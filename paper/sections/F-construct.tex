@@ -8,7 +8,8 @@ and $\CC$ refers to arcs in $Q^\circ$ unless said otherwise. Points of $\Hp$ are
 \subsection{Regions}
 
 \begin{definition}[Stolz angles, trapezoids, $B(K,\eps,\alpha,\beta)$]\label{def:regions}
-\lean{TJK.Construct.stolz, TJK.Construct.trap, TJK.Construct.tri, TJK.Construct.hull, TJK.Construct.region}
+\lean{TJK.Construct.stolz, TJK.Construct.trap, TJK.Construct.tri, TJK.Construct.hull, TJK.Construct.gaps,
+  TJK.Construct.region}
 For $a\in\R$, $\eps>0$, $0<\theta<\pi/2$:
 $s(a,\eps,\theta)=\{\langle x,y\rangle:0<y<\eps,\ \abs{x-a}<y\cot\theta\}$.
 For a nonempty interval $J$ with endpoints $a\le b$: $\Trap(J,\eps,\theta)=\{0<y<\eps,\ a+y\cot\theta<x<b-y\cot\theta\}$
@@ -21,7 +22,8 @@ B(K,\eps,\alpha,\beta)=\Trap(J(K),\eps,\alpha)\setminus\bigcup_{I\in\mathcal J(K
 \end{definition}
 
 \begin{lemma}[description of $B$]\label{lem:B-char}
-\lean{TJK.Construct.mem_region_iff}
+\lean{TJK.Construct.mem_region_iff, TJK.Construct.region_eq, TJK.Construct.exists_gap,
+  TJK.Construct.connectedComponentIn_hull_diff}
 \uses{def:regions}
 $\langle x,y\rangle\in B(K,\eps,\alpha,\beta)$ iff $0<y<\eps$, $\min K+y\cot\alpha<x<\max K-y\cot\alpha$, and
 $\dist(x,K)<y\cot\beta$.
@@ -31,9 +33,13 @@ Let $y>0$ and $x\in J(K)$. If $x\in K$, $x$ lies in no $\Tri(I,\beta)$ (these li
 endpoint $a$ of $I$ we would need $a+y\cot\beta\le a$). If $x\in I=(a,b)\in\mathcal J(K)$, then $x\notin\Tri(I,\beta)$
 iff $\min(x-a,b-x)<y\cot\beta$, i.e.\ iff $\dist(x,K)<y\cot\beta$, and $x$ lies over no other component.
 \end{proof}
+In Lean, $\mathcal J(K)$ is recorded by the endpoint pairs $(a,b)$ with $a,b\in K$, $a<b$, $(a,b)\cap K=\emptyset$
+(\texttt{gaps}); that these intervals are exactly the components of $J(K)\setminus K$ is
+\texttt{exists\_gap} and \texttt{connectedComponentIn\_hull\_diff}. Here $\R$ is the line $\{\Im z=0\}$ of $\C$.
 
 \begin{lemma}[{\cite[(VI)--(XVIII)]{TAMSb}}; {\cite[(6)--(17)]{Diss}}]\label{lem:region-geometry}
-\lean{TJK.Construct.isOpen_stolz, TJK.Construct.isOpen_region, TJK.Construct.closure_stolz_inter_axis,
+\lean{TJK.Construct.isOpen_stolz, TJK.Construct.isOpen_region, TJK.Construct.stolz_subset_upper,
+  TJK.Construct.region_subset_upper, TJK.Construct.closure_stolz_inter_axis,
   TJK.Construct.closure_region_inter_axis, TJK.Construct.closure_stolz_subset, TJK.Construct.stolz_disjoint,
   TJK.Construct.region_disjoint_of_split, TJK.Construct.region_disjoint_of_disjoint,
   TJK.Construct.closure_region_subset, TJK.Construct.region_stolz_disjoint_of_not_mem_interior,
@@ -71,6 +77,9 @@ $\min K+yc_\alpha<\min K_1+yc_{\alpha_1}\le x$ (similarly on the right), and $\d
 $\dist(a,K)\le\abs{x-a}+\dist(x,K)<y(c_\theta+c_\beta)$ with $y<\eta$. (R10) On the closure, $0<y\le\eta<\eps$,
 $\abs{x-a}\le yc_\theta$, so $\dist(x,K)\le yc_\theta<yc_\beta$ and $x\ge a-yc_\theta>\min K+yc_\alpha$.
 \end{proof}
+In Lean the hypothesis of (R6) is stated pointwise ($\eta\le\abs{x_1-x_2}/(2c_\beta)$ for $x_i\in K_i$, which also
+gives $K_1\cap K_2=\emptyset$ when $\eta>0$), and the hypotheses $a\notin K$ in (R9) and $a\in J(K)^*$ in (R10),
+which follow from the bounds on $\eta$ when $\eta>0$, are omitted.
 
 \subsection{Special families and special functions}
 
