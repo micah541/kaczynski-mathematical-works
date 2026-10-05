@@ -7,11 +7,11 @@ Every node is a numbered item of the [companion paper](../paper/main.pdf). Arrow
 
 | Status | Meaning | Count |
 |---|---|---|
-| `proved` | proved (no `sorry`) | 30 |
-| `defined` | definition written in Lean | 6 |
+| `proved` | proved (no `sorry`) | 34 |
+| `defined` | definition written in Lean | 8 |
 | `sorry` | stated in Lean, proof is `sorry` | 13 |
-| `partial` | some Lean declarations exist | 4 |
-| `planned` | Lean name reserved, not yet stated | 71 |
+| `partial` | some Lean declarations exist | 3 |
+| `planned` | Lean name reserved, not yet stated | 66 |
 | `imported` | imported fact (Mathlib / library) | 14 |
 
 ```mermaid
@@ -476,15 +476,15 @@ flowchart BT
   lem_th_lemma10 --> def_th_special
   lem_th_lemma11 --> def_th_special
   classDef proved fill:#1f8a4c,color:#fff,stroke:#146236
-  class lem_sut_basic,prop_sut_two_composite,prop_sut_explicit,lem_sut_factor,thm_sut_sutcliffe2,thm_sut_sutcliffe3,lem_sut_lemma1,lem_sut_lemma2,thm_sut_main,cor_sut_main,lem_borel_basic,lem_reduction,cor_reduction_finite,thm_sierpinski,lem_baire1_fsigma,lem_finite_valued,lem_finite_valued_ops,lem_approx_char,lem_approx_finite,lem_uniform_approx,lem_approx_real,thm_baire1_char,lem_uniform_limit_fsigma,thm_extension,lem_B_char,lem_region_geometry,lem_monotone_inverse,lem_closed_graph,thm_construct_C,lem_th_lemma25 proved
+  class lem_sut_basic,prop_sut_two_composite,prop_sut_explicit,lem_sut_factor,thm_sut_sutcliffe2,thm_sut_sutcliffe3,lem_sut_lemma1,lem_sut_lemma2,thm_sut_main,cor_sut_main,lem_borel_basic,lem_reduction,cor_reduction_finite,thm_sierpinski,lem_baire1_fsigma,lem_finite_valued,lem_finite_valued_ops,lem_approx_char,lem_approx_finite,lem_uniform_approx,lem_approx_real,thm_baire1_char,lem_uniform_limit_fsigma,thm_extension,lem_B_char,lem_region_geometry,lem_special_from_fsigma,lem_special_sequence,lem_special_pair_exists,lem_special_pair_shrink,lem_monotone_inverse,lem_closed_graph,thm_construct_C,lem_th_lemma25 proved
   classDef defined fill:#b7e1c5,color:#123,stroke:#4c9a68
-  class def_sut_solution,def_borel_classes,def_fn_classes,def_arcs,def_ccset,def_regions defined
+  class def_sut_solution,def_borel_classes,def_fn_classes,def_arcs,def_ccset,def_regions,def_special_family,def_special_pair defined
   classDef sorry fill:#f2c14e,color:#222,stroke:#b8902e
   class thm_mcmillan,thm_mm_thm2,thm_bf_fsigma,thm_homeo,thm_cc_realize,thm_construct_F,thm_baire_plus_one,thm_th_thm10,cor_ae_zero,cor_nonmeasurable,thm_ha_example,thm_ha_theorem,thm_cube sorry
   classDef partial fill:#f7dd9b,color:#222,stroke:#b8902e
-  class cor_bf_honorary,def_special_family,thm_construct_H,def_trapezoid partial
+  class cor_bf_honorary,thm_construct_H,def_trapezoid partial
   classDef planned fill:#eeeeee,color:#333,stroke:#999
-  class def_fold,lem_fold,lem_fold_factor,thm_sphere_baire1,thm_sphere_extension,thm_honorary_char,lem_honorary_invariance,thm_kuratowski,cor_baire_continuity_point,lem_meager_subspace,def_additive_classes,lem_additive_basic,lem_baire_precomp,lem_baire_imp_class,lem_equiv,lem_intervals_open,lem_two_sided,lem_monotone_extend,lem_monotone_compose,lem_baire_criterion,cor_path_arc,lem_subarc,lem_cluster,lem_disjoint_arcs,def_charts,lem_charts,lem_crosscut_H,lem_strip,lem_disc_geometry,lem_open_components,lem_transfer,lem_locality,def_acc,lem_mm_lemma2,lem_mm_lemma3,cor_mm_corollaries,thm_mcmillan_H,lem_th_lemma7,lem_th_lemma8,lem_th_lemma15,prop_gdelta_remark,lem_homeo_values,lem_special_from_fsigma,lem_special_sequence,def_special_pair,lem_special_pair_exists,lem_special_pair_shrink,thm_construct_A,thm_construct_B,thm_construct_D,thm_construct_E,def_meets_in,lem_figure5,cor_borel,lem_th_lemma23,lem_th_lemma24,thm_th_thm9,prop_th_example,lem_ha_lemma,lem_general_limit_endpoints,lem_ha_sequences,lem_ha_estimates,cor_ha_corollary,cor_ha_analytic,def_asymptotic,lem_cube_lemma,def_th_special,lem_th_special_implies,lem_th_lemma9,lem_th_lemma10,lem_th_lemma11 planned
+  class def_fold,lem_fold,lem_fold_factor,thm_sphere_baire1,thm_sphere_extension,thm_honorary_char,lem_honorary_invariance,thm_kuratowski,cor_baire_continuity_point,lem_meager_subspace,def_additive_classes,lem_additive_basic,lem_baire_precomp,lem_baire_imp_class,lem_equiv,lem_intervals_open,lem_two_sided,lem_monotone_extend,lem_monotone_compose,lem_baire_criterion,cor_path_arc,lem_subarc,lem_cluster,lem_disjoint_arcs,def_charts,lem_charts,lem_crosscut_H,lem_strip,lem_disc_geometry,lem_open_components,lem_transfer,lem_locality,def_acc,lem_mm_lemma2,lem_mm_lemma3,cor_mm_corollaries,thm_mcmillan_H,lem_th_lemma7,lem_th_lemma8,lem_th_lemma15,prop_gdelta_remark,lem_homeo_values,thm_construct_A,thm_construct_B,thm_construct_D,thm_construct_E,def_meets_in,lem_figure5,cor_borel,lem_th_lemma23,lem_th_lemma24,thm_th_thm9,prop_th_example,lem_ha_lemma,lem_general_limit_endpoints,lem_ha_sequences,lem_ha_estimates,cor_ha_corollary,cor_ha_analytic,def_asymptotic,lem_cube_lemma,def_th_special,lem_th_special_implies,lem_th_lemma9,lem_th_lemma10,lem_th_lemma11 planned
   classDef imported fill:#dbe8f6,color:#1c3a5e,stroke:#6b8fb8
   class fact_banach,fact_borel_baire,fact_tietze_arc,fact_tietze_ext,fact_hyperspace,fact_baire_category,fact_crosscut,fact_bagemihl,fact_vitali,fact_poisson,fact_jordan_access,fact_analytic_nonborel,fact_kierst,fact_normal imported
 ```
@@ -605,12 +605,12 @@ flowchart BT
 | def:regions<br/>*Stolz angles, trapezoids, $B(K,eps,alpha,beta)$* | definition | `TJK.Construct.stolz` ([src](../TJK/Construct/Regions.lean))<br/>`TJK.Construct.trap` ([src](../TJK/Construct/Regions.lean))<br/>`TJK.Construct.tri` ([src](../TJK/Construct/Regions.lean))<br/>`TJK.Construct.hull` ([src](../TJK/Construct/Regions.lean))<br/>`TJK.Construct.gaps` ([src](../TJK/Construct/Regions.lean))<br/>`TJK.Construct.region` ([src](../TJK/Construct/Regions.lean)) |  | `defined` |
 | lem:B-char<br/>*description of $B$* | lemma | `TJK.Construct.mem_region_iff` ([src](../TJK/Construct/Regions.lean))<br/>`TJK.Construct.region_eq` ([src](../TJK/Construct/Regions.lean))<br/>`TJK.Construct.exists_gap` ([src](../TJK/Construct/Regions.lean))<br/>`TJK.Construct.connectedComponentIn_hull_diff` ([src](../TJK/Construct/Regions.lean)) | `def:regions` | `proved` |
 | lem:region-geometry<br/>*;* | lemma | `TJK.Construct.isOpen_stolz` ([src](../TJK/Construct/Regions.lean))<br/>`TJK.Construct.isOpen_region` ([src](../TJK/Construct/Regions.lean))<br/>`TJK.Construct.stolz_subset_upper` ([src](../TJK/Construct/Regions.lean))<br/>`TJK.Construct.region_subset_upper` ([src](../TJK/Construct/Regions.lean))<br/>`TJK.Construct.closure_stolz_inter_axis` ([src](../TJK/Construct/Regions.lean))<br/>`TJK.Construct.closure_region_inter_axis` ([src](../TJK/Construct/Regions.lean))<br/>`TJK.Construct.closure_stolz_subset` ([src](../TJK/Construct/Regions.lean))<br/>`TJK.Construct.stolz_disjoint` ([src](../TJK/Construct/Regions.lean))<br/>`TJK.Construct.region_disjoint_of_split` ([src](../TJK/Construct/Regions.lean))<br/>`TJK.Construct.region_disjoint_of_disjoint` ([src](../TJK/Construct/Regions.lean))<br/>`TJK.Construct.closure_region_subset` ([src](../TJK/Construct/Regions.lean))<br/>`TJK.Construct.region_stolz_disjoint_of_not_mem_interior` ([src](../TJK/Construct/Regions.lean))<br/>`TJK.Construct.stolz_region_disjoint_small_stolz` ([src](../TJK/Construct/Regions.lean))<br/>`TJK.Construct.stolz_region_disjoint_small_region` ([src](../TJK/Construct/Regions.lean))<br/>`TJK.Construct.closure_stolz_subset_region` ([src](../TJK/Construct/Regions.lean)) | `lem:B-char`, `def:special-family` | `proved` |
-| def:special-family<br/>*splitting, special families* | definition | `TJK.Construct.Split` ([src](../TJK/Construct/Regions.lean))<br/>`TJK.Construct.IsSpecialFamily`<br/>`TJK.Construct.endpoints`<br/>`TJK.Construct.twoPoint` |  | `partial` |
-| lem:special-from-fsigma<br/>*;* | lemma | `TJK.Construct.exists_specialFamily_of_isFσ` | `def:special-family`, `lem:borel-basic` | `planned` |
-| lem:special-sequence | lemma | `TJK.Construct.exists_specialFamily_seq` | `lem:special-from-fsigma`, `lem:borel-basic` | `planned` |
-| def:special-pair<br/>*special functions* | definition | `TJK.Construct.IsSpecialPair` | `def:special-family`, `def:regions` | `planned` |
-| lem:special-pair-exists<br/>*;* | lemma | `TJK.Construct.exists_specialPair` | `def:special-pair`, `lem:region-geometry` | `planned` |
-| lem:special-pair-shrink<br/>*;* | lemma | `TJK.Construct.IsSpecialPair.mono` | `def:special-pair`, `def:regions` | `planned` |
+| def:special-family<br/>*splitting, special families* | definition | `TJK.Construct.Split` ([src](../TJK/Construct/Regions.lean))<br/>`TJK.Construct.IsSpecialFamily` ([src](../TJK/Construct/Special.lean))<br/>`TJK.Construct.endpoints` ([src](../TJK/Construct/Special.lean))<br/>`TJK.Construct.twoPoint` ([src](../TJK/Construct/Special.lean)) |  | `defined` |
+| lem:special-from-fsigma<br/>*;* | lemma | `TJK.Construct.exists_specialFamily_of_isFσ` ([src](../TJK/Construct/Special.lean)) | `def:special-family`, `lem:borel-basic` | `proved` |
+| lem:special-sequence | lemma | `TJK.Construct.exists_specialFamily_seq` ([src](../TJK/Construct/Special.lean)) | `lem:special-from-fsigma`, `lem:borel-basic` | `proved` |
+| def:special-pair<br/>*special functions* | definition | `TJK.Construct.IsSpecialPair` ([src](../TJK/Construct/Special.lean)) | `def:special-family`, `def:regions` | `defined` |
+| lem:special-pair-exists<br/>*;* | lemma | `TJK.Construct.exists_specialPair` ([src](../TJK/Construct/Special.lean)) | `def:special-pair`, `lem:region-geometry` | `proved` |
+| lem:special-pair-shrink<br/>*;* | lemma | `TJK.Construct.IsSpecialPair.mono` ([src](../TJK/Construct/Special.lean)) | `def:special-pair`, `def:regions` | `proved` |
 | thm:construct-A<br/>*;* | theorem | `TJK.Construct.exists_g` | `lem:special-sequence`, `lem:special-pair-exists`, `lem:special-pair-shrink`, `lem:region-geometry`, `lem:subarc`, `def:special-family` | `planned` |
 | thm:cc-realize | theorem | `TJK.Construct.exists_curvConvSet_eq_upperHalfPlane` ([src](../TJK/MainTheorems.lean)) | `thm:construct-A`, `lem:transfer`, `lem:charts`, `lem:borel-basic`, `lem:subarc`, `def:ccset` | `sorry` |
 | lem:monotone-inverse<br/>*;* | lemma | `TJK.Construct.exists_monotone_leftInverse` ([src](../TJK/Construct/K.lean))<br/>`TJK.Construct.exists_monotone_leftInverse_real` ([src](../TJK/Construct/K.lean)) |  | `proved` |

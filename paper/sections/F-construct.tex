@@ -86,12 +86,17 @@ which follow from the bounds on $\eta$ when $\eta>0$, are omitted.
 \begin{definition}[splitting, special families]\label{def:special-family}
 \lean{TJK.Construct.Split, TJK.Construct.IsSpecialFamily, TJK.Construct.endpoints, TJK.Construct.twoPoint}
 Two sets $E_1,E_2\subseteq\R$ \emph{split} if there is $p$ with $E_1\le p\le E_2$ or $E_2\le p\le E_1$ (pointwise). A
-\emph{special family} is a nonempty countable family $\mathcal F$ of compact subsets of $X$ such that any two members
+\emph{special family} is a countable family $\mathcal F$ of compact subsets of $X$ such that any two members
 are equal, disjoint, or split. Let $\mathcal F^2$ be the members with at least two points and $E(\mathcal F)$ the set of
 endpoints of the intervals $J(F)$, $F\in\mathcal F$, $F\ne\emptyset$.
 \end{definition}
 Two distinct members of a special family meet in at most one point, and such a common point is an endpoint of both
-hulls. Endpoints of $J(F)$ belong to $F$.
+hulls. Endpoints of $J(F)$ belong to $F$. In particular, if $e\in E(\mathcal F)$, $F\in\mathcal F$ and $e\in J(F)^*$, then
+$e\notin F$: $e$ is an endpoint of some $J(F')$, so $e\in F'$ and $F'\ne F$; if $e\in F$, then $F,F'$ split at a point $p$
+with $p=e$, and $e$ would be an endpoint of $J(F)$ (Lean: \texttt{IsSpecialFamily.notMem\_of\_mem\_Ioo}).
+(The source also asks $\mathcal F\ne\emptyset$; nothing uses this, and it is dropped.) In Lean, subsets of $X$ are subsets
+of $\R$ contained in $(-1,1)$, and ``$\Fs$ (resp.\ $\Fsd$) in $X$'' is stated as ``$\Fs$ (resp.\ $\Fsd$) in $\R$''; for
+subsets of $X$ these agree since $X$ is open, hence $\Fs$, in $\R$.
 
 \begin{lemma}[{\cite[(III)]{TAMSb}}; {\cite[Lemma 9]{Diss}}]\label{lem:special-from-fsigma}
 \lean{TJK.Construct.exists_specialFamily_of_isFσ}
@@ -99,12 +104,14 @@ hulls. Endpoints of $J(F)$ belong to $F$.
 Every $\Fs$ subset $E$ of $X$ is the union of a special family.
 \end{lemma}
 \begin{proof}
-Write $E=\bigcup_nA_n$ with $A_n$ closed in $X$, $A_1=\emptyset$, $A_n\subseteq A_{n+1}$. Every open interval
-$I\subseteq X$ is the union of countably many compact intervals any two of which split: take a strictly increasing
-bi-infinite sequence $(c_k)_{k\in\Z}$ in $I$ tending to the endpoints and the intervals $[c_k,c_{k+1}]$. As
-$X\setminus A_n$ is a disjoint union of countably many open intervals, $X\setminus A_n=\bigcup_jI_{n,j}$ with compact
-intervals $I_{n,j}$ any two of which split. Let $\mathcal F=\{A_1\}\cup\{I_{n,j}\cap A_{n+1}\}$. Its members are compact,
-and $\bigcup\mathcal F=\bigcup_n(A_{n+1}\setminus A_n)=E$. For distinct members $I_{n,j}\cap A_{n+1}$,
+Write $E=\bigcup_nC_n$ with $C_n$ closed in $\R$ and put $A_n=C_1\cup\dots\cup C_{n-1}$, so $A_1=\emptyset$, the $A_n$
+are closed, increasing, and contained in $E$. Every open $U\subseteq\R$ is the union of countably many compact intervals
+any two of which split: take the maximal dyadic intervals $[k2^{-m},(k+1)2^{-m}]$ ($m\in\N$, $k\in\Z$) contained in $U$.
+They cover $U$ (each $x\in U$ lies in a dyadic interval inside $U$, and among its finitely many dyadic ancestors in
+$U$ take the largest), and two distinct ones are not nested, hence have disjoint interiors, hence split. So
+$\R\setminus A_n=\bigcup_jI_{n,j}$ with compact intervals $I_{n,j}$ any two of which split. Let
+$\mathcal F=\{I_{n,j}\cap A_{n+1}\}$. Its members are compact subsets of $X$, and
+$\bigcup\mathcal F=\bigcup_n(A_{n+1}\setminus A_n)=E$. For distinct members $I_{n,j}\cap A_{n+1}$,
 $I_{n',j'}\cap A_{n'+1}$: if $n<n'$ then $n+1\le n'$ and the second lies in $X\setminus A_{n'}\subseteq X\setminus
 A_{n+1}$, so they are disjoint; if $n=n'$ then $j\ne j'$ and they split because $I_{n,j},I_{n,j'}$ do.
 \end{proof}
@@ -116,10 +123,10 @@ If $A\subseteq X$ is $\Fsd$, there are special families $\mathcal F_n$ with $A=\
 every member of $\mathcal F_{n+1}$ is contained in a member of $\mathcal F_n$.
 \end{lemma}
 \begin{proof}
-Write $A=\bigcap_nA_n$ with $A_n$ $\Fs$ and decreasing, choose special $\mathcal S_n$ with $A_n=\bigcup\mathcal S_n$, and
-put $\mathcal F_1=\mathcal S_1$, $\mathcal F_{n+1}=\{E\cap F:E\in\mathcal F_n,F\in\mathcal S_{n+1}\}$. For two members
+Write $A=\bigcap_nA_n$ with $A_n\subseteq X$ $\Fs$ (replace $A_n$ by $A_n\cap X$), choose special $\mathcal S_n$ with
+$A_n=\bigcup\mathcal S_n$, and put $\mathcal F_1=\mathcal S_1$, $\mathcal F_{n+1}=\{E\cap F:E\in\mathcal F_n,F\in\mathcal S_{n+1}\}$. For two members
 $E\cap F$, $E'\cap F'$: if $E\ne E'$ compare $E,E'$, and if $E=E'$ compare $F,F'$; subsets of disjoint (splitting) sets are
-disjoint (split). So $\mathcal F_{n+1}$ is special, and $\bigcup\mathcal F_n=A_1\cap\dots\cap A_n=A_n$.
+disjoint (split). So $\mathcal F_{n+1}$ is special, $\bigcup\mathcal F_n=A_1\cap\dots\cap A_n$, and $\bigcap_n\bigcup\mathcal F_n=A$.
 \end{proof}
 
 \begin{definition}[special functions]\label{def:special-pair}
@@ -140,23 +147,27 @@ $\mathcal F$ is a pair $(\eps,\delta)$ of positive functions on $E(\mathcal F)$ 
 Every special family has a pair of special $\alpha,\beta,\theta$ functions.
 \end{lemma}
 \begin{proof}
-Enumerate $\mathcal F=\{F_1,F_2,\dots\}$; for $F\in\mathcal F$ let $k(F)$ be its least index, and for $e\in E(\mathcal F)$ let
-$k(e)$ be the least $k$ such that $e$ is an endpoint of $J(F_k)$. Let $E(k)$ be the set of endpoints of the $J(F_j)$,
-$j\le k$, $F_j\ne\emptyset$. Put $c=\cot\theta+\cot\beta$ and define
+If $\mathcal F=\emptyset$ there is nothing to prove. Otherwise enumerate $\mathcal F=\{F_0,F_1,\dots\}$ (repetitions
+allowed); for $F\in\mathcal F$ let $k(F)$ be its least index, and for $e\in E(\mathcal F)$ let $k(e)$ be the least $k$ such
+that $F_k\ne\emptyset$ and $e$ is an endpoint of $J(F_k)$. Put $c=\cot\theta+\cot\beta$ and $t^+=t$ if $t>0$, $t^+=1$
+otherwise; for disjoint compact $K,L$ let $\sigma(K,L)>0$ be a lower bound of $\abs{x-y}$, $x\in K$, $y\in L$ (and
+$\sigma(K,L)=1$ if $K,L$ meet). Define
 \begin{align*}
-\delta(F)&=\min\Bigl(\Bigl\{\tfrac1{k(F)}\Bigr\}\cup\Bigl\{\tfrac{\dist(F_j,F)}{2\cot\beta}:j<k(F),\ F_j\in\mathcal F^2,\ F_j\cap F=\emptyset\Bigr\}\cup
-\Bigl\{\tfrac{\dist(e,F)}c:e\in E(k(F)-1)\cap J(F)^*\setminus F\Bigr\}\Bigr),\\
-\eps(e)&=\min\Bigl(\Bigl\{\tfrac1{k(e)}\Bigr\}\cup\Bigl\{\tfrac{\abs{e-e'}}{2\cot\theta}:e'\in E(k(e))\setminus\{e\}\Bigr\}\cup
-\Bigl\{\tfrac{\dist(e,F_j)}c:j\le k(e),\ F_j\in\mathcal F^2,\ e\in J(F_j)^*\setminus F_j\Bigr\}\Bigr).
+\delta(F)&=\min_{j\le k(F)}\min\Bigl\{\tfrac1{j+1},\ \Bigl(\tfrac{\sigma(F_j,F)}{2\cot\beta}\Bigr)^+,\
+  \Bigl(\tfrac{\dist(\min F_j,F)}c\Bigr)^+,\ \Bigl(\tfrac{\dist(\max F_j,F)}c\Bigr)^+\Bigr\},\\
+\eps(e)&=\min_{j\le k(e)}\min\Bigl\{\tfrac1{j+1},\ \Bigl(\tfrac{\abs{e-\min F_j}}{2\cot\theta}\Bigr)^+,\
+  \Bigl(\tfrac{\abs{e-\max F_j}}{2\cot\theta}\Bigr)^+,\ \Bigl(\tfrac{\dist(e,F_j)}c\Bigr)^+\Bigr\}.
 \end{align*}
-These are minima of finite sets of positive numbers. Condition (i): $\delta(F)\ge\eta$ forces $k(F)\le1/\eta$; (ii):
-$\eps(e)\ge\eta$ forces $k(e)\le1/\eta$, and each index contributes at most two endpoints.
-(iii) If $e\ne e'$, say $k(e')\le k(e)$, then $e'\in E(k(e))$ and (R4) applies.
-(iv) If $F\ne F'$ in $\mathcal F^2$ split, use (R5); if they are disjoint, say $k(F')<k(F)$, use (R6).
+These are minima of finitely many positive numbers. Condition (i): $\delta(F)\ge\eta$ forces $k(F)+1\le1/\eta$; (ii):
+$\eps(e)\ge\eta$ forces $k(e)+1\le1/\eta$, and each index contributes at most two endpoints.
+(iii) If $e\ne e'$, say $k(e')\le k(e)$, then $e'$ is an endpoint of $J(F_{k(e')})$, so
+$\eps(e)\le\abs{e-e'}/(2\cot\theta)$ and (R4) applies.
+(iv) If $F\ne F'$ in $\mathcal F^2$ split, use (R5); if they are disjoint, say $k(F')<k(F)$, then
+$\delta(F)\le\sigma(F',F)/(2\cot\beta)$ and (R6) applies.
 (v) Let $e\in E(\mathcal F)$ and $F\in\mathcal F^2$. If $e\notin J(F)^*$ use (R8) ($\beta<\alpha<\theta$). Otherwise
-$e\notin F$: indeed $e$ is an endpoint of some $J(F')$, $e\in F'$, and $F'\ne F$; if $e\in F$ then $F,F'$ would split at
-$e$, making $e$ an endpoint of $J(F)$. If $k(F)\le k(e)$ the definition of $\eps(e)$ and (R9) apply; if $k(F)>k(e)$ then
-$e\in E(k(F)-1)$ and the definition of $\delta(F)$ and (R9) apply.
+$e\notin F$ (remark after Definition~\ref{def:special-family}), so $\dist(e,F)>0$. If $k(F)\le k(e)$ then
+$\eps(e)\le\dist(e,F)/c$ and the first half of (R9) applies; if $k(F)>k(e)$ then $e$ is an endpoint of $J(F_{k(e)})$, so
+$\delta(F)\le\dist(e,F)/c$ and the second half of (R9) applies.
 \end{proof}
 
 \begin{lemma}[{\cite[(XXI)]{TAMSb}}; {\cite[Lemma 14]{Diss}}]\label{lem:special-pair-shrink}
