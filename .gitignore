@@ -1,0 +1,13 @@
+.lake/
+img/
+txt/
+/*.pdf
+/*.txt
+paper/*.aux
+paper/*.log
+paper/*.out
+paper/*.toc
+paper/*.fls
+paper/*.fdb_latexmk
+paper/build.log
+__pycache__/

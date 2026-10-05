@@ -1,0 +1,236 @@
+% ===========================================================================
+\section{Boundary functions of discontinuous functions}\label{sec:discont}
+% ===========================================================================
+Sources: \cite[Chapter II]{Diss}; \cite[Theorems 4--6]{JMM}. We work in $\Hp$ with boundary $\R$.
+
+\subsection{Baire functions}
+
+\begin{definition}\label{def:meets-in}
+\lean{TJK.Discont.MeetsIn}
+\uses{def:arcs}
+For arcs $\gamma_x,\gamma_y$ at $x,y\in\R$ and $n\in\N$, $\gamma_x$ \emph{meets $\gamma_y$ in $\overline{\Hp}_n$} if there are
+subarcs $\gamma_x'\ni x$ and $\gamma_y'\ni y$ of them, contained in $\overline{\Hp}_n$, with $\gamma_x'\cap\gamma_y'\ne\emptyset$.
+If $\gamma_x$ meets $\gamma_y$ in $\overline\Hp_n$ and $n'\le n$, it meets $\gamma_y$ in $\overline\Hp_{n'}$.
+\end{definition}
+
+\begin{lemma}[{the ``Figure 5'' argument of \cite[proof of Theorem 8]{Diss}}]\label{lem:figure5}
+\lean{TJK.Discont.figure5}
+\uses{lem:crosscut-H, fact:tietze-arc}
+Let $x<t<y$ be real, let $\alpha,\beta$ be arcs at $x,y$ contained in $\overline\Hp_n$ with $\alpha\cap\beta\ne\emptyset$, and let
+$\tau$ be an arc at $t$, contained in $\overline\Hp_n$, whose other endpoint lies on $X_n$. Then $\tau$ meets $\alpha\cup\beta$.
+\end{lemma}
+\begin{proof}
+By Fact~\ref{fact:tietze-arc}, $\alpha\cup\beta$ contains a simple arc $\sigma$ from $x$ to $y$, a crosscut of $\Hp$ contained in
+$\overline\Hp_n$. Suppose $\tau\cap\sigma=\emptyset$. Let $V,U$ be the bounded and unbounded components of $\Hp\setminus\sigma$
+(Lemma~\ref{lem:crosscut-H}). A small half-disk $S(r,t)\cap\Hp$ misses $\sigma$, is connected, and meets $V$ because
+$t\in(x,y)\subseteq\overline V$; so it lies in $V$, and therefore so does the connected set $\tau\setminus\{t\}$. Its endpoint $q$
+on $X_n$ is then in the open set $V$, so $q+i\eps\in V$ for small $\eps>0$; but $\{\operatorname{Im}z>1/n\}\subseteq U$ since
+$\max_\sigma\operatorname{Im}\le1/n$. Contradiction.
+\end{proof}
+
+\begin{theorem}[{\cite[Theorem 8]{Diss}}; {\cite[Theorem 4]{JMM}}]\label{thm:baire-plus-one}
+\lean{TJK.Discont.baireClass_succ_of_boundaryFn}
+\uses{def:meets-in, lem:figure5, lem:strip, lem:subarc, lem:intervals-open, lem:equiv, lem:monotone-extend,
+  lem:monotone-compose, lem:baire-precomp, lem:baire-imp-class, lem:additive-basic, lem:baire-criterion}
+Let $Y$ be a separable arcwise connected metric space, $\xi\ge1$, $f:\Hp\to Y$ of Baire class $\xi$, $E\subseteq\R$, and
+$\varphi:E\to Y$ a boundary function for $f$. Then $\varphi$ is of Baire class $\xi+1$.
+\end{theorem}
+\begin{proof}
+Let $U\subseteq Y$ be open, $V=Y\setminus\overline U$, $A=\varphi^{-1}(U)$, $B=\varphi^{-1}(V)$, $P=A\cup B$. For $x\in P$ choose
+(Lemma~\ref{lem:subarc}) an arc $\gamma_x$ at $x$ with $f\to\varphi(x)$ along it, $\gamma_x\subseteq\{\abs{z-x}\le1\}$, and
+$\gamma_x\setminus\{x\}\subseteq f^{-1}(U)$ if $x\in A$, $\subseteq f^{-1}(V)$ if $x\in B$. If $x\in A$ and $y\in B$ then
+$\gamma_x\cap\gamma_y=\emptyset$. Let
+\begin{align*}
+L_a&=\{x\in A:\forall n\ \exists y\in P\setminus\{x\},\ \gamma_y\text{ meets }\gamma_x\text{ in }\overline\Hp_n\},&
+M_a&=A\setminus L_a,\\
+L_b&=\{x\in B:\forall n\ \exists y\in P\setminus\{x\},\ \gamma_y\text{ meets }\gamma_x\text{ in }\overline\Hp_n\},&
+M_b&=B\setminus L_b,
+\end{align*}
+$L=L_a\cup L_b$, $M=M_a\cup M_b$. For $x\in M$ let $n(x)$ be such that $\gamma_x$ meets no $\gamma_y$ ($y\ne x$) in
+$\overline\Hp_{n(x)}$; the same then holds for all $n\ge n(x)$. Let $K_n$ be the set of $x\in P$ such that $\gamma_x$ meets $X_n$
+and, if $x\in M$, $n\ge n(x)$. Then $K_n\subseteq K_{n+1}$ and $P=\bigcup_nK_n$.
+
+\emph{Step 1: $L_a\approx G_a\cap P$ for a $\Gd$ set $G_a$, and $L_b\approx G_b\cap P$ for a $\Gd$ set $G_b$.} Let $x\in L_a$
+and $n\in\N$; choose $y\in P\setminus\{x\}$ with $\gamma_y$ meeting $\gamma_x$ in $\overline\Hp_n$, and let $I^n_x$ be the closed
+interval with endpoints $x,y$. We claim $I^n_x\subseteq L_a\cup(\R\setminus K_n)$. Let $t\in I^n_x\cap K_n$. If $t\ne x,y$, let
+$\tau$ be the subarc of $\gamma_t$ from $t$ to its first point on $X_n$; by Lemma~\ref{lem:figure5}, $\gamma_t$ meets $\gamma_x$ or
+$\gamma_y$ in $\overline\Hp_n$. The same holds trivially for $t=y$. If $t\in M$ this contradicts $n\ge n(t)$; so $t\notin M$.
+Since $\gamma_x$ meets $\gamma_y$ and $x\in A$, $y\notin B$, so $y\in A$; likewise $t\in A$. Hence $t\in A\setminus M=L_a$.
+Put $W_n=\bigcup_{x\in L_a}I^n_x$. Then $L_a\subseteq W_n\cap P\subseteq(L_a\cup(\R\setminus K_n))\cap P$, so
+$L_a=\bigcap_n(W_n\cap P)$. By Lemma~\ref{lem:intervals-open} each $W_n$ is $\approx$ an open set $O_n$; let
+$G_a=\bigcap_nO_n$. By Lemma~\ref{lem:equiv}, $L_a\approx G_a\cap P$. The same argument applies to $L_b$.
+
+\emph{Step 2: $M_a\approx F\cap P$ with $F\in P^{\xi+2}(\R)$.} For $x\in M\cap K_n$ let $p_n(x)$ be the first point of $X_n$
+reached along $\gamma_x$ from $x$, and $h^0_n(x)=\operatorname{Re}p_n(x)$. If $x<x'$ in $M\cap K_n$, the subarcs from $x$ to
+$p_n(x)$ and from $x'$ to $p_n(x')$ are disjoint (as $n\ge n(x)$), so $h_n^0(x)<h_n^0(x')$ by Lemma~\ref{lem:strip}. Also
+$\abs{x-h_n^0(x)}\le1$. By Lemma~\ref{lem:monotone-extend} extend $h_n^0$ to a weakly increasing $h_n:\R\to\R$ (take
+$h_n=\mathrm{id}$ if $M\cap K_n=\emptyset$), and let $g_n(x)=f(h_n(x)+i/n)$. By Lemmas~\ref{lem:baire-precomp}
+and~\ref{lem:monotone-compose} there is a countable $N$ such that each $g_n|_{M\setminus N}$ is of Baire class $\xi$. For
+$x\in M$ and $n$ large, $x\in M\cap K_n$ and $g_n(x)=f(p_n(x))$ with $p_n(x)\in\gamma_x$, $\operatorname{Im}p_n(x)=1/n$; so
+$p_n(x)\to x$ along $\gamma_x$ and $g_n(x)\to\varphi(x)$. Hence $\varphi|_{M\setminus N}$ is of Baire class $\xi+1$, hence of
+class $P^{\xi+2}$ (Lemma~\ref{lem:baire-imp-class}), so $A\cap(M\setminus N)=D\cap(M\setminus N)$ for some
+$D\in P^{\xi+2}(\R)$ (Lemma~\ref{lem:additive-basic}(f)). Then
+\[
+M_a=A\cap M\approx D\cap M=D\cap(P\setminus L)\approx D\cap\bigl(\R\setminus(G_a\cup G_b)\bigr)\cap P=:F\cap P,
+\]
+and $F\in P^{\xi+2}(\R)$ because $\R\setminus(G_a\cup G_b)$ is $\Fs$, i.e.\ in $P^2\subseteq P^{\xi+2}$.
+
+\emph{Step 3.} $A=L_a\cup M_a\approx(G_a\cup F)\cap P$, and $G_a\in Q^2\subseteq P^{\xi+2}$ since $\xi\ge1$. Correcting by
+countable sets (countable sets are in $P^2$ and co-countable sets in $Q^2$), $A=T\cap P$ for some $T\in P^{\xi+2}(\R)$. Then
+$T\cap B=A\cap B=\emptyset$, so $\varphi^{-1}(U)=A\subseteq T\cap E\subseteq E\setminus B=\varphi^{-1}(\overline U)$, and
+$T\cap E\in P^{\xi+2}(E)$. By Lemma~\ref{lem:baire-criterion} (with $\xi+1\ge2$), $\varphi$ is of Baire class $\xi+1$.
+\end{proof}
+
+\begin{corollary}[{\cite[Theorem 8, Corollary]{Diss}}; {\cite[Theorems 4, 5]{JMM}}]\label{cor:borel}
+\lean{TJK.Discont.measurable_of_boundaryFn, TJK.Discont.baireClass_succ_of_boundaryFn_real}
+\uses{thm:baire-plus-one, fact:borel-baire, lem:baire-imp-class, lem:additive-basic}
+Let $Y$ be a separable, arcwise connected metric space, $f:\Hp\to Y$ Borel measurable, and $\varphi:E\to Y$ a boundary function for $f$.
+Then $\varphi$ is Borel measurable. In particular (\cite[Theorems 4, 5]{JMM}), if $f$ is a real function of Baire class
+$\xi\ge1$ in the upper half-plane, every finite-valued boundary function of $f$ is of Baire class $\xi+1$, and if $f$ is
+Borel measurable so is every finite-valued boundary function.
+\end{corollary}
+\begin{proof}
+By Fact~\ref{fact:borel-baire}, $f$ is of some Baire class $\xi<\omega_1$ (if $\xi=0$, also of class $1$); by
+Theorem~\ref{thm:baire-plus-one}, $\varphi$ is of Baire class $\xi+1$, hence Borel measurable
+(Lemma~\ref{lem:baire-imp-class}). $\R$ is separable and arcwise connected.
+\end{proof}
+
+\subsection{Lebesgue measure}
+$X_0=\R\times\{0\}$, $X_1=\R\times\{1\}$; $m$ is planar Lebesgue measure, $m^1$ linear measure on a line, and $m_e$, $m^1_e$
+the outer measures. A \emph{segment} below means a closed line segment with one endpoint $\langle a_0(s),0\rangle\in X_0$ and the
+other $\langle a_1(s),1\rangle\in X_1$; write $\ell_s(y)=(1-y)a_0(s)+ya_1(s)$.
+
+\begin{definition}[trapezoids]\label{def:trapezoid}
+\lean{TJK.Discont.closedTrapezoid, TJK.Discont.IsTrapezoid, TJK.Discont.segTrap}
+For $a_0\le b_0$, $a_1\le b_1$ in $[-\infty,+\infty]$ with $a_i<+\infty$ and $b_i>-\infty$ (and $0\cdot(\pm\infty)=0$), let
+$T(a_0,b_0;a_1,b_1)=\{\langle x,y\rangle:0\le y\le1,\ x\in\R,\ (1-y)a_0+ya_1\le x\le(1-y)b_0+yb_1\}$, a \emph{closed trapezoid}; $\emptyset$
+is also one. $S$ is a \emph{trapezoid} if $T^\circ\subseteq S\subseteq T$ for a closed trapezoid $T$, where $T^\circ$ is the interior
+of $T$ \emph{relative to the strip} $\{0\le y\le1\}$. For disjoint segments
+$s,s'$ with $a_i(s)\le a_i(s')$, $T(s,s')=T(s',s)=T(a_0(s),a_0(s');a_1(s),a_1(s'))$; and $T(s,s)=s$.
+\end{definition}
+A trapezoid $S$ is Lebesgue measurable and
+$m(S)=\frac12\bigl[(b_0-a_0)+(b_1-a_1)\bigr]=\frac12\bigl[m^1(S\cap X_0)+m^1(S\cap X_1)\bigr]$: integrate the lengths
+$(1-y)(b_0-a_0)+y(b_1-a_1)$ of the horizontal sections, and note that $S\cap X_i$ lies between $(a_i,b_i)$ and $[a_i,b_i]$.
+(The restrictions $a_i<+\infty$, $b_i>-\infty$ exclude the degenerate sides $a_i=b_i=\pm\infty$, for which the formula fails.) Two disjoint segments $s\ne s'$ satisfy either $\ell_s<\ell_{s'}$ on $[0,1]$
+or $\ell_s>\ell_{s'}$ on $[0,1]$, since $\ell_s-\ell_{s'}$ is affine and does not vanish.
+
+\begin{lemma}[{\cite[Lemma 23]{Diss}}]\label{lem:th-lemma23}
+\lean{TJK.Discont.segTrap_subset_union}
+\uses{def:trapezoid}
+Let $s_1,s_2,s_3,s_4$ be segments, any two equal or disjoint. If $T(s_1,s_2)\cap T(s_3,s_4)\ne\emptyset$ then
+$T(s_1,s_3)\subseteq T(s_1,s_2)\cup T(s_3,s_4)$.
+\end{lemma}
+\begin{proof}
+The horizontal section of $T(s_i,s_j)$ at height $y$ is the interval between $\ell_{s_i}(y)$ and $\ell_{s_j}(y)$. The order of the
+four numbers $\ell_{s_i}(y)$ (with ties exactly between equal segments) does not depend on $y$. Whether two such intervals meet
+depends only on this order; so if the two sections meet at one height they meet at every height. The union of two meeting
+intervals is an interval, and it contains $\ell_{s_1}(y)$ and $\ell_{s_3}(y)$.
+\end{proof}
+
+\begin{lemma}[{\cite[Lemma 24]{Diss}}]\label{lem:th-lemma24}
+\lean{TJK.Discont.isTrapezoid_biUnion}
+\uses{def:trapezoid}
+If $\Sigma$ is a set of pairwise disjoint segments, $\bigcup_{s,s'\in\Sigma}T(s,s')$ is a trapezoid.
+\end{lemma}
+\begin{proof}
+Let $A_i=\inf_sa_i(s)$, $B_i=\sup_sa_i(s)$ and $T=T(A_0,B_0;A_1,B_1)$. The union lies in $T$. The segments are totally ordered and
+both $a_0$ and $a_1$ increase along the order; so a sequence $s_k$ descending in this order with $a_0(s_k)\to A_0$ also
+has $a_1(s_k)\to A_1$ (given $s$ with $a_1(s)$ close to $A_1$, eventually $s_k\preceq s$), whence $\inf_s\ell_s(y)=(1-y)A_0+yA_1$,
+and similarly for the supremum. Hence every
+$\langle x,y\rangle\in T^\circ$ satisfies $\ell_s(y)<x<\ell_{s'}(y)$ for some $s,s'\in\Sigma$, so it lies in $T(s,s')$.
+\end{proof}
+
+\begin{theorem}[{\cite[Theorem 9]{Diss}}]\label{thm:th-thm9}
+\lean{TJK.Discont.outerMeasure_union_segments}
+\uses{lem:th-lemma23, lem:th-lemma24, def:trapezoid}
+Let $\Sigma$ be a set of pairwise disjoint segments and $S=\bigcup\Sigma$. Then
+$m_e(S)=\frac12\bigl[m^1_e(S\cap X_0)+m^1_e(S\cap X_1)\bigr]$.
+\end{theorem}
+\begin{proof}
+We may assume $\Sigma\ne\emptyset$. Let $\eps>0$ and $E_i=S\cap X_i$. Choose open $U\supseteq S$ with $m(U)\le m_e(S)+\eps$ and
+relatively open $G_i\supseteq E_i$ in $X_i$ with $m^1(G_i)\le m^1_e(E_i)+\eps$ (when these are finite). Let
+$V=\{\langle(1-y)u_0+yu_1,y\rangle:u_0\in G_0,u_1\in G_1,y\in\R\}$. $V$ is open (if $\langle x,y\rangle=\langle(1-y)u_0+yu_1,y\rangle$, then
+nearby points are $\langle(1-y')(u_0+t)+y'(u_1+t),y'\rangle$ with small $t$), $S\subseteq V$ and $V\cap X_i=G_i$. Put $W=U\cap V$.
+
+For $s,s'\in\Sigma$ write $s\equiv s'$ if $T(s,s')\subseteq W$. By Lemma~\ref{lem:th-lemma23} (with $T(s_1,s_2)\cap T(s_2,s_3)\supseteq s_2$)
+this is an equivalence relation; let $\Gamma$ be the set of classes. \emph{$\Gamma$ is countable:} for $s\in\Sigma$, $s$ is compact
+and in $W$, so there is $\delta_s>0$ such that $N_s=\{\langle x,y\rangle:0\le y\le1,\ \abs{x-\ell_s(y)}<\delta_s\}\subseteq W$. Let
+$J_i(s)=(a_i(s)-\delta_s,a_i(s)+\delta_s)$. If $J_0(s)\cap J_0(s')\ne\emptyset$ and $J_1(s)\cap J_1(s')\ne\emptyset$, then
+$\abs{\ell_s(y)-\ell_{s'}(y)}<\delta_s+\delta_{s'}$ for all $y$, so $T(s,s')\subseteq N_s\cup N_{s'}\subseteq W$ and $s\equiv s'$.
+Choosing $s(C)\in C$ for $C\in\Gamma$, the open rectangles $J_0(s(C))\times J_1(s(C))$ are pairwise disjoint, so $\Gamma$ is countable.
+
+For $C\in\Gamma$ let $T(C)=\bigcup_{s,s'\in C}T(s,s')$, a trapezoid by Lemma~\ref{lem:th-lemma24}, with $C\subseteq T(C)\subseteq W$. If
+$C_1\ne C_2$ then $T(C_1)\cap T(C_2)=\emptyset$: otherwise some $T(s_1,s_1')\cap T(s_2,s_2')\ne\emptyset$ and
+Lemma~\ref{lem:th-lemma23} gives $T(s_1,s_2)\subseteq W$, i.e.\ $s_1\equiv s_2$. Let $K_i(C)=T(C)\cap X_i$; these are intervals,
+pairwise disjoint for fixed $i$, and $E_i\subseteq\bigcup_CK_i(C)\subseteq W\cap X_i\subseteq G_i$. Put
+\[
+a=m\Bigl(\bigcup_CT(C)\Bigr)=\sum_Cm(T(C))=\tfrac12\Bigl[m^1\Bigl(\bigcup_CK_0(C)\Bigr)+m^1\Bigl(\bigcup_CK_1(C)\Bigr)\Bigr].
+\]
+Since $S\subseteq\bigcup_CT(C)\subseteq W\subseteq U$, $m_e(S)\le a\le m_e(S)+\eps$; and
+$\frac12[m^1_e(E_0)+m^1_e(E_1)]\le a\le\frac12[m^1(G_0)+m^1(G_1)]\le\frac12[m^1_e(E_0)+m^1_e(E_1)]+\eps$. Let $\eps\to0$ (the infinite
+cases are covered by the same inequalities).
+\end{proof}
+
+\begin{proposition}[{\cite[example after Theorem 9]{Diss}}]\label{prop:th-example}
+\lean{TJK.Discont.segments_not_disjoint_example}
+\uses{fact:baire-category}
+Disjointness cannot be omitted in Theorem~\ref{thm:th-thm9}: there are sets $M_0\subseteq X_0$, $M_1\subseteq X_1$ of measure zero
+such that every point of $\{0<y<1\}$ lies on a segment from $M_0$ to $M_1$.
+\end{proposition}
+\begin{proof}
+Let $M_i$ be dense $\Gd$ subsets of measure zero, e.g.\ $\bigcap_n\bigcup_k(q_k-2^{-n-k},q_k+2^{-n-k})$ for an enumeration $q_k$ of
+$\Q$. Given $\langle x_0,y_0\rangle$ with $0<y_0<1$, the maps $F_0(\theta)=x_0-y_0\cot\theta$ and $F_1(\theta)=x_0+(1-y_0)\cot\theta$
+are homeomorphisms of $(0,\pi)$ onto $\R$, so $F_0^{-1}(M_0)\cap F_1^{-1}(M_1)$ is a nonempty residual set by Baire's theorem;
+for $\theta$ in it, the line through $\langle x_0,y_0\rangle$ with inclination $\theta$ meets $X_0$ in $M_0$ and $X_1$ in $M_1$.
+\end{proof}
+
+\begin{lemma}[{\cite[Lemma 25]{Diss}}]\label{lem:th-lemma25}
+\lean{TJK.Discont.exists_strictMono_null_range}
+For every $\eps>0$ there is a strictly increasing $h:\R\to\R$ with $m^1(h(\R))=0$ and $\abs{x-h(x)}\le\eps$ for all $x$.
+\end{lemma}
+\begin{proof}
+For $t\in[0,1)$ with binary digits $t=\sum_ia_i2^{-i}$ (not ending in $1$'s) put $c(t)=\sum_i2a_i3^{-i}$. Then $c$ maps $[0,1)$ into
+the Cantor set, which is null, and is strictly increasing: if $t<t'$ first differ at digit $k$, then
+$c(t)<\sum_{i<k}2a_i3^{-i}+3^{-k}<c(t')$, the first inequality being strict because the digits of $t$ do not end in $1$'s. Put
+$h(x)=n\eps+\eps c(x/\eps-n)$ for $x\in[n\eps,(n+1)\eps)$, $n\in\Z$.
+\end{proof}
+
+\begin{theorem}[{\cite[Theorem 10]{Diss}}]\label{thm:th-thm10}
+\lean{TJK.Discont.exists_disjoint_null_arcs}
+\uses{lem:th-lemma25, thm:th-thm9, def:arcs}
+There is a family $(\gamma_x)_{x\in\R}$ of arcs, $\gamma_x$ an arc at $x$, pairwise disjoint, whose union has planar measure zero.
+\end{theorem}
+\begin{proof}
+Choose by Lemma~\ref{lem:th-lemma25} strictly increasing $h_n$ with $h_n(\R)$ null and $\abs{x-h_n(x)}\le1/n$. For $x\in\R$ let
+$X_x:[0,1]\to\R$ be $X_x(0)=x$ and, on $[1/(n+1),1/n]$, the affine function with $X_x(1/(n+1))=h_{n+1}(x)$ and $X_x(1/n)=h_n(x)$.
+It is continuous (at $0$ because $\abs{X_x(y)-x}\le1/n$ there), so $\gamma_x=\{\langle X_x(y),y\rangle:0\le y\le1\}$ is an arc at $x$.
+If $x<x'$ then $X_x<X_{x'}$ everywhere, so the arcs are disjoint. Let $S_n$ be the union over $x$ of the segments
+$\{\langle X_x(y),y\rangle:1/(n+1)\le y\le1/n\}$. After the affine change of variable $y\mapsto n(n+1)(y-1/(n+1))$, which multiplies
+areas by $n(n+1)$, Theorem~\ref{thm:th-thm9} applies; the end sets lie in $h_{n+1}(\R)$ and $h_n(\R)$, so $m_e(S_n)=0$.
+Hence $\bigcup_x\gamma_x\subseteq X_0\cup\bigcup_nS_n$ is null.
+\end{proof}
+
+\begin{corollary}[{\cite[Theorem 10, Corollary 1]{Diss}}; {\cite[Theorem 6]{JMM}}]\label{cor:ae-zero}
+\lean{TJK.Discont.exists_ae_zero_boundaryFn}
+\uses{thm:th-thm10, def:ccset}
+Let $Y$ be a metric space with a point $0$ and $\varphi:\R\to Y$ arbitrary. There is $f:\Hp\to Y$ with $f=0$ outside a set of
+measure zero such that $\varphi$ is a boundary function for $f$.
+\end{corollary}
+\begin{proof}
+Put $f=\varphi(x)$ on $\gamma_x\setminus\{x\}$ and $f=0$ elsewhere; $f$ is constant along each $\gamma_x$.
+\end{proof}
+
+\begin{fact}[non-measurable sets]\label{fact:vitali}
+\lean{TJK.Discont.exists_not_nullMeasurableSet}
+\source{Vitali; Mathlib may provide it}
+There is a subset of $\R$ that is not Lebesgue measurable.
+\end{fact}
+
+\begin{corollary}[{\cite[Theorem 10, Corollary 2]{Diss}}]\label{cor:nonmeasurable}
+\lean{TJK.Discont.exists_measurable_nonmeasurable_boundaryFn}
+\uses{cor:ae-zero, fact:vitali}
+There is a Lebesgue-measurable $f:\Hp\to\R$ with a boundary function on $\R$ that is not Lebesgue measurable.
+\end{corollary}
+\begin{proof}
+Apply Corollary~\ref{cor:ae-zero} to the indicator function of a non-measurable set; $f=0$ almost everywhere.
+\end{proof}

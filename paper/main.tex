@@ -1,0 +1,144 @@
+\documentclass[11pt,reqno]{amsart}
+\usepackage[margin=1.1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{enumitem}
+\usepackage{booktabs,longtable}
+\usepackage{xcolor}
+\usepackage[colorlinks=true,linkcolor=blue!50!black,citecolor=green!40!black,urlcolor=blue!50!black]{hyperref}
+
+% ---------------------------------------------------------------------------
+% Theorem environments
+% ---------------------------------------------------------------------------
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{fact}[theorem]{Fact}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{example}[theorem]{Example}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+% ---------------------------------------------------------------------------
+% Macros
+% ---------------------------------------------------------------------------
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\C}{\mathbb{C}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\D}{\mathbb{D}}
+\newcommand{\T}{\mathbb{T}}
+\newcommand{\Hp}{\mathbb{H}}
+\newcommand{\Sph}{\mathbb{S}^2}
+\newcommand{\cl}{\operatorname{Cl}}
+\newcommand{\inter}{\operatorname{int}}
+\newcommand{\diam}{\operatorname{diam}}
+\newcommand{\dist}{\operatorname{dist}}
+\newcommand{\acc}{\operatorname{acc}}
+\newcommand{\CC}{\operatorname{CC}}
+\newcommand{\Trap}{\operatorname{Trap}}
+\newcommand{\Tri}{\operatorname{Tri}}
+\newcommand{\expi}{\operatorname{expi}}
+\newcommand{\abs}[1]{\lvert #1\rvert}
+\newcommand{\norm}[1]{\lVert #1\rVert}
+\newcommand{\eps}{\varepsilon}
+\newcommand{\Fs}{F_\sigma}
+\newcommand{\Gd}{G_\delta}
+\newcommand{\Fsd}{F_{\sigma\delta}}
+\newcommand{\todo}[1]{\textcolor{red!70!black}{[#1]}}
+
+% ---------------------------------------------------------------------------
+% Blueprint annotations (leanblueprint-compatible). They are invisible in the
+% PDF; scripts/blueprint.py reads them to build blueprint/map.md.
+%   \lean{Decl1, Decl2}  Lean declaration(s) formalizing this item
+%   \uses{label1, ...}   items this statement / proof depends on
+%   \source{text}        where an imported Fact comes from
+% ---------------------------------------------------------------------------
+\newcommand{\lean}[1]{}
+\newcommand{\uses}[1]{}
+\newcommand{\leanok}{}
+\newcommand{\source}[1]{}
+
+\numberwithin{equation}{section}
+
+\title{The mathematical works of T.\,J.~Kaczynski:\\ a unified account and formalization blueprint}
+\date{October 2026}
+
+\begin{document}
+
+\begin{abstract}
+We give a single, self-contained account, in traditional mathematical language, of every result in
+the following seven sources: the doctoral dissertation \emph{Boundary functions} (1967) \cite{Diss};
+the papers \cite{JMM} (described only by its review MR0176080), \cite{MMJ}, \cite{TAMSa},
+\cite{TAMSb}, \cite{PAMS}; and the note \cite{MathMag} on a problem of Alan Sutcliffe. The one
+result known to us only through a review (Theorem~1 of \cite{JMM}, on homeomorphisms of the disk) is
+given a complete proof by the plane-topological methods of the other papers. Proofs that the
+originals leave to the reader (the ``readily verifiable facts'' of \cite{TAMSb}, the existence of
+special functions, the explicit Sutcliffe solutions, the extension theorems for Baire functions) are
+written out. Classical results from the literature that the originals cite are isolated as numbered
+\emph{Facts}. The document is organised as a blueprint for a Lean~4 formalization: every numbered
+item names the Lean declarations that formalize it and the items it depends on.
+\end{abstract}
+
+\maketitle
+\tableofcontents
+
+\input{sections/00-intro}
+\input{sections/A-sutcliffe}
+\input{sections/B-baire}
+\input{sections/C-plane}
+\input{sections/D-mcmillan}
+\input{sections/E-boundary}
+\input{sections/F-construct}
+\input{sections/G-discont}
+\input{sections/H-harmonic}
+\input{sections/I-cube}
+\input{sections/Z-appendix}
+
+\begin{thebibliography}{99}
+\bibitem{JMM} T.~J. Kaczynski, \emph{Boundary functions for functions defined in a disk},
+  J. Math. Mech. \textbf{14} (1965), 589--612. (Known here through MR0176080.)
+\bibitem{MMJ} T.~J. Kaczynski, \emph{On a boundary property of continuous functions},
+  Michigan Math. J. \textbf{13} (1966), 313--320.
+\bibitem{Diss} T.~J. Kaczynski, \emph{Boundary functions}, Doctoral dissertation, University of
+  Michigan, 1967.
+\bibitem{MathMag} T.~J. Kaczynski, \emph{Note on a problem of Alan Sutcliffe}, Math. Mag.
+  \textbf{41} (1968), 84--86.
+\bibitem{TAMSa} T.~J. Kaczynski, \emph{Boundary functions for bounded harmonic functions},
+  Trans. Amer. Math. Soc. \textbf{137} (1969), 203--209.
+\bibitem{TAMSb} T.~J. Kaczynski, \emph{Boundary functions and sets of curvilinear convergence for
+  continuous functions}, Trans. Amer. Math. Soc. \textbf{141} (1969), 107--125.
+\bibitem{PAMS} T.~J. Kaczynski, \emph{The set of curvilinear convergence of a continuous function
+  defined in the interior of a cube}, Proc. Amer. Math. Soc. \textbf{23} (1969), 323--327.
+\bibitem{Sut} A.~Sutcliffe, \emph{Integers that are multiplied when their digits are reversed},
+  Math. Mag. \textbf{39} (1966), 282--287.
+\bibitem{BP} F.~Bagemihl and G.~Piranian, \emph{Boundary functions for functions defined in a disk},
+  Michigan Math. J. \textbf{8} (1961), 201--207.
+\bibitem{Bag} F.~Bagemihl, \emph{Curvilinear cluster sets of arbitrary functions}, Proc. Nat. Acad.
+  Sci. U.S.A. \textbf{41} (1955), 379--382.
+\bibitem{BS} F.~Bagemihl and W.~Seidel, \emph{Koebe arcs and Fatou points of normal functions},
+  Comment. Math. Helv. \textbf{36} (1961), 9--18.
+\bibitem{Banach} S.~Banach, \emph{\"Uber analytisch darstellbare Operationen in abstrakten
+  R\"aumen}, Fund. Math. \textbf{17} (1931), 283--295.
+\bibitem{Hausdorff} F.~Hausdorff, \emph{\"Uber halbstetige Funktionen und deren
+  Verallgemeinerung}, Math. Z. \textbf{5} (1919), 292--309.
+\bibitem{Hoffman} K.~Hoffman, \emph{Banach spaces of analytic functions}, Prentice-Hall, 1962.
+\bibitem{Kierst} S.~Kierst, \emph{Sur l'ensemble des valeurs asymptotiques d'une fonction
+  m\'eromorphe dans le cercle-unit\'e}, Fund. Math. \textbf{27} (1936), 226--233.
+\bibitem{Kuratowski} K.~Kuratowski, \emph{Topologie I}, 3rd ed., Warsaw, 1952.
+\bibitem{LV} O.~Lehto and K.~I. Virtanen, \emph{Boundary behaviour and normal meromorphic
+  functions}, Acta Math. \textbf{97} (1957), 47--65.
+\bibitem{McM} J.~E. McMillan, \emph{Boundary properties of functions continuous in a disc},
+  Michigan Math. J. \textbf{13} (1966), 299--312.
+\bibitem{Newman} M.~H.~A. Newman, \emph{Elements of the topology of plane sets of points}, 2nd ed.,
+  Cambridge, 1964.
+\bibitem{Sierpinski} W.~Sierpi\'nski, \emph{Sur une propri\'et\'e des ensembles ambigus}, Fund.
+  Math. \textbf{6} (1924), 1--5.
+\bibitem{SierpGT} W.~Sierpi\'nski, \emph{General topology}, Univ. of Toronto Press, 1952.
+\bibitem{Tietze} H.~Tietze, \emph{\"Uber stetige Kurven, Jordansche Kurvenb\"ogen und geschlossene
+  Jordansche Kurven}, Math. Z. \textbf{5} (1919), 284--291.
+\end{thebibliography}
+
+\end{document}

@@ -1,0 +1,207 @@
+{
+  "TJK.IsFσ": {
+    "sha": "88ce80a90ed1f02c",
+    "statement": "def IsFσ (s : Set X) : Prop := ∃ F : ℕ → Set X, (∀ n, IsClosed (F n)) ∧ s = ⋃ n, F n",
+    "file": "TJK/Defs.lean"
+  },
+  "TJK.IsFσδ": {
+    "sha": "2941d1333c4863f4",
+    "statement": "def IsFσδ (s : Set X) : Prop := ∃ A : ℕ → Set X, (∀ n, IsFσ (A n)) ∧ s = ⋂ n, A n",
+    "file": "TJK/Defs.lean"
+  },
+  "TJK.IsAmbiguous": {
+    "sha": "832f9aa5a14ce7fa",
+    "statement": "def IsAmbiguous (s : Set X) : Prop := IsFσ s ∧ IsGδ s end Sets section Functions variable {X : Type u} {Y : Type v} [TopologicalSpace X] [TopologicalSpace Y]",
+    "file": "TJK/Defs.lean"
+  },
+  "TJK.IsFσMeasurable": {
+    "sha": "fef678ebd2207234",
+    "statement": "def IsFσMeasurable (f : X → Y) : Prop := ∀ U : Set Y, IsOpen U → IsFσ (f ⁻¹' U)",
+    "file": "TJK/Defs.lean"
+  },
+  "TJK.IsBaireOne": {
+    "sha": "7a639b4c716be267",
+    "statement": "def IsBaireOne (f : X → Y) : Prop := ∃ F : ℕ → X → Y, (∀ n, Continuous (F n)) ∧ ∀ x, Tendsto (fun n => F n x) atTop (𝓝 (f x))",
+    "file": "TJK/Defs.lean"
+  },
+  "TJK.IsHonoraryBaireTwo": {
+    "sha": "2074df24c3848373",
+    "statement": "def IsHonoraryBaireTwo (f : X → Y) : Prop := ∃ N : Set X, N.Countable ∧ ∃ g : X → Y, IsBaireOne g ∧ ∀ x ∉ N, f x = g x",
+    "file": "TJK/Defs.lean"
+  },
+  "TJK.BaireClass": {
+    "sha": "79a9eb9fb789ff81",
+    "statement": "inductive BaireClass : Ordinal.{0} → (X → Y) → Prop | zero {f : X → Y} : Continuous f → BaireClass 0 f | lim {ξ : Ordinal.{0}} {f : X → Y} (η : ℕ → Ordinal.{0}) (F : ℕ → X → Y) : 0 < ξ → (∀ n, η n < ξ) → (∀ n, BaireClass (η n) (F n)) → (∀ x, Tendsto (fun n => F n x) atTop (𝓝 (f x))) → BaireClass ξ f end Functions section Arcs variable {E : Type u} [TopologicalSpace E] {Y : Type v} [TopologicalSpace Y]",
+    "file": "TJK/Defs.lean"
+  },
+  "TJK.IsArc": {
+    "sha": "061d4722e8465e25",
+    "statement": "def IsArc (γ : Set E) (a b : E) : Prop := ∃ p : Path a b, Function.Injective p ∧ range p = γ",
+    "file": "TJK/Defs.lean"
+  },
+  "TJK.IsArcAt": {
+    "sha": "8a2cd2f2e437186f",
+    "statement": "def IsArcAt (Ω : Set E) (x : E) (γ : Set E) : Prop := ∃ b, IsArc γ x b ∧ γ \\ {x} ⊆ Ω",
+    "file": "TJK/Defs.lean"
+  },
+  "TJK.IsCrosscut": {
+    "sha": "c68dc993a635019c",
+    "statement": "def IsCrosscut (Ω B : Set E) (γ : Set E) : Prop := ∃ a b, a ≠ b ∧ a ∈ B ∧ b ∈ B ∧ IsArc γ a b ∧ γ \\ {a, b} ⊆ Ω",
+    "file": "TJK/Defs.lean"
+  },
+  "TJK.curvConvSet": {
+    "sha": "bb07db2764a6e3f5",
+    "statement": "def curvConvSet (Ω B : Set E) (f : E → Y) : Set E := {x | x ∈ B ∧ ∃ γ, IsArcAt Ω x γ ∧ ∃ q, Tendsto f (𝓝[γ \\ {x}] x) (𝓝 q)}",
+    "file": "TJK/Defs.lean"
+  },
+  "TJK.IsBoundaryFunction": {
+    "sha": "b67624808b162a7c",
+    "statement": "def IsBoundaryFunction (Ω : Set E) (f : E → Y) (S : Set E) (φ : E → Y) : Prop := ∀ x ∈ S, ∃ γ, IsArcAt Ω x γ ∧ Tendsto f (𝓝[γ \\ {x}] x) (𝓝 (φ x))",
+    "file": "TJK/Defs.lean"
+  },
+  "TJK.clusterSet": {
+    "sha": "bfdf374354933348",
+    "statement": "def clusterSet (f : E → Y) (γ : Set E) (x : E) : Set Y := {q | MapClusterPt q (𝓝[γ \\ {x}] x) f} end Arcs",
+    "file": "TJK/Defs.lean"
+  },
+  "TJK.disc": {
+    "sha": "2a3ddbdd886233e0",
+    "statement": "abbrev disc : Set ℂ := Metric.ball 0 1",
+    "file": "TJK/Defs.lean"
+  },
+  "TJK.circle": {
+    "sha": "a6bbcfe002e196a0",
+    "statement": "abbrev circle : Set ℂ := Metric.sphere 0 1",
+    "file": "TJK/Defs.lean"
+  },
+  "TJK.upper": {
+    "sha": "22ed6cbd9521dad9",
+    "statement": "abbrev upper : Set ℂ := {z | 0 < z.im}",
+    "file": "TJK/Defs.lean"
+  },
+  "TJK.realAxis": {
+    "sha": "5d618b1d698514cb",
+    "statement": "abbrev realAxis : Set ℂ := {z | z.im = 0}",
+    "file": "TJK/Defs.lean"
+  },
+  "TJK.Sphere2": {
+    "sha": "5314bca50c06756c",
+    "statement": "abbrev Sphere2 : Type := Metric.sphere (0 : EuclideanSpace ℝ (Fin 3)) 1 end TJK",
+    "file": "TJK/Defs.lean"
+  },
+  "TJK.McMillan.isFσδ_curvConvSet": {
+    "sha": "9a6f144019c6ca11",
+    "statement": "theorem McMillan.isFσδ_curvConvSet {K : Type*} [MetricSpace K] [CompleteSpace K] [TopologicalSpace.SeparableSpace K] (f : ℂ → K) (hf : ContinuousOn f disc) : IsFσδ (curvConvSet disc circle f)",
+    "file": "TJK/MainTheorems.lean"
+  },
+  "TJK.McMillan.isFσδ_clusterSet_subset": {
+    "sha": "d577866aec442c51",
+    "statement": "theorem McMillan.isFσδ_clusterSet_subset {K : Type*} [MetricSpace K] [CompactSpace K] (ℰ : Set (TopologicalSpace.NonemptyCompacts K)) (hℰ : IsClosed ℰ) (f : ℂ → K) (hf : ContinuousOn f disc) : IsFσδ {x | x ∈ circle ∧ ∃ γ, IsArcAt disc x γ ∧ ∃ E ∈ ℰ, clusterSet f γ x ⊆ (E : Set K)}",
+    "file": "TJK/MainTheorems.lean"
+  },
+  "TJK.BoundaryFn.exists_countable_isFσMeasurable": {
+    "sha": "83671fede2cf59eb",
+    "statement": "theorem BoundaryFn.exists_countable_isFσMeasurable {Y : Type*} [MetricSpace Y] [TopologicalSpace.SeparableSpace Y] (f : ℂ → Y) (hf : ContinuousOn f upper) (E : Set ℂ) (hE : E ⊆ realAxis) (φ : ℂ → Y) (hφ : IsBoundaryFunction upper f E φ) : ∃ M ⊆ E, M.Countable ∧ IsFσMeasurable ((E \\ M).restrict φ)",
+    "file": "TJK/MainTheorems.lean"
+  },
+  "TJK.BoundaryFn.isHonoraryBaireTwo_disc_real": {
+    "sha": "977d3941ba057e0b",
+    "statement": "theorem BoundaryFn.isHonoraryBaireTwo_disc_real (f : ℂ → ℝ) (hf : ContinuousOn f disc) (E : Set ℂ) (hE : E ⊆ circle) (φ : ℂ → ℝ) (hφ : IsBoundaryFunction disc f E φ) : IsHonoraryBaireTwo (E.restrict φ)",
+    "file": "TJK/MainTheorems.lean"
+  },
+  "TJK.BoundaryFn.isHonoraryBaireTwo_disc_sphere": {
+    "sha": "b36efbb2b63e6b86",
+    "statement": "theorem BoundaryFn.isHonoraryBaireTwo_disc_sphere (f : ℂ → Sphere2) (hf : ContinuousOn f disc) (E : Set ℂ) (hE : E ⊆ circle) (φ : ℂ → Sphere2) (hφ : IsBoundaryFunction disc f E φ) : IsHonoraryBaireTwo (E.restrict φ)",
+    "file": "TJK/MainTheorems.lean"
+  },
+  "TJK.Homeo.exists_countable_continuousOn": {
+    "sha": "365ab9140a47660a",
+    "statement": "theorem Homeo.exists_countable_continuousOn (e : disc ≃ₜ disc) (f : ℂ → ℂ) (hfe : ∀ z : disc, f z = e z) (E : Set ℂ) (hE : E ⊆ circle) (φ : ℂ → ℂ) (hφ : IsBoundaryFunction disc f E φ) : ∃ N ⊆ E, N.Countable ∧ ContinuousOn φ (E \\ N)",
+    "file": "TJK/MainTheorems.lean"
+  },
+  "TJK.Construct.exists_curvConvSet_eq_upperHalfPlane": {
+    "sha": "1b97bccd8da6bbe3",
+    "statement": "theorem Construct.exists_curvConvSet_eq_upperHalfPlane (A : Set ℝ) (hA : IsFσδ A) : ∃ f : ℂ → ℂ, ContinuousOn f upper ∧ Bornology.IsBounded (f '' upper) ∧ curvConvSet upper realAxis f = ((↑) : ℝ → ℂ) '' A",
+    "file": "TJK/MainTheorems.lean"
+  },
+  "TJK.Construct.exists_f_sphere": {
+    "sha": "fbe6f7e9bde51b37",
+    "statement": "theorem Construct.exists_f_sphere (A : Set ℂ) (hA : A ⊆ circle) (hAF : IsFσδ A) (φ : ℂ → Sphere2) (hφ : IsHonoraryBaireTwo (A.restrict φ)) : ∃ f : ℂ → Sphere2, ContinuousOn f disc ∧ curvConvSet disc circle f = A ∧ IsBoundaryFunction disc f A φ",
+    "file": "TJK/MainTheorems.lean"
+  },
+  "TJK.Construct.exists_boundaryFn_euclidean": {
+    "sha": "bb1c1473c4c73005",
+    "statement": "theorem Construct.exists_boundaryFn_euclidean {m : ℕ} (E : Set ℝ) (φ : ℝ → EuclideanSpace ℝ (Fin m)) (hφ : IsHonoraryBaireTwo (E.restrict φ)) : ∃ f : ℂ → EuclideanSpace ℝ (Fin m), ContinuousOn f upper ∧ IsBoundaryFunction upper f (((↑) : ℝ → ℂ) '' E) (fun z => φ z.re)",
+    "file": "TJK/MainTheorems.lean"
+  },
+  "TJK.Discont.baireClass_succ_of_boundaryFn": {
+    "sha": "8dbb7cadf5d50801",
+    "statement": "theorem Discont.baireClass_succ_of_boundaryFn {Y : Type} [MetricSpace Y] [TopologicalSpace.SeparableSpace Y] [PathConnectedSpace Y] (ξ : Ordinal.{0}) (hξ : 1 ≤ ξ) (f : ℂ → Y) (hf : BaireClass ξ (upper.restrict f)) (E : Set ℂ) (hE : E ⊆ realAxis) (φ : ℂ → Y) (hφ : IsBoundaryFunction upper f E φ) : BaireClass (ξ + 1) (E.restrict φ)",
+    "file": "TJK/MainTheorems.lean"
+  },
+  "TJK.Discont.exists_disjoint_null_arcs": {
+    "sha": "1a090fd63eef8e38",
+    "statement": "theorem Discont.exists_disjoint_null_arcs : ∃ γ : ℝ → Set ℂ, (∀ x : ℝ, IsArcAt upper (x : ℂ) (γ x)) ∧ Pairwise (fun x y => Disjoint (γ x) (γ y)) ∧ volume (⋃ x, γ x) = 0",
+    "file": "TJK/MainTheorems.lean"
+  },
+  "TJK.Discont.exists_ae_zero_boundaryFn": {
+    "sha": "8961007d42719f7f",
+    "statement": "theorem Discont.exists_ae_zero_boundaryFn {Y : Type*} [MetricSpace Y] (y₀ : Y) (φ : ℝ → Y) : ∃ f : ℂ → Y, (∀ᵐ z ∂volume, f z = y₀) ∧ IsBoundaryFunction upper f realAxis (fun z => φ z.re)",
+    "file": "TJK/MainTheorems.lean"
+  },
+  "TJK.Discont.exists_measurable_nonmeasurable_boundaryFn": {
+    "sha": "5dd703529243882f",
+    "statement": "theorem Discont.exists_measurable_nonmeasurable_boundaryFn : ∃ f : ℂ → ℝ, NullMeasurable f volume ∧ ∃ φ : ℂ → ℝ, IsBoundaryFunction upper f realAxis φ ∧ ¬ NullMeasurable (fun x : ℝ => φ x) volume",
+    "file": "TJK/MainTheorems.lean"
+  },
+  "TJK.Harmonic.exists_bounded_harmonic_boundaryFn_not_baireOne": {
+    "sha": "ca1c60ebba365b59",
+    "statement": "theorem Harmonic.exists_bounded_harmonic_boundaryFn_not_baireOne : ∃ f : ℂ → ℝ, InnerProductSpace.HarmonicOnNhd f disc ∧ Bornology.IsBounded (f '' disc) ∧ ∃ φ : ℂ → ℝ, IsBoundaryFunction disc f circle φ ∧ ¬ IsBaireOne (circle.restrict φ)",
+    "file": "TJK/MainTheorems.lean"
+  },
+  "TJK.Harmonic.isMeagre_asymptotic_diff_generalLimit": {
+    "sha": "a7e05fff6e13b793",
+    "statement": "theorem Harmonic.isMeagre_asymptotic_diff_generalLimit (u : ℂ → ℝ) (hu : InnerProductSpace.HarmonicOnNhd u disc) (p : ℝ) (hp : 1 < p) (hmean : ∃ B : ℝ, ∀ r ∈ Ico (0 : ℝ) 1, ∫ θ in (0 : ℝ)..(2 * Real.pi), |u (r * Complex.exp (θ * Complex.I))| ^ p ≤ B) : IsMeagre ((Subtype.val : circle → ℂ) ⁻¹' (curvConvSet disc circle u \\ {ζ | ∃ L, Tendsto u (𝓝[disc] ζ) (𝓝 L)}))",
+    "file": "TJK/MainTheorems.lean"
+  },
+  "TJK.Cube.openCube": {
+    "sha": "8841e039fe768ac2",
+    "statement": "def Cube.openCube : Set (EuclideanSpace ℝ (Fin 3)) := {v | v 0 ∈ Ioo (-1 : ℝ) 1 ∧ v 1 ∈ Ioo (0 : ℝ) 1 ∧ v 2 ∈ Ioo (-1 : ℝ) 1}",
+    "file": "TJK/MainTheorems.lean"
+  },
+  "TJK.Cube.exists_not_measurableSet_curvConvSet": {
+    "sha": "10e90f54c4cfa8b5",
+    "statement": "theorem Cube.exists_not_measurableSet_curvConvSet : ∃ f : EuclideanSpace ℝ (Fin 3) → ℂ, ContinuousOn f Cube.openCube ∧ Bornology.IsBounded (f '' Cube.openCube) ∧ ¬ MeasurableSet (curvConvSet Cube.openCube (frontier Cube.openCube) f)",
+    "file": "TJK/MainTheorems.lean"
+  },
+  "TJK.Sutcliffe.IsSolution": {
+    "sha": "80d55e624d765cfd",
+    "statement": "def IsSolution (n k : ℕ) (L : List ℕ) : Prop := 2 ≤ n ∧ 1 < k ∧ L ≠ [] ∧ 0 < L.headI ∧ 0 < L.getLastI ∧ (∀ a ∈ L, a ≤ n - 1) ∧ k * Nat.ofDigits n L = Nat.ofDigits n L.reverse",
+    "file": "TJK/Sutcliffe.lean"
+  },
+  "TJK.Sutcliffe.HasSolution": {
+    "sha": "57225d10256d65ea",
+    "statement": "def HasSolution (n d : ℕ) : Prop := ∃ k L, L.length = d ∧ IsSolution n k L",
+    "file": "TJK/Sutcliffe.lean"
+  },
+  "TJK.Sutcliffe.two_digit_of_three_digit": {
+    "sha": "1dbc4628aea08f61",
+    "statement": "theorem two_digit_of_three_digit {n : ℕ} (hn : 2 ≤ n) (h : HasSolution n 3) : HasSolution n 2",
+    "file": "TJK/Sutcliffe.lean"
+  },
+  "TJK.Sutcliffe.three_digit_iff": {
+    "sha": "2d9aeb04eef69c73",
+    "statement": "theorem three_digit_iff {n : ℕ} (hn : 3 < n) : HasSolution n 3 ↔ ¬ (n + 1).Prime",
+    "file": "TJK/Sutcliffe.lean"
+  },
+  "TJK.Sutcliffe.two_digit_iff": {
+    "sha": "38dfbb47967bee12",
+    "statement": "theorem two_digit_iff {n : ℕ} (hn : 4 ≤ n) : HasSolution n 2 ↔ ¬ (n + 1).Prime",
+    "file": "TJK/Sutcliffe.lean"
+  },
+  "TJK.Sutcliffe.three_digit_of_two_digit": {
+    "sha": "7890c5185fec2265",
+    "statement": "theorem three_digit_of_two_digit {n : ℕ} (h : HasSolution n 2) : HasSolution n 3",
+    "file": "TJK/Sutcliffe.lean"
+  }
+}

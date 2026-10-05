@@ -1,0 +1,446 @@
+% ===========================================================================
+\section{Realizing sets of curvilinear convergence and boundary functions}\label{sec:construct}
+% ===========================================================================
+Sources: \cite[(A)--(F)]{TAMSb}; \cite[\S\S4--5, Lemmas 9--17, Theorems 4, 6, 7]{Diss}. In this
+section $X=(-1,1)$ (identified with $(-1,1)\times\{0\}$), $Q=[-1,1]\times(0,1]$, $Q^\circ=(-1,1)\times(0,1)$,
+and $\CC$ refers to arcs in $Q^\circ$ unless said otherwise. Points of $\Hp$ are $\langle x,y\rangle$, $y>0$.
+
+\subsection{Regions}
+
+\begin{definition}[Stolz angles, trapezoids, $B(K,\eps,\alpha,\beta)$]\label{def:regions}
+\lean{TJK.Construct.stolz, TJK.Construct.trap, TJK.Construct.tri, TJK.Construct.hull, TJK.Construct.region}
+For $a\in\R$, $\eps>0$, $0<\theta<\pi/2$:
+$s(a,\eps,\theta)=\{\langle x,y\rangle:0<y<\eps,\ \abs{x-a}<y\cot\theta\}$.
+For a nonempty interval $J$ with endpoints $a\le b$: $\Trap(J,\eps,\theta)=\{0<y<\eps,\ a+y\cot\theta<x<b-y\cot\theta\}$
+and $\Tri(J,\theta)=\{y\ge0,\ a+y\cot\theta\le x\le b-y\cot\theta\}$. For a nonempty compact $K\subseteq\R$ let
+$J(K)=[\min K,\max K]$ and let $\mathcal J(K)$ be the set of components of $J(K)\setminus K$; for
+$0<\beta<\alpha<\pi/2$ put
+\[
+B(K,\eps,\alpha,\beta)=\Trap(J(K),\eps,\alpha)\setminus\bigcup_{I\in\mathcal J(K)}\Tri(I,\beta).
+\]
+\end{definition}
+
+\begin{lemma}[description of $B$]\label{lem:B-char}
+\lean{TJK.Construct.mem_region_iff}
+\uses{def:regions}
+$\langle x,y\rangle\in B(K,\eps,\alpha,\beta)$ iff $0<y<\eps$, $\min K+y\cot\alpha<x<\max K-y\cot\alpha$, and
+$\dist(x,K)<y\cot\beta$.
+\end{lemma}
+\begin{proof}
+Let $y>0$ and $x\in J(K)$. If $x\in K$, $x$ lies in no $\Tri(I,\beta)$ (these lie over $\overline I$, and at an
+endpoint $a$ of $I$ we would need $a+y\cot\beta\le a$). If $x\in I=(a,b)\in\mathcal J(K)$, then $x\notin\Tri(I,\beta)$
+iff $\min(x-a,b-x)<y\cot\beta$, i.e.\ iff $\dist(x,K)<y\cot\beta$, and $x$ lies over no other component.
+\end{proof}
+
+\begin{lemma}[{\cite[(VI)--(XVIII)]{TAMSb}}; {\cite[(6)--(17)]{Diss}}]\label{lem:region-geometry}
+\lean{TJK.Construct.isOpen_stolz, TJK.Construct.isOpen_region, TJK.Construct.closure_stolz_inter_axis,
+  TJK.Construct.closure_region_inter_axis, TJK.Construct.closure_stolz_subset, TJK.Construct.stolz_disjoint,
+  TJK.Construct.region_disjoint_of_split, TJK.Construct.region_disjoint_of_disjoint,
+  TJK.Construct.closure_region_subset, TJK.Construct.region_stolz_disjoint_of_not_mem_interior,
+  TJK.Construct.stolz_region_disjoint_small_stolz, TJK.Construct.stolz_region_disjoint_small_region,
+  TJK.Construct.closure_stolz_subset_region}
+\uses{lem:B-char, def:special-family}
+Let $K,K_1,K_2$ be nonempty compact subsets of $\R$, $0<\beta<\alpha<\pi/2$, $0<\theta<\pi/2$. Write
+$c_\theta=\cot\theta$.
+\begin{enumerate}[label=(R\arabic*)]
+\item $s(a,\eps,\theta)$ and $B(K,\eps,\alpha,\beta)$ are open subsets of $\Hp$.
+\item $\cl s(a,\eps,\theta)\cap\R=\{a\}$ and $\cl B(K,\eps,\alpha,\beta)\cap\R\subseteq K$.
+\item If $\eps<\eps'$ and $\theta'<\theta$ then $\cl s(a,\eps,\theta)\cap\Hp\subseteq s(a,\eps',\theta')$.
+\item If $a\ne b$ and $\eta\le\abs{a-b}/(2c_\theta)$, then $s(a,\eps,\theta)\cap s(b,\eta,\theta)=\emptyset$ for all $\eps$.
+\item If $K_1,K_2$ split (Definition~\ref{def:special-family}), $B(K_1,\eps_1,\alpha,\beta)\cap B(K_2,\eps_2,\alpha,\beta)=\emptyset$.
+\item If $K_1\cap K_2=\emptyset$ and $\eta\le\dist(K_1,K_2)/(2c_\beta)$, then
+  $B(K_1,\eps,\alpha,\beta)\cap B(K_2,\eta,\alpha,\beta)=\emptyset$ for all $\eps$.
+\item If $K_1\subseteq K$, $\eps>\eps_1>0$ and $0<\beta<\beta_1<\alpha_1<\alpha<\pi/2$, then
+  $\cl B(K_1,\eps_1,\alpha_1,\beta_1)\cap\Hp\subseteq B(K,\eps,\alpha,\beta)$.
+\item If $\alpha<\theta$ and $a\notin J(K)^*$, then $B(K,\eps,\alpha,\beta)\cap s(a,\eps_1,\theta)=\emptyset$.
+\item If $a\notin K$ and $\eta\le\dist(a,K)/(c_\theta+c_\beta)$, then $s(a,\eta,\theta)\cap B(K,\eps,\alpha,\beta)=\emptyset$
+  and $s(a,\eps,\theta)\cap B(K,\eta,\alpha,\beta)=\emptyset$ for all $\eps$.
+\item If $a\in K\cap J(K)^*$, $\beta<\theta$, and $0<\eta<\min\{\eps,(a-\min K)/(c_\theta+c_\alpha),(\max K-a)/(c_\theta+c_\alpha)\}$,
+  then $\cl s(a,\eta,\theta)\cap\Hp\subseteq B(K,\eps,\alpha,\beta)$.
+\end{enumerate}
+\end{lemma}
+\begin{proof}
+All follow from Lemma~\ref{lem:B-char} and the triangle inequality.
+(R1) Strict inequalities between continuous functions. (R2) If $\langle x_n,y_n\rangle\to\langle x,0\rangle$ with
+$\dist(x_n,K)<y_nc_\beta$ then $\dist(x,K)=0$. (R3) On the closure, $y\le\eps<\eps'$ and $\abs{x-a}\le yc_\theta<yc_{\theta'}$.
+(R4) A common point has $\abs{a-b}<2yc_\theta<2\eta c_\theta$. (R5) With splitting point $p$ and $K_1\le p\le K_2$,
+points of the first region have $x<\max K_1\le p$ and those of the second $x>\min K_2\ge p$. (R6) A common point
+has $y<\eta$ and $\dist(K_1,K_2)\le\dist(x,K_1)+\dist(x,K_2)<2yc_\beta$. (R7) On the closure $y\le\eps_1<\eps$,
+$\min K+yc_\alpha<\min K_1+yc_{\alpha_1}\le x$ (similarly on the right), and $\dist(x,K)\le\dist(x,K_1)\le yc_{\beta_1}<yc_\beta$.
+(R8) If $a\le\min K$, points of the Stolz angle have $x<a+yc_\theta<\min K+yc_\alpha$; symmetrically if $a\ge\max K$. (R9) A common point has
+$\dist(a,K)\le\abs{x-a}+\dist(x,K)<y(c_\theta+c_\beta)$ with $y<\eta$. (R10) On the closure, $0<y\le\eta<\eps$,
+$\abs{x-a}\le yc_\theta$, so $\dist(x,K)\le yc_\theta<yc_\beta$ and $x\ge a-yc_\theta>\min K+yc_\alpha$.
+\end{proof}
+
+\subsection{Special families and special functions}
+
+\begin{definition}[splitting, special families]\label{def:special-family}
+\lean{TJK.Construct.Split, TJK.Construct.IsSpecialFamily, TJK.Construct.endpoints, TJK.Construct.twoPoint}
+Two sets $E_1,E_2\subseteq\R$ \emph{split} if there is $p$ with $E_1\le p\le E_2$ or $E_2\le p\le E_1$ (pointwise). A
+\emph{special family} is a nonempty countable family $\mathcal F$ of compact subsets of $X$ such that any two members
+are equal, disjoint, or split. Let $\mathcal F^2$ be the members with at least two points and $E(\mathcal F)$ the set of
+endpoints of the intervals $J(F)$, $F\in\mathcal F$, $F\ne\emptyset$.
+\end{definition}
+Two distinct members of a special family meet in at most one point, and such a common point is an endpoint of both
+hulls. Endpoints of $J(F)$ belong to $F$.
+
+\begin{lemma}[{\cite[(III)]{TAMSb}}; {\cite[Lemma 9]{Diss}}]\label{lem:special-from-fsigma}
+\lean{TJK.Construct.exists_specialFamily_of_isFσ}
+\uses{def:special-family, lem:borel-basic}
+Every $\Fs$ subset $E$ of $X$ is the union of a special family.
+\end{lemma}
+\begin{proof}
+Write $E=\bigcup_nA_n$ with $A_n$ closed in $X$, $A_1=\emptyset$, $A_n\subseteq A_{n+1}$. Every open interval
+$I\subseteq X$ is the union of countably many compact intervals any two of which split: take a strictly increasing
+bi-infinite sequence $(c_k)_{k\in\Z}$ in $I$ tending to the endpoints and the intervals $[c_k,c_{k+1}]$. As
+$X\setminus A_n$ is a disjoint union of countably many open intervals, $X\setminus A_n=\bigcup_jI_{n,j}$ with compact
+intervals $I_{n,j}$ any two of which split. Let $\mathcal F=\{A_1\}\cup\{I_{n,j}\cap A_{n+1}\}$. Its members are compact,
+and $\bigcup\mathcal F=\bigcup_n(A_{n+1}\setminus A_n)=E$. For distinct members $I_{n,j}\cap A_{n+1}$,
+$I_{n',j'}\cap A_{n'+1}$: if $n<n'$ then $n+1\le n'$ and the second lies in $X\setminus A_{n'}\subseteq X\setminus
+A_{n+1}$, so they are disjoint; if $n=n'$ then $j\ne j'$ and they split because $I_{n,j},I_{n,j'}$ do.
+\end{proof}
+
+\begin{lemma}[{\cite[(IV)]{TAMSb}}]\label{lem:special-sequence}
+\lean{TJK.Construct.exists_specialFamily_seq}
+\uses{lem:special-from-fsigma, lem:borel-basic}
+If $A\subseteq X$ is $\Fsd$, there are special families $\mathcal F_n$ with $A=\bigcap_n\bigcup\mathcal F_n$ such that
+every member of $\mathcal F_{n+1}$ is contained in a member of $\mathcal F_n$.
+\end{lemma}
+\begin{proof}
+Write $A=\bigcap_nA_n$ with $A_n$ $\Fs$ and decreasing, choose special $\mathcal S_n$ with $A_n=\bigcup\mathcal S_n$, and
+put $\mathcal F_1=\mathcal S_1$, $\mathcal F_{n+1}=\{E\cap F:E\in\mathcal F_n,F\in\mathcal S_{n+1}\}$. For two members
+$E\cap F$, $E'\cap F'$: if $E\ne E'$ compare $E,E'$, and if $E=E'$ compare $F,F'$; subsets of disjoint (splitting) sets are
+disjoint (split). So $\mathcal F_{n+1}$ is special, and $\bigcup\mathcal F_n=A_1\cap\dots\cap A_n=A_n$.
+\end{proof}
+
+\begin{definition}[special functions]\label{def:special-pair}
+\lean{TJK.Construct.IsSpecialPair}
+\uses{def:special-family, def:regions}
+Let $0<\beta<\alpha<\theta<\pi/2$ and $\mathcal F$ special. A \emph{pair of special $\alpha,\beta,\theta$ functions} for
+$\mathcal F$ is a pair $(\eps,\delta)$ of positive functions on $E(\mathcal F)$ and $\mathcal F^2$ such that:
+(i) for each $\eta>0$ only finitely many $F\in\mathcal F^2$ have $\delta(F)\ge\eta$;
+(ii) for each $\eta>0$ only finitely many $x\in E(\mathcal F)$ have $\eps(x)\ge\eta$;
+(iii) the sets $s(x,\eps(x),\theta)$, $x\in E(\mathcal F)$, are pairwise disjoint;
+(iv) the sets $B(F,\delta(F),\alpha,\beta)$, $F\in\mathcal F^2$, are pairwise disjoint;
+(v) $s(x,\eps(x),\theta)\cap B(F,\delta(F),\alpha,\beta)=\emptyset$ for $x\in E(\mathcal F)$, $F\in\mathcal F^2$.
+\end{definition}
+
+\begin{lemma}[{\cite[(XX)]{TAMSb}}; {\cite[Lemma 13]{Diss}}]\label{lem:special-pair-exists}
+\lean{TJK.Construct.exists_specialPair}
+\uses{def:special-pair, lem:region-geometry}
+Every special family has a pair of special $\alpha,\beta,\theta$ functions.
+\end{lemma}
+\begin{proof}
+Enumerate $\mathcal F=\{F_1,F_2,\dots\}$; for $F\in\mathcal F$ let $k(F)$ be its least index, and for $e\in E(\mathcal F)$ let
+$k(e)$ be the least $k$ such that $e$ is an endpoint of $J(F_k)$. Let $E(k)$ be the set of endpoints of the $J(F_j)$,
+$j\le k$, $F_j\ne\emptyset$. Put $c=\cot\theta+\cot\beta$ and define
+\begin{align*}
+\delta(F)&=\min\Bigl(\Bigl\{\tfrac1{k(F)}\Bigr\}\cup\Bigl\{\tfrac{\dist(F_j,F)}{2\cot\beta}:j<k(F),\ F_j\in\mathcal F^2,\ F_j\cap F=\emptyset\Bigr\}\cup
+\Bigl\{\tfrac{\dist(e,F)}c:e\in E(k(F)-1)\cap J(F)^*\setminus F\Bigr\}\Bigr),\\
+\eps(e)&=\min\Bigl(\Bigl\{\tfrac1{k(e)}\Bigr\}\cup\Bigl\{\tfrac{\abs{e-e'}}{2\cot\theta}:e'\in E(k(e))\setminus\{e\}\Bigr\}\cup
+\Bigl\{\tfrac{\dist(e,F_j)}c:j\le k(e),\ F_j\in\mathcal F^2,\ e\in J(F_j)^*\setminus F_j\Bigr\}\Bigr).
+\end{align*}
+These are minima of finite sets of positive numbers. Condition (i): $\delta(F)\ge\eta$ forces $k(F)\le1/\eta$; (ii):
+$\eps(e)\ge\eta$ forces $k(e)\le1/\eta$, and each index contributes at most two endpoints.
+(iii) If $e\ne e'$, say $k(e')\le k(e)$, then $e'\in E(k(e))$ and (R4) applies.
+(iv) If $F\ne F'$ in $\mathcal F^2$ split, use (R5); if they are disjoint, say $k(F')<k(F)$, use (R6).
+(v) Let $e\in E(\mathcal F)$ and $F\in\mathcal F^2$. If $e\notin J(F)^*$ use (R8) ($\beta<\alpha<\theta$). Otherwise
+$e\notin F$: indeed $e$ is an endpoint of some $J(F')$, $e\in F'$, and $F'\ne F$; if $e\in F$ then $F,F'$ would split at
+$e$, making $e$ an endpoint of $J(F)$. If $k(F)\le k(e)$ the definition of $\eps(e)$ and (R9) apply; if $k(F)>k(e)$ then
+$e\in E(k(F)-1)$ and the definition of $\delta(F)$ and (R9) apply.
+\end{proof}
+
+\begin{lemma}[{\cite[(XXI)]{TAMSb}}; {\cite[Lemma 14]{Diss}}]\label{lem:special-pair-shrink}
+\lean{TJK.Construct.IsSpecialPair.mono}
+\uses{def:special-pair, def:regions}
+If $(\eps,\delta)$ is a special pair and $0<\eps_1\le\eps$, $0<\delta_1\le\delta$, then $(\eps_1,\delta_1)$ is a special pair.
+\end{lemma}
+\begin{proof}
+The regions shrink as the parameters $\eps,\delta$ decrease.
+\end{proof}
+
+\subsection{The function $g$}
+
+\begin{theorem}[{\cite[(A)]{TAMSb}}; {\cite[Theorem 4, proof]{Diss}}]\label{thm:construct-A}
+\lean{TJK.Construct.exists_g}
+\uses{lem:special-sequence, lem:special-pair-exists, lem:special-pair-shrink, lem:region-geometry, lem:subarc,
+  def:special-family}
+Let $A\subseteq X$ be $\Fsd$. There is a continuous $g:\Hp\to[0,1]$ such that
+(a) for each $x\in A$, $g(z)\to0$ as $z\to x$ through $s(x,1,3\pi/8)$; and
+(b) if $x\in\R$ and $g\to0$ along some arc at $x$ in $\Hp$, then $x\in A$.
+\end{theorem}
+\begin{proof}
+Take $\mathcal F_n$ as in Lemma~\ref{lem:special-sequence} and $E_n=E(\mathcal F_n)$. Fix sequences
+$\beta_n\uparrow\pi/4$ in $(0,\pi/4)$, $\alpha_n\downarrow\pi/4$ in $(\pi/4,\pi/3)$, $\theta_n\uparrow3\pi/8$ in
+$(\pi/3,3\pi/8)$, all strictly monotone.
+
+\emph{Claim.} If $x\in E_{n+1}\setminus E_n$, there is a unique $F\in\mathcal F_n^2$ with $x\in F\cap J(F)^*$; and no
+$x\in E_n$ lies in $F\cap J(F)^*$ for any $F\in\mathcal F_n^2$. Indeed $x\in K\subseteq F$ for some $K\in\mathcal F_{n+1}$,
+$F\in\mathcal F_n$; if $x$ were an endpoint of $J(F)$ it would be in $E_n$; uniqueness and the last assertion follow from
+the remark after Definition~\ref{def:special-family}. Likewise each $K\in\mathcal F^2_{n+1}$ lies in a unique
+$F\in\mathcal F_n$, and $F\in\mathcal F_n^2$.
+
+\emph{Construction.} Let $(\eps(1,\cdot),\delta(1,\cdot))$ be any special $\alpha_1,\beta_1,\theta_1$ pair for $\mathcal F_1$.
+Given $(\eps(n,\cdot),\delta(n,\cdot))$, take any special $\alpha_{n+1},\beta_{n+1},\theta_{n+1}$ pair $(\eps,\delta)$ for
+$\mathcal F_{n+1}$ and set: for $x\in E_{n+1}\setminus E_n$, with $F$ from the Claim, $\eps(n+1,x)=\min\{\eps(x),\zeta(x)\}$,
+where $\zeta(x)>0$ is given by (R10) for $B(F,\delta(n,F),\alpha_n,\beta_n)$ and $\theta_{n+1}>\beta_n$; for
+$x\in E_{n+1}\cap E_n$, $\eps(n+1,x)=\min\{\eps(x),\frac12\eps(n,x)\}$; for $K\in\mathcal F^2_{n+1}$, $K\subseteq F$,
+$\delta(n+1,K)=\min\{\delta(K),\frac12\delta(n,F)\}$. By Lemma~\ref{lem:special-pair-shrink} this is a special pair, and by
+(R3), (R7), (R10):
+\begin{enumerate}[label=(\roman*)]
+\item if $x\in E_{n+1}$, $F\in\mathcal F_n^2$, $x\in F\cap J(F)^*$, then
+  $\cl s(x,\eps(n+1,x),\theta_{n+1})\cap\Hp\subseteq B(F,\delta(n,F),\alpha_n,\beta_n)$;
+\item if $x\in E_{n+1}\cap E_n$, then $\cl s(x,\eps(n+1,x),\theta_{n+1})\cap\Hp\subseteq s(x,\eps(n,x),\theta_n)$;
+\item if $K\in\mathcal F^2_{n+1}$, $F\in\mathcal F^2_n$, $K\subseteq F$, then
+  $\cl B(K,\delta(n+1,K),\alpha_{n+1},\beta_{n+1})\cap\Hp\subseteq B(F,\delta(n,F),\alpha_n,\beta_n)$.
+\end{enumerate}
+
+\emph{The sets $U_n$.} Let $U_n$ be the union of the sets $s(x,\eps(n,x),\theta_n)$, $x\in E_n$, and
+$B(F,\delta(n,F),\alpha_n,\beta_n)$, $F\in\mathcal F^2_n$. These pieces are open and pairwise disjoint, so each component
+$W$ of $U_n$ lies in one piece, and by (R2)
+\begin{equation}\label{eq:A1}
+\overline W\cap\R\subseteq\textstyle\bigcup\mathcal F_n .
+\end{equation}
+Each piece lies in $\{y<\eps(n,x)\}$ or $\{y<\delta(n,F)\}$, so by (i), (ii) of Definition~\ref{def:special-pair} the
+pieces form a locally finite family in $\Hp$, and $\cl U_n\cap\Hp$ is the union of the closures of the pieces. By
+(i)--(iii) and the Claim, $\cl U_{n+1}\cap\Hp\subseteq U_n$; in particular $U_{n+1}\subseteq U_n$.
+
+\emph{The function.} Let $g_n:\Hp\to[0,1]$ be continuous with $g_n=1$ on $\Hp\setminus U_n$ and $g_n=0$ on
+$\cl U_{n+1}\cap\Hp$ (Urysohn), and $g=\sum_n2^{-n}g_n$. Then $g$ is continuous with values in $[0,1]$, and
+\begin{equation}\label{eq:A23}
+g\ge2^{1-n}\text{ on }\Hp\setminus U_n,\qquad g\le2^{-n}\text{ on }U_{n+1}.
+\end{equation}
+
+(a) Let $x_0\in A$ and $n\in\N$. Then $x_0\in F$ for some $F\in\mathcal F_{n+1}$. If $x_0\in E_{n+1}$, put
+$\eta=\eps(n+1,x_0)$; as $\theta_{n+1}<3\pi/8$, $s(x_0,\eta,3\pi/8)\subseteq s(x_0,\eps(n+1,x_0),\theta_{n+1})\subseteq U_{n+1}$.
+Otherwise $x_0\in F\cap J(F)^*$ with $F\in\mathcal F^2_{n+1}$, and (R10) with $\beta_{n+1}<3\pi/8$ gives $\eta>0$ with
+$s(x_0,\eta,3\pi/8)\subseteq B(F,\delta(n+1,F),\alpha_{n+1},\beta_{n+1})\subseteq U_{n+1}$. In both cases $g\le2^{-n}$ on
+$s(x_0,1,3\pi/8)\cap\{y<\eta\}$.
+
+(b) If $g\to0$ along an arc $\gamma$ at $x$, then for each $n$ a subarc $\gamma'$ at $x$ has $g<2^{1-n}$ on
+$\gamma'\setminus\{x\}$, which therefore lies in $U_n$, hence in one component $W$; so $x\in\overline W\cap\R\subseteq\bigcup\mathcal F_n$
+by \eqref{eq:A1}. Thus $x\in\bigcap_n\bigcup\mathcal F_n=A$.
+\end{proof}
+
+\begin{theorem}[{\cite[Theorem 4]{Diss}}]\label{thm:cc-realize}
+\lean{TJK.Construct.exists_curvConvSet_eq_upperHalfPlane}
+\uses{thm:construct-A, lem:transfer, lem:charts, lem:borel-basic, lem:subarc, def:ccset}
+For every $\Fsd$ set $A\subseteq\R$ there is a bounded continuous $f:\Hp\to\C$ with $\CC(f)=A$.
+\end{theorem}
+\begin{proof}
+Let $A'=\Psi_\Hp^{-1}(A)\subseteq X$, an $\Fsd$ set, $g$ as in Theorem~\ref{thm:construct-A} for $A'$, and
+$f_0=g\sin(1/y)+ig$ on $Q^\circ$. If $x\in A'$, $f_0\to0$ along a short vertical segment at $x$ (which lies in $Q^\circ\cap s(x,1,3\pi/8)$ apart from $x$),
+since $\abs{f_0}\le2g$.
+If $f_0\to c+di$ along an arc $\gamma$ at $x$, then $g\to d$; if $d\ne0$, then since $y\to0$ continuously along
+$\gamma$, every tail of $\gamma$ contains points with $\sin(1/y)=1$ and with $\sin(1/y)=-1$, so $\operatorname{Re}f_0$
+has no limit. Hence $d=0$ and $x\in A'$ by Theorem~\ref{thm:construct-A}(b). So $\CC(f_0)=A'$, and
+$f=f_0\circ\Psi_\Hp^{-1}$ has $\CC(f)=A$ by Lemma~\ref{lem:transfer}.
+\end{proof}
+
+\subsection{The function $h$}
+
+\begin{lemma}[{\cite[(B)(I)]{TAMSb}}; {\cite[Lemma 17]{Diss}}]\label{lem:monotone-inverse}
+\lean{TJK.Construct.exists_monotone_leftInverse, TJK.Construct.exists_monotone_leftInverse_real}
+(a) If $f:(-1,1)\to\R$ is strictly increasing, there is a continuous weakly increasing $f^*:\R\to[-1,1]$ with
+$f^*(f(x))=x$ for all $x$. (b) If $f:\R\to\R$ is strictly increasing and $f(\R)$ is unbounded above and below, there is
+a continuous weakly increasing $f^*:\R\to\R$ with $f^*\circ f=\mathrm{id}$.
+\end{lemma}
+\begin{proof}
+(a) $f^*(t)=\sup(\{-1\}\cup\{x:f(x)\le t\})$. It is weakly increasing, and $\{x:f(x)\le f(x_0)\}=(-1,x_0]$ gives
+$f^*(f(x_0))=x_0$. Its range contains $(-1,1)$, so it is dense in $[-1,1]$, and a monotone map onto a dense subset of an
+interval is continuous. (b) The same with $f^*(t)=\sup\{x:f(x)\le t\}$, whose range is $\R$.
+\end{proof}
+
+\begin{lemma}[{\cite[(B)(II)]{TAMSb}}; {\cite[Lemma 16]{Diss}}]\label{lem:closed-graph}
+\lean{TJK.Construct.continuous_of_closedGraph}
+Let $M$ be a metric space and $u:M\to\R$. Suppose that whenever $p_n\to p$ in $M$ and $u(p_n)\to y$ in
+$[-\infty,+\infty]$, we have $y\in\R$ and $y=u(p)$. Then $u$ is continuous.
+\end{lemma}
+\begin{proof}
+If $u(p_n)\not\to u(p)$, a subsequence converges in $[-\infty,\infty]$ to some $y\ne u(p)$.
+\end{proof}
+
+\begin{theorem}[{\cite[(B)]{TAMSb}}; {\cite[Theorem 6]{Diss}}]\label{thm:construct-B}
+\lean{TJK.Construct.exists_h}
+\uses{lem:monotone-inverse, lem:closed-graph, thm:baire1-char, def:regions, def:fn-classes}
+Let $E\subseteq X$ and let $\varphi:E\to\R^m$ be of honorary Baire class $\le2$. There is a continuous $h:\Hp\to\R^m$ such
+that for each $p\in E$ there is a segment $\lambda_p$ at $p$, contained in $s(p,1,3\pi/8)\cup\{p\}$, along which
+$h\to\varphi(p)$. If $\varphi$ is bounded, $h$ can be taken bounded.
+\end{theorem}
+\begin{proof}
+Let $\varphi=\psi$ on $E\setminus N_0$ with $N_0$ countable and $\psi\in\mathcal B_1(E,\R^m)$. Let $N\supseteq N_0$ be a countably
+infinite subset of $X$, enumerated injectively as $s_1,s_2,\dots$, and let $w(s_n)=(\sqrt2-1)2^{-n-1}$, so
+$\sum_sw(s)<\sqrt2-1=\cot(3\pi/8)$. Define on $X$
+\[
+f(x)=x+\sum_{s\in N,\ s<x}w(s),
+\]
+which is strictly increasing with $\abs{f(x)-x}<\sqrt2-1$. Let $f^*$ be as in Lemma~\ref{lem:monotone-inverse}(a).
+
+\emph{The function $u$.} For $\langle x,y\rangle$ with $0<y<1$ the function $v\mapsto v-f^*\bigl((x-(1-y)v)/y\bigr)$ is
+continuous and strictly increasing, and lies in $[v-1,v+1]$; so it has a unique zero $u(x,y)\in[-1,1]$. If
+$\langle x_n,y_n\rangle\to\langle x,y\rangle$ and $u(x_n,y_n)\to u_0$, then $u_0\in[-1,1]$ and continuity of $f^*$ gives
+$u_0=f^*((x-(1-y)u_0)/y)$, so $u_0=u(x,y)$; by Lemma~\ref{lem:closed-graph}, $u$ is continuous.
+
+\emph{The function $h_0$.} By Theorem~\ref{thm:baire1-char} there are continuous $g_n:\R\to\R^m$ with $g_n\to\psi$ on $E$.
+For $n\ge2$ and $1/(n+1)\le y\le1/n$ put
+\[
+h_0(x,y)=\bigl(yn(n+1)-n\bigr)g_n(u(x,y))+\bigl((n+1)-yn(n+1)\bigr)g_{n+1}(u(x,y)),
+\]
+and $h_0(x,y)=h_0(x,\tfrac12)$ for $y\ge\frac12$. The two formulas agree at $y=1/n$, so $h_0$ is continuous on $\Hp$; the
+coefficients lie in $[0,1]$ and add up to $1$.
+
+\emph{The correction.} Let $l_n=f(s_n)=\sup_{x\le s_n}f(x)$, $r_n=\inf_{x>s_n}f(x)=l_n+w(s_n)$, $z_n=\varphi(s_n)-\psi(s_n)$ if
+$s_n\in E$ and $z_n=0$ otherwise, $t_n(x,y)=(x-(1-y)s_n)/y$, and
+\[
+\Lambda_n(x,y)=\bigl[(1-ny)\vee0\bigr]\Bigl[\Bigl(1-\frac{\abs{r_n+l_n-2t_n(x,y)}}{r_n-l_n}\Bigr)\vee0\Bigr]z_n .
+\]
+$\Lambda_n$ is continuous and vanishes for $y\ge1/n$, and its second factor vanishes unless $l_n<t_n<r_n$. So
+$h=h_0+\sum_n\Lambda_n$ is continuous on $\Hp$.
+
+\emph{Points of $E$.} Let $p\in E$ and let $\lambda$ be the part with $0<y\le\frac12$ of the line $x=(f(p)-p)y+p$. On $\lambda$,
+$t_n=f(p)+(p-s_n)(1/y-1)$, which is $\ge f(p)\ge r_n$ if $p>s_n$, is $\le f(p)<l_n$ if $p<s_n$, and equals $l_n$ if $p=s_n$;
+so every $\Lambda_n$ vanishes on $\lambda$. Also $(x-(1-y)p)/y=f(p)$ there, so $u=p$, and $h_0$ lies on the segment from
+$g_n(p)$ to $g_{n+1}(p)$ when $1/(n+1)\le y\le1/n$. Hence $h\to\psi(p)$ along $\lambda$, which is $\varphi(p)$ unless
+$p\in N_0$.
+
+\emph{Points of $N_0$.} Let $p=s_m\in E$, $\mu_m=(r_m+l_m)/2$, and let $\lambda'$ be the part with $0<y\le\frac12$ of the line
+$x=(\mu_m-s_m)y+s_m$. On $\lambda'$, $t_n=\mu_m+(s_m-s_n)(1/y-1)$. If $s_n<s_m$ then $t_n>l_m\ge r_n$; if $s_n>s_m$ then
+$t_n<r_m\le l_n$; so $\Lambda_n=0$ for $n\ne m$, while $\Lambda_m=[(1-my)\vee0]z_m\to z_m$. For $a<s_m<b$ we have
+$f(a)\le l_m<\mu_m<r_m\le f(b)$, hence $a\le f^*(\mu_m)\le b$; so $f^*(\mu_m)=s_m$ and $u=s_m$ on $\lambda'$. Thus
+$h\to\psi(s_m)+z_m=\varphi(s_m)$ along $\lambda'$.
+
+The slopes satisfy $\abs{f(p)-p}<\sqrt2-1$ and $0\le\mu_m-s_m<\sqrt2-1$, so $\lambda,\lambda'\subseteq s(p,1,3\pi/8)$. If
+$\varphi$ is bounded, choose $b$ with $\varphi(E)\subseteq(-b,b)^m$ and clamp each coordinate of $h$ to $[-b,b]$; the limits
+along $\lambda_p$ are unchanged.
+\end{proof}
+
+\subsection{The function $k$}
+
+\begin{theorem}[{\cite[(C)]{TAMSb}}]\label{thm:construct-C}
+\lean{TJK.Construct.exists_k}
+Let $d:(0,1]\to(0,\infty)$ be weakly increasing. There is a continuous $k:\R\times(0,1]\to\C$ with $\abs k\le\sqrt2$ such
+that for every $a\in(0,1]$ and every connected $\gamma\subseteq[-1,1]\times(0,a]$ containing two points at distance
+$\ge d(a)$, there are $p,q\in\gamma$ with $\abs{k(p)-k(q)}\ge2$.
+\end{theorem}
+\begin{proof}
+Let $p(x)=\frac12\int_0^xd(t)\,dt$ for $0<x\le1$: positive, continuous, strictly increasing, with $p(x)\le\frac12d(x)$.
+For $a\in(0,1]$ the function $1/p$ is uniformly continuous on $[a/4,1]$, so there is $\eps\in(0,a/4]$ such that
+($a/2\le x_1\le1$, $x_2\in(0,1]$, $\abs{x_1-x_2}<\eps$) implies $\abs{p(x_1)^{-1}-p(x_2)^{-1}}\le\frac12$. Let $e(a)$ be the
+supremum of such $\eps$ in $(0,1]$; the implication holds with $\eps=e(a)$, and $e$ is weakly increasing because an $\eps$
+that works for $a$ works for every $a'\ge a$ (the condition $a'/2\le x_1$ is stronger). Let
+$q(x)=\int_0^xe(t)\,dt$, so $q$ is positive, continuous, increasing and $q\le e$; let $m=\min\{p,q\}$. Define
+\[
+k_1(y)=\sin\frac{2\pi}{y\,m(y)},\qquad k_2(x,y)=\sin\frac{4\pi x}{p(y)},\qquad k=k_1+ik_2 .
+\]
+Let $z_1,z_2\in\gamma$ with $\abs{z_1-z_2}\ge d(a)$, $z_j=\langle x_j,y_j\rangle$, $y_2\le y_1\le a$, and $a'=\min\{a,2y_1\}$, so
+$a'/2\le y_1\le a'\le a$. As $m(a')\le\frac12d(a')\le\frac12d(a)$, either
+\[
+\text{(12)}\ \ \abs{y_1-y_2}\ge m(a'),\qquad\text{or}\qquad\text{(13)}\ \ \abs{y_1-y_2}<m(a')\text{ and }\abs{x_1-x_2}\ge\tfrac12d(a').
+\]
+In case (12), using $m(y_2)\le m(y_1)\le m(a')$ and $y_1,y_2\le1$,
+\[
+\frac{2\pi}{y_2m(y_2)}-\frac{2\pi}{y_1m(y_1)}\ge\frac{2\pi(y_1-y_2)}{y_1y_2m(y_1)}\ge\frac{2\pi m(a')}{y_1y_2m(y_1)}\ge2\pi .
+\]
+The continuous function $2\pi/(y\,m(y))$ on the connected set $\gamma$ therefore takes all values in an interval of length
+$2\pi$, so $k_1$ takes the values $1$ and $-1$ on $\gamma$. In case (13), $\abs{y_1-y_2}<m(a')\le e(a')$ gives
+$\abs{p(y_1)^{-1}-p(y_2)^{-1}}\le\frac12$, and $p(y_1)\le p(a')\le\frac12d(a')$, so with $\abs{x_2}\le1$
+\[
+\Bigl|\frac{4\pi x_1}{p(y_1)}-\frac{4\pi x_2}{p(y_2)}\Bigr|\ge4\pi\Bigl[\frac{\abs{x_1-x_2}}{p(y_1)}-\Bigl|\frac1{p(y_1)}-\frac1{p(y_2)}\Bigr|\Bigr]
+\ge4\pi\Bigl[1-\frac12\Bigr]=2\pi,
+\]
+and $k_2$ takes the values $\pm1$ on $\gamma$. In either case some $p,q\in\gamma$ have $\abs{k(p)-k(q)}\ge2$.
+\end{proof}
+
+\subsection{Assembly}
+
+\begin{theorem}[{\cite[(D)]{TAMSb}}]\label{thm:construct-D}
+\lean{TJK.Construct.exists_f_Q}
+\uses{thm:construct-A, thm:construct-B, thm:construct-C, lem:subarc, def:ccset}
+Let $A\subseteq X$ be $\Fsd$ and $\varphi:A\to\C$ bounded and of honorary Baire class $\le2$. There is a bounded continuous
+$f:Q\to\C$ such that $A$ is the set of curvilinear convergence of $f$ (arcs in $Q^\circ$) and $\varphi$ is a boundary
+function for $f$.
+\end{theorem}
+\begin{proof}
+Let $g$ be given by Theorem~\ref{thm:construct-A} and $h$ (bounded, with $\C=\R^2$) by Theorem~\ref{thm:construct-B} for
+$E=A$, both restricted to $Q$. For $t\in(0,1]$ let $d_1(t)$ (resp.\ $d_2(t)$) be the supremum of the $\delta\in(0,1]$ such that
+$z_1,z_2\in Q$, $\operatorname{Im}z_j\ge t$, $\abs{z_1-z_2}<\delta$ imply $\abs{h(z_1)-h(z_2)}\le t$ (resp.\
+$\abs{g(z_1)-g(z_2)}\le t$); these are positive by uniform continuity on $[-1,1]\times[t,1]$, and weakly increasing. Let
+$d(t)=\min\{\frac14d_1(t/2),\frac14d_2(t/2),t/4\}$, $k$ as in Theorem~\ref{thm:construct-C}, and $f=h+gk$.
+
+If $x\in A$, $h\to\varphi(x)$ along a segment in $s(x,1,3\pi/8)$, along which $gk\to0$; a short initial piece of this
+segment lies in $Q^\circ$ (Lemma~\ref{lem:subarc}). So $\varphi$ is a boundary function and $A\subseteq\CC(f)$. Conversely let $f$ have a limit along an arc $\gamma$ at $x\in X$ in $Q^\circ$; we show $g\to0$ along
+$\gamma$, so $x\in A$ by Theorem~\ref{thm:construct-A}(b). If not, there are $\eps\in(0,1]$ and $z_n=\langle x_n,y_n\rangle\in\gamma\setminus\{x\}$,
+$z_n\to x$, with $\abs{g(z_n)}\ge\eps$. Fix $n$ large: $y_n<3\eps/16$, and the other endpoint of $\gamma$ is farther than $y_n$
+from $z_n$. Let $a=4y_n/3\le1$. By Lemma~\ref{lem:subarc}(b) a connected $\gamma'\subseteq\gamma\cap\overline{S(d(a),z_n)}$
+contains $z_n$ and a point at distance $d(a)$ from it. Since $d(a)\le a/4=y_n/3$, $\gamma'\subseteq[-1,1]\times[a/2,a]$, and
+Theorem~\ref{thm:construct-C} gives $p,q\in\gamma'$ with $\abs{k(p)-k(q)}\ge2$. As $\abs{p-q}\le2d(a)<d_1(a/2)$ and
+$\abs{p-z_n},\abs{q-z_n}\le d(a)<d_2(a/2)$, all with imaginary parts $\ge a/2$, we get $\abs{h(p)-h(q)}\le a/2$ and
+$\abs{g(p)-g(z_n)},\abs{g(q)-g(z_n)}\le a/2<\eps/8$. Hence
+\[
+\abs{f(p)-f(q)}\ge\abs{g(z_n)}\abs{k(p)-k(q)}-\abs{k(p)}\abs{g(p)-g(z_n)}-\abs{k(q)}\abs{g(q)-g(z_n)}-\abs{h(p)-h(q)}
+>2\eps-\tfrac{2\sqrt2+1}8\eps>\eps .
+\]
+Since $\abs{p-z_n},\abs{q-z_n}\le y_n/3\to0$, $f$ has no limit along $\gamma$, a contradiction.
+\end{proof}
+
+\begin{theorem}[{\cite[(E)]{TAMSb}}]\label{thm:construct-E}
+\lean{TJK.Construct.exists_f_disc}
+\uses{thm:construct-D, lem:transfer, lem:locality, lem:charts, lem:borel-basic, fact:tietze-ext, def:ccset,
+  lem:honorary-invariance}
+Let $A\subseteq C$ be $\Fsd$ and $\varphi:A\to\C$ bounded and of honorary Baire class $\le2$. There is a bounded continuous
+$f:\D\to\C$ with $\CC(f)=A$ such that $\varphi$ is a boundary function for $f$.
+\end{theorem}
+\begin{proof}
+If $A=\emptyset$ take $f(z)=\exp\bigl(i/(1-\abs z)\bigr)$: along any arc, $1/(1-\abs z)$ tends to $+\infty$ continuously, so
+$f$ has no limit. Otherwise rotate so that $1\in A$. Let $A'=\Psi_\D^{-1}(A\setminus\{1\})\subseteq X$, which is $\Fsd$, and
+apply Theorem~\ref{thm:construct-D} to $A'$ and $\varphi\circ\Psi_\D$ (of honorary Baire class $\le2$ by
+Lemma~\ref{lem:honorary-invariance}), obtaining $f_1$; put $f_0=f_1\circ\Psi_\D^{-1}$ on
+$G^\circ$. On the set $G''$ of Lemma~\ref{lem:charts}(c), which is closed in $\D$, $f_0$ is continuous and bounded; set
+$F=f_0$ on $G''$ and $F=\varphi(1)$ on the radius $[0,1)$, which is closed in $\D$ and disjoint from $G''$. By the Tietze
+extension theorem (Fact~\ref{fact:tietze-ext}) $F$ extends to a bounded continuous $f$ on $\D$. Along the radius $f\to\varphi(1)$. Each $x\in
+C\setminus\{1\}$ has a neighbourhood $W$ with $W\cap\D\subseteq G''$, so by Lemmas~\ref{lem:locality}
+and~\ref{lem:transfer} the arc limits of $f$ at $x$ are those of $f_1$ at $\Psi_\D^{-1}(x)$.
+\end{proof}
+
+\begin{theorem}[{\cite[(F)]{TAMSb}}; McMillan's problem]\label{thm:construct-F}
+\lean{TJK.Construct.exists_f_sphere}
+\uses{thm:construct-E, lem:fold, lem:fold-factor, def:fold, lem:baire1-fsigma, thm:honorary-char, lem:cluster}
+Let $A\subseteq C$ be $\Fsd$ and $\varphi:A\to\Sph$ of honorary Baire class $\le2$. There is a continuous $f:\D\to\Sph$ with
+$\CC(f)=A$ such that $\varphi$ is a boundary function for $f$.
+\end{theorem}
+\begin{proof}
+Let $\varphi=\psi$ off a countable $N$ with $\psi\in\mathcal B_1(A,\Sph)$, and $A_1=A\setminus N$. By
+Lemmas~\ref{lem:baire1-fsigma} and~\ref{lem:fold-factor}, applied in the metric space $A_1$, there is $\psi_0:A_1\to Z_U\cup Z_V$ with
+$\Phi\circ\psi_0=\varphi|_{A_1}$ and $\sigma\circ\psi_0$ of class $\Fs$. For $x\in N$ choose $\psi_0(x)\in Z_U\cup Z_V$ with
+$\Phi(\psi_0(x))=\varphi(x)$ (possible since $\Phi(Z_U\cup Z_V)=\Sph$). Then $\sigma\circ\psi_0:A\to\R^2$ is bounded
+(Lemma~\ref{lem:fold}(v)) and of honorary Baire class $\le2$ (Theorem~\ref{thm:honorary-char}). By
+Theorem~\ref{thm:construct-E} there is a bounded continuous $f_1:\D\to\C$ with $\CC(f_1)=A$ and boundary function
+$\sigma\circ\psi_0$. Put $f=\Phi\circ\sigma^{-1}\circ f_1$. Then $f\to\Phi(\psi_0(x))=\varphi(x)$ along the arcs at $x\in A$. If
+$x\notin A$ and $\gamma$ is an arc at $x$, $f_1$ has no limit along $\gamma$, so its cluster set (with values in a closed disk
+$K$ containing $f_1(\D)$) is a connected set with more than one point (Lemma~\ref{lem:cluster}), hence infinite; by
+Lemma~\ref{lem:cluster} with $\Theta=\Phi\circ\sigma^{-1}|_K$, $C(f,\gamma)$ is its image under $\Theta$, which is at most
+three-to-one, so $C(f,\gamma)$ is infinite and $f$ has no limit
+along $\gamma$.
+\end{proof}
+
+\begin{theorem}[half-plane versions; {\cite[Theorems 4, 6, 7]{Diss}}]\label{thm:construct-H}
+\lean{TJK.Construct.exists_f_upperHalfPlane, TJK.Construct.exists_f_upperHalfPlane_sphere,
+  TJK.Construct.exists_boundaryFn_euclidean, TJK.Construct.exists_boundaryFn_sphere}
+\uses{thm:construct-D, thm:construct-B, thm:construct-F, lem:transfer, lem:charts, lem:fold, lem:fold-factor,
+  thm:honorary-char, lem:cluster, lem:subarc, lem:honorary-invariance}
+\begin{enumerate}[label=(\alph*)]
+\item If $A\subseteq\R$ is $\Fsd$ and $\varphi:A\to\C$ is bounded and of honorary Baire class $\le2$, there is a bounded continuous
+  $f:\Hp\to\C$ with $\CC(f)=A$ and boundary function $\varphi$. The same holds with $\Sph$ in place of $\C$ (and $f$
+  continuous).
+\item (\cite[Theorem 6]{Diss}) If $E\subseteq\R$ is arbitrary and $\varphi:E\to\R^m$ is of honorary Baire class $\le2$, there is a
+  continuous $f:\Hp\to\R^m$ having $\varphi$ as a boundary function.
+\item (\cite[Theorem 7]{Diss}) The same with $\Sph$ in place of $\R^m$.
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+(a) Transfer Theorem~\ref{thm:construct-D} by $\Psi_\Hp$ (Lemma~\ref{lem:transfer}); no exceptional point occurs. For $\Sph$
+argue as in Theorem~\ref{thm:construct-F}. (b) Apply Theorem~\ref{thm:construct-B} to $\Psi_\Hp^{-1}(E)$ and
+$\varphi\circ\Psi_\Hp$; the segments have tails in $Q^\circ$; transfer. (c) Write $\varphi=\Phi\circ\sigma^{-1}\circ\chi$ with
+$\chi:E\to\R^2$ bounded and of honorary Baire class $\le2$, exactly as in Theorem~\ref{thm:construct-F}, apply (b) to $\chi$,
+and compose with $\Phi\circ\sigma^{-1}$.
+\end{proof}

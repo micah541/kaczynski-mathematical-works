@@ -1,0 +1,194 @@
+% ===========================================================================
+\section{Sets of curvilinear convergence}\label{sec:cc}
+% ===========================================================================
+Sources: \cite{MMJ}; \cite[\S4, Lemmas 7--8, Theorem 3]{Diss}. We work in $\D$ and transfer to $\Hp$.
+
+\begin{definition}[accessible points and crosscut arcs]\label{def:acc}
+\lean{TJK.McMillan.crossArc, TJK.McMillan.I, TJK.McMillan.I0, TJK.McMillan.acc}
+\uses{def:arcs, fact:crosscut}
+For a crosscut $\gamma$ of $\D$ with $0\notin\gamma$, let $L(\gamma)=\overline V\cap C$ where $V$ is the
+component of $\D\setminus\gamma$ not containing $0$; by Fact~\ref{fact:crosscut} it is a nondegenerate
+closed arc whose endpoints are those of $\gamma$. For a domain $\Omega\subseteq\D\setminus\{0\}$ let
+$\Gamma(\Omega)$ be the set of crosscuts $\gamma$ with $\gamma\cap\D\subseteq\Omega$,
+\[
+I(\Omega)=\bigcup_{\gamma\in\Gamma(\Omega)}L(\gamma),\qquad I_0(\Omega)=\bigcup_{\gamma\in\Gamma(\Omega)}L(\gamma)^*,
+\]
+and let $\acc(\Omega)$ be the set of $x\in C$ for which there is an arc at $x$ in $\Omega$.
+\end{definition}
+
+\begin{lemma}[{\cite[Lemma 2]{MMJ}}]\label{lem:mm-lemma2}
+\lean{TJK.McMillan.countable_acc_diff_I0}
+\uses{def:acc, lem:intervals-open, fact:tietze-arc}
+For every domain $\Omega\subseteq\D\setminus\{0\}$, $\acc(\Omega)\setminus I_0(\Omega)$ is countable.
+\end{lemma}
+\begin{proof}
+$I(\Omega)\setminus I_0(\Omega)$ is countable by Lemma~\ref{lem:intervals-open}, so it suffices to show
+$\acc(\Omega)\subseteq I(\Omega)$ when $\acc(\Omega)$ has two or more points. Let $a\ne a'$ be in
+$\acc(\Omega)$, with arcs $\gamma,\gamma'$ at $a,a'$ in $\Omega$, and join their other endpoints by an arc
+$\gamma''\subseteq\Omega$. By Fact~\ref{fact:tietze-arc} the union contains a simple arc $\delta'$ from $a$ to
+$a'$; it is a crosscut with $\delta'\cap\D\subseteq\Omega$ (so $0\notin\delta'$), and $a\in L(\delta')$.
+\end{proof}
+
+\begin{lemma}[{\cite[Lemma 3]{MMJ}}]\label{lem:mm-lemma3}
+\lean{TJK.McMillan.inter_nonempty}
+\uses{def:acc, fact:crosscut, fact:tietze-arc}
+Let $\Omega_1,\Omega_2\subseteq\D\setminus\{0\}$ be domains. If the sets
+$I_0(\Omega_1)\cap\overline{\acc(\Omega_1)}$ and $I_0(\Omega_2)\cap\overline{\acc(\Omega_2)}$ have a common
+point, then $\Omega_1\cap\Omega_2\ne\emptyset$.
+\end{lemma}
+\begin{proof}
+Suppose $\Omega_1\cap\Omega_2=\emptyset$ and $a$ is a common point. Choose $\gamma_i\in\Gamma(\Omega_i)$ with
+$a\in L(\gamma_i)^*$, and let $U_i,V_i$ be the components of $\D\setminus\gamma_i$, with $0\in U_i$. Then
+$\gamma_1\cap\D$ and $\gamma_2\cap\D$ are disjoint, and $\overline{U_i}\cap C=C\setminus L(\gamma_i)^*$.
+
+Suppose $\gamma_1\cap\D\subseteq V_2$ and $\gamma_2\cap\D\subseteq V_1$. As $\gamma_1\cap\D\subseteq\overline{U_1}$
+(Fact~\ref{fact:crosscut}) and $V_2$ is open, $U_1$ meets $V_2$; also $0\in U_1\cap U_2$. The connected set
+$U_1$ meets both components of $\D\setminus\gamma_2$, so it meets $\gamma_2\cap\D\subseteq V_1$, which is
+absurd. The connected sets $\gamma_i\cap\D$ each lie in a component of the other complement, so (by
+symmetry) we may assume $\gamma_2\cap\D\subseteq U_1$.
+
+Since $a\in\overline{\acc(\Omega_2)}$ and $L(\gamma_1)^*$ is a neighbourhood of $a$ in $C$, there is
+$b\in L(\gamma_1)^*\cap\acc(\Omega_2)$. Joining an arc at $b$ in $\Omega_2$ to a point of $\gamma_2\cap\D$ inside
+$\Omega_2$ and applying Fact~\ref{fact:tietze-arc}, we get a simple arc $\gamma$ from $b$ to a point of
+$\gamma_2\cap\D$ with $\gamma\setminus\{b\}\subseteq\Omega_2$. Then $\gamma\setminus\{b\}$ is connected, misses
+$\gamma_1$, and meets $U_1$; so it lies in $U_1$ and $b\in\overline{U_1}\cap C=C\setminus L(\gamma_1)^*$, a
+contradiction.
+\end{proof}
+
+\begin{theorem}[McMillan {\cite[Theorem 5]{McM}}; {\cite[Theorem 1]{MMJ}}]\label{thm:mcmillan}
+\lean{TJK.McMillan.isFσδ_curvConvSet}
+\uses{lem:mm-lemma2, lem:mm-lemma3, cor:path-arc, lem:subarc, lem:open-components, lem:borel-basic}
+Let $K$ be a complete separable metric space and $f:\D\to K$ continuous. Then $\CC(f)$ is an $\Fsd$
+subset of $C$.
+\end{theorem}
+\begin{proof}
+Let $\{p_k\}$ be dense in $K$ and $\{\theta_m\}$ an enumeration of $\Q$. Put
+$Q(n,m)=\{re^{it}:1-1/n<r<1,\ \theta_m<t<\theta_m+2\pi/n\}$, and let $U(n,m,k,l)$, $l\in\N$, list (with
+repetitions, or empty) the components of $f^{-1}(S(2^{-n},p_k))\cap Q(n,m)$
+(Lemma~\ref{lem:open-components}); put $A(n,m,k,l)=\acc U(n,m,k,l)$ and
+\[
+Y=\bigcap_n\bigcup_{m,k,l}\Bigl(I_0(U(n,m,k,l))\cap\overline{A(n,m,k,l)}\Bigr).
+\]
+$I_0(\cdot)$ is open in $C$, so $Y$ is $\Fsd$.
+
+\emph{$Y\subseteq\CC(f)$.} Let $y\in Y$ and choose $U_n=U(n,m[n],k[n],l[n])$ with
+$y\in I_0(U_n)\cap\overline{\acc U_n}$. By Lemma~\ref{lem:mm-lemma3}, $U_n\cap U_{n+1}$ contains a
+point $z_n$; join $z_n$ to $z_{n+1}$ by a path $\gamma_n\subseteq U_{n+1}$. Since
+$y\in\overline{U_{n+1}}\subseteq\overline{Q(n+1,m[n+1])}$, every point of $\gamma_n$ lies within
+$(2\pi+1)/(n+1)$ of $y$. So the paths $\gamma_n$, traversed successively and followed by $y$, form a path
+$g$ with $g(1)=y$ and $g([0,1))\subseteq\D$. As $S(2^{-n},p_{k[n]})$ and $S(2^{-n-1},p_{k[n+1]})$ meet,
+$\rho(p_{k[n]},p_{k[n+1]})<2^{-n+1}$, so $p_{k[n]}\to p$ for some $p\in K$; and
+$f(\gamma_n)\subseteq S(2^{-n-1},p_{k[n+1]})$, so $f(g(t))\to p$ as $t\to1$. By
+Corollary~\ref{cor:path-arc}, $y\in\CC(f)$.
+
+\emph{$\CC(f)\subseteq\bigcap_n\bigcup_{m,k,l}A(n,m,k,l)$.} Let $f\to p'$ along an arc $\gamma_0$ at $x$.
+Given $n$, pick $k$ with $\rho(p',p_k)<2^{-n-1}$ and $m$ with $x$ interior to $\overline{Q(n,m)}\cap C$. By
+Lemma~\ref{lem:subarc} a subarc $\gamma_0'$ at $x$ has $\gamma_0'\setminus\{x\}\subseteq Q(n,m)\cap
+f^{-1}(S(2^{-n},p_k))$; being connected, it lies in one component, so $x\in A(n,m,k,l)$ for some $l$.
+
+\emph{$\CC(f)\setminus Y$ is countable.} If $x\in\CC(f)\setminus Y$, there is $n$ with
+$x\in A(n,m,k,l)$ for some $m,k,l$ but $x\notin I_0(U(n,m,k,l))\cap\overline{A(n,m,k,l)}$, so
+$x\in A(n,m,k,l)\setminus I_0(U(n,m,k,l))$, which is countable by Lemma~\ref{lem:mm-lemma2}.
+
+So $\CC(f)$ is the union of an $\Fsd$ set and a countable set, hence $\Fsd$.
+\end{proof}
+
+\begin{theorem}[{\cite[Theorem 2]{MMJ}}]\label{thm:mm-thm2}
+\lean{TJK.McMillan.isFσδ_clusterSet_subset}
+\uses{lem:mm-lemma2, lem:mm-lemma3, cor:path-arc, lem:subarc, lem:cluster, lem:open-components,
+  lem:borel-basic, fact:hyperspace}
+Let $K$ be a compact metric space, $\mathcal C(K)$ the space of nonempty closed subsets of $K$ with the
+Hausdorff metric $\bar\rho$, $\mathcal E\subseteq\mathcal C(K)$ closed, and $f:\D\to K$ continuous. Then
+\[
+X_{\mathcal E}=\{x\in C:\text{there are an arc $\gamma$ at $x$ and $E\in\mathcal E$ with }C(f,\gamma)\subseteq E\}
+\]
+is an $\Fsd$ set.
+\end{theorem}
+\begin{proof}
+If $\mathcal E=\emptyset$ there is nothing to prove. $\mathcal E$ is compact (Fact~\ref{fact:hyperspace}), hence has a dense sequence
+$P(k)$. For $\eps>0$ let $\mathcal S(\eps,E)=\{a:\dist(a,E)<\eps\}$, which is open, and note that
+$\bar\rho(E,F)<\eps$ implies $F\subseteq\mathcal S(\eps,E)$. Define $Q(n,m)$ as before, $U(n,m,k,l)$ as the
+components of $f^{-1}(\mathcal S(1/n,P(k)))\cap Q(n,m)$, $A(n,m,k,l)=\acc U(n,m,k,l)$, and $Y$ by the same
+formula; $Y$ is $\Fsd$.
+
+\emph{$Y\subseteq X_{\mathcal E}$.} With $U_n$ as before, compactness gives $P\in\mathcal E$ and
+$n_1<n_2<\cdots$ with $P(k[n_j])\to P$. Lemma~\ref{lem:mm-lemma3} gives $z_j\in U_{n_j}\cap U_{n_{j+1}}$,
+and paths $\gamma_j\subseteq U_{n_{j+1}}$ from $z_j$ to $z_{j+1}$, within $(2\pi+1)/n_{j+1}$ of $y$; they
+form a path $g$ ending at $y$. Let $f(w_s)\to p$ with $w_s\to y$ along the path. Each $\gamma_j$ is a compact
+subset of $\D$, so $w_s\in\gamma_{i(s)}$ with $i(s)\to\infty$. Given $\eps>0$, for $s$ large
+$f(w_s)\in\mathcal S(1/n_{i+1},P(k[n_{i+1}]))$ with $1/n_{i+1}<\eps/3$ and
+$\bar\rho(P(k[n_{i+1}]),P)<\eps/3$, and $\rho(f(w_s),p)<\eps/3$; so $\dist(p,P)<\eps$. As $P$ is closed,
+$p\in P$. By Corollary~\ref{cor:path-arc} there is an arc $\gamma$ at $y$ with $C(f,\gamma)\subseteq P$.
+
+\emph{$X_{\mathcal E}\subseteq\bigcap_n\bigcup_{m,k,l}A(n,m,k,l)$.} Let $C(f,\gamma_0)\subseteq P_0\in\mathcal E$.
+Given $n$, choose $k$ with $\bar\rho(P_0,P(k))<1/n$, so $C(f,\gamma_0)\subseteq\mathcal S(1/n,P(k))=:O$. Some
+subarc of $\gamma_0$ at $x$ is mapped into $O$: otherwise there are $z'_t\in\gamma_0\cap S(1/t,x)\cap\D$ with
+$f(z'_t)$ in the compact set $K\setminus O$, and a limit point of $f(z'_t)$ would lie in
+$C(f,\gamma_0)\setminus O$. Conclude as in Theorem~\ref{thm:mcmillan}; the countability of
+$X_{\mathcal E}\setminus Y$ is proved in the same way.
+\end{proof}
+
+\begin{corollary}[{\cite[Corollaries 1--4]{MMJ}}]\label{cor:mm-corollaries}
+\lean{TJK.McMillan.cor1, TJK.McMillan.cor2, TJK.McMillan.cor3, TJK.McMillan.cor4}
+\uses{thm:mm-thm2, lem:cluster}
+Let $f:\D\to\Sph$ be continuous. Each of the following sets is $\Fsd$:
+\begin{enumerate}[label=(\arabic*)]
+\item (McMillan) $\{x:\exists\gamma\text{ at }x,\ \exists p\in E,\ f\to p\text{ along }\gamma\}$, for closed
+  $E\subseteq\Sph$;
+\item $\{x:\exists\gamma\text{ at }x,\ \diam C(f,\gamma)\le d\}$, for $d\ge0$;
+\item $\{x:\exists\gamma\text{ at }x,\ C(f,\gamma)\subseteq E\}$, for closed $E\subseteq\Sph$;
+\item $\{x:\exists\gamma\text{ at }x,\ C(f,\gamma)\text{ is an arc of a great circle}\}$, where (since
+  $C(f,\gamma)$ is closed and connected) an ``arc'' may be a point, a closed arc, or a whole great circle.
+\end{enumerate}
+\end{corollary}
+\begin{proof}
+Apply Theorem~\ref{thm:mm-thm2} with $\mathcal E$ equal to: (1) $\{\{p\}:p\in E\}$, an isometric copy of
+$E$, using that $C(f,\gamma)\subseteq\{p\}$ iff $f\to p$ along $\gamma$ (Lemma~\ref{lem:cluster});
+(2) $\{F:\diam F\le d\}$, closed because $\abs{\diam F-\diam F'}\le2\bar\rho(F,F')$, and using $E=C(f,\gamma)$
+for the converse; (3) $\{E\}$ (or note the set is empty if $E=\emptyset$); (4) the set of great circles,
+the continuous image of the compact set of unit normals, together with the connectedness of
+$C(f,\gamma)$ (Lemma~\ref{lem:cluster}). In (4) we read ``arc'' in this broad sense, which is what the connectedness
+argument indicated in \cite{MMJ} gives.
+\end{proof}
+
+\begin{theorem}[McMillan in the half-plane; {\cite[Theorem 3]{Diss}}]\label{thm:mcmillan-H}
+\lean{TJK.McMillan.isFσδ_curvConvSet_upperHalfPlane}
+\uses{thm:mcmillan, lem:transfer, lem:charts, lem:borel-basic}
+If $K$ is a complete separable metric space and $f:\Hp\to K$ is continuous, then $\CC(f)\subseteq\R$ is
+$\Fsd$.
+\end{theorem}
+\begin{proof}
+By Lemma~\ref{lem:transfer} with $\Psi=\kappa$ (Lemma~\ref{lem:charts}(a)),
+$\CC(f)=\kappa^{-1}(\CC(f\circ\kappa^{-1})\setminus\{1\})$, and the right side is $\Fsd$ by
+Theorem~\ref{thm:mcmillan} and Lemma~\ref{lem:borel-basic}.
+\end{proof}
+
+\subsection*{The half-plane lemmas of the dissertation}
+For a domain $\Omega\subseteq\Hp$ and a crosscut $\gamma$ of $\Hp$ with endpoints $c<d$ let
+$L(\gamma)=[c,d]$, the trace on $\R$ of the closure of the bounded component of $\Hp\setminus\gamma$; let
+$I(\Omega)=\bigcup L(\gamma)^*$ over crosscuts with $\gamma\cap\Hp\subseteq\Omega$, and $\acc(\Omega)$ the
+points of $\R$ accessible by arcs in $\Omega$. These lemmas are the half-plane forms of
+Lemmas~\ref{lem:mm-lemma2} and~\ref{lem:mm-lemma3}; they are not used elsewhere.
+
+\begin{lemma}[{\cite[Lemma 7]{Diss}}]\label{lem:th-lemma7}
+\lean{TJK.McMillan.halfPlane_I_eq}
+\uses{lem:crosscut-H, fact:tietze-arc}
+If $\acc(\Omega)\ne\emptyset$, $a=\inf\acc(\Omega)$ and $b=\sup\acc(\Omega)$, then $I(\Omega)=(a,b)$.
+\end{lemma}
+\begin{proof}
+If $x\in L(\gamma)^*=(c,d)$ then $c,d\in\acc(\Omega)$, so $a\le c<x<d\le b$. Conversely, for $a<x<b$ pick
+$c',d'\in\acc(\Omega)$ with $c'<x<d'$, and join them by a crosscut through $\Omega$ as in
+Lemma~\ref{lem:mm-lemma2}.
+\end{proof}
+
+\begin{lemma}[{\cite[Lemma 8]{Diss}}]\label{lem:th-lemma8}
+\lean{TJK.McMillan.halfPlane_inter_nonempty}
+\uses{lem:crosscut-H, fact:tietze-arc, lem:mm-lemma3}
+If $\Omega_1,\Omega_2\subseteq\Hp$ are domains and $I(\Omega_1)\cap\overline{\acc(\Omega_1)}$ and
+$I(\Omega_2)\cap\overline{\acc(\Omega_2)}$ meet, then $\Omega_1\cap\Omega_2\ne\emptyset$.
+\end{lemma}
+\begin{proof}
+As in Lemma~\ref{lem:mm-lemma3}, with $U_i$ the unbounded component of $\Hp\setminus\gamma_i$ (any two
+unbounded components meet, since each contains a half-plane $\{\operatorname{Im}z>t\}$) and
+Lemma~\ref{lem:crosscut-H} in place of Fact~\ref{fact:crosscut}.
+\end{proof}

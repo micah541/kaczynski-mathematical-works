@@ -1,0 +1,261 @@
+% ===========================================================================
+\section{Arcs, crosscuts and transfer}\label{sec:plane}
+% ===========================================================================
+
+\subsection{Arcs and curvilinear limits}
+
+\begin{definition}[arcs]\label{def:arcs}
+\lean{TJK.IsArc, TJK.IsArcAt, TJK.IsCrosscut}
+A \emph{path} in $\R^n$ is a continuous $g:[0,1]\to\R^n$; a \emph{simple arc} is the image of an
+injective path, and its \emph{endpoints} are $g(0),g(1)$. Let $\Omega\subseteq\R^n$ be open and
+$p\in\partial\Omega$. An \emph{arc at $p$} (in $\Omega$) is a simple arc $\gamma$ with one endpoint $p$
+and $\gamma\setminus\{p\}\subseteq\Omega$. A \emph{crosscut} of $\D$ is a simple arc whose endpoints
+are distinct points of $C$ and whose other points lie in $\D$; a crosscut of $\Hp$ is defined in the
+same way with $\R$ in place of $C$.
+\end{definition}
+
+\begin{definition}[curvilinear convergence, boundary functions, cluster sets]\label{def:ccset}
+\lean{TJK.curvConvSet, TJK.IsBoundaryFunction, TJK.clusterSet}
+\uses{def:arcs}
+Let $\Omega$ be open, $B\subseteq\partial\Omega$, $Y$ a metric space and $f:\Omega\to Y$. For an arc
+$\gamma$ at $p$, $f(z)\to q$ \emph{along $\gamma$} means $f(z)\to q$ as $z\to p$ with
+$z\in\gamma\setminus\{p\}$. The \emph{set of curvilinear convergence} of $f$ (relative to $B$) is
+\[
+\CC(f)=\{p\in B:\ \text{there are an arc $\gamma$ at $p$ and $q\in Y$ with $f\to q$ along $\gamma$}\}.
+\]
+If $E\subseteq B$, a function $\varphi:E\to Y$ is a \emph{boundary function} for $f$ if for every
+$p\in E$ there is an arc $\gamma$ at $p$ with $f\to\varphi(p)$ along $\gamma$. The \emph{cluster set}
+of $f$ along $\gamma$ is $C(f,\gamma)=\{q:\exists z_n\in\gamma\setminus\{p\},\ z_n\to p,\ f(z_n)\to q\}$.
+The pairs $(\Omega,B)$ used are $(\D,C)$, $(\Hp,\R)$ and $(Q^\circ,X)$, and in Section~\ref{sec:cube}
+the open cube with its whole boundary.
+\end{definition}
+
+\begin{fact}[Tietze {\cite{Tietze}}]\label{fact:tietze-arc}
+\lean{TJK.exists_arc_in_path}
+\uses{def:arcs}
+\source{Tietze 1919; also: every path-connected Hausdorff space is arc-connected}
+If $g$ is a path in $\R^n$ with $g(0)\ne g(1)$, then $g([0,1])$ contains a simple arc with endpoints
+$g(0)$ and $g(1)$.
+\end{fact}
+
+\begin{corollary}[paths may replace arcs]\label{cor:path-arc}
+\lean{TJK.exists_arcAt_of_path}
+\uses{fact:tietze-arc, def:ccset}
+Let $\Omega$ be open, $p\in\partial\Omega$, and $g:[0,1]\to\R^n$ continuous with $g(1)=p$ and
+$g([0,1))\subseteq\Omega$. Then $g([0,1])$ contains an arc $\gamma$ at $p$, and for every
+$f:\Omega\to Y$: if $f(g(t))\to q$ as $t\to1$ then $f\to q$ along $\gamma$; and $C(f,\gamma)$ is
+contained in the set of limits of $f(g(t_n))$ with $t_n\to1$.
+\end{corollary}
+\begin{proof}
+Fact~\ref{fact:tietze-arc} gives a simple arc $\gamma\subseteq g([0,1])$ from $g(0)$ to $p$; since
+$g(t)\ne p$ for $t<1$, $\gamma\setminus\{p\}\subseteq\Omega$. If $z_k\in\gamma\setminus\{p\}$ and
+$z_k\to p$, write $z_k=g(t_k)$ with $t_k<1$; a subsequence of $t_k$ bounded away from $1$ would have a
+limit $t^*<1$ with $g(t^*)=p$, which is impossible. So $t_k\to1$.
+\end{proof}
+
+\begin{lemma}[subarcs and exits]\label{lem:subarc}
+\lean{TJK.IsArcAt.exists_subarc_subset, TJK.IsArcAt.tendsto_subarc, TJK.exists_exit_subpath}
+\uses{def:ccset}
+(a) If $\gamma$ is an arc at $p$ and $W$ is a neighbourhood of $p$, there is an arc $\gamma'\subseteq\gamma\cap
+W$ at $p$; limits and cluster sets along $\gamma'$ and $\gamma$ coincide. If $f\to q$ along $\gamma$ and
+$V\ni q$ is open, some such $\gamma'$ has $f(\gamma'\setminus\{p\})\subseteq V$.
+(b) If $g$ is a path, $w=g(t_0)$, and $\abs{g(t_1)-w}\ge r>0$, there is a closed interval $J$ with
+endpoints $t_0$ and some $t'$ between $t_0$ and $t_1$ such that $g(J)\subseteq\overline{S(r,w)}$ and
+$\abs{g(t')-w}=r$; in particular $\diam g(J)\ge r$.
+(c) If $\gamma$ is an arc at $p$ in $\Hp$ and $n$ is large enough that $\gamma$ meets $X_n$, then the subarc
+of $\gamma$ from $p$ to its first point on $X_n$ is an arc at $p$ contained in $\overline{\Hp}_n$ with all
+points other than its endpoints in $\Hp_n$.
+\end{lemma}
+\begin{proof}
+Parametrize and take initial segments; for (b) let $t'$ be the first parameter between $t_0$ and $t_1$
+with $\abs{g(t')-w}\ge r$, and use continuity.
+\end{proof}
+
+\begin{lemma}[cluster sets]\label{lem:cluster}
+\lean{TJK.clusterSet_nonempty, TJK.isCompact_clusterSet, TJK.isConnected_clusterSet,
+  TJK.tendsto_iff_clusterSet_eq_singleton}
+\uses{def:ccset, lem:subarc}
+Let $K$ be a compact metric space, $f:\Omega\to K$ continuous and $\gamma$ an arc at $p$. Then
+$C(f,\gamma)=\bigcap_{\gamma'}\overline{f(\gamma'\setminus\{p\})}$, the intersection over the subarcs
+$\gamma'$ of $\gamma$ at $p$; it is nonempty, compact and connected; and $f\to q$ along $\gamma$ iff
+$C(f,\gamma)=\{q\}$. If $\Theta:K\to K'$ is continuous into a metric space, then
+$C(\Theta\circ f,\gamma)=\Theta(C(f,\gamma))$.
+\end{lemma}
+\begin{proof}
+The sets $\overline{f(\gamma'\setminus\{p\})}$ are compact, connected (images of half-open arcs) and
+decrease as $\gamma'$ shrinks; a decreasing intersection of nonempty compact connected sets is
+nonempty, compact and connected. The claim about limits is the usual compactness argument. For the last
+claim: $\supseteq$ by continuity of $\Theta$; if $\Theta(f(z_n))\to q'$ with $z_n\to p$ along $\gamma$, a subsequence
+of $f(z_n)$ converges in the compact $K$ to some $q\in C(f,\gamma)$, and $\Theta(q)=q'$.
+\end{proof}
+
+\begin{fact}[Tietze extension]\label{fact:tietze-ext}
+\lean{TJK.tietze_bounded_complex}
+\source{Mathlib: ContinuousMap.exists_extension / BoundedContinuousFunction extensions (apply to real and imaginary parts)}
+A bounded continuous function from a closed subset of a metric space to $\C$ extends to a bounded continuous function on the
+whole space.
+\end{fact}
+
+\begin{fact}[hyperspace]\label{fact:hyperspace}
+\lean{TJK.compactSpace_nonemptyCompacts}
+\source{Hausdorff, Mengenlehre p.~150; Mathlib: EMetric.NonemptyCompacts.compactSpace}
+If $K$ is a compact metric space, the space $\mathcal C(K)$ of nonempty closed subsets of $K$ with the Hausdorff metric is
+compact.
+\end{fact}
+
+\begin{fact}[Baire category theorem]\label{fact:baire-category}
+\lean{TJK.baire_category}
+\source{Mathlib: BaireSpace instances, dense_iInter_of_isOpen}
+A complete metric space is not of the first category in itself; in it, a countable intersection of dense open sets is dense.
+\end{fact}
+
+\subsection{Crosscuts}
+
+\begin{fact}[crosscut theorem]\label{fact:crosscut}
+\lean{TJK.crosscut_theorem}
+\uses{def:arcs}
+\source{Jordan curve theorem; Newman, Elements, Theorem 11.8 (the $\theta$-curve theorem)}
+Let $\sigma$ be a crosscut of $\D$ with endpoints $a\ne b$, and let $A_1,A_2$ be the two closed arcs of
+$C$ with endpoints $a,b$. Then $\D\setminus\sigma$ has exactly two components $U_1,U_2$, and the frontier
+of $U_i$ is $\sigma\cup A_i$ ($i=1,2$). In particular $\overline{U_i}\cap C=A_i$ and
+$\sigma\subseteq\overline{U_1}\cap\overline{U_2}$.
+\end{fact}
+
+\begin{lemma}[disjoint components have disjoint boundary arcs]\label{lem:disjoint-arcs}
+\lean{TJK.disjoint_boundaryArcs}
+\uses{fact:crosscut}
+Let $\sigma,\tau$ be crosscuts of $\D$, $U$ a component of $\D\setminus\sigma$ and $V$ a component of
+$\D\setminus\tau$, with $U\cap V=\emptyset$. Then the arcs $\overline U\cap C$ and $\overline V\cap C$ have
+disjoint relative interiors.
+\end{lemma}
+\begin{proof}
+Let $p$ be interior to both arcs. Then $p$ is not an endpoint of $\sigma$ or $\tau$, so $p\notin\sigma\cup\tau$,
+and there is $r>0$ with $S(r,p)\cap(\sigma\cup\tau)=\emptyset$. The convex set $S(r,p)\cap\D$ lies in one
+component of $\D\setminus\sigma$; as $p\in\overline U$ it meets $U$, so it lies in $U$. Likewise it lies in
+$V$, contradicting $U\cap V=\emptyset$.
+\end{proof}
+
+\begin{definition}[charts]\label{def:charts}
+\lean{TJK.cayley, TJK.chartH, TJK.chartD, TJK.stripExp}
+\begin{enumerate}[label=(\alph*)]
+\item The Cayley map $\kappa(z)=(z-i)/(z+i)$.
+\item $\Psi_\Hp\langle x,y\rangle=\tan(\pi x/2)+i\,y/(1-y)$ for $\abs x<1$, $0\le y<1$.
+\item $\Psi_\D\langle x,y\rangle=1-1/w$ with $w=\tfrac12(1+y)+i\tan(\pi x/2)$, for $\abs x<1$, $0\le y<1$.
+\item $\mathcal E_h(z)=e^{\pi z/h}$ for $h>0$.
+\end{enumerate}
+\end{definition}
+
+\begin{lemma}[charts]\label{lem:charts}
+\lean{TJK.cayley_homeomorph, TJK.chartH_homeomorph, TJK.chartD_homeomorph, TJK.stripExp_homeomorph,
+  TJK.chartD_closedPiece}
+\uses{def:charts}
+(a) $\kappa$ is a homeomorphism of $\Hp\cup\R$ onto $(\D\cup C)\setminus\{1\}$ mapping $\Hp$ onto $\D$
+and $\R$ onto $C\setminus\{1\}$; $\abs{\kappa(z)-1}\to0$ iff $\abs z\to\infty$.
+(b) $\Psi_\Hp$ is a homeomorphism of $Q^\circ\cup X$ onto $\Hp\cup\R$ mapping $X$ onto $\R$
+increasingly.
+(c) $\Psi_\D$ is a homeomorphism of $Q^\circ\cup X$ onto $G^\circ\cup(C\setminus\{1\})$, where
+$G^\circ=\{z\in\D:\operatorname{Re}(1-z)^{-1}<1\}$, mapping $X$ onto $C\setminus\{1\}$. The set
+$G''=\{z\in\D:\operatorname{Re}(1-z)^{-1}\le3/4\}$ is closed in $\D$, contains a neighbourhood in $\D$
+of each point of $C\setminus\{1\}$, and is disjoint from the radius $[0,1)$.
+(d) $\mathcal E_h$ maps $\{0\le\operatorname{Im}z\le h\}$ homeomorphically onto
+$(\Hp\cup\R)\setminus\{0\}$, the line $\operatorname{Im}z=0$ increasingly onto $(0,\infty)$ and the line
+$\operatorname{Im}z=h$ decreasingly onto $(-\infty,0)$.
+\end{lemma}
+\begin{proof}
+(a) $\abs{\kappa(z)}<1$ iff $\abs{z-i}<\abs{z+i}$ iff $\operatorname{Im}z>0$; the inverse is
+$w\mapsto i(1+w)/(1-w)$. (b) is a product of homeomorphisms $(-1,1)\to\R$ and $[0,1)\to[0,\infty)$.
+(c) $z\mapsto(1-z)^{-1}$ maps $\D$ onto $\{\operatorname{Re}w>\frac12\}$ and $C\setminus\{1\}$ onto
+$\{\operatorname{Re}w=\frac12\}$ (since $\abs{1-1/w}<1\iff\abs{w-1}<\abs w$); $\Psi_\D$ is the inverse
+of this map composed with a homeomorphism of $Q^\circ\cup X$ onto $\{\frac12\le\operatorname{Re}w<1\}$.
+Near a point $x\in C\setminus\{1\}$, $\operatorname{Re}(1-z)^{-1}$ is close to $\frac12$; on $[0,1)$ it is
+$\ge1$. (d) is elementary.
+\end{proof}
+
+\begin{lemma}[crosscuts of the half-plane]\label{lem:crosscut-H}
+\lean{TJK.crosscutH_theorem}
+\uses{fact:crosscut, lem:charts}
+Let $\sigma$ be a crosscut of $\Hp$ with endpoints $a<b$. Then $\Hp\setminus\sigma$ has exactly two
+components, a bounded one $V$ with $\overline V\cap\R=[a,b]$, and an unbounded one $U$ with
+$\overline U\cap\R=\R\setminus(a,b)$; moreover $\sigma\subseteq\overline U\cap\overline V$ and
+$U\supseteq\{\operatorname{Im}z>\max_\sigma\operatorname{Im}\}$.
+\end{lemma}
+\begin{proof}
+$\kappa(\sigma)$ is a crosscut of $\D$ with endpoints in $C\setminus\{1\}$
+(Lemma~\ref{lem:charts}(a)); apply Fact~\ref{fact:crosscut}. The component whose closed arc avoids $1$
+has closure a compact subset of $\overline\D\setminus\{1\}$, so its preimage $V$ is bounded, and $\kappa$
+maps $[a,b]$ onto that arc. The half-plane above $\sigma$ is connected, unbounded and disjoint from
+$\sigma$, so it lies in $U$.
+\end{proof}
+
+\begin{lemma}[order of disjoint arcs in a strip]\label{lem:strip}
+\lean{TJK.strip_order}
+\uses{lem:crosscut-H, lem:charts}
+Let $h>0$, $S=\{0<\operatorname{Im}z<h\}$, and let $\alpha,\alpha'$ be disjoint simple arcs, $\alpha$ from
+$x\in\R$ to $p$ with $\operatorname{Im}p=h$, $\alpha'$ from $x'\in\R$ to $p'$ with
+$\operatorname{Im}p'=h$, all other points in $S$. If $x<x'$ then $\operatorname{Re}p<\operatorname{Re}p'$.
+\end{lemma}
+\begin{proof}
+By Lemma~\ref{lem:charts}(d), $\mathcal E_h(\alpha)$ is a crosscut of $\Hp$ from $u=e^{\pi x/h}$ to
+$v=-e^{\pi\operatorname{Re}p/h}$, and $\mathcal E_h(\alpha')$ one from $u'>u$ to
+$v'=-e^{\pi\operatorname{Re}p'/h}\ne v$. By Lemma~\ref{lem:crosscut-H} the bounded component $V$ of
+$\Hp\setminus\mathcal E_h(\alpha)$ has $\overline V\cap\R=[v,u]$. The connected set
+$\mathcal E_h(\alpha')\setminus\{u',v'\}$ lies in one component; its closure contains $u'\notin[v,u]$, so
+it lies in the unbounded component $U$, and then $v'\in\overline U\cap\R=\R\setminus(v,u)$. As $v'<0<u$
+and $v'\ne v$, $v'<v$, i.e.\ $\operatorname{Re}p'>\operatorname{Re}p$.
+\end{proof}
+
+\begin{lemma}[geometry near a boundary point]\label{lem:disc-geometry}
+\lean{TJK.convex_disc_inter_ball, TJK.isConnected_disc_diff_closedBall, TJK.shortArc_subset_ball}
+Let $x\in C$ and $0<\delta<2$.
+(a) $\D\cap S(\delta,x)$ is convex.
+(b) $\D\setminus\overline{S(\delta,x)}$ is connected and has $-x$ in its closure.
+(c) If $x'\in C$ and $\abs{x'-x}<\delta$, the shorter closed arc of $C$ from $x$ to $x'$ lies in $S(\delta,x)$.
+Any arc of $C$ between $w_1,w_2$ has length at least $\abs{w_1-w_2}$.
+(d) If $A_1,\dots,A_m$ are closed arcs of $C$ with pairwise disjoint relative interiors, their lengths add up to at most
+$2\pi$. (The length of an arc is the Lebesgue measure of the corresponding set of angles in $[0,2\pi)$.)
+\end{lemma}
+\begin{proof}
+(a) Intersection of convex sets. (b) For $z\in\D$ the convex function $t\mapsto\abs{(1-t)z-tx-x}^2$ has
+derivative $2(1-\abs z^2)>0$ at $t=0$, hence increases on $[0,1]$; so the segment $[z,-x)$ stays in
+$\D\setminus\overline{S(\delta,x)}$ and ends in the convex set $\D\cap S(2-\delta,-x)$, which lies in
+$\D\setminus\overline{S(\delta,x)}$. (c) On an arc of angle at most $\pi$ the chord from an endpoint
+increases with the angle; chords are shorter than arcs. (d) The interiors are disjoint measurable sets of
+angles and the endpoints are null.
+\end{proof}
+
+\begin{lemma}\label{lem:open-components}
+\lean{TJK.countable_connectedComponents_of_isOpen}
+An open subset of $\R^n$ has countably many components; they are open and path-connected, and a
+connected subset of the open set lies in one of them.
+\end{lemma}
+\begin{proof}
+$\R^n$ is locally path-connected and second countable.
+\end{proof}
+
+\subsection{Transfer}
+
+\begin{lemma}[transfer]\label{lem:transfer}
+\lean{TJK.transfer_isArcAt, TJK.transfer_curvConvSet, TJK.transfer_isBoundaryFunction,
+  TJK.transfer_clusterSet}
+\uses{def:ccset}
+Let $\Omega,\Omega'$ be open, $B\subseteq\partial\Omega$, $B'\subseteq\partial\Omega'$, and let
+$\Psi:\Omega\cup B\to\Omega'\cup B'$ be a homeomorphism with $\Psi(\Omega)=\Omega'$. For $f:\Omega'\to Y$:
+$\gamma$ is an arc at $p\in B$ iff $\Psi(\gamma)$ is an arc at $\Psi(p)$; $f\circ\Psi\to q$ along
+$\gamma$ iff $f\to q$ along $\Psi(\gamma)$, and the cluster sets agree; hence
+$\CC(f\circ\Psi)=\Psi^{-1}(\CC(f))$, and $\varphi$ is a boundary function for $f$ on $E'$ iff
+$\varphi\circ\Psi$ is one for $f\circ\Psi$ on $\Psi^{-1}(E')$.
+\end{lemma}
+\begin{proof}
+Arcs at $p$ lie in $\Omega\cup\{p\}$, where $\Psi$ is a homeomorphism.
+\end{proof}
+
+\begin{lemma}[locality]\label{lem:locality}
+\lean{TJK.curvConv_local}
+\uses{def:ccset, lem:subarc}
+Let $p\in\partial\Omega\cap\partial\Omega'$ and suppose $W\cap\Omega=W\cap\Omega'$ for an open $W\ni p$. If
+$f=f'$ on $W\cap\Omega$, then $f$ has a limit $q$ along some arc at $p$ in $\Omega$ iff $f'$ has the limit
+$q$ along some arc at $p$ in $\Omega'$.
+\end{lemma}
+\begin{proof}
+Lemma~\ref{lem:subarc}(a).
+\end{proof}

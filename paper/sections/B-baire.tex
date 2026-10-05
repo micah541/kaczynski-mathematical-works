@@ -1,0 +1,545 @@
+% ===========================================================================
+\section{Borel classes and Baire functions}\label{sec:baire}
+% ===========================================================================
+Sources: \cite[Introduction, \S3]{Diss}, \cite[Appendix]{TAMSb}. Throughout, $M$ is a metric space.
+
+\subsection{Classes of sets}
+
+\begin{definition}[$\Fs$, $\Gd$, $\Fsd$, ambiguous sets]\label{def:borel-classes}
+\lean{TJK.IsFσ, TJK.IsFσδ, TJK.IsAmbiguous}
+A subset of a topological space is $\Fs$ if it is a countable union of closed sets, $\Gd$ if it is a
+countable intersection of open sets, $\Fsd$ if it is a countable intersection of $\Fs$ sets, and
+\emph{ambiguous} if it is both $\Fs$ and $\Gd$. For $L\subseteq M$ we write $\Fs(L)$, $\Gd(L)$,
+$\Fsd(L)$ for the corresponding classes of the subspace $L$.
+\end{definition}
+
+\begin{lemma}[closure properties]\label{lem:borel-basic}
+\lean{TJK.IsFσ.iUnion, TJK.IsFσ.inter, TJK.IsFσδ.iInter, TJK.IsFσδ.union, TJK.IsOpen.isFσ,
+  TJK.Set.Countable.isFσ, TJK.isFσ_subtype_iff, TJK.isGδ_subtype_iff, TJK.isFσδ_subtype_iff,
+  TJK.IsFσδ.of_subtype}
+\uses{def:borel-classes}
+\begin{enumerate}[label=(\alph*)]
+\item In $M$, open sets are $\Fs$, closed sets are $\Gd$, and countable sets are $\Fs$.
+\item $\Fs$ is closed under countable unions and finite intersections; $\Gd$ under countable
+  intersections and finite unions; $\Fsd$ under countable intersections and finite unions. The
+  complement of an $\Fs$ set is $\Gd$ and conversely.
+\item For $L\subseteq M$: $E\in\Fs(L)$ iff $E=P\cap L$ for some $\Fs$ set $P$ of $M$; likewise for
+  $\Gd$ and $\Fsd$.
+\item If $L$ is $\Fsd$ (resp.\ $\Gd$) in $M$ and $E\in\Fsd(L)$ (resp.\ $\Gd(L)$), then $E$ is $\Fsd$
+  (resp.\ $\Gd$) in $M$. Every $\Fs$ set is $\Fsd$, and every $\Gd$ set is $\Fsd$.
+\item Homeomorphisms preserve all these classes.
+\end{enumerate}
+\end{lemma}
+\begin{proof}
+(a) $U=\bigcup_k\{x:\dist(x,M\setminus U)\ge1/k\}$ for $U\ne M$ open; complements give the rest, and
+points are closed. (b) $(\bigcup_nA_n)\cap(\bigcup_mB_m)=\bigcup_{n,m}A_n\cap B_m$, and
+$(\bigcap_nP_n)\cup(\bigcap_mR_m)=\bigcap_{n,m}(P_n\cup R_m)$; the rest is De Morgan. (c) Closed sets
+of $L$ are traces of closed sets of $M$, and traces commute with countable unions and intersections.
+(d) $E=P\cap L$ with $P$ in the class, and the class is closed under finite intersections; a $\Gd$ set
+$\bigcap_nU_n$ is $\Fsd$ by (a). (e) is clear.
+\end{proof}
+
+\subsection{Classes of functions}
+
+\begin{definition}[function classes]\label{def:fn-classes}
+\lean{TJK.IsFσMeasurable, TJK.IsBaireOne, TJK.IsHonoraryBaireTwo, TJK.BaireClass}
+\uses{def:borel-classes}
+Let $L$ be a metric space and $Y$ a metric space.
+\begin{enumerate}[label=(\alph*)]
+\item $f:L\to Y$ is \emph{of class $\Fs$} if $f^{-1}(U)\in\Fs(L)$ for every open $U\subseteq Y$.
+\item $f$ is \emph{of Baire class $\le1$}, written $f\in\mathcal B_1(L,Y)$, if there are continuous
+  $f_n:L\to Y$ with $f_n\to f$ pointwise on $L$.
+\item $f$ is \emph{of honorary Baire class $\le2$} if there are a countable $N\subseteq L$ and
+  $\psi\in\mathcal B_1(L,Y)$ with $f=\psi$ on $L\setminus N$.
+\item (Baire classes of all orders.) $f$ is of Baire class $0$ if it is continuous; for an ordinal
+  $\xi\ge1$, $f$ is of Baire class $\xi$ if it is the pointwise limit of a sequence $f_n$, each of
+  Baire class $\eta_n$ for some $\eta_n<\xi$. (So class $\xi$ contains all classes $\eta<\xi$ when
+  $\xi\ge1$.)
+\end{enumerate}
+\end{definition}
+
+\begin{lemma}[reduction; {\cite[Lemma 1]{Diss}}]\label{lem:reduction}
+\lean{TJK.reduction}
+\uses{lem:borel-basic}
+Let $E,F$ be $\Fs$ subsets of $M$. There are disjoint $\Fs$ sets $A\subseteq E$, $B\subseteq F$ with
+$A\cup B=E\cup F$. In particular $E\setminus F\subseteq A$ and $F\setminus E\subseteq B$.
+\end{lemma}
+\begin{proof}
+Write $E=\bigcup_nE_n$, $F=\bigcup_nF_n$ with $E_n,F_n$ closed, and put
+\[
+A=\bigcup_n\Bigl(E_n\setminus\bigcup_{j<n}F_j\Bigr),\qquad
+B=\bigcup_n\Bigl(F_n\setminus\bigcup_{j\le n}E_j\Bigr).
+\]
+Each term is closed minus closed, i.e.\ closed $\cap$ open, hence $\Fs$ (Lemma~\ref{lem:borel-basic}).
+If $x\in(E_n\setminus\bigcup_{j<n}F_j)\cap(F_m\setminus\bigcup_{j\le m}E_j)$ then $m<n$ is impossible
+because $x\in F_m$, and $m\ge n$ is impossible because $x\in E_n$; so $A\cap B=\emptyset$. If
+$x\in E\cup F$, let $n$ be least with $x\in E_n\cup F_n$. If $x\in E_n$ then $x\in A$; otherwise
+$x\in F_n\setminus\bigcup_{j\le n}E_j\subseteq B$.
+\end{proof}
+
+\begin{corollary}[finite reduction]\label{cor:reduction-finite}
+\lean{TJK.reduction_finite}
+\uses{lem:reduction}
+If $P_1,\dots,P_q$ are $\Fs$ subsets of $M$, there are pairwise disjoint $\Fs$ sets $R_i\subseteq P_i$
+with $\bigcup_iR_i=\bigcup_iP_i$. If $\bigcup_iP_i=M$, each $R_i$ is ambiguous.
+\end{corollary}
+\begin{proof}
+Induction on $q$. Reduce $P_1$ against $P'=P_2\cup\dots\cup P_q$ (Lemma~\ref{lem:reduction}), getting
+disjoint $\Fs$ sets $A\subseteq P_1$, $B\subseteq P'$ with $A\cup B=P_1\cup P'$; apply the induction
+hypothesis to $P_2,\dots,P_q$, getting $R_2',\dots,R_q'$, and put $R_1=A$, $R_i=R_i'\cap B$. If the $R_i$
+cover $M$, the complement of each is the finite union of the others, hence $\Fs$.
+\end{proof}
+
+\begin{theorem}[Sierpi\'nski {\cite{Sierpinski}}]\label{thm:sierpinski}
+\lean{TJK.sierpinski_ambiguous}
+\uses{lem:reduction, lem:borel-basic}
+If $E\subseteq F\subseteq M$ with $E$ a $\Gd$ set and $F$ an $\Fs$ set, there is an ambiguous set
+$K$ with $E\subseteq K\subseteq F$.
+\end{theorem}
+\begin{proof}
+$P=M\setminus E$ and $F$ are $\Fs$ with $P\cup F=M$. Reduce them (Lemma~\ref{lem:reduction}):
+$A\subseteq P$, $B\subseteq F$ disjoint $\Fs$ with $A\cup B=M$. Put $K=B$. Then $K\subseteq F$,
+$K=M\setminus A\supseteq M\setminus P=E$, and $K$ is $\Fs$ with $\Fs$ complement $A$.
+\end{proof}
+
+\begin{lemma}\label{lem:baire1-fsigma}
+\lean{TJK.IsBaireOne.isFσMeasurable}
+\uses{def:fn-classes, lem:borel-basic}
+Every $f\in\mathcal B_1(L,Y)$ is of class $\Fs$.
+\end{lemma}
+\begin{proof}
+Let $f_n\to f$ with $f_n$ continuous, and $U\subsetneq Y$ open. Put
+$V_k=\{y:\dist(y,Y\setminus U)\ge1/k\}$, a closed subset of $U$. Then
+$f^{-1}(U)=\bigcup_{k,N}\bigcap_{n\ge N}f_n^{-1}(V_k)$: if $\dist(f(x),Y\setminus U)>2/k$ then
+eventually $f_n(x)\in V_k$; conversely if $f_n(x)\in V_k$ for $n\ge N$ then $f(x)\in V_k\subseteq U$.
+\end{proof}
+
+\begin{lemma}[{Banach's Hilfssatz 3}]\label{lem:finite-valued}
+\lean{TJK.finiteValued_ambiguous}
+\uses{def:fn-classes, lem:borel-basic}
+If $f:L\to Y$ is of class $\Fs$ and takes only the values $a_1,\dots,a_q$ (distinct), then the sets
+$E_j=f^{-1}(a_j)$ are ambiguous in $L$ and partition $L$.
+\end{lemma}
+\begin{proof}
+With $r$ less than half the least distance between the $a_j$, $E_j=f^{-1}(S(r,a_j))$ is $\Fs$, and its
+complement $\bigcup_{i\ne j}E_i$ is $\Fs$ too.
+\end{proof}
+
+\begin{lemma}\label{lem:finite-valued-ops}
+\lean{TJK.FiniteValued.add, TJK.FiniteValued.sub}
+\uses{lem:finite-valued}
+If $f,g:L\to\R$ are finitely valued and of class $\Fs$, so are $f+g$ and $f-g$.
+\end{lemma}
+\begin{proof}
+By Lemma~\ref{lem:finite-valued} the level sets of $f$ and $g$ are ambiguous; every preimage under $f\pm g$
+is a finite union of sets $f^{-1}(a)\cap g^{-1}(b)$, which are $\Fs$.
+\end{proof}
+
+\begin{lemma}[{\cite[Lemma 2]{Diss}}]\label{lem:approx-char}
+\lean{TJK.approx_indicator}
+\uses{lem:reduction, lem:borel-basic}
+Let $L\subseteq M$ and let $E$ be ambiguous in $L$. There are continuous $f_n:M\to[0,1]$ with
+$f_n\to\chi_E$ pointwise on $L$.
+\end{lemma}
+\begin{proof}
+Write $E=E_1\cap L$ and $L\setminus E=F_1\cap L$ with $E_1,F_1$ $\Fs$ in $M$. Reduce: disjoint $\Fs$
+sets $A\subseteq E_1$, $B\subseteq F_1$ with $A\cup B=E_1\cup F_1\supseteq L$. Then $E=A\cap L$ and
+$L\setminus E=B\cap L$ (a point of $E$ is not in $F_1$, hence not in $B$, hence in $A$). Write
+$A=\bigcup A_n$, $B=\bigcup B_n$ with $A_n\subseteq A_{n+1}$, $B_n\subseteq B_{n+1}$ closed, and let
+$f_n$ be the Urysohn function $\dist(x,B_n)/(\dist(x,A_n)+\dist(x,B_n))$ (if $A_n=\emptyset$ take
+$f_n=0$; if $B_n=\emptyset$ take $f_n=1$), which is $1$ on $A_n$ and $0$ on $B_n$. For $x\in L$, eventually $x\in A_n$ or eventually
+$x\in B_n$.
+\end{proof}
+
+\begin{lemma}[{\cite[Lemma 3]{Diss}}]\label{lem:approx-finite}
+\lean{TJK.approx_finiteValued}
+\uses{lem:finite-valued, lem:approx-char}
+If $f:L\to\R$ is of class $\Fs$ and finitely valued, and $L\subseteq M$, there are continuous
+$f_n:M\to\R$ with $f_n\to f$ pointwise on $L$.
+\end{lemma}
+\begin{proof}
+$f=\sum_ja_j\chi_{E_j}$ with $E_j$ ambiguous (Lemma~\ref{lem:finite-valued}); take
+$f_n=\sum_ja_jf^{(j)}_n$ with $f^{(j)}_n\to\chi_{E_j}$ from Lemma~\ref{lem:approx-char}.
+\end{proof}
+
+\begin{lemma}[{\cite[Lemma 4]{Diss}}, Banach's Hilfssatz 4]\label{lem:uniform-approx}
+\lean{TJK.uniform_approx_finiteValued}
+\uses{cor:reduction-finite}
+If $f:L\to\R$ is bounded and of class $\Fs$, then for every $k\in\N$ there is a finitely valued
+$g:L\to\R$ of class $\Fs$ with $\abs{g-f}<1/k$ and $\sup\abs g\le\sup\abs f+1/k$.
+\end{lemma}
+\begin{proof}
+Cover $[-\sup\abs f,\sup\abs f]$ by the finitely many intervals $U_j=((j-1)/k,(j+1)/k)$ that meet it.
+The sets $f^{-1}(U_j)$ are $\Fs$ in $L$ and cover $L$; Corollary~\ref{cor:reduction-finite} gives a
+partition of $L$ into ambiguous $R_j\subseteq f^{-1}(U_j)$. Put $g=j/k$ on $R_j$. Then $\abs{g-f}<1/k$,
+and $g^{-1}(W)$ is a finite union of $R_j$'s for every $W$.
+\end{proof}
+
+\begin{lemma}[{\cite[Lemma 5]{Diss}}]\label{lem:approx-real}
+\lean{TJK.approx_real}
+\uses{lem:uniform-approx, lem:approx-finite, lem:finite-valued-ops}
+Let $L\subseteq M$ and let $f:L\to\R$ be of class $\Fs$. There are continuous $f_j:M\to\R$ with
+$f_j\to f$ pointwise on $L$.
+\end{lemma}
+\begin{proof}
+\emph{Bounded $f$.} Choose by Lemma~\ref{lem:uniform-approx} finitely valued $g_n$ of class $\Fs$ with
+$\norm{g_n-f}_\infty\le2^{-n}$; put $h_1=g_1$, $h_n=g_n-g_{n-1}$. Each $h_n$ is finitely valued of class
+$\Fs$, and $\norm{h_n}\le 2^{-n+2}$ for $n\ge2$. By Lemma~\ref{lem:approx-finite} choose continuous
+$h_{n,j}\to h_n$ on $L$, and let $k_{n,j}$ be $h_{n,j}$ clamped to $[-\norm{h_n},\norm{h_n}]$; still
+$k_{n,j}\to h_n$ on $L$. Then $f_j=\sum_nk_{n,j}$ converges uniformly, so it is continuous. For
+$x\in L$ and $m\in\N$,
+\[
+\abs{f_j(x)-f(x)}\le\sum_{n>m}\norm{h_n}+\sum_{n\le m}\abs{k_{n,j}(x)-h_n(x)}+\abs{g_m(x)-f(x)},
+\]
+which is small for $m$ large and then $j$ large.
+
+\emph{General $f$.} $\arctan\circ f$ is bounded of class $\Fs$; take continuous $G_j\to\arctan\circ f$
+on $L$, clamp $G_j$ into $[-\pi/2+1/j,\pi/2-1/j]$ to get $H_j$ (still convergent on $L$, since the target
+values lie in the open interval), and put $f_j=\tan\circ H_j$.
+\end{proof}
+
+\begin{theorem}[{\cite[Lemma 6]{Diss}}]\label{thm:baire1-char}
+\lean{TJK.baireOne_tfae}
+\uses{lem:approx-real, lem:baire1-fsigma}
+Let $L\subseteq M$ and $f:L\to\R^m$. The following are equivalent:
+(i) $f\in\mathcal B_1(L,\R^m)$; (ii) $f$ is of class $\Fs$; (iii) there are continuous
+$f_n:M\to\R^m$ with $f_n\to f$ pointwise on $L$.
+\end{theorem}
+\begin{proof}
+(i)$\Rightarrow$(ii) is Lemma~\ref{lem:baire1-fsigma}; (iii)$\Rightarrow$(i) by restriction. (ii)$\Rightarrow$(iii):
+each coordinate $f_i=\pi_i\circ f$ is of class $\Fs$; apply Lemma~\ref{lem:approx-real} to each. (Conversely
+the coordinates being of class $\Fs$ implies $f$ is: an open set of $\R^m$ is a countable union of open
+boxes, and $f^{-1}(\prod_iI_i)=\bigcap_if_i^{-1}(I_i)$.)
+\end{proof}
+
+\begin{lemma}[uniform limits]\label{lem:uniform-limit-fsigma}
+\lean{TJK.IsFσMeasurable.of_tendstoUniformly}
+\uses{def:fn-classes, lem:borel-basic}
+If $S_n:L\to Y$ are of class $\Fs$ and $S_n\to F$ uniformly, then $F$ is of class $\Fs$.
+\end{lemma}
+\begin{proof}
+Let $U\subsetneq Y$ be open and $U_k=\{y:\dist(y,Y\setminus U)>2/k\}$; for each $k$ choose $n_k$ with
+$\dist(S_{n_k}(x),F(x))<1/k$ for all $x$. Then $F^{-1}(U)=\bigcup_kS_{n_k}^{-1}(U_k)$.
+\end{proof}
+
+\begin{theorem}[extension of Baire-one functions]\label{thm:extension}
+\lean{TJK.IsBaireOne.extend_of_isGδ, TJK.IsBaireOne.extend_of_countable_compl}
+\uses{lem:finite-valued, lem:finite-valued-ops, cor:reduction-finite, lem:uniform-approx, lem:uniform-limit-fsigma,
+  thm:baire1-char, lem:baire1-fsigma, lem:borel-basic, lem:approx-real}
+Let $f:L\to\R^m$ be of Baire class $\le1$, $L\subseteq M$.
+\begin{enumerate}[label=(\alph*)]
+\item If $L$ is $\Gd$ in $M$ and $f$ is bounded, $f$ extends to a bounded $F\in\mathcal B_1(M,\R^m)$.
+\item If $M\setminus L$ is countable, $f$ extends to some $F\in\mathcal B_1(M,\R^m)$.
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+It suffices to treat $m=1$ (extend coordinatewise).
+
+(a) \emph{Finitely valued $f$ of class $\Fs$ on a $\Gd$ set $L$.} By Lemma~\ref{lem:finite-valued}, $f=\sum_ja_j\chi_{E_j}$ with
+$E_1,\dots,E_q$ an ambiguous partition of $L$; write $E_j=P_j\cap L$ with $P_j$ $\Fs$ in $M$. The sets
+$P_1,\dots,P_q,M\setminus L$ are $\Fs$ and cover $M$; let $R_1,\dots,R_q,R_0$ be the disjoint $\Fs$
+cover given by Corollary~\ref{cor:reduction-finite}. Put $F=a_j$ on $R_j$ and $F=0$ on $R_0$. For
+$x\in L\cap E_j$, $x\notin R_0$, and $x\in R_i$ forces $x\in P_i\cap L=E_i$, so $i=j$ and $F(x)=f(x)$.
+$F$ is finitely valued of class $\Fs$ and $\sup\abs F\le\max\abs{a_j}$.
+
+\emph{Bounded $f$.} $f$ is of class $\Fs$ (Lemma~\ref{lem:baire1-fsigma}). With $g_n$, $h_n$ as in the proof
+of Lemma~\ref{lem:approx-real}, extend each
+$h_n$ to a finitely valued $H_n$ of class $\Fs$ with $\sup\abs{H_n}\le\sup\abs{h_n}$. The partial sums
+$S_N=\sum_{n\le N}H_n$ are finitely valued of class $\Fs$ and converge uniformly to some $F$, which is
+bounded, of class $\Fs$ (Lemma~\ref{lem:uniform-limit-fsigma}), hence in $\mathcal B_1(M,\R)$
+(Theorem~\ref{thm:baire1-char} with $L=M$); and $F|_L=\lim g_N=f$.
+
+(b) Let $\tau(v)=v/(1+\abs v)$, a homeomorphism of $\R^m$ onto the open unit ball $B$. Since $M\setminus L$
+is countable, $L$ is $\Gd$; by (a) extend $\tau\circ f$ to a bounded $G\in\mathcal B_1(M,\R^m)$. The
+set $Z=G^{-1}(\R^m\setminus B)$ lies in $M\setminus L$, so it is countable. Put $G'=G$ off $Z$ and
+$G'=0$ on $Z$. For open $U\subseteq B$, $G'^{-1}(U)=G^{-1}(U)\cup(Z\text{ or }\emptyset)$ is $\Fs$. So
+$G':M\to B$ is of class $\Fs$, hence so is $\tau^{-1}\circ G':M\to\R^m$, which is therefore in
+$\mathcal B_1$ (Theorem~\ref{thm:baire1-char}) and extends $f$.
+\end{proof}
+
+\subsection{Functions into the sphere}
+We use the folding device of \cite[(F)(I)]{TAMSb}. Write points of $\Sph$ as $\langle x,y,z\rangle$ and
+let $T(z)=4z^3-3z$.
+
+\begin{definition}[the fold]\label{def:fold}
+\lean{TJK.Fold.fold, TJK.Fold.U, TJK.Fold.V, TJK.Fold.ZU, TJK.Fold.ZV}
+Let $s=2^{-1/2}$ and
+\begin{gather*}
+U=\{-s<z\le1\},\quad V=\{-1\le z<s\},\quad Z_U=\{s<z\le1\},\quad Z_V=\{-1\le z<-s\},\\
+\Phi\langle x,y,z\rangle=\begin{cases}\langle x(4z^2-1),\,y(4z^2-1),\,T(z)\rangle,&\abs z\ge s,\\
+\langle x,y,-z\rangle,&\abs z\le s,\end{cases}
+\end{gather*}
+all subsets of $\Sph$. Let $p_1=\langle1,0,0\rangle$ and let $\sigma:\Sph\setminus\{p_1\}\to\R^2$ be
+stereographic projection from $p_1$.
+\end{definition}
+
+\begin{lemma}[properties of the fold]\label{lem:fold}
+\lean{TJK.Fold.continuous_fold, TJK.Fold.fold_mapsTo, TJK.Fold.homeomorph_ZU, TJK.Fold.homeomorph_ZV,
+  TJK.Fold.fibre_card_le_three, TJK.Fold.isOpen_U, TJK.Fold.isOpen_V, TJK.Fold.U_union_V,
+  TJK.Fold.bounded_chart}
+\uses{def:fold}
+(i) $\Phi$ is a continuous map $\Sph\to\Sph$. (ii) $\Phi$ restricts to homeomorphisms $Z_U\to U$ and
+$Z_V\to V$. (iii) Each fibre of $\Phi$ has at most three points. (iv) $U,V$ are open and
+$U\cup V=\Sph$. (v) $Z_U\cup Z_V\subseteq\Sph\setminus\{p_1\}$ and $\sigma(Z_U\cup Z_V)$ is bounded.
+\end{lemma}
+\begin{proof}
+On $\Sph$, $(x^2+y^2)(4z^2-1)^2+T(z)^2=(1-z^2)(16z^4-8z^2+1)+z^2(16z^4-24z^2+9)=1$, so $\Phi$ maps into
+$\Sph$. At $z=\pm s$ we have $4z^2-1=1$ and $T(\pm s)=\mp s$, so the two formulas agree and $\Phi$ is
+continuous by the pasting lemma. $T'(z)=12z^2-3>0$ for $\abs z>1/2$, so $T$ is a strictly increasing
+bijection $[s,1]\to[-s,1]$ and $[-1,-s]\to[-1,s]$. Given $\langle x',y',z'\rangle\in U$, put
+$z=T^{-1}(z')\in(s,1]$, $c=4z^2-1\in(1,3]$, $x=x'/c$, $y=y'/c$; the identity above shows
+$\langle x,y,z\rangle\in\Sph$, and this is a continuous inverse of $\Phi|_{Z_U}$. Likewise for $Z_V$.
+$\Phi$ is injective on each of $Z_U$, $\{\abs z\le s\}$, $Z_V$, which cover $\Sph$; this gives (iii). (iv)
+is clear. (v): $\cl(Z_U\cup Z_V)=\{\abs z\ge s\}$ is compact and misses $p_1$.
+\end{proof}
+
+\begin{lemma}[fold factorisation]\label{lem:fold-factor}
+\lean{TJK.Fold.exists_factor}
+\uses{lem:fold, thm:sierpinski, lem:borel-basic}
+Let $f:M\to\Sph$ be of class $\Fs$. There is $\psi:M\to Z_U\cup Z_V$ with $\Phi\circ\psi=f$ such that
+$\sigma\circ\psi:M\to\R^2$ is bounded and of class $\Fs$.
+\end{lemma}
+\begin{proof}
+$f^{-1}(U)$ is $\Fs$ and $M\setminus f^{-1}(V)$ is $\Gd$, and $M\setminus f^{-1}(V)\subseteq f^{-1}(U)$ since $U\cup V=\Sph$.
+Theorem~\ref{thm:sierpinski} gives an ambiguous $K$ with $M\setminus f^{-1}(V)\subseteq K\subseteq f^{-1}(U)$; put
+$L=M\setminus K$, so $f(K)\subseteq U$, $f(L)\subseteq V$. Let $\Phi_U=\Phi|_{Z_U}:Z_U\to U$ and $\Phi_V=\Phi|_{Z_V}:Z_V\to V$
+(homeomorphisms by Lemma~\ref{lem:fold}), and define $\psi=\Phi_U^{-1}\circ f$ on $K$, $\psi=\Phi_V^{-1}\circ f$ on $L$. For
+$G\subseteq\Sph\setminus\{p_1\}$ open, $\psi^{-1}(G)=[K\cap f^{-1}(\Phi_U(Z_U\cap G))]\cup[L\cap f^{-1}(\Phi_V(Z_V\cap G))]$, and
+$\Phi_U(Z_U\cap G)$ is open in $U$, hence in $\Sph$; so $\psi^{-1}(G)$ is $\Fs$. Boundedness is Lemma~\ref{lem:fold}(v).
+\end{proof}
+
+\begin{theorem}[{\cite[Appendix, Theorem (a)]{TAMSb}}; cf.\ {\cite[Theorem 1]{Diss}}]\label{thm:sphere-baire1}
+\lean{TJK.sphere_baireOne_iff}
+\uses{lem:fold-factor, thm:baire1-char, lem:baire1-fsigma}
+A function $f:M\to\Sph$ is in $\mathcal B_1(M,\Sph)$ if and only if it is of class $\Fs$.
+\end{theorem}
+\begin{proof}
+One direction is Lemma~\ref{lem:baire1-fsigma}. Conversely, take $\psi$ from Lemma~\ref{lem:fold-factor};
+by Theorem~\ref{thm:baire1-char} there are continuous
+$\psi_n:M\to\R^2$ with $\psi_n\to\sigma\circ\psi$. Then $\Phi\circ\sigma^{-1}\circ\psi_n$ are
+continuous and converge to $\Phi\circ\psi=f$.
+\end{proof}
+
+\begin{theorem}[{\cite[Appendix, Theorem (c)]{TAMSb}}]\label{thm:sphere-extension}
+\lean{TJK.sphere_baireOne_extend}
+\uses{lem:fold-factor, thm:extension, thm:baire1-char, lem:baire1-fsigma}
+If $E$ is a $\Gd$ subset of $M$ and $f\in\mathcal B_1(E,\Sph)$, then $f$ extends to some
+$F\in\mathcal B_1(M,\Sph)$.
+\end{theorem}
+\begin{proof}
+By Lemmas~\ref{lem:baire1-fsigma} and~\ref{lem:fold-factor}, applied in the metric space $E$, write
+$f=\Phi\circ\psi$ with $\sigma\circ\psi:E\to\R^2$ bounded of class $\Fs$, hence in $\mathcal B_1$. By
+Theorem~\ref{thm:extension}(a) it extends to a bounded $G\in\mathcal B_1(M,\R^2)$; let continuous
+$G_n\to G$ on $M$. Then $\Phi\circ\sigma^{-1}\circ G_n$ are continuous and converge on $M$ to
+$F=\Phi\circ\sigma^{-1}\circ G$, and $F|_E=\Phi\circ\psi=f$.
+\end{proof}
+
+\begin{theorem}[honorary Baire class 2; {\cite[Theorem 2]{Diss}}, {\cite[Appendix, Theorem (b)]{TAMSb}}]\label{thm:honorary-char}
+\lean{TJK.isHonoraryBaireTwo_iff_euclidean, TJK.isHonoraryBaireTwo_iff_sphere,
+  TJK.isHonoraryBaireTwo_iff_closed_preimage}
+\uses{thm:baire1-char, thm:sphere-baire1, thm:extension, thm:sphere-extension, lem:borel-basic, lem:baire1-fsigma}
+Let $Y$ be $\R^m$ or $\Sph$ and $f:M\to Y$. The following are equivalent.
+\begin{enumerate}[label=(\arabic*)]
+\item $f$ is of honorary Baire class $\le2$.
+\item There is a countable $N\subseteq M$ such that $f|_{M\setminus N}$ is of class $\Fs$.
+\item There is a countable $N\subseteq M$ such that $f^{-1}(F)\setminus N$ is $\Gd$ in $M$ for every
+  closed $F\subseteq Y$.
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+(1)$\Rightarrow$(2): restrict the Baire-one function and use Lemma~\ref{lem:baire1-fsigma}.
+(2)$\Rightarrow$(1): $f|_{M\setminus N}\in\mathcal B_1$ by Theorem~\ref{thm:baire1-char} or
+\ref{thm:sphere-baire1}, and $M\setminus N$ is $\Gd$; extend it to $M$ by
+Theorem~\ref{thm:extension}(b) or \ref{thm:sphere-extension}.
+(2)$\Leftrightarrow$(3): $f^{-1}(F)\setminus N=(M\setminus N)\setminus(f|_{M\setminus N})^{-1}(Y\setminus F)$;
+a subset of the $\Gd$ set $M\setminus N$ is $\Gd$ in $M$ iff it is $\Gd$ in $M\setminus N$, and complements
+in $M\setminus N$ exchange $\Fs(M\setminus N)$ and $\Gd(M\setminus N)$.
+\end{proof}
+
+\begin{lemma}[invariance of honorary Baire class 2]\label{lem:honorary-invariance}
+\lean{TJK.IsHonoraryBaireTwo.restrict, TJK.IsHonoraryBaireTwo.comp_homeomorph}
+\uses{def:fn-classes}
+If $f:M\to Y$ is of honorary Baire class $\le2$, so are $f|_{M'}$ for $M'\subseteq M$ and $f\circ h$ for a
+homeomorphism $h:M''\to M$.
+\end{lemma}
+\begin{proof}
+Restrict (resp.\ compose with $h$) the Baire-one function, its continuous approximants and the countable set.
+\end{proof}
+
+\subsection{Points of continuity}
+
+\begin{theorem}[Baire, Kuratowski {\cite[p.~301]{Kuratowski}}]\label{thm:kuratowski}
+\lean{TJK.IsBaireOne.meagre_discontinuity}
+\uses{def:fn-classes}
+If $A$ and $Y$ are metric spaces and $f\in\mathcal B_1(A,Y)$, then the set of points of $A$ at which
+$f$ is discontinuous is of the first category in $A$.
+\end{theorem}
+\begin{proof}
+Let $f_n\to f$ be continuous. For $\eps>0$ and $N\in\N$ the set
+$F^\eps_N=\{x:\dist(f_n(x),f_m(x))\le\eps\ \forall n,m\ge N\}$ is closed and $\bigcup_NF^\eps_N=A$. Put
+$G^\eps=\bigcup_N\inter F^\eps_N$. Then $A\setminus G^\eps\subseteq\bigcup_N(F^\eps_N\setminus\inter
+F^\eps_N)$, a countable union of closed nowhere dense sets. If $x\in\inter F^\eps_N$, then
+$\dist(f,f_N)\le\eps$ on a neighbourhood of $x$, and $f_N$ is continuous, so
+$\dist(f(x'),f(x))\le3\eps$ for $x'$ near $x$ and the oscillation of $f$ at $x$ is at most $6\eps$. Hence the discontinuity set is contained in $\bigcup_k(A\setminus G^{1/k})$.
+\end{proof}
+
+\begin{corollary}\label{cor:baire-continuity-point}
+\lean{TJK.IsBaireOne.exists_continuousAt}
+\uses{thm:kuratowski}
+If $P$ is a nonempty complete metric space, $Y$ a metric space and $f\in\mathcal B_1(P,Y)$, then $f$ is continuous at some
+point of $P$.
+\end{corollary}
+\begin{proof}
+By the Baire category theorem $P$ is not of the first category in itself.
+\end{proof}
+
+\begin{lemma}\label{lem:meager-subspace}
+\lean{TJK.isMeagre_of_isMeagre_subtype}
+A subset of $A\subseteq M$ that is of the first category in $A$ is of the first category in $M$.
+\end{lemma}
+\begin{proof}
+If $N\subseteq A$ is nowhere dense in $A$ and an open $O\ne\emptyset$ of $M$ lies in $\cl_M N$, then
+$O$ meets $A$ and $O\cap A\subseteq\cl_A N$, a contradiction.
+\end{proof}
+
+\subsection{Higher Borel and Baire classes}
+These are needed only in Section~\ref{sec:discont}.
+
+\begin{definition}[{\cite[\S3]{Diss}}]\label{def:additive-classes}
+\lean{TJK.AddClass, TJK.MulClass}
+\uses{def:borel-classes}
+$P^1(M)$ is the family of open subsets of $M$ and $Q^1(M)$ that of closed subsets. For an ordinal
+$\xi>1$, $P^\xi(M)$ consists of the countable unions of members of $\bigcup_{\eta<\xi}Q^\eta(M)$, and
+$Q^\xi(M)$ of the countable intersections of members of $\bigcup_{\eta<\xi}P^\eta(M)$. A function
+$f:M\to Y$ is \emph{of class $P^\xi$} if $f^{-1}(U)\in P^\xi(M)$ for every open $U\subseteq Y$.
+\end{definition}
+
+\begin{lemma}\label{lem:additive-basic}
+\lean{TJK.mulClass_iff_compl, TJK.AddClass.mono, TJK.AddClass.iUnion, TJK.AddClass.inter,
+  TJK.MulClass.iInter, TJK.AddClass.preimage, TJK.AddClass.subtype_iff, TJK.AddClass.measurableSet}
+\uses{def:additive-classes, lem:borel-basic}
+(a) $E\in Q^\xi$ iff $M\setminus E\in P^\xi$. (b) $P^\xi$ and $Q^\xi$ are closed under finite unions and
+intersections, $P^\xi$ under countable unions, $Q^\xi$ under countable intersections. (c) If $\eta<\xi$
+then $P^\eta\cup Q^\eta\subseteq P^\xi\cap Q^\xi$. (d) $P^2(M)$ is the class of $\Fs$ sets and
+$Q^2(M)$ that of $\Gd$ sets. (e) Continuous preimages preserve each class. (f) For $L\subseteq M$,
+$P^\xi(L)=\{D\cap L:D\in P^\xi(M)\}$. (g) Every member of every class is a Borel set.
+\end{lemma}
+\begin{proof}
+Transfinite induction on $\xi$. (c) for $\eta=1$ uses that in a metric space open sets are $\Fs$ and closed
+sets are $\Gd$ (Lemma~\ref{lem:borel-basic}(a)); for $\eta>1$ it is immediate from the definitions. For (b), $(\bigcup A_n)\cap(\bigcup B_m)=\bigcup A_n\cap B_m$, and
+$A_n\in Q^{\eta_1}$, $B_m\in Q^{\eta_2}$ both lie in $Q^{\max(\eta_1,\eta_2)}$ by (c). The rest is
+routine.
+\end{proof}
+
+\begin{lemma}\label{lem:baire-precomp}
+\lean{TJK.BaireClass.comp_continuous, TJK.BaireClass.mono}
+\uses{def:fn-classes}
+If $f:M\to Y$ is of Baire class $\xi$ and $g:K\to M$ is continuous, then $f\circ g$ is of Baire class
+$\xi$. In particular restrictions to subspaces keep the class. If $1\le\xi\le\xi'$, Baire class $\xi$
+is contained in Baire class $\xi'$.
+\end{lemma}
+\begin{proof}
+Induction on $\xi$; for the last claim use constant sequences.
+\end{proof}
+
+\begin{lemma}\label{lem:baire-imp-class}
+\lean{TJK.BaireClass.addClass_preimage}
+\uses{def:additive-classes, lem:additive-basic, lem:baire-precomp, lem:baire1-fsigma}
+If $f:M\to Y$ is of Baire class $\xi$ ($Y$ any metric space), then $f$ is of class $P^{\xi+1}$. In
+particular it is Borel measurable.
+\end{lemma}
+\begin{proof}
+For $\xi=0$ preimages of open sets are open. For $\xi\ge1$ let $f_n\to f$ with $f_n$ of class
+$\eta_n<\xi$. With $V_k$ as in Lemma~\ref{lem:baire1-fsigma},
+$f^{-1}(U)=\bigcup_{k,N}\bigcap_{n\ge N}f_n^{-1}(V_k)$; by induction $f_n^{-1}(V_k)\in
+Q^{\eta_n+1}\subseteq Q^\xi$, so the intersections lie in $Q^\xi$ and the union in $P^{\xi+1}$.
+\end{proof}
+
+\begin{fact}[Banach {\cite{Banach}}]\label{fact:banach}
+\lean{TJK.banach_baireClass_of_addClass}
+\uses{def:additive-classes, def:fn-classes}
+\source{Banach 1931, quoted in Diss \S3}
+Let $Y$ be a separable, arcwise connected metric space and $\xi\ge2$. If $f:M\to Y$ is of class
+$P^{\xi+1}$, then $f$ is of Baire class $\xi$.
+\end{fact}
+
+\begin{fact}[Lebesgue--Hausdorff--Banach]\label{fact:borel-baire}
+\lean{TJK.borel_measurable_exists_baireClass}
+\uses{def:fn-classes}
+\source{Hausdorff, Set Theory p.~294 (for Y = R, as quoted in Diss \S3); general Y: Banach 1931 with the Borel hierarchy; cf. Kuratowski, Topology I \S31}
+Let $Y$ be a separable, arcwise connected metric space. Every Borel-measurable $f:M\to Y$ is of Baire
+class $\xi$ for some countable ordinal $\xi$.
+\end{fact}
+
+\begin{lemma}[{\cite[Lemma 18]{Diss}}]\label{lem:equiv}
+\lean{TJK.CountablyEquiv, TJK.CountablyEquiv.equivalence, TJK.CountablyEquiv.diff,
+  TJK.CountablyEquiv.iInter, TJK.CountablyEquiv.iUnion}
+Write $A\approx B$ if $A\setminus B$ and $B\setminus A$ are countable. This is an equivalence relation;
+$A\approx E$ implies $S\setminus A\approx S\setminus E$; and if $A_n\approx E_n$ for $n$ in a countable
+set, then $\bigcap A_n\approx\bigcap E_n$ and $\bigcup A_n\approx\bigcup E_n$.
+\end{lemma}
+\begin{proof}
+$(\bigcap A_n)\setminus(\bigcap E_n)\subseteq\bigcup_n(A_n\setminus E_n)$, and similarly for the rest.
+\end{proof}
+
+\begin{lemma}[{\cite[Lemma 19]{Diss}}, {\cite[Lemma 1]{MMJ}}]\label{lem:intervals-open}
+\lean{TJK.countable_biUnion_diff_interior_real, TJK.countable_biUnion_diff_interior_circle}
+\uses{lem:equiv}
+If $\mathcal I$ is a family of nondegenerate intervals of $\R$ (resp.\ nondegenerate closed arcs of $C$),
+then $\bigcup_{I\in\mathcal I}I\setminus\bigcup_{I\in\mathcal I}I^*$ is countable. In particular every
+union of nondegenerate intervals is $\approx$ an open set.
+\end{lemma}
+\begin{proof}
+$\bigcup I^*$ is open, so it is the disjoint union of its countably many components $J_n$. If $x_0$
+lies in $\bigcup I$ but not in $\bigcup I^*$, then $x_0$ is an endpoint of some $I_0$; $I_0^*\subseteq
+J_n$ for some $n$, so $x_0\in\overline{J_n}\setminus J_n$ is an endpoint of $J_n$. There are countably
+many such endpoints.
+\end{proof}
+
+\begin{lemma}[two-sided limit points]\label{lem:two-sided}
+\lean{TJK.countable_not_twoSided}
+For $F\subseteq\R$, the set of points of $\overline F$ that are not two-sided limit points of $F$ is
+countable. (Here $x$ is a \emph{two-sided limit point} of $F$ if every interval $(x-r,x)$ and $(x,x+r)$, $r>0$,
+meets $F$.)
+\end{lemma}
+\begin{proof}
+If $x\in\overline F$ and $(x,x+r)\cap F=\emptyset$, then $(x,x+r)$ misses $\overline F$, so $x$ is the
+left endpoint of a component of $\R\setminus\overline F$. There are countably many components; argue
+symmetrically on the left.
+\end{proof}
+
+\begin{lemma}[{\cite[Lemma 20]{Diss}}]\label{lem:monotone-extend}
+\lean{TJK.MonotoneOn.exists_monotone_extension_of_dist_le}
+Let $h$ be weakly increasing on a nonempty $E\subseteq\R$ with $\abs{x-h(x)}\le1$ on $E$. Then $h$
+extends to a weakly increasing $h_1:\R\to\R$.
+\end{lemma}
+\begin{proof}
+Let $e=\inf E$. For $x>e$ put $h_1(x)=\sup h((-\infty,x]\cap E)$, which is finite since
+$h(t)\le t+1\le x+1$ there. If $e>-\infty$ put $h_1(x)=\inf h(E)$ for $x\le e$, finite since
+$h\ge e-1$ on $E$. Monotonicity and $h_1|_E=h$ are immediate.
+\end{proof}
+
+\begin{lemma}[{\cite[Lemma 21]{Diss}}]\label{lem:monotone-compose}
+\lean{TJK.BaireClass.comp_monotone}
+\uses{lem:baire-precomp}
+If $f:\R\to Y$ is of Baire class $\xi$ and $h:\R\to\R$ is weakly increasing, there is a countable
+$N\subseteq\R$ such that $(f\circ h)|_{\R\setminus N}$ is of Baire class $\xi$.
+\end{lemma}
+\begin{proof}
+Let $N$ be the (countable) set of discontinuities of $h$ and apply Lemma~\ref{lem:baire-precomp} to
+$h|_{\R\setminus N}$.
+\end{proof}
+
+\begin{lemma}[{\cite[Lemma 22]{Diss}}]\label{lem:baire-criterion}
+\lean{TJK.baireClass_of_sandwich}
+\uses{fact:banach, lem:additive-basic}
+Let $Y$ be a separable arcwise connected metric space, $E$ a metric space, $\xi\ge2$, and
+$\varphi:E\to Y$ such that for every open $U\subseteq Y$ there is $T\in P^{\xi+1}(E)$ with
+$\varphi^{-1}(U)\subseteq T\subseteq\varphi^{-1}(\overline U)$. Then $\varphi$ is of Baire class $\xi$.
+\end{lemma}
+\begin{proof}
+Let $\mathcal B$ be a countable base of $Y$. For open $W$ let $\mathcal B(W)=\{B\in\mathcal
+B:\overline B\subseteq W\}$; then $W=\bigcup_{\mathcal B(W)}B=\bigcup_{\mathcal B(W)}\overline B$ (for
+$p\in W$ with $S(r,p)\subseteq W$ choose $p\in B\subseteq S(r/2,p)$). With $T(B)$ as in the hypothesis,
+$\varphi^{-1}(W)=\bigcup_{B\in\mathcal B(W)}T(B)\in P^{\xi+1}(E)$. Conclude by Fact~\ref{fact:banach}.
+\end{proof}

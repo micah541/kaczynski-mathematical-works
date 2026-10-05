@@ -1,0 +1,75 @@
+% ===========================================================================
+\section{Introduction}\label{sec:intro}
+% ===========================================================================
+
+\subsection{The sources}
+Seven documents are covered.
+\begin{itemize}[leftmargin=2em]
+\item \cite{MathMag} (1968): an elementary number-theoretic note settling a conjecture of Sutcliffe
+  on integers that are multiplied by an integer when their digits are reversed. Section~\ref{sec:arith}.
+\item \cite{JMM} (1965), known to us only through its review. Its theorems concern boundary functions of
+  homeomorphisms, continuous, Baire and measurable functions in a disk. Theorems~2--6 of \cite{JMM}
+  reappear, with proofs, in the dissertation \cite{Diss} (which says so explicitly); Theorem~1 (on
+  homeomorphisms) does not, and is proved here in Section~\ref{sec:bf} by the crosscut methods of
+  \cite{MMJ,Diss}.
+\item \cite{MMJ} (1966): a short proof of McMillan's theorem that the set of curvilinear convergence of
+  a continuous function is of type $\Fsd$, and a generalization to cluster sets. Section~\ref{sec:cc}.
+\item \cite{Diss} (1967): the dissertation. Its Introduction (Baire functions) is in
+  Section~\ref{sec:baire}; Chapter~I in Sections~\ref{sec:cc}, \ref{sec:bf}, \ref{sec:construct};
+  Chapter~II in Section~\ref{sec:discont}.
+\item \cite{TAMSb} (1969): every $\Fsd$ set is the set of curvilinear convergence of a continuous
+  function with a prescribed boundary function (McMillan's problem); appendix on Baire functions into
+  the sphere. Sections~\ref{sec:construct} and~\ref{sec:baire}.
+\item \cite{TAMSa} (1969): boundary functions of bounded harmonic functions. Section~\ref{sec:harmonic}.
+\item \cite{PAMS} (1969): a bounded continuous function in a cube whose set of curvilinear
+  convergence is not Borel. Section~\ref{sec:cube}.
+\end{itemize}
+A concordance between the numbered results of the sources and the items of this document is given in
+Appendix~\ref{app:concordance}.
+
+\subsection{How the document is organised}
+Several results occur in more than one source in slightly different settings (the disk $\D$, the upper
+half-plane $\Hp$, the strip-like region $Q$). We prove each result once, in the most convenient model,
+and transfer it to the others by an explicit homeomorphism (Lemma~\ref{lem:transfer}). When two
+sources prove the same statement by different arguments, we give the argument that is shorter or more
+general, and say so in the concordance.
+
+\emph{Facts.} Results from the literature that the sources use without proof are stated as numbered
+\emph{Facts}, with their provenance. In the formalization they are separate Lean theorems, proved or
+left as \texttt{sorry}; they are never axioms. Some of them are deep (the Jordan curve theorem, Kierst's
+theorem on asymptotic values of holomorphic functions); the dependency map shows exactly which results
+rest on which Facts.
+
+\emph{Departures from the sources.} We record here the places where our proof differs in substance from
+the source.
+\begin{enumerate}[label=(\roman*)]
+\item The step (B)(III) of \cite{TAMSb} cites a theorem of Bagemihl and McMillan; we use instead the
+  approximation theorem of the dissertation (Theorem~\ref{thm:baire1-char}), as \cite{TAMSb} itself
+  suggests.
+\item The proof of (F)(I) in \cite{TAMSb} cites an invariance-of-domain corollary from \cite{Newman}; we
+  write down the inverse maps explicitly (Lemma~\ref{lem:fold}).
+\item The extension theorems for Baire-one functions (cited from \cite{Hausdorff} in \cite{Diss} and
+  used in Appendix~(b),(c) of \cite{TAMSb}) are proved (Theorem~\ref{thm:extension}).
+\item The ``Figure~5'' argument of \cite{Diss} and the monotonicity of first hitting points are derived
+  from a single imported crosscut theorem (Fact~\ref{fact:crosscut}).
+\item Sutcliffe's Theorems~2 and~3, used in \cite{MathMag}, are proved with explicit solutions
+  (Propositions~\ref{prop:sut-two-composite}, \ref{prop:sut-explicit}).
+\item In the existence of special functions (statement (XX) of \cite{TAMSb}) we give a non-recursive
+  construction: all disjointness constraints turn out to be independent of the other member's size.
+\end{enumerate}
+
+\subsection{Conventions}\label{sec:conventions}
+$\N=\{1,2,3,\dots\}$. ``Countable'' includes ``finite''. We identify $\R^2$ with $\C$ and write points as
+$z=x+iy=\langle x,y\rangle$. We use
+\begin{align*}
+\D&=\{z:\abs z<1\}, & C&=\{z:\abs z=1\}, & \Hp&=\{z:\operatorname{Im}z>0\},\\
+Q&=\{\langle x,y\rangle:-1\le x\le1,\ 0<y\le1\}, & Q^\circ&=(-1,1)\times(0,1), &
+X&=(-1,1)\times\{0\}.
+\end{align*}
+The real axis is identified with $\R$; in Sections~\ref{sec:construct} we identify $X$ with $(-1,1)$.
+For $n\in\N$, $\Hp_n=\{0<y<1/n\}$, $\overline{\Hp}_n=\{0\le y\le 1/n\}$ and $X_n=\{y=1/n\}$.
+$\Sph=\{v\in\R^3:\abs v=1\}$ is the Riemann sphere with the Euclidean metric.
+$S(r,p)$ is the open ball of radius $r$ about $p$; $\cl E$ or $\overline E$ is closure, $E^*$ or
+$\inter E$ interior (for subsets of $C$ or of $\R$, relative to $C$ or $\R$).
+For an interval or arc $I$, $I^*$ is its relative interior; an interval or arc is
+\emph{nondegenerate} if it has more than one point.

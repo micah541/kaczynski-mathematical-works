@@ -1,0 +1,101 @@
+% ===========================================================================
+\section{A cube with a non-Borel set of curvilinear convergence}\label{sec:cube}
+% ===========================================================================
+Source: \cite{PAMS}. For an open connected $\Omega\subseteq\R^n$ and $f:\Omega\to\R^m$, the set of curvilinear convergence $\CC(f)$ is the set of
+$p\in\partial\Omega$ for which there is an arc $\gamma$ at $p$ with $f$ converging to a finite limit along $\gamma$.
+
+\begin{definition}[asymptotic values]\label{def:asymptotic}
+\lean{TJK.Cube.IsAsymptoticValue, TJK.Cube.IsPointAsymptoticValue}
+\uses{def:ccset, cor:path-arc}
+$a\in\R^m$ is an \emph{asymptotic value} of $f:\Omega\to\R^m$ if there is a continuous $v:[0,1)\to\Omega$ with $\dist(v(t),\R^n\setminus\Omega)\to0$
+and $f(v(t))\to a$ as $t\to1$; it is a \emph{point asymptotic value at $p$} if moreover $v(t)\to p\in\partial\Omega$. By
+Corollary~\ref{cor:path-arc}, $p\in\CC(f)$ iff $f$ has a (finite) point asymptotic value at $p$.
+\end{definition}
+
+\begin{fact}[analytic non-Borel sets]\label{fact:analytic-nonborel}
+\lean{TJK.Cube.exists_analytic_not_borel}
+\source{Souslin--Lusin; Sierpi\'nski, General topology p.~254. Mathlib has MeasureTheory.AnalyticSet}
+There is an analytic subset of $\R$ that is not a Borel set.
+\end{fact}
+
+\begin{fact}[Kierst {\cite{Kierst}}]\label{fact:kierst}
+\lean{TJK.Cube.kierst}
+\source{Kierst 1936}
+For every analytic set $A\subseteq\R$ there is a holomorphic function $h$ in $\D$ omitting the values $i$ and $-i$ whose set of finite asymptotic
+values is $A\cup\{-i,i\}$.
+\end{fact}
+
+\begin{fact}[Lehto--Virtanen {\cite[p.~53]{LV}}; Bagemihl--Seidel {\cite[Theorem 1]{BS}}]\label{fact:normal}
+\lean{TJK.Cube.asymptotic_is_point_asymptotic}
+\source{Lehto--Virtanen 1957 (functions omitting two values are normal); Bagemihl--Seidel 1961 (Koebe arcs), as used by McMillan}
+If $h$ is holomorphic in $\D$ and omits two finite values, then every finite asymptotic value of $h$ is a point asymptotic value of $h$.
+\end{fact}
+
+\begin{lemma}[{\cite[Lemma]{PAMS}}]\label{lem:cube-lemma}
+\lean{TJK.Cube.exists_s}
+\uses{fact:analytic-nonborel, fact:kierst, fact:normal, def:asymptotic, cor:path-arc}
+There is a continuous $s:\Hp\to\C$ with $\abs s<1$ such that the set $E$ of real asymptotic values of $s$ lying in $(-1,1)$ equals the set
+of real point asymptotic values of $s$ lying in $(-1,1)$, and $E$ is not a Borel set.
+\end{lemma}
+\begin{proof}
+Let $A$ be analytic and not Borel, $h$ as in Fact~\ref{fact:kierst}, and $\rho(w)=w/(1+\abs w)$, a homeomorphism of $\C$ onto $\D$ mapping
+$\R$ onto $(-1,1)$. Put $s(x,y)=\rho\bigl(h((1-y)e^{ix})\bigr)$ for $0<y<1$ and $s(x,y)=\rho(h(0))$ for $y\ge1$. Let $b\in(-1,1)$.
+If $b$ is an asymptotic value of $s$ along $v=\langle x(t),y(t)\rangle$ (so $y(t)\to0$), then $\rho^{-1}(b)$ is an asymptotic value of $h$ along
+$(1-y(t))e^{ix(t)}$, hence lies in $A$. If $a\in A$, by Fact~\ref{fact:normal} $a$ is a point asymptotic value of $h$ at some $e^{ip}$, along a
+path $w(t)\to e^{ip}$; writing $w(t)=r(t)e^{i\vartheta(t)}$ with $\vartheta$ continuous (for $t$ near $1$), $\vartheta(t)\to p+2\pi k$, and $\rho(a)$
+is a point asymptotic value of $s$ at $p+2\pi k$ along $\langle\vartheta(t),1-r(t)\rangle$. Thus both sets equal $\rho(A)$, which is not Borel.
+\end{proof}
+
+\begin{remark}
+\cite{PAMS} notes that the lemma can also be proved without meromorphic functions, from \cite[Theorem 113]{SierpGT}, a theorem of
+Bagemihl--McMillan, and the methods of \cite{TAMSb}, but omits the ``messy construction''.
+\end{remark}
+
+\begin{theorem}[{\cite[Theorem]{PAMS}}]\label{thm:cube}
+\lean{TJK.Cube.exists_not_measurableSet_curvConvSet}
+\uses{lem:cube-lemma, thm:construct-C, lem:subarc, cor:path-arc, def:asymptotic}
+There is a bounded continuous $f:K^\circ\to\C$ on the open cube $K^\circ=(-1,1)\times(0,1)\times(-1,1)$ whose set of curvilinear convergence
+is not a Borel set. (So McMillan's theorem does not extend to three dimensions.)
+\end{theorem}
+\begin{proof}
+Let $s,E$ be as in Lemma~\ref{lem:cube-lemma} and $g(x,y)=s(x/y,y)$ on $Q$.
+
+\emph{$E$ is the set of real point asymptotic values of $g$ at $\langle0,0\rangle$ in $(-1,1)$.} If $g\to b$ along a path
+$\langle x(t),y(t)\rangle\to\langle0,0\rangle$ in $Q^\circ$, then $s\to b$ along $\langle x/y,y\rangle$, whose second coordinate tends to $0$; so $b\in E$. If
+$s\to b$ along $\langle u(t),v(t)\rangle\to\langle p,0\rangle$, then $g\to b$ along $\langle u(t)v(t),v(t)\rangle\to\langle0,0\rangle$, which lies in $Q^\circ$ for $t$ near $1$.
+
+\emph{Construction.} Let $d_0(t)$ be the supremum of the $\delta\in(0,1]$ such that $z,z'\in Q$, $\operatorname{Im}z,\operatorname{Im}z'\ge t$,
+$\abs{z-z'}<\delta$ imply $\abs{g(z)-g(z')}\le t$; let $d(t)=\min\{\frac14d_0(t/2),\frac14t\}$, and $k$ as in Theorem~\ref{thm:construct-C}
+(so $\abs k\le\sqrt2\le2$). Here $d_0(t)>0$ because $g$ is uniformly continuous on the compact set $[-1,1]\times[t,1]$,
+and $d_0$ is weakly increasing (raising $t$ shrinks the region and loosens the tolerance); so $d$ is positive and weakly
+increasing, as Theorem~\ref{thm:construct-C} requires. Put $f(x,y,z)=(g(x,y)-z)\,k(x,y)$. For any three points $P=\langle x,y,z\rangle$, $P'$, $P''$ of $K^\circ$, writing
+$g'=g(x',y')$ etc.,
+\begin{equation}\label{eq:cube1}
+\abs{f(P')-f(P'')}\ge\abs{g-z}\abs{k'-k''}-2\abs{g'-g}-2\abs{g-g''}-2\abs{z-z'}-2\abs{z''-z},
+\end{equation}
+because $f(P')-f(P'')=(g-z)(k'-k'')+\bigl((g'-z')-(g-z)\bigr)k'-\bigl((g''-z'')-(g-z)\bigr)k''$.
+
+Let $L=\{\langle0,0,z\rangle:-1<z<1\}$ and $F=\CC(f)$. We show $F\cap L=\{\langle0,0,b\rangle:b\in E\}$; then $F$ is not Borel, since
+otherwise $F\cap L$ would be.
+
+If $b\in E$, take an arc $\gamma$ at $\langle0,0\rangle$ in $Q^\circ$ along which $g\to b$; along $\gamma'=\{\langle x,y,b\rangle:\langle x,y\rangle\in\gamma\}$,
+$g-z\to0$, so $f\to0$, and $\langle0,0,b\rangle\in F$.
+
+Conversely let $f$ converge along an arc $\gamma'$ at $\langle0,0,b\rangle$ in $K^\circ$, and let $\gamma$ be its projection to the $\langle x,y\rangle$-plane,
+a path ending at $\langle0,0\rangle$ and otherwise in $Q^\circ$. We claim $g(x,y)-z\to0$ along $\gamma'$; then $g\to b$ along $\gamma$, so $b$ is a
+point asymptotic value of $g$ at $\langle0,0\rangle$ and $b\in E$. If not, there are $\eps>0$ and points $\langle x_n,y_n,z_n\rangle\in\gamma'$
+converging to $\langle0,0,b\rangle$ with $\abs{g(x_n,y_n)-z_n}\ge\eps$. Since the only point of $\gamma'$ with $y=0$ is its endpoint, there is
+$\delta>0$ such that points of $\gamma'$ with $y\le\delta$ have $z$-coordinates within $\eps/8$ of each other. Fix $n$ large, with
+$y_n<\min\{3\eps/32,3\delta/4,3/4\}$ and with the projection of the other endpoint of $\gamma'$ farther than $y_n$ from
+$\langle x_n,y_n\rangle$, and put $a=4y_n/3$. By Lemma~\ref{lem:subarc}(b) applied to (a parametrization of) $\gamma$, there is a
+connected $\gamma^*\subseteq\gamma\cap\overline{S(d(a),\langle x_n,y_n\rangle)}$ containing $\langle x_n,y_n\rangle$ and a point at distance $d(a)$ from it.
+As $d(a)\le a/4$, $\gamma^*\subseteq[-1,1]\times[a/2,a]$, and Theorem~\ref{thm:construct-C} gives points $\langle x_n',y_n'\rangle$,
+$\langle x_n'',y_n''\rangle$ of $\gamma^*$ with $\abs{k'-k''}\ge2$; lift them to points of $\gamma'$ with third coordinates $z_n',z_n''$. These have
+$y\le a<\delta$, so $\abs{z_n'-z_n},\abs{z_n''-z_n}<\eps/8$; and $\abs{g(x_n,y_n)-g'},\abs{g(x_n,y_n)-g''}\le a/2<\eps/16$ by the choice of
+$d$. By \eqref{eq:cube1}, $\abs{f(P_n')-f(P_n'')}\ge2\eps-\frac\eps4-\frac\eps2>\eps$. Since $P_n',P_n''\to\langle0,0,b\rangle$ along $\gamma'$, $f$ does
+not converge along $\gamma'$: a contradiction.
+\end{proof}
+
+\begin{remark}
+\cite{PAMS} leaves open whether a continuous \emph{real}-valued function in a cube can have a non-Borel set of curvilinear convergence.
+\end{remark}

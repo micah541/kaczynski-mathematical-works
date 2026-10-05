@@ -1,0 +1,123 @@
+% ===========================================================================
+\appendix
+\section{The dissertation's special families}\label{app:variants}
+% ===========================================================================
+The dissertation uses a more restrictive notion of special family than \cite{TAMSb}. Its results are proved here for completeness;
+they are not used elsewhere. A \emph{complementary interval} of a closed $F\subseteq\R$ is a component of $\R\setminus F$.
+
+\begin{definition}[{\cite[\S4]{Diss}}]\label{def:th-special}
+\lean{TJK.Variant.IsThesisSpecial}
+A \emph{thesis-special family} is a nonempty family $\mathcal F$ of bounded closed subsets of $\R$ with an enumeration $F_1,F_2,\dots$ (every
+member occurring) such that for $m>n$, either $F_m$ lies in a complementary interval of $F_n$ or $F_m$ splits with $F_n$.
+\end{definition}
+
+\begin{lemma}\label{lem:th-special-implies}
+\lean{TJK.Variant.IsThesisSpecial.pairwise}
+\uses{def:th-special, def:special-family, lem:special-pair-exists, lem:special-pair-shrink}
+Any two members of a thesis-special family are equal, disjoint, or split. Hence Lemmas~\ref{lem:special-pair-exists}
+and~\ref{lem:special-pair-shrink} apply to thesis-special families of subsets of $X$ (\cite[Lemmas 13, 14]{Diss}).
+\end{lemma}
+\begin{proof}
+A set lying in a complementary interval of $F_n$ is disjoint from $F_n$.
+\end{proof}
+
+\begin{lemma}[{\cite[Lemma 9]{Diss}}]\label{lem:th-lemma9}
+\lean{TJK.Variant.exists_seq_split_or_disjoint}
+\uses{lem:special-from-fsigma}
+Every $\Fs$ set $E\subseteq\R$ is $\bigcup_nE_n$ for bounded closed $E_n$ any two of which are disjoint or split.
+\end{lemma}
+\begin{proof}
+As in Lemma~\ref{lem:special-from-fsigma}, with $\R$ in place of $X$; enumerate the resulting countable family, padding
+with $\emptyset$ if it is finite (repeating a member with two points would violate the condition).
+\end{proof}
+
+\begin{lemma}[{\cite[Lemma 10]{Diss}}]\label{lem:th-lemma10}
+\lean{TJK.Variant.exists_thesisSpecial_of_isFσ}
+\uses{lem:th-lemma9, def:th-special}
+Every $\Fs$ set $E\subseteq\R$ is the union of a thesis-special family.
+\end{lemma}
+\begin{proof}
+Take $E_n$ from Lemma~\ref{lem:th-lemma9}. We construct $1=n_1<n_2<\cdots$ and bounded closed sets $F_1,F_2,\dots$ such that for every $s$:
+(a) if $n_s\ge r>t\ge1$, then $F_r$ lies in a complementary interval of $F_t$ or splits with $F_t$; (b) each $F_i$, $i\le n_s$, lies in some
+$E_j$, $j\le s$; (c) $\bigcup_{i\le n_s}F_i=\bigcup_{j\le s}E_j$. Start with $F_1=E_1$. Given stage $s$, let $\mathcal J$ be the set of
+complementary intervals of the bounded closed set $\bigcup_{j\le s}E_j$.
+
+\emph{$E_{s+1}$ meets only finitely many $I\in\mathcal J$.} Otherwise pick $x_m\in I_m\cap E_{s+1}$ for infinitely many distinct $I_m$; a
+subsequence is strictly monotone, say increasing, with limit $x$. Between consecutive terms lies an endpoint $a_k$ of some $I_m$, which
+belongs to $\bigcup_{j\le s}E_j$; infinitely many $a_k$ lie in one $E_u$, so $x\in E_u\cap E_{s+1}$. Then $E_u$ and $E_{s+1}$ split at $x$; but
+both contain points less than $x$, which is impossible.
+
+Let the new sets $F_{n_s+1},\dots,F_{n_{s+1}}$ be $\emptyset$ and the sets $\overline I\cap E_{s+1}$ for the finitely many $I\in\mathcal J$ meeting
+$E_{s+1}$. (We use the closure $\overline I$, so that the new sets are closed; with $I$ itself, as written in \cite{Diss}, they need not be.)
+(b) and (c) are clear. For (a) with $r$ new: if $t$ is old, $F_t\subseteq E_v$ with $v\le s$. If $E_v\cap E_{s+1}=\emptyset$, let $J$ be the
+smallest closed interval containing $F_r=\overline I\cap E_{s+1}$; $J^*\subseteq I$ misses $E_v$, and the endpoints of $J$ lie in $E_{s+1}$, so
+$J\cap E_v=\emptyset$ and $F_r$ lies in a complementary interval of $F_t$. If $E_v$ and $E_{s+1}$ split, so do $F_t$ and $F_r$. If $t$ is new too,
+$F_r$ and $F_t$ come from distinct $I_1,I_2\in\mathcal J$, and $\overline{I_1},\overline{I_2}$ split. Finally
+$\mathcal F=\{F_k\}$ is thesis-special with $\bigcup\mathcal F=E$.
+\end{proof}
+
+\begin{lemma}[{\cite[Lemmas 11, 12]{Diss}}]\label{lem:th-lemma11}
+\lean{TJK.Variant.IsThesisSpecial.inf, TJK.Variant.sUnion_inf}
+\uses{def:th-special}
+If $\mathcal F$ and $\mathcal G$ are thesis-special, so is $\mathcal F\wedge\mathcal G=\{F\cap G:F\in\mathcal F,G\in\mathcal G\}$, and
+$\bigcup(\mathcal F\wedge\mathcal G)=\bigcup\mathcal F\cap\bigcup\mathcal G$.
+\end{lemma}
+\begin{proof}
+Enumerate $\N\times\N$ as $(a(k),b(k))$ by increasing $a+b$ and, for equal sums, increasing $b$; then $k<l$ implies $a(k)<a(l)$ or
+$b(k)<b(l)$. Put $H_k=F_{a(k)}\cap G_{b(k)}$. If $l>k$ and $a(k)<a(l)$, then $F_{a(l)}$ lies in a complementary interval of $F_{a(k)}$, which
+lies in a complementary interval of $H_k\subseteq F_{a(k)}$, or $F_{a(l)}$ splits with $F_{a(k)}$; in either case $H_l$ relates to $H_k$ in the
+same way. The case $b(k)<b(l)$ is symmetric.
+\end{proof}
+
+% ===========================================================================
+\section{Concordance with the sources}\label{app:concordance}
+% ===========================================================================
+\begin{longtable}{@{}p{0.3\textwidth}p{0.65\textwidth}@{}}
+\toprule
+Source item & Here \\ \midrule
+\multicolumn{2}{@{}l}{\cite{MathMag}, with \cite{Sut}}\\
+Sutcliffe Thm 2 & Prop.~\ref{prop:sut-two-composite}, Prop.~\ref{prop:sut-explicit}, Thm.~\ref{thm:sut-sutcliffe2}\\
+Sutcliffe Thm 3 & Thm.~\ref{thm:sut-sutcliffe3}\\
+Lemma 1, Lemma 2 & Lemma~\ref{lem:sut-lemma1}, Lemma~\ref{lem:sut-lemma2}\\
+Theorem, Corollary & Thm.~\ref{thm:sut-main}, Cor.~\ref{cor:sut-main}\\ \midrule
+\multicolumn{2}{@{}l}{\cite{JMM} (from the review)}\\
+Theorem 1 (homeomorphisms) & Thm.~\ref{thm:homeo} (new proof)\\
+Theorems 2, 3 & Cor.~\ref{cor:bf-honorary}\\
+Theorems 4, 5 & Thm.~\ref{thm:baire-plus-one}, Cor.~\ref{cor:borel}\\
+$f=0$ a.e.\ with given boundary function & Cor.~\ref{cor:ae-zero}\\
+remarks on three dimensions & not a theorem; see Section~\ref{sec:cube}\\ \midrule
+\multicolumn{2}{@{}l}{\cite{MMJ}}\\
+Lemma 1 & Lemma~\ref{lem:intervals-open}\\
+Lemmas 2, 3 & Lemmas~\ref{lem:mm-lemma2}, \ref{lem:mm-lemma3}\\
+Theorem 1 (McMillan) & Thm.~\ref{thm:mcmillan}\\
+Theorem 2, Corollaries 1--4 & Thm.~\ref{thm:mm-thm2}, Cor.~\ref{cor:mm-corollaries}\\
+remark ($E$ of type $\Gd$) & Prop.~\ref{prop:gdelta-remark}\\ \midrule
+\multicolumn{2}{@{}l}{\cite{Diss}}\\
+Lemmas 1--6 & Lemma~\ref{lem:reduction}, \ref{lem:approx-char}, \ref{lem:approx-finite}, \ref{lem:uniform-approx}, \ref{lem:approx-real}, Thm.~\ref{thm:baire1-char}\\
+Theorems 1, 2 & Thm.~\ref{thm:sphere-baire1}, Thm.~\ref{thm:honorary-char}\\
+Lemmas 7, 8; Theorem 3 & Lemmas~\ref{lem:th-lemma7}, \ref{lem:th-lemma8}; Thm.~\ref{thm:mcmillan-H}\\
+Lemmas 9--12 & Lemmas~\ref{lem:th-lemma9}, \ref{lem:th-lemma10}, \ref{lem:th-lemma11}\\
+facts (6)--(17); Lemmas 13, 14 & Lemma~\ref{lem:region-geometry}; Lemmas~\ref{lem:special-pair-exists}, \ref{lem:special-pair-shrink}, \ref{lem:th-special-implies}\\
+Theorem 4 & Thm.~\ref{thm:cc-realize} (and Thm.~\ref{thm:construct-A})\\
+Lemma 15; Theorem 5 and Corollary & Lemma~\ref{lem:th-lemma15}; Thm.~\ref{thm:bf-fsigma}, Cor.~\ref{cor:bf-honorary}\\
+Lemmas 16, 17; Theorems 6, 7 & Lemma~\ref{lem:closed-graph}, \ref{lem:monotone-inverse}; Thm.~\ref{thm:construct-B}, \ref{thm:construct-H}\\
+Lemmas 18--22 & Lemmas~\ref{lem:equiv}, \ref{lem:intervals-open}, \ref{lem:monotone-extend}, \ref{lem:monotone-compose}, \ref{lem:baire-criterion}\\
+Theorem 8 and Corollary & Thm.~\ref{thm:baire-plus-one}, Cor.~\ref{cor:borel}\\
+Lemmas 23, 24; Theorem 9; example & Lemmas~\ref{lem:th-lemma23}, \ref{lem:th-lemma24}; Thm.~\ref{thm:th-thm9}; Prop.~\ref{prop:th-example}\\
+Lemma 25; Theorem 10, Corollaries & Lemma~\ref{lem:th-lemma25}; Thm.~\ref{thm:th-thm10}; Cor.~\ref{cor:ae-zero}, \ref{cor:nonmeasurable}\\
+unsolved problems 1--5 & open questions; not formalized\\ \midrule
+\multicolumn{2}{@{}l}{\cite{TAMSa}}\\
+Lemma & Lemma~\ref{lem:ha-lemma}\\
+example (answer to \cite[Problem 5]{BP}) & Lemmas~\ref{lem:ha-sequences}, \ref{lem:ha-estimates}, Thm.~\ref{thm:ha-example}\\
+Theorem, Corollary, analytic case & Thm.~\ref{thm:ha-theorem}, Cor.~\ref{cor:ha-corollary}, Cor.~\ref{cor:ha-analytic}\\ \midrule
+\multicolumn{2}{@{}l}{\cite{TAMSb}}\\
+(A) with (I)--(XXII) & Thm.~\ref{thm:construct-A}; Def.~\ref{def:special-family}, Lemmas~\ref{lem:special-from-fsigma}, \ref{lem:special-sequence}; Def.~\ref{def:regions}, Lemma~\ref{lem:region-geometry}; Def.~\ref{def:special-pair}, Lemmas~\ref{lem:special-pair-exists}, \ref{lem:special-pair-shrink}\\
+(B) with (I)--(IV) & Thm.~\ref{thm:construct-B}; Lemmas~\ref{lem:monotone-inverse}, \ref{lem:closed-graph}; Thm.~\ref{thm:baire1-char}\\
+(C), (D), (E), (F) & Thms.~\ref{thm:construct-C}, \ref{thm:construct-D}, \ref{thm:construct-E}, \ref{thm:construct-F}; Def.~\ref{def:fold}, Lemma~\ref{lem:fold}\\
+Appendix (a), (b), (c) & Thms.~\ref{thm:sphere-baire1}, \ref{thm:honorary-char}, \ref{thm:sphere-extension}\\
+Problems 1, 2 & open questions; not formalized\\ \midrule
+\multicolumn{2}{@{}l}{\cite{PAMS}}\\
+Lemma, Theorem & Lemma~\ref{lem:cube-lemma}, Thm.~\ref{thm:cube}\\
+Problem & open question; not formalized\\
+\bottomrule
+\end{longtable}

@@ -1,0 +1,153 @@
+% ===========================================================================
+\section{Boundary functions of continuous functions and homeomorphisms}\label{sec:bf}
+% ===========================================================================
+Sources: \cite[\S5, Lemma 15, Theorem 5]{Diss}; \cite[Theorems 1--3]{JMM}; \cite[remark after Corollary 4]{MMJ}.
+
+\begin{lemma}[{\cite[Lemma 15]{Diss}}]\label{lem:th-lemma15}
+\lean{TJK.isFσMeasurable_of_sandwich}
+\uses{def:fn-classes, lem:borel-basic, lem:baire-criterion}
+Let $E$ be a metric space, $Y$ a separable metric space and $\varphi:E\to Y$. Suppose that for every open
+$U\subseteq Y$ there are $L\in\Fs(E)$ and a countable $N\subseteq E$ with
+$\varphi^{-1}(U)\subseteq L\subseteq\varphi^{-1}(\overline U)\cup N$. Then there is a countable $M\subseteq E$
+such that $\varphi|_{E\setminus M}$ is of class $\Fs$.
+\end{lemma}
+\begin{proof}
+Let $\mathcal B$ be a countable base, choose $L(B),N(B)$ for $B\in\mathcal B$, put $M=\bigcup_BN(B)$,
+$E_0=E\setminus M$, $\varphi_0=\varphi|_{E_0}$. For open $W$ let $\mathcal B(W)=\{B:\overline B\subseteq W\}$,
+so $W=\bigcup_{\mathcal B(W)}B$ (proof of Lemma~\ref{lem:baire-criterion}). Then
+\[
+\varphi_0^{-1}(W)\subseteq E_0\cap\bigcup_{\mathcal B(W)}L(B)\subseteq
+E_0\cap\bigcup_{\mathcal B(W)}\bigl(\varphi^{-1}(\overline B)\cup N(B)\bigr)=E_0\cap\bigcup_{\mathcal B(W)}\varphi^{-1}(\overline B)
+\subseteq\varphi_0^{-1}(W),
+\]
+so $\varphi_0^{-1}(W)=E_0\cap\bigcup_{\mathcal B(W)}L(B)\in\Fs(E_0)$.
+\end{proof}
+
+\begin{theorem}[{\cite[Theorem 5]{Diss}}]\label{thm:bf-fsigma}
+\lean{TJK.BoundaryFn.exists_countable_isFσMeasurable}
+\uses{lem:th-lemma15, lem:two-sided, lem:crosscut-H, fact:tietze-arc, lem:subarc, lem:open-components,
+  lem:borel-basic, def:ccset}
+Let $Y$ be a separable metric space, $f:\Hp\to Y$ continuous, $E\subseteq\R$, and $\varphi:E\to Y$ a
+boundary function for $f$. There is a countable $M\subseteq E$ such that $\varphi|_{E\setminus M}$ is of
+class $\Fs$.
+\end{theorem}
+\begin{proof}
+By Lemma~\ref{lem:th-lemma15} it suffices, given open $U\subseteq Y$, to find $L\in\Fs(E)$ and countable
+$N$ with $\varphi^{-1}(U)\subseteq L\subseteq\varphi^{-1}(\overline U)\cup N$. Let $W=Y\setminus\overline U$ and
+\begin{align*}
+E_n&=\{x\in\R:\text{some arc $\gamma$ at $x$ has its other endpoint on $X_n$ and }\gamma\setminus\{x\}\subseteq f^{-1}(U)\},\\
+K&=\{x\in\R:\text{some arc $\gamma$ at $x$ has }\gamma\setminus\{x\}\subseteq f^{-1}(W)\}.
+\end{align*}
+If $x\in\varphi^{-1}(U)$, a subarc of the arc at $x$ along which $f\to\varphi(x)$ is mapped into $U$
+(Lemma~\ref{lem:subarc}); cutting it at its first point on a line $X_n$ below its other endpoint shows
+$x\in E_n$. So $\varphi^{-1}(U)\subseteq\bigcup_nE_n$, and likewise $\varphi^{-1}(W)\subseteq K$.
+
+\emph{$K\cap\overline{E_n}$ is countable.} Fix $n$. For $x\in K$ choose (Lemma~\ref{lem:subarc}) an arc
+$\gamma_x$ at $x$ with $\gamma_x\setminus\{x\}\subseteq\Hp_n\cap f^{-1}(W)$, and let $U_x$ be the component of
+the open set $\Hp_n\cap f^{-1}(W)$ containing $\gamma_x\setminus\{x\}$. Let $T$ be the set of points of
+$K\cap\overline{E_n}$ that are two-sided limit points of $E_n$. We claim $x\mapsto U_x$ is injective on $T$,
+so $T$ is countable (Lemma~\ref{lem:open-components}). Let $x<y$ in $T$ with $U_x=U_y$. Joining
+$\gamma_x$ and $\gamma_y$ by a path in $U_x$ and applying Fact~\ref{fact:tietze-arc}, we get a crosscut $\alpha'$
+of $\Hp$ from $x$ to $y$ with $\alpha'\setminus\{x,y\}\subseteq U_x\subseteq\Hp_n\cap f^{-1}(W)$. Let $A$ be the
+unbounded component of $\Hp\setminus\alpha'$ (Lemma~\ref{lem:crosscut-H}); since $\max_{\alpha'}\operatorname{Im}<1/n$,
+$X_n\subseteq A$. Choose $w\in(x,y)\cap E_n$ and an arc $\beta$ at $w$ ending on $X_n$ with
+$\beta\setminus\{w\}\subseteq f^{-1}(U)$. Then $\beta\setminus\{w\}$ is connected, misses $\alpha'$ (as
+$f^{-1}(U)\cap f^{-1}(W)=\emptyset$) and meets $X_n\subseteq A$, so it lies in $A$; hence
+$w\in\overline A\cap\R=\R\setminus(x,y)$, a contradiction. The points of $\overline{E_n}$ that are not two-sided
+limit points of $E_n$ form a countable set (Lemma~\ref{lem:two-sided}). Hence $K\cap\overline{E_n}$ is countable.
+
+Put $N=E\cap K\cap\bigcup_n\overline{E_n}$ (countable) and $L=E\cap\bigcup_n\overline{E_n}\in\Fs(E)$. Then
+$\varphi^{-1}(U)\subseteq L\subseteq N\cup(E\setminus K)\subseteq N\cup(E\setminus\varphi^{-1}(W))=N\cup\varphi^{-1}(\overline U)$.
+\end{proof}
+
+\begin{corollary}[{\cite[Theorem 5, Corollary]{Diss}}; {\cite[Theorems 2, 3]{JMM}}]\label{cor:bf-honorary}
+\lean{TJK.BoundaryFn.isHonoraryBaireTwo_upperHalfPlane, TJK.BoundaryFn.isHonoraryBaireTwo_disc_real, TJK.BoundaryFn.isHonoraryBaireTwo_disc_sphere}
+\uses{thm:bf-fsigma, thm:honorary-char, lem:transfer, lem:charts, lem:borel-basic}
+Let $Y$ be $\R^m$ or $\Sph$. If $f:\Hp\to Y$ (resp.\ $f:\D\to Y$) is continuous, $E\subseteq\R$ (resp.\
+$E\subseteq C$) and $\varphi:E\to Y$ is a boundary function for $f$, then $\varphi$ is of honorary Baire class
+$\le2$. In particular (\cite[Theorems 2, 3]{JMM}) a finite-valued boundary function on $C$ of a continuous
+real function in $\D$ is of honorary Baire class $2(C,\R)$, and a boundary function on $C$ of a
+continuous map $\D\to\Sph$ is of honorary Baire class $2(C,\Sph)$.
+\end{corollary}
+\begin{proof}
+For $\Hp$ combine Theorem~\ref{thm:bf-fsigma} with Theorem~\ref{thm:honorary-char}(2)$\Rightarrow$(1). For
+$\D$, Lemma~\ref{lem:transfer} with $\kappa$ shows that $\varphi\circ\kappa$ is a boundary function for
+$f\circ\kappa$ on $\kappa^{-1}(E\setminus\{1\})$; so $\varphi|_{E\setminus(\kappa(M)\cup\{1\})}$ is of class $\Fs$ for
+a countable $M$, and Theorem~\ref{thm:honorary-char} applies.
+\end{proof}
+
+\begin{fact}[Bagemihl's ambiguous point theorem {\cite{Bag}}]\label{fact:bagemihl}
+\lean{TJK.bagemihl_ambiguous_countable}
+\uses{def:ccset}
+\source{Bagemihl, Proc. Nat. Acad. Sci. 41 (1955)}
+For any function $f:\D\to\Sph$, the set of $x\in C$ at which there are two arcs along which $f$ has
+different limits is countable.
+\end{fact}
+
+\begin{proposition}[{\cite[remark after Corollary 4]{MMJ}}]\label{prop:gdelta-remark}
+\lean{TJK.McMillan.isFσδ_limit_mem_of_isGδ}
+\uses{thm:mcmillan, cor:bf-honorary, fact:bagemihl, lem:borel-basic, lem:equiv, lem:baire1-fsigma, def:fn-classes}
+In Corollary~\ref{cor:mm-corollaries}(1) it suffices that $E$ be a $\Gd$ subset of $\Sph$.
+\end{proposition}
+\begin{proof}
+$A=\CC(f)$ is $\Fsd$ (Theorem~\ref{thm:mcmillan}). Choose any boundary function $\varphi:A\to\Sph$. By
+Corollary~\ref{cor:bf-honorary}, $\varphi=\psi$ off a countable $N_0$, with $\psi\in\mathcal B_1(A,\Sph)$. Off the
+countable set $Z$ of Fact~\ref{fact:bagemihl}, every arc limit of $f$ at $x\in A$ equals $\varphi(x)$; so the set
+in question differs from $\psi^{-1}(E)$ by a countable set. Writing $E=\bigcap_jO_j$ with $O_j$ open,
+$\psi^{-1}(E)=\bigcap_j\psi^{-1}(O_j)$ is $\Fsd$ in $A$, hence in $C$; adding or removing countably many points
+keeps a set $\Fsd$.
+\end{proof}
+
+\subsection{Homeomorphisms}
+The following is Theorem~1 of \cite{JMM}, of which we have only the statement.
+
+\begin{lemma}\label{lem:homeo-values}
+\lean{TJK.Homeo.boundaryFn_mem_circle}
+\uses{def:ccset}
+Let $f$ be a homeomorphism of $\D$ onto $\D$, regarded as a map $\D\to\C$. If $f\to q\in\C$ along an arc at
+$x\in C$, then $q\in C$.
+\end{lemma}
+\begin{proof}
+If $q\in\D$ then $z=f^{-1}(f(z))\to f^{-1}(q)\in\D$ as $z\to x$ along the arc, which is absurd.
+\end{proof}
+
+\begin{theorem}[{\cite[Theorem 1]{JMM}}]\label{thm:homeo}
+\lean{TJK.Homeo.exists_countable_continuousOn}
+\uses{lem:homeo-values, fact:crosscut, lem:disjoint-arcs, lem:disc-geometry, fact:tietze-arc, lem:subarc, def:ccset}
+Let $f$ be a homeomorphism of $\D$ onto $\D$, regarded as a map $\D\to\C$, let $E\subseteq C$, and let $\varphi:E\to\C$ be a
+boundary function for $f$ (so $\varphi(E)\subseteq C$ by Lemma~\ref{lem:homeo-values}). Then there is a countable $N\subseteq E$ such that $\varphi|_{E\setminus N}$ is continuous. More precisely,
+for every $\eps>0$ the set
+\[
+S_\eps=\{x\in E:\ \text{for every }\delta>0\text{ there is }x'\in E\text{ with }0<\abs{x'-x}<\delta,\
+\abs{\varphi(x')-\varphi(x)}\ge\eps\}
+\]
+has at most $2\pi/\eps$ points.
+\end{theorem}
+\begin{proof}
+Since $\varphi$ is continuous (relative to $E$) at every point of $E\setminus\bigcup_kS_{1/k}$, the first claim
+follows from the second. Let $x_1,\dots,x_m$ be distinct points of $S_\eps$. Choose $\delta\in(0,1)$ so small
+that the balls $S(\delta,x_i)$ are pairwise disjoint, and for each $i$ choose $x_i'\in E$ with
+$0<\abs{x_i'-x_i}<\delta/2$ and $\abs{\varphi(x_i')-\varphi(x_i)}\ge\eps$. Fix $i$, and let
+$\gamma,\gamma'$ be arcs at $x_i,x_i'$ along which $f$ tends to $\varphi(x_i),\varphi(x_i')$.
+
+\emph{A crosscut near $x_i$.} By Lemma~\ref{lem:subarc} choose subarcs $\beta\subseteq\gamma\cap S(\delta/2,x_i)$ at
+$x_i$ and $\beta'\subseteq\gamma'\cap S(\delta/2,x_i')$ at $x_i'$, with other endpoints $u,v\in\D$. The segment
+$[u,v]$ lies in the convex set $\D\cap S(\delta,x_i)$ (Lemma~\ref{lem:disc-geometry}(a)). By
+Fact~\ref{fact:tietze-arc}, $\beta\cup[u,v]\cup\beta'$ contains a simple arc $\sigma_i$ from $x_i$ to $x_i'$,
+which is a crosscut of $\D$ lying in a closed ball $\overline{S(\delta',x_i)}$ with $\delta'<\delta$. Near $x_i$,
+$\sigma_i$ consists of points of $\beta$ (the compact sets $[u,v]$ and $\beta'$ miss $x_i$), so $f\to\varphi(x_i)$
+along $\sigma_i$ at $x_i$; likewise $f\to\varphi(x_i')$ at $x_i'$. Since $\varphi(x_i)\ne\varphi(x_i')$ lie on $C$
+(Lemma~\ref{lem:homeo-values}), $\tau_i=f(\sigma_i\cap\D)\cup\{\varphi(x_i),\varphi(x_i')\}$ is a crosscut of $\D$.
+
+\emph{The small component.} Let $R_i$ be the component of $\D\setminus\sigma_i$ with $\overline{R_i}\cap C$ equal to
+the shorter arc $J_i$ from $x_i$ to $x_i'$ (Fact~\ref{fact:crosscut}); $J_i\subseteq S(\delta,x_i)$ by
+Lemma~\ref{lem:disc-geometry}(c). The connected set $\D\setminus\overline{S(\delta',x_i)}$
+(Lemma~\ref{lem:disc-geometry}(b)) misses $\sigma_i$ and has $-x_i\notin J_i$ in its closure, so it lies in the
+other component; hence $R_i\subseteq S(\delta,x_i)$. So $R_1,\dots,R_m$ are pairwise disjoint.
+
+\emph{Images.} $f$ maps $\D\setminus\sigma_i$ homeomorphically onto $\D\setminus\tau_i$, so $f(R_i)$ is a component
+of $\D\setminus\tau_i$, and by Fact~\ref{fact:crosscut} $\overline{f(R_i)}\cap C$ is a closed arc $A_i$ with
+endpoints $\varphi(x_i),\varphi(x_i')$, of length at least $\abs{\varphi(x_i)-\varphi(x_i')}\ge\eps$
+(Lemma~\ref{lem:disc-geometry}(c)). The sets $f(R_i)$ are pairwise disjoint, so the arcs $A_i$ have pairwise
+disjoint interiors (Lemma~\ref{lem:disjoint-arcs}). Hence $m\eps\le2\pi$ by Lemma~\ref{lem:disc-geometry}(d).
+\end{proof}

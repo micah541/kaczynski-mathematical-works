@@ -1,0 +1,17 @@
+name = "TJK"
+version = "0.1.0"
+keywords = ["math", "boundary-functions", "baire-functions", "number-theory"]
+defaultTargets = ["TJK"]
+
+[leanOptions]
+pp.unicode.fun = true
+autoImplicit = false
+
+# Pinned: every statement in this project is checked against exactly this version of Mathlib.
+[[require]]
+name = "mathlib"
+git = "https://github.com/leanprover-community/mathlib4"
+rev = "v4.33.1"
+
+[[lean_lib]]
+name = "TJK"
