@@ -332,27 +332,28 @@ that for every $a\in(0,1]$ and every connected $\gamma\subseteq[-1,1]\times(0,a]
 $\ge d(a)$, there are $p,q\in\gamma$ with $\abs{k(p)-k(q)}\ge2$.
 \end{theorem}
 \begin{proof}
-Let $p(x)=\frac12\int_0^xd(t)\,dt$ for $0<x\le1$: positive, continuous, strictly increasing, with $p(x)\le\frac12d(x)$.
-For $a\in(0,1]$ the function $1/p$ is uniformly continuous on $[a/4,1]$, so there is $\eps\in(0,a/4]$ such that
-($a/2\le x_1\le1$, $x_2\in(0,1]$, $\abs{x_1-x_2}<\eps$) implies $\abs{p(x_1)^{-1}-p(x_2)^{-1}}\le\frac12$. Let $e(a)$ be the
-supremum of such $\eps$ in $(0,1]$; the implication holds with $\eps=e(a)$, and $e$ is weakly increasing because an $\eps$
-that works for $a$ works for every $a'\ge a$ (the condition $a'/2\le x_1$ is stronger). Let
-$q(x)=\int_0^xe(t)\,dt$, so $q$ is positive, continuous, increasing and $q\le e$; let $m=\min\{p,q\}$. Define
+Let $p(x)=\inf_{t\in(0,1]}\bigl(\frac12d(t)+\abs{x-t}\bigr)$. As an infimum of $1$-Lipschitz functions, $p$ is
+$1$-Lipschitz. It is weakly increasing on $(0,1]$: for $x\le x'$ and $t\in(0,1]$, if $t\le x$ the term at $x$ is at most
+the term at $x'$, and if $t>x$ then $p(x)\le\frac12d(x)\le\frac12d(t)$. For $x\in(0,1]$ we have
+$0<\min\{\frac12d(x/2),x/2\}\le p(x)\le\frac12d(x)$ (split $t\ge x/2$ and $t<x/2$). Let
+$m(y)=\min\{p(y),\,y/2,\,p(y/2)^2/2\}$: continuous, positive and weakly increasing on $(0,1]$. Define
 \[
-k_1(y)=\sin\frac{2\pi}{y\,m(y)},\qquad k_2(x,y)=\sin\frac{4\pi x}{p(y)},\qquad k=k_1+ik_2 .
+k_1(y)=\sin\frac{2\pi}{y\,m(y)},\qquad k_2(x,y)=\sin\frac{4\pi x}{p(y)},\qquad k=k_1+ik_2 ;
 \]
-Let $z_1,z_2\in\gamma$ with $\abs{z_1-z_2}\ge d(a)$, $z_j=\langle x_j,y_j\rangle$, $y_2\le y_1\le a$, and $a'=\min\{a,2y_1\}$, so
-$a'/2\le y_1\le a'\le a$. As $m(a')\le\frac12d(a')\le\frac12d(a)$, either
+$k$ is continuous on $\R\times(0,1]$ and $\abs k\le\sqrt2$.
+Let $z_1,z_2\in\gamma$ with $\abs{z_1-z_2}\ge d(a)$, $z_j=\langle x_j,y_j\rangle$, $y_2\le y_1\le a$. Either
 \[
-\text{(12)}\ \ \abs{y_1-y_2}\ge m(a'),\qquad\text{or}\qquad\text{(13)}\ \ \abs{y_1-y_2}<m(a')\text{ and }\abs{x_1-x_2}\ge\tfrac12d(a').
+\text{(12)}\ \ y_1-y_2\ge m(y_1),\qquad\text{or}\qquad\text{(13)}\ \ y_1-y_2<m(y_1).
 \]
-In case (12), using $m(y_2)\le m(y_1)\le m(a')$ and $y_1,y_2\le1$,
+In case (12), using $m(y_2)\le m(y_1)$ and $y_1y_2\le1$,
 \[
-\frac{2\pi}{y_2m(y_2)}-\frac{2\pi}{y_1m(y_1)}\ge\frac{2\pi(y_1-y_2)}{y_1y_2m(y_1)}\ge\frac{2\pi m(a')}{y_1y_2m(y_1)}\ge2\pi .
+\frac{2\pi}{y_2m(y_2)}-\frac{2\pi}{y_1m(y_1)}\ge\frac{2\pi(y_1-y_2)}{y_1y_2m(y_1)}\ge\frac{2\pi m(y_1)}{y_1y_2m(y_1)}\ge2\pi .
 \]
 The continuous function $2\pi/(y\,m(y))$ on the connected set $\gamma$ therefore takes all values in an interval of length
-$2\pi$, so $k_1$ takes the values $1$ and $-1$ on $\gamma$. In case (13), $\abs{y_1-y_2}<m(a')\le e(a')$ gives
-$\abs{p(y_1)^{-1}-p(y_2)^{-1}}\le\frac12$, and $p(y_1)\le p(a')\le\frac12d(a')$, so with $\abs{x_2}\le1$
+$2\pi$, so $k_1$ takes the values $1$ and $-1$ on $\gamma$. In case (13), $y_1-y_2<m(y_1)\le y_1/2$, so with
+$c=p(y_1/2)>0$ we have $p(y_1),p(y_2)\ge c$ and $\abs{p(y_1)-p(y_2)}\le y_1-y_2<m(y_1)\le c^2/2$; hence
+$\abs{p(y_1)^{-1}-p(y_2)^{-1}}\le\frac12$. Also $d(y_1)\le d(a)$ and $y_1-y_2<m(y_1)\le p(y_1)\le\frac12d(y_1)$, so
+$\abs{x_1-x_2}\ge d(a)-(y_1-y_2)\ge\frac12d(y_1)\ge p(y_1)$. With $\abs{x_2}\le1$,
 \[
 \Bigl|\frac{4\pi x_1}{p(y_1)}-\frac{4\pi x_2}{p(y_2)}\Bigr|\ge4\pi\Bigl[\frac{\abs{x_1-x_2}}{p(y_1)}-\Bigl|\frac1{p(y_1)}-\frac1{p(y_2)}\Bigr|\Bigr]
 \ge4\pi\Bigl[1-\frac12\Bigr]=2\pi,

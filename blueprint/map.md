@@ -7,11 +7,11 @@ Every node is a numbered item of the [companion paper](../paper/main.pdf). Arrow
 
 | Status | Meaning | Count |
 |---|---|---|
-| `proved` | proved (no `sorry`) | 20 |
+| `proved` | proved (no `sorry`) | 28 |
 | `defined` | definition written in Lean | 6 |
 | `sorry` | stated in Lean, proof is `sorry` | 13 |
-| `partial` | some Lean declarations exist | 3 |
-| `planned` | Lean name reserved, not yet stated | 82 |
+| `partial` | some Lean declarations exist | 4 |
+| `planned` | Lean name reserved, not yet stated | 73 |
 | `imported` | imported fact (Mathlib / library) | 14 |
 
 ```mermaid
@@ -476,15 +476,15 @@ flowchart BT
   lem_th_lemma10 --> def_th_special
   lem_th_lemma11 --> def_th_special
   classDef proved fill:#1f8a4c,color:#fff,stroke:#146236
-  class lem_sut_basic,prop_sut_two_composite,prop_sut_explicit,lem_sut_factor,thm_sut_sutcliffe2,thm_sut_sutcliffe3,lem_sut_lemma1,lem_sut_lemma2,thm_sut_main,cor_sut_main,lem_borel_basic,lem_reduction,cor_reduction_finite,thm_sierpinski,lem_baire1_fsigma,lem_finite_valued,lem_finite_valued_ops,lem_B_char,lem_region_geometry,lem_th_lemma25 proved
+  class lem_sut_basic,prop_sut_two_composite,prop_sut_explicit,lem_sut_factor,thm_sut_sutcliffe2,thm_sut_sutcliffe3,lem_sut_lemma1,lem_sut_lemma2,thm_sut_main,cor_sut_main,lem_borel_basic,lem_reduction,cor_reduction_finite,thm_sierpinski,lem_baire1_fsigma,lem_finite_valued,lem_finite_valued_ops,lem_approx_char,lem_approx_finite,lem_uniform_approx,lem_approx_real,thm_baire1_char,lem_B_char,lem_region_geometry,lem_monotone_inverse,lem_closed_graph,thm_construct_C,lem_th_lemma25 proved
   classDef defined fill:#b7e1c5,color:#123,stroke:#4c9a68
   class def_sut_solution,def_borel_classes,def_fn_classes,def_arcs,def_ccset,def_regions defined
   classDef sorry fill:#f2c14e,color:#222,stroke:#b8902e
   class thm_mcmillan,thm_mm_thm2,thm_bf_fsigma,thm_homeo,thm_cc_realize,thm_construct_F,thm_baire_plus_one,thm_th_thm10,cor_ae_zero,cor_nonmeasurable,thm_ha_example,thm_ha_theorem,thm_cube sorry
   classDef partial fill:#f7dd9b,color:#222,stroke:#b8902e
-  class cor_bf_honorary,def_special_family,thm_construct_H partial
+  class cor_bf_honorary,def_special_family,thm_construct_H,def_trapezoid partial
   classDef planned fill:#eeeeee,color:#333,stroke:#999
-  class lem_approx_char,lem_approx_finite,lem_uniform_approx,lem_approx_real,thm_baire1_char,lem_uniform_limit_fsigma,thm_extension,def_fold,lem_fold,lem_fold_factor,thm_sphere_baire1,thm_sphere_extension,thm_honorary_char,lem_honorary_invariance,thm_kuratowski,cor_baire_continuity_point,lem_meager_subspace,def_additive_classes,lem_additive_basic,lem_baire_precomp,lem_baire_imp_class,lem_equiv,lem_intervals_open,lem_two_sided,lem_monotone_extend,lem_monotone_compose,lem_baire_criterion,cor_path_arc,lem_subarc,lem_cluster,lem_disjoint_arcs,def_charts,lem_charts,lem_crosscut_H,lem_strip,lem_disc_geometry,lem_open_components,lem_transfer,lem_locality,def_acc,lem_mm_lemma2,lem_mm_lemma3,cor_mm_corollaries,thm_mcmillan_H,lem_th_lemma7,lem_th_lemma8,lem_th_lemma15,prop_gdelta_remark,lem_homeo_values,lem_special_from_fsigma,lem_special_sequence,def_special_pair,lem_special_pair_exists,lem_special_pair_shrink,thm_construct_A,lem_monotone_inverse,lem_closed_graph,thm_construct_B,thm_construct_C,thm_construct_D,thm_construct_E,def_meets_in,lem_figure5,cor_borel,def_trapezoid,lem_th_lemma23,lem_th_lemma24,thm_th_thm9,prop_th_example,lem_ha_lemma,lem_general_limit_endpoints,lem_ha_sequences,lem_ha_estimates,cor_ha_corollary,cor_ha_analytic,def_asymptotic,lem_cube_lemma,def_th_special,lem_th_special_implies,lem_th_lemma9,lem_th_lemma10,lem_th_lemma11 planned
+  class lem_uniform_limit_fsigma,thm_extension,def_fold,lem_fold,lem_fold_factor,thm_sphere_baire1,thm_sphere_extension,thm_honorary_char,lem_honorary_invariance,thm_kuratowski,cor_baire_continuity_point,lem_meager_subspace,def_additive_classes,lem_additive_basic,lem_baire_precomp,lem_baire_imp_class,lem_equiv,lem_intervals_open,lem_two_sided,lem_monotone_extend,lem_monotone_compose,lem_baire_criterion,cor_path_arc,lem_subarc,lem_cluster,lem_disjoint_arcs,def_charts,lem_charts,lem_crosscut_H,lem_strip,lem_disc_geometry,lem_open_components,lem_transfer,lem_locality,def_acc,lem_mm_lemma2,lem_mm_lemma3,cor_mm_corollaries,thm_mcmillan_H,lem_th_lemma7,lem_th_lemma8,lem_th_lemma15,prop_gdelta_remark,lem_homeo_values,lem_special_from_fsigma,lem_special_sequence,def_special_pair,lem_special_pair_exists,lem_special_pair_shrink,thm_construct_A,thm_construct_B,thm_construct_D,thm_construct_E,def_meets_in,lem_figure5,cor_borel,lem_th_lemma23,lem_th_lemma24,thm_th_thm9,prop_th_example,lem_ha_lemma,lem_general_limit_endpoints,lem_ha_sequences,lem_ha_estimates,cor_ha_corollary,cor_ha_analytic,def_asymptotic,lem_cube_lemma,def_th_special,lem_th_special_implies,lem_th_lemma9,lem_th_lemma10,lem_th_lemma11 planned
   classDef imported fill:#dbe8f6,color:#1c3a5e,stroke:#6b8fb8
   class fact_banach,fact_borel_baire,fact_tietze_arc,fact_tietze_ext,fact_hyperspace,fact_baire_category,fact_crosscut,fact_bagemihl,fact_vitali,fact_poisson,fact_jordan_access,fact_analytic_nonborel,fact_kierst,fact_normal imported
 ```
@@ -518,11 +518,11 @@ flowchart BT
 | lem:baire1-fsigma | lemma | `TJK.IsBaireOne.isFσMeasurable` ([src](../TJK/Baire/Basic.lean)) | `def:fn-classes`, `lem:borel-basic` | `proved` |
 | lem:finite-valued<br/>*Banach's Hilfssatz 3* | lemma | `TJK.finiteValued_ambiguous` ([src](../TJK/Baire/Basic.lean)) | `def:fn-classes`, `lem:borel-basic` | `proved` |
 | lem:finite-valued-ops | lemma | `TJK.IsFσMeasurable.add_of_finite` ([src](../TJK/Baire/Basic.lean))<br/>`TJK.IsFσMeasurable.sub_of_finite` ([src](../TJK/Baire/Basic.lean))<br/>`TJK.IsFσMeasurable.comp₂_of_finite` ([src](../TJK/Baire/Basic.lean)) | `lem:finite-valued` | `proved` |
-| lem:approx-char | lemma | `TJK.approx_indicator` | `lem:reduction`, `lem:borel-basic` | `planned` |
-| lem:approx-finite | lemma | `TJK.approx_finiteValued` | `lem:finite-valued`, `lem:approx-char` | `planned` |
-| lem:uniform-approx<br/>*, Banach's Hilfssatz 4* | lemma | `TJK.uniform_approx_finiteValued` | `cor:reduction-finite` | `planned` |
-| lem:approx-real | lemma | `TJK.approx_real` | `lem:uniform-approx`, `lem:approx-finite`, `lem:finite-valued-ops` | `planned` |
-| thm:baire1-char | theorem | `TJK.baireOne_tfae` | `lem:approx-real`, `lem:baire1-fsigma` | `planned` |
+| lem:approx-char | lemma | `TJK.approx_indicator` ([src](../TJK/Baire/Approx.lean)) | `lem:reduction`, `lem:borel-basic` | `proved` |
+| lem:approx-finite | lemma | `TJK.approx_finiteValued` ([src](../TJK/Baire/Approx.lean)) | `lem:finite-valued`, `lem:approx-char` | `proved` |
+| lem:uniform-approx<br/>*, Banach's Hilfssatz 4* | lemma | `TJK.uniform_approx_finiteValued` ([src](../TJK/Baire/Approx.lean)) | `cor:reduction-finite` | `proved` |
+| lem:approx-real | lemma | `TJK.approx_real` ([src](../TJK/Baire/Approx.lean)) | `lem:uniform-approx`, `lem:approx-finite`, `lem:finite-valued-ops` | `proved` |
+| thm:baire1-char | theorem | `TJK.baireOne_tfae` ([src](../TJK/Baire/Approx.lean)) | `lem:approx-real`, `lem:baire1-fsigma` | `proved` |
 | lem:uniform-limit-fsigma<br/>*uniform limits* | lemma | `TJK.IsFσMeasurable.of_tendstoUniformly` | `def:fn-classes`, `lem:borel-basic` | `planned` |
 | thm:extension<br/>*extension of Baire-one functions* | theorem | `TJK.IsBaireOne.extend_of_isGδ`<br/>`TJK.IsBaireOne.extend_of_countable_compl` | `lem:finite-valued`, `lem:finite-valued-ops`, `cor:reduction-finite`, `lem:uniform-approx`, `lem:uniform-limit-fsigma`, `thm:baire1-char`, `lem:baire1-fsigma`, `lem:borel-basic`, `lem:approx-real` | `planned` |
 | def:fold<br/>*the fold* | definition | `TJK.Fold.fold`<br/>`TJK.Fold.U`<br/>`TJK.Fold.V`<br/>`TJK.Fold.ZU`<br/>`TJK.Fold.ZV` |  | `planned` |
@@ -613,10 +613,10 @@ flowchart BT
 | lem:special-pair-shrink<br/>*;* | lemma | `TJK.Construct.IsSpecialPair.mono` | `def:special-pair`, `def:regions` | `planned` |
 | thm:construct-A<br/>*;* | theorem | `TJK.Construct.exists_g` | `lem:special-sequence`, `lem:special-pair-exists`, `lem:special-pair-shrink`, `lem:region-geometry`, `lem:subarc`, `def:special-family` | `planned` |
 | thm:cc-realize | theorem | `TJK.Construct.exists_curvConvSet_eq_upperHalfPlane` ([src](../TJK/MainTheorems.lean)) | `thm:construct-A`, `lem:transfer`, `lem:charts`, `lem:borel-basic`, `lem:subarc`, `def:ccset` | `sorry` |
-| lem:monotone-inverse<br/>*;* | lemma | `TJK.Construct.exists_monotone_leftInverse`<br/>`TJK.Construct.exists_monotone_leftInverse_real` |  | `planned` |
-| lem:closed-graph<br/>*;* | lemma | `TJK.Construct.continuous_of_closedGraph` |  | `planned` |
+| lem:monotone-inverse<br/>*;* | lemma | `TJK.Construct.exists_monotone_leftInverse` ([src](../TJK/Construct/K.lean))<br/>`TJK.Construct.exists_monotone_leftInverse_real` ([src](../TJK/Construct/K.lean)) |  | `proved` |
+| lem:closed-graph<br/>*;* | lemma | `TJK.Construct.continuous_of_closedGraph` ([src](../TJK/Construct/K.lean)) |  | `proved` |
 | thm:construct-B<br/>*;* | theorem | `TJK.Construct.exists_h` | `lem:monotone-inverse`, `lem:closed-graph`, `thm:baire1-char`, `def:regions`, `def:fn-classes` | `planned` |
-| thm:construct-C | theorem | `TJK.Construct.exists_k` |  | `planned` |
+| thm:construct-C | theorem | `TJK.Construct.exists_k` ([src](../TJK/Construct/K.lean)) |  | `proved` |
 | thm:construct-D | theorem | `TJK.Construct.exists_f_Q` | `thm:construct-A`, `thm:construct-B`, `thm:construct-C`, `lem:subarc`, `def:ccset` | `planned` |
 | thm:construct-E | theorem | `TJK.Construct.exists_f_disc` | `thm:construct-D`, `lem:transfer`, `lem:locality`, `lem:charts`, `lem:borel-basic`, `fact:tietze-ext`, `def:ccset`, `lem:honorary-invariance` | `planned` |
 | thm:construct-F<br/>*; McMillan's problem* | theorem | `TJK.Construct.exists_f_sphere` ([src](../TJK/MainTheorems.lean)) | `thm:construct-E`, `lem:fold`, `lem:fold-factor`, `def:fold`, `lem:baire1-fsigma`, `thm:honorary-char`, `lem:cluster` | `sorry` |
@@ -630,7 +630,7 @@ flowchart BT
 | lem:figure5<br/>*the ``Figure 5'' argument of* | lemma | `TJK.Discont.figure5` | `lem:crosscut-H`, `fact:tietze-arc` | `planned` |
 | thm:baire-plus-one<br/>*;* | theorem | `TJK.Discont.baireClass_succ_of_boundaryFn` ([src](../TJK/MainTheorems.lean)) | `def:meets-in`, `lem:figure5`, `lem:strip`, `lem:subarc`, `lem:intervals-open`, `lem:equiv`, `lem:monotone-extend`, `lem:monotone-compose`, `lem:baire-precomp`, `lem:baire-imp-class`, `lem:additive-basic`, `lem:baire-criterion` | `sorry` |
 | cor:borel<br/>*;* | corollary | `TJK.Discont.measurable_of_boundaryFn`<br/>`TJK.Discont.baireClass_succ_of_boundaryFn_real` | `thm:baire-plus-one`, `fact:borel-baire`, `lem:baire-imp-class`, `lem:additive-basic` | `planned` |
-| def:trapezoid<br/>*trapezoids* | definition | `TJK.Discont.closedTrapezoid`<br/>`TJK.Discont.IsTrapezoid`<br/>`TJK.Discont.segTrap` |  | `planned` |
+| def:trapezoid<br/>*trapezoids* | definition | `TJK.Discont.closedTrapezoid` ([src](../TJK/Discont/Segments.lean))<br/>`TJK.Discont.IsTrapezoid`<br/>`TJK.Discont.segTrap` |  | `partial` |
 | lem:th-lemma23 | lemma | `TJK.Discont.segTrap_subset_union` | `def:trapezoid` | `planned` |
 | lem:th-lemma24 | lemma | `TJK.Discont.isTrapezoid_biUnion` | `def:trapezoid` | `planned` |
 | thm:th-thm9 | theorem | `TJK.Discont.outerMeasure_union_segments` | `lem:th-lemma23`, `lem:th-lemma24`, `def:trapezoid` | `planned` |
