@@ -15,8 +15,10 @@ $\Fsd(L)$ for the corresponding classes of the subspace $L$.
 
 \begin{lemma}[closure properties]\label{lem:borel-basic}
 \lean{TJK.IsFσ.iUnion, TJK.IsFσ.inter, TJK.IsFσδ.iInter, TJK.IsFσδ.union, TJK.IsOpen.isFσ,
-  TJK.Set.Countable.isFσ, TJK.isFσ_subtype_iff, TJK.isGδ_subtype_iff, TJK.isFσδ_subtype_iff,
-  TJK.IsFσδ.of_subtype}
+  TJK.Set.Countable.isFσ, TJK.isGδ_compl_iff, TJK.IsFσ.isFσδ, TJK.IsGδ.isFσδ,
+  TJK.isFσ_subtype_iff, TJK.isGδ_subtype_iff, TJK.isFσδ_subtype_iff,
+  TJK.IsFσδ.of_subtype, TJK.IsGδ.of_subtype, TJK.IsFσ.preimage, TJK.IsFσδ.preimage,
+  TJK.Homeomorph.isFσ_image, TJK.Homeomorph.isFσδ_image}
 \uses{def:borel-classes}
 \begin{enumerate}[label=(\alph*)]
 \item In $M$, open sets are $\Fs$, closed sets are $\Gd$, and countable sets are $\Fs$.
@@ -78,7 +80,7 @@ $x\in F_n\setminus\bigcup_{j\le n}E_j\subseteq B$.
 \end{proof}
 
 \begin{corollary}[finite reduction]\label{cor:reduction-finite}
-\lean{TJK.reduction_finite}
+\lean{TJK.reduction_finite, TJK.reduction_countable, TJK.isAmbiguous_of_iUnion_eq_univ}
 \uses{lem:reduction}
 If $P_1,\dots,P_q$ are $\Fs$ subsets of $M$, there are pairwise disjoint $\Fs$ sets $R_i\subseteq P_i$
 with $\bigcup_iR_i=\bigcup_iP_i$. If $\bigcup_iP_i=M$, each $R_i$ is ambiguous.
@@ -126,7 +128,8 @@ complement $\bigcup_{i\ne j}E_i$ is $\Fs$ too.
 \end{proof}
 
 \begin{lemma}\label{lem:finite-valued-ops}
-\lean{TJK.FiniteValued.add, TJK.FiniteValued.sub}
+\lean{TJK.IsFσMeasurable.add_of_finite, TJK.IsFσMeasurable.sub_of_finite,
+  TJK.IsFσMeasurable.comp₂_of_finite}
 \uses{lem:finite-valued}
 If $f,g:L\to\R$ are finitely valued and of class $\Fs$, so are $f+g$ and $f-g$.
 \end{lemma}

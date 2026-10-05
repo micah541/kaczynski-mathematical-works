@@ -7,11 +7,11 @@ Every node is a numbered item of the [companion paper](../paper/main.pdf). Arrow
 
 | Status | Meaning | Count |
 |---|---|---|
-| `proved` | proved (no `sorry`) | 17 |
-| `defined` | definition written in Lean | 5 |
+| `proved` | proved (no `sorry`) | 20 |
+| `defined` | definition written in Lean | 6 |
 | `sorry` | stated in Lean, proof is `sorry` | 13 |
-| `partial` | some Lean declarations exist | 2 |
-| `planned` | Lean name reserved, not yet stated | 87 |
+| `partial` | some Lean declarations exist | 3 |
+| `planned` | Lean name reserved, not yet stated | 82 |
 | `imported` | imported fact (Mathlib / library) | 14 |
 
 ```mermaid
@@ -476,15 +476,15 @@ flowchart BT
   lem_th_lemma10 --> def_th_special
   lem_th_lemma11 --> def_th_special
   classDef proved fill:#1f8a4c,color:#fff,stroke:#146236
-  class lem_sut_basic,prop_sut_two_composite,prop_sut_explicit,lem_sut_factor,thm_sut_sutcliffe2,thm_sut_sutcliffe3,lem_sut_lemma1,lem_sut_lemma2,thm_sut_main,cor_sut_main,lem_borel_basic,lem_reduction,cor_reduction_finite,thm_sierpinski,lem_baire1_fsigma,lem_finite_valued,lem_th_lemma25 proved
+  class lem_sut_basic,prop_sut_two_composite,prop_sut_explicit,lem_sut_factor,thm_sut_sutcliffe2,thm_sut_sutcliffe3,lem_sut_lemma1,lem_sut_lemma2,thm_sut_main,cor_sut_main,lem_borel_basic,lem_reduction,cor_reduction_finite,thm_sierpinski,lem_baire1_fsigma,lem_finite_valued,lem_finite_valued_ops,lem_B_char,lem_region_geometry,lem_th_lemma25 proved
   classDef defined fill:#b7e1c5,color:#123,stroke:#4c9a68
-  class def_sut_solution,def_borel_classes,def_fn_classes,def_arcs,def_ccset defined
+  class def_sut_solution,def_borel_classes,def_fn_classes,def_arcs,def_ccset,def_regions defined
   classDef sorry fill:#f2c14e,color:#222,stroke:#b8902e
   class thm_mcmillan,thm_mm_thm2,thm_bf_fsigma,thm_homeo,thm_cc_realize,thm_construct_F,thm_baire_plus_one,thm_th_thm10,cor_ae_zero,cor_nonmeasurable,thm_ha_example,thm_ha_theorem,thm_cube sorry
   classDef partial fill:#f7dd9b,color:#222,stroke:#b8902e
-  class cor_bf_honorary,thm_construct_H partial
+  class cor_bf_honorary,def_special_family,thm_construct_H partial
   classDef planned fill:#eeeeee,color:#333,stroke:#999
-  class lem_finite_valued_ops,lem_approx_char,lem_approx_finite,lem_uniform_approx,lem_approx_real,thm_baire1_char,lem_uniform_limit_fsigma,thm_extension,def_fold,lem_fold,lem_fold_factor,thm_sphere_baire1,thm_sphere_extension,thm_honorary_char,lem_honorary_invariance,thm_kuratowski,cor_baire_continuity_point,lem_meager_subspace,def_additive_classes,lem_additive_basic,lem_baire_precomp,lem_baire_imp_class,lem_equiv,lem_intervals_open,lem_two_sided,lem_monotone_extend,lem_monotone_compose,lem_baire_criterion,cor_path_arc,lem_subarc,lem_cluster,lem_disjoint_arcs,def_charts,lem_charts,lem_crosscut_H,lem_strip,lem_disc_geometry,lem_open_components,lem_transfer,lem_locality,def_acc,lem_mm_lemma2,lem_mm_lemma3,cor_mm_corollaries,thm_mcmillan_H,lem_th_lemma7,lem_th_lemma8,lem_th_lemma15,prop_gdelta_remark,lem_homeo_values,def_regions,lem_B_char,lem_region_geometry,def_special_family,lem_special_from_fsigma,lem_special_sequence,def_special_pair,lem_special_pair_exists,lem_special_pair_shrink,thm_construct_A,lem_monotone_inverse,lem_closed_graph,thm_construct_B,thm_construct_C,thm_construct_D,thm_construct_E,def_meets_in,lem_figure5,cor_borel,def_trapezoid,lem_th_lemma23,lem_th_lemma24,thm_th_thm9,prop_th_example,lem_ha_lemma,lem_general_limit_endpoints,lem_ha_sequences,lem_ha_estimates,cor_ha_corollary,cor_ha_analytic,def_asymptotic,lem_cube_lemma,def_th_special,lem_th_special_implies,lem_th_lemma9,lem_th_lemma10,lem_th_lemma11 planned
+  class lem_approx_char,lem_approx_finite,lem_uniform_approx,lem_approx_real,thm_baire1_char,lem_uniform_limit_fsigma,thm_extension,def_fold,lem_fold,lem_fold_factor,thm_sphere_baire1,thm_sphere_extension,thm_honorary_char,lem_honorary_invariance,thm_kuratowski,cor_baire_continuity_point,lem_meager_subspace,def_additive_classes,lem_additive_basic,lem_baire_precomp,lem_baire_imp_class,lem_equiv,lem_intervals_open,lem_two_sided,lem_monotone_extend,lem_monotone_compose,lem_baire_criterion,cor_path_arc,lem_subarc,lem_cluster,lem_disjoint_arcs,def_charts,lem_charts,lem_crosscut_H,lem_strip,lem_disc_geometry,lem_open_components,lem_transfer,lem_locality,def_acc,lem_mm_lemma2,lem_mm_lemma3,cor_mm_corollaries,thm_mcmillan_H,lem_th_lemma7,lem_th_lemma8,lem_th_lemma15,prop_gdelta_remark,lem_homeo_values,lem_special_from_fsigma,lem_special_sequence,def_special_pair,lem_special_pair_exists,lem_special_pair_shrink,thm_construct_A,lem_monotone_inverse,lem_closed_graph,thm_construct_B,thm_construct_C,thm_construct_D,thm_construct_E,def_meets_in,lem_figure5,cor_borel,def_trapezoid,lem_th_lemma23,lem_th_lemma24,thm_th_thm9,prop_th_example,lem_ha_lemma,lem_general_limit_endpoints,lem_ha_sequences,lem_ha_estimates,cor_ha_corollary,cor_ha_analytic,def_asymptotic,lem_cube_lemma,def_th_special,lem_th_special_implies,lem_th_lemma9,lem_th_lemma10,lem_th_lemma11 planned
   classDef imported fill:#dbe8f6,color:#1c3a5e,stroke:#6b8fb8
   class fact_banach,fact_borel_baire,fact_tietze_arc,fact_tietze_ext,fact_hyperspace,fact_baire_category,fact_crosscut,fact_bagemihl,fact_vitali,fact_poisson,fact_jordan_access,fact_analytic_nonborel,fact_kierst,fact_normal imported
 ```
@@ -510,14 +510,14 @@ flowchart BT
 | Item | Kind | Lean | Depends on | Status |
 |---|---|---|---|---|
 | def:borel-classes<br/>*$Fs$, $Gd$, $Fsd$, ambiguous sets* | definition | `TJK.IsFσ` ([src](../TJK/Defs.lean))<br/>`TJK.IsFσδ` ([src](../TJK/Defs.lean))<br/>`TJK.IsAmbiguous` ([src](../TJK/Defs.lean)) |  | `defined` |
-| lem:borel-basic<br/>*closure properties* | lemma | `TJK.IsFσ.iUnion` ([src](../TJK/Baire/Basic.lean))<br/>`TJK.IsFσ.inter` ([src](../TJK/Baire/Basic.lean))<br/>`TJK.IsFσδ.iInter` ([src](../TJK/Baire/Basic.lean))<br/>`TJK.IsFσδ.union` ([src](../TJK/Baire/Basic.lean))<br/>`TJK.IsOpen.isFσ` ([src](../TJK/Baire/Basic.lean))<br/>`TJK.Set.Countable.isFσ` ([src](../TJK/Baire/Basic.lean))<br/>`TJK.isFσ_subtype_iff` ([src](../TJK/Baire/Basic.lean))<br/>`TJK.isGδ_subtype_iff` ([src](../TJK/Baire/Basic.lean))<br/>`TJK.isFσδ_subtype_iff` ([src](../TJK/Baire/Basic.lean))<br/>`TJK.IsFσδ.of_subtype` ([src](../TJK/Baire/Basic.lean)) | `def:borel-classes` | `proved` |
+| lem:borel-basic<br/>*closure properties* | lemma | `TJK.IsFσ.iUnion` ([src](../TJK/Baire/Basic.lean))<br/>`TJK.IsFσ.inter` ([src](../TJK/Baire/Basic.lean))<br/>`TJK.IsFσδ.iInter` ([src](../TJK/Baire/Basic.lean))<br/>`TJK.IsFσδ.union` ([src](../TJK/Baire/Basic.lean))<br/>`TJK.IsOpen.isFσ` ([src](../TJK/Baire/Basic.lean))<br/>`TJK.Set.Countable.isFσ` ([src](../TJK/Baire/Basic.lean))<br/>`TJK.isGδ_compl_iff` ([src](../TJK/Baire/Basic.lean))<br/>`TJK.IsFσ.isFσδ` ([src](../TJK/Baire/Basic.lean))<br/>`TJK.IsGδ.isFσδ` ([src](../TJK/Baire/Basic.lean))<br/>`TJK.isFσ_subtype_iff` ([src](../TJK/Baire/Basic.lean))<br/>`TJK.isGδ_subtype_iff` ([src](../TJK/Baire/Basic.lean))<br/>`TJK.isFσδ_subtype_iff` ([src](../TJK/Baire/Basic.lean))<br/>`TJK.IsFσδ.of_subtype` ([src](../TJK/Baire/Basic.lean))<br/>`TJK.IsGδ.of_subtype` ([src](../TJK/Baire/Basic.lean))<br/>`TJK.IsFσ.preimage` ([src](../TJK/Baire/Basic.lean))<br/>`TJK.IsFσδ.preimage` ([src](../TJK/Baire/Basic.lean))<br/>`TJK.Homeomorph.isFσ_image` ([src](../TJK/Baire/Basic.lean))<br/>`TJK.Homeomorph.isFσδ_image` ([src](../TJK/Baire/Basic.lean)) | `def:borel-classes` | `proved` |
 | def:fn-classes<br/>*function classes* | definition | `TJK.IsFσMeasurable` ([src](../TJK/Defs.lean))<br/>`TJK.IsBaireOne` ([src](../TJK/Defs.lean))<br/>`TJK.IsHonoraryBaireTwo` ([src](../TJK/Defs.lean))<br/>`TJK.BaireClass` ([src](../TJK/Defs.lean)) | `def:borel-classes` | `defined` |
 | lem:reduction<br/>*reduction;* | lemma | `TJK.reduction` ([src](../TJK/Baire/Basic.lean)) | `lem:borel-basic` | `proved` |
-| cor:reduction-finite<br/>*finite reduction* | corollary | `TJK.reduction_finite` ([src](../TJK/Baire/Basic.lean)) | `lem:reduction` | `proved` |
+| cor:reduction-finite<br/>*finite reduction* | corollary | `TJK.reduction_finite` ([src](../TJK/Baire/Basic.lean))<br/>`TJK.reduction_countable` ([src](../TJK/Baire/Basic.lean))<br/>`TJK.isAmbiguous_of_iUnion_eq_univ` ([src](../TJK/Baire/Basic.lean)) | `lem:reduction` | `proved` |
 | thm:sierpinski<br/>*Sierpi'nski* | theorem | `TJK.sierpinski_ambiguous` ([src](../TJK/Baire/Basic.lean)) | `lem:reduction`, `lem:borel-basic` | `proved` |
 | lem:baire1-fsigma | lemma | `TJK.IsBaireOne.isFσMeasurable` ([src](../TJK/Baire/Basic.lean)) | `def:fn-classes`, `lem:borel-basic` | `proved` |
 | lem:finite-valued<br/>*Banach's Hilfssatz 3* | lemma | `TJK.finiteValued_ambiguous` ([src](../TJK/Baire/Basic.lean)) | `def:fn-classes`, `lem:borel-basic` | `proved` |
-| lem:finite-valued-ops | lemma | `TJK.FiniteValued.add`<br/>`TJK.FiniteValued.sub` | `lem:finite-valued` | `planned` |
+| lem:finite-valued-ops | lemma | `TJK.IsFσMeasurable.add_of_finite` ([src](../TJK/Baire/Basic.lean))<br/>`TJK.IsFσMeasurable.sub_of_finite` ([src](../TJK/Baire/Basic.lean))<br/>`TJK.IsFσMeasurable.comp₂_of_finite` ([src](../TJK/Baire/Basic.lean)) | `lem:finite-valued` | `proved` |
 | lem:approx-char | lemma | `TJK.approx_indicator` | `lem:reduction`, `lem:borel-basic` | `planned` |
 | lem:approx-finite | lemma | `TJK.approx_finiteValued` | `lem:finite-valued`, `lem:approx-char` | `planned` |
 | lem:uniform-approx<br/>*, Banach's Hilfssatz 4* | lemma | `TJK.uniform_approx_finiteValued` | `cor:reduction-finite` | `planned` |
@@ -602,10 +602,10 @@ flowchart BT
 
 | Item | Kind | Lean | Depends on | Status |
 |---|---|---|---|---|
-| def:regions<br/>*Stolz angles, trapezoids, $B(K,eps,alpha,beta)$* | definition | `TJK.Construct.stolz`<br/>`TJK.Construct.trap`<br/>`TJK.Construct.tri`<br/>`TJK.Construct.hull`<br/>`TJK.Construct.region` |  | `planned` |
-| lem:B-char<br/>*description of $B$* | lemma | `TJK.Construct.mem_region_iff` | `def:regions` | `planned` |
-| lem:region-geometry<br/>*;* | lemma | `TJK.Construct.isOpen_stolz`<br/>`TJK.Construct.isOpen_region`<br/>`TJK.Construct.closure_stolz_inter_axis`<br/>`TJK.Construct.closure_region_inter_axis`<br/>`TJK.Construct.closure_stolz_subset`<br/>`TJK.Construct.stolz_disjoint`<br/>`TJK.Construct.region_disjoint_of_split`<br/>`TJK.Construct.region_disjoint_of_disjoint`<br/>`TJK.Construct.closure_region_subset`<br/>`TJK.Construct.region_stolz_disjoint_of_not_mem_interior`<br/>`TJK.Construct.stolz_region_disjoint_small_stolz`<br/>`TJK.Construct.stolz_region_disjoint_small_region`<br/>`TJK.Construct.closure_stolz_subset_region` | `lem:B-char`, `def:special-family` | `planned` |
-| def:special-family<br/>*splitting, special families* | definition | `TJK.Construct.Split`<br/>`TJK.Construct.IsSpecialFamily`<br/>`TJK.Construct.endpoints`<br/>`TJK.Construct.twoPoint` |  | `planned` |
+| def:regions<br/>*Stolz angles, trapezoids, $B(K,eps,alpha,beta)$* | definition | `TJK.Construct.stolz` ([src](../TJK/Construct/Regions.lean))<br/>`TJK.Construct.trap` ([src](../TJK/Construct/Regions.lean))<br/>`TJK.Construct.tri` ([src](../TJK/Construct/Regions.lean))<br/>`TJK.Construct.hull` ([src](../TJK/Construct/Regions.lean))<br/>`TJK.Construct.gaps` ([src](../TJK/Construct/Regions.lean))<br/>`TJK.Construct.region` ([src](../TJK/Construct/Regions.lean)) |  | `defined` |
+| lem:B-char<br/>*description of $B$* | lemma | `TJK.Construct.mem_region_iff` ([src](../TJK/Construct/Regions.lean))<br/>`TJK.Construct.region_eq` ([src](../TJK/Construct/Regions.lean))<br/>`TJK.Construct.exists_gap` ([src](../TJK/Construct/Regions.lean))<br/>`TJK.Construct.connectedComponentIn_hull_diff` ([src](../TJK/Construct/Regions.lean)) | `def:regions` | `proved` |
+| lem:region-geometry<br/>*;* | lemma | `TJK.Construct.isOpen_stolz` ([src](../TJK/Construct/Regions.lean))<br/>`TJK.Construct.isOpen_region` ([src](../TJK/Construct/Regions.lean))<br/>`TJK.Construct.stolz_subset_upper` ([src](../TJK/Construct/Regions.lean))<br/>`TJK.Construct.region_subset_upper` ([src](../TJK/Construct/Regions.lean))<br/>`TJK.Construct.closure_stolz_inter_axis` ([src](../TJK/Construct/Regions.lean))<br/>`TJK.Construct.closure_region_inter_axis` ([src](../TJK/Construct/Regions.lean))<br/>`TJK.Construct.closure_stolz_subset` ([src](../TJK/Construct/Regions.lean))<br/>`TJK.Construct.stolz_disjoint` ([src](../TJK/Construct/Regions.lean))<br/>`TJK.Construct.region_disjoint_of_split` ([src](../TJK/Construct/Regions.lean))<br/>`TJK.Construct.region_disjoint_of_disjoint` ([src](../TJK/Construct/Regions.lean))<br/>`TJK.Construct.closure_region_subset` ([src](../TJK/Construct/Regions.lean))<br/>`TJK.Construct.region_stolz_disjoint_of_not_mem_interior` ([src](../TJK/Construct/Regions.lean))<br/>`TJK.Construct.stolz_region_disjoint_small_stolz` ([src](../TJK/Construct/Regions.lean))<br/>`TJK.Construct.stolz_region_disjoint_small_region` ([src](../TJK/Construct/Regions.lean))<br/>`TJK.Construct.closure_stolz_subset_region` ([src](../TJK/Construct/Regions.lean)) | `lem:B-char`, `def:special-family` | `proved` |
+| def:special-family<br/>*splitting, special families* | definition | `TJK.Construct.Split` ([src](../TJK/Construct/Regions.lean))<br/>`TJK.Construct.IsSpecialFamily`<br/>`TJK.Construct.endpoints`<br/>`TJK.Construct.twoPoint` |  | `partial` |
 | lem:special-from-fsigma<br/>*;* | lemma | `TJK.Construct.exists_specialFamily_of_isFσ` | `def:special-family`, `lem:borel-basic` | `planned` |
 | lem:special-sequence | lemma | `TJK.Construct.exists_specialFamily_seq` | `lem:special-from-fsigma`, `lem:borel-basic` | `planned` |
 | def:special-pair<br/>*special functions* | definition | `TJK.Construct.IsSpecialPair` | `def:special-family`, `def:regions` | `planned` |
