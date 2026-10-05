@@ -149,8 +149,8 @@ Write $E=E_1\cap L$ and $L\setminus E=F_1\cap L$ with $E_1,F_1$ $\Fs$ in $M$. Re
 sets $A\subseteq E_1$, $B\subseteq F_1$ with $A\cup B=E_1\cup F_1\supseteq L$. Then $E=A\cap L$ and
 $L\setminus E=B\cap L$ (a point of $E$ is not in $F_1$, hence not in $B$, hence in $A$). Write
 $A=\bigcup A_n$, $B=\bigcup B_n$ with $A_n\subseteq A_{n+1}$, $B_n\subseteq B_{n+1}$ closed, and let
-$f_n$ be the Urysohn function $\dist(x,B_n)/(\dist(x,A_n)+\dist(x,B_n))$ (if $A_n=\emptyset$ take
-$f_n=0$; if $B_n=\emptyset$ take $f_n=1$), which is $1$ on $A_n$ and $0$ on $B_n$. For $x\in L$, eventually $x\in A_n$ or eventually
+$f_n:M\to[0,1]$ be a Urysohn function, $1$ on $A_n$ and $0$ on $B_n$ (e.g.\
+$\dist(x,B_n)/(\dist(x,A_n)+\dist(x,B_n))$). For $x\in L$, eventually $x\in A_n$ or eventually
 $x\in B_n$.
 \end{proof}
 
@@ -166,43 +166,40 @@ $f_n=\sum_ja_jf^{(j)}_n$ with $f^{(j)}_n\to\chi_{E_j}$ from Lemma~\ref{lem:appro
 \end{proof}
 
 \begin{lemma}[{\cite[Lemma 4]{Diss}}, Banach's Hilfssatz 4]\label{lem:uniform-approx}
-\lean{TJK.uniform_approx_finiteValued}
+\lean{TJK.uniform_approx_finiteValued, TJK.exists_piecewise_of_partition}
 \uses{cor:reduction-finite}
-If $f:L\to\R$ is bounded and of class $\Fs$, then for every $k\in\N$ there is a finitely valued
-$g:L\to\R$ of class $\Fs$ with $\abs{g-f}<1/k$ and $\sup\abs g\le\sup\abs f+1/k$.
+If $f:L\to\R$ is of class $\Fs$ with $\abs f\le C$, then for every $\eps>0$ there is a finitely valued
+$g:L\to\R$ of class $\Fs$ with $\abs{g-f}<\eps$ and $\abs g\le C+\eps$.
 \end{lemma}
 \begin{proof}
-Cover $[-\sup\abs f,\sup\abs f]$ by the finitely many intervals $U_j=((j-1)/k,(j+1)/k)$ that meet it.
+Let $N\ge C/\eps$ and $U_j=((j-1)\eps,(j+1)\eps)$ for $j\in\Z$, $\abs j\le N$; these cover $[-C,C]$.
 The sets $f^{-1}(U_j)$ are $\Fs$ in $L$ and cover $L$; Corollary~\ref{cor:reduction-finite} gives a
-partition of $L$ into ambiguous $R_j\subseteq f^{-1}(U_j)$. Put $g=j/k$ on $R_j$. Then $\abs{g-f}<1/k$,
-and $g^{-1}(W)$ is a finite union of $R_j$'s for every $W$.
+partition of $L$ into $\Fs$ sets $R_j\subseteq f^{-1}(U_j)$. Put $g=j\eps$ on $R_j$. Then
+$\abs{g-f}<\eps$, and $g^{-1}(W)$ is a finite union of $R_j$'s for every $W$.
 \end{proof}
 
 \begin{lemma}[{\cite[Lemma 5]{Diss}}]\label{lem:approx-real}
-\lean{TJK.approx_real}
+\lean{TJK.approx_real, TJK.approx_real_of_bounded, TJK.exists_hasSum_finiteValued}
 \uses{lem:uniform-approx, lem:approx-finite, lem:finite-valued-ops}
 Let $L\subseteq M$ and let $f:L\to\R$ be of class $\Fs$. There are continuous $f_j:M\to\R$ with
 $f_j\to f$ pointwise on $L$.
 \end{lemma}
 \begin{proof}
-\emph{Bounded $f$.} Choose by Lemma~\ref{lem:uniform-approx} finitely valued $g_n$ of class $\Fs$ with
-$\norm{g_n-f}_\infty\le2^{-n}$; put $h_1=g_1$, $h_n=g_n-g_{n-1}$. Each $h_n$ is finitely valued of class
-$\Fs$, and $\norm{h_n}\le 2^{-n+2}$ for $n\ge2$. By Lemma~\ref{lem:approx-finite} choose continuous
-$h_{n,j}\to h_n$ on $L$, and let $k_{n,j}$ be $h_{n,j}$ clamped to $[-\norm{h_n},\norm{h_n}]$; still
-$k_{n,j}\to h_n$ on $L$. Then $f_j=\sum_nk_{n,j}$ converges uniformly, so it is continuous. For
-$x\in L$ and $m\in\N$,
-\[
-\abs{f_j(x)-f(x)}\le\sum_{n>m}\norm{h_n}+\sum_{n\le m}\abs{k_{n,j}(x)-h_n(x)}+\abs{g_m(x)-f(x)},
-\]
-which is small for $m$ large and then $j$ large.
+\emph{Bounded $f$.} Choose by Lemma~\ref{lem:uniform-approx} finitely valued $g_n$ ($n\ge0$) of class
+$\Fs$ with $\abs{g_n-f}<2^{-n}$; put $h_0=g_0$, $h_n=g_n-g_{n-1}$. Each $h_n$ is finitely valued of class
+$\Fs$, $\abs{h_n}\le b_n:=(\abs C+4)2^{-n}$, and $\sum_nh_n=f$ on $L$. By Lemma~\ref{lem:approx-finite}
+choose continuous $h_{n,j}\to h_n$ on $L$, and let $k_{n,j}$ be $h_{n,j}$ clamped to $[-b_n,b_n]$; still
+$k_{n,j}\to h_n$ on $L$. Then $f_j=\sum_nk_{n,j}$ converges uniformly, so it is continuous, and
+$f_j(x)\to\sum_nh_n(x)=f(x)$ for $x\in L$ by dominated convergence for series ($\abs{k_{n,j}}\le b_n$,
+$\sum b_n<\infty$).
 
 \emph{General $f$.} $\arctan\circ f$ is bounded of class $\Fs$; take continuous $G_j\to\arctan\circ f$
-on $L$, clamp $G_j$ into $[-\pi/2+1/j,\pi/2-1/j]$ to get $H_j$ (still convergent on $L$, since the target
-values lie in the open interval), and put $f_j=\tan\circ H_j$.
+on $L$, clamp $G_j$ into $[-\pi/2+\delta_j,\pi/2-\delta_j]$, $\delta_j=1/(j+1)$, to get $H_j$ (still
+convergent on $L$, since the target values lie in the open interval), and put $f_j=\tan\circ H_j$.
 \end{proof}
 
 \begin{theorem}[{\cite[Lemma 6]{Diss}}]\label{thm:baire1-char}
-\lean{TJK.baireOne_tfae}
+\lean{TJK.baireOne_tfae, TJK.IsFσMeasurable.isBaireOne_real}
 \uses{lem:approx-real, lem:baire1-fsigma}
 Let $L\subseteq M$ and $f:L\to\R^m$. The following are equivalent:
 (i) $f\in\mathcal B_1(L,\R^m)$; (ii) $f$ is of class $\Fs$; (iii) there are continuous
@@ -221,12 +218,17 @@ boxes, and $f^{-1}(\prod_iI_i)=\bigcap_if_i^{-1}(I_i)$.)
 If $S_n:L\to Y$ are of class $\Fs$ and $S_n\to F$ uniformly, then $F$ is of class $\Fs$.
 \end{lemma}
 \begin{proof}
-Let $U\subsetneq Y$ be open and $U_k=\{y:\dist(y,Y\setminus U)>2/k\}$; for each $k$ choose $n_k$ with
-$\dist(S_{n_k}(x),F(x))<1/k$ for all $x$. Then $F^{-1}(U)=\bigcup_kS_{n_k}^{-1}(U_k)$.
+Let $U\subseteq Y$ be open, $\eps_k=1/(k+1)$, and let $U_k$ be the union of the balls $S(\eps_k,z)$ over
+all $z$ with $S(3\eps_k,z)\subseteq U$, an open set. For each $k$ choose $n_k$ with
+$\dist(S_{n_k}(x),F(x))<\eps_k$ for all $x$. Then $F^{-1}(U)=\bigcup_kS_{n_k}^{-1}(U_k)$: if $F(x)\in U$,
+take $k$ with $S(3\eps_k,F(x))\subseteq U$ and $z=F(x)$; conversely, if $S_{n_k}(x)\in S(\eps_k,z)$ then
+$F(x)\in S(2\eps_k,z)\subseteq U$.
 \end{proof}
 
 \begin{theorem}[extension of Baire-one functions]\label{thm:extension}
-\lean{TJK.IsBaireOne.extend_of_isGδ, TJK.IsBaireOne.extend_of_countable_compl}
+\lean{TJK.IsBaireOne.extend_of_isGδ, TJK.IsBaireOne.extend_of_countable_compl,
+  TJK.exists_extend_finiteValued, TJK.exists_extend_of_isGδ_real,
+  TJK.exists_extend_of_countable_compl_real, TJK.isFσMeasurable_finiteValued_sum}
 \uses{lem:finite-valued, lem:finite-valued-ops, cor:reduction-finite, lem:uniform-approx, lem:uniform-limit-fsigma,
   thm:baire1-char, lem:baire1-fsigma, lem:borel-basic, lem:approx-real}
 Let $f:L\to\R^m$ be of Baire class $\le1$, $L\subseteq M$.
@@ -236,7 +238,8 @@ Let $f:L\to\R^m$ be of Baire class $\le1$, $L\subseteq M$.
 \end{enumerate}
 \end{theorem}
 \begin{proof}
-It suffices to treat $m=1$ (extend coordinatewise).
+It suffices to treat $m=1$ (extend coordinatewise); then $f$ is of class $\Fs$
+(Lemma~\ref{lem:baire1-fsigma}).
 
 (a) \emph{Finitely valued $f$ of class $\Fs$ on a $\Gd$ set $L$.} By Lemma~\ref{lem:finite-valued}, $f=\sum_ja_j\chi_{E_j}$ with
 $E_1,\dots,E_q$ an ambiguous partition of $L$; write $E_j=P_j\cap L$ with $P_j$ $\Fs$ in $M$. The sets
@@ -245,19 +248,18 @@ cover given by Corollary~\ref{cor:reduction-finite}. Put $F=a_j$ on $R_j$ and $F
 $x\in L\cap E_j$, $x\notin R_0$, and $x\in R_i$ forces $x\in P_i\cap L=E_i$, so $i=j$ and $F(x)=f(x)$.
 $F$ is finitely valued of class $\Fs$ and $\sup\abs F\le\max\abs{a_j}$.
 
-\emph{Bounded $f$.} $f$ is of class $\Fs$ (Lemma~\ref{lem:baire1-fsigma}). With $g_n$, $h_n$ as in the proof
+\emph{Bounded $f$.} With $h_n$, $b_n$ as in the proof
 of Lemma~\ref{lem:approx-real}, extend each
-$h_n$ to a finitely valued $H_n$ of class $\Fs$ with $\sup\abs{H_n}\le\sup\abs{h_n}$. The partial sums
-$S_N=\sum_{n\le N}H_n$ are finitely valued of class $\Fs$ and converge uniformly to some $F$, which is
-bounded, of class $\Fs$ (Lemma~\ref{lem:uniform-limit-fsigma}), hence in $\mathcal B_1(M,\R)$
-(Theorem~\ref{thm:baire1-char} with $L=M$); and $F|_L=\lim g_N=f$.
+$h_n$ to a finitely valued $H_n$ of class $\Fs$ with $\abs{H_n}\le b_n$. The partial sums
+$S_N=\sum_{n<N}H_n$ are finitely valued of class $\Fs$ and converge uniformly to $F=\sum_nH_n$, which is
+bounded by $\sum_nb_n$, of class $\Fs$ (Lemma~\ref{lem:uniform-limit-fsigma}), hence in $\mathcal B_1(M,\R)$
+(Theorem~\ref{thm:baire1-char} with $L=M$); and $F|_L=\sum_nh_n=f$.
 
-(b) Let $\tau(v)=v/(1+\abs v)$, a homeomorphism of $\R^m$ onto the open unit ball $B$. Since $M\setminus L$
-is countable, $L$ is $\Gd$; by (a) extend $\tau\circ f$ to a bounded $G\in\mathcal B_1(M,\R^m)$. The
-set $Z=G^{-1}(\R^m\setminus B)$ lies in $M\setminus L$, so it is countable. Put $G'=G$ off $Z$ and
-$G'=0$ on $Z$. For open $U\subseteq B$, $G'^{-1}(U)=G^{-1}(U)\cup(Z\text{ or }\emptyset)$ is $\Fs$. So
-$G':M\to B$ is of class $\Fs$, hence so is $\tau^{-1}\circ G':M\to\R^m$, which is therefore in
-$\mathcal B_1$ (Theorem~\ref{thm:baire1-char}) and extends $f$.
+(b) Let $I=(-\pi/2,\pi/2)$. Since $M\setminus L$ is countable, it is $\Fs$ and $L$ is $\Gd$; by (a)
+extend $\arctan\circ f$ to a bounded $G\in\mathcal B_1(M,\R)$, of class $\Fs$. The set $Z=G^{-1}(\R\setminus I)$
+lies in $M\setminus L$, so it is countable. Put $F=\tan\circ G$ off $Z$ and $F=0$ on $Z$. For open
+$U\subseteq\R$, $F^{-1}(U)=G^{-1}(I\cap\tan^{-1}(U))\cup(Z\text{ or }\emptyset)$ is $\Fs$. So $F$ is of class
+$\Fs$, hence in $\mathcal B_1(M,\R)$ (Theorem~\ref{thm:baire1-char}), and $F|_L=\tan\circ\arctan\circ f=f$.
 \end{proof}
 
 \subsection{Functions into the sphere}
