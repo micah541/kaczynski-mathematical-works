@@ -7,11 +7,11 @@ Every node is a numbered item of the [companion paper](../paper/main.pdf). Arrow
 
 | Status | Meaning | Count |
 |---|---|---|
-| `proved` | proved (no `sorry`) | 11 |
+| `proved` | proved (no `sorry`) | 17 |
 | `defined` | definition written in Lean | 5 |
 | `sorry` | stated in Lean, proof is `sorry` | 13 |
 | `partial` | some Lean declarations exist | 2 |
-| `planned` | Lean name reserved, not yet stated | 93 |
+| `planned` | Lean name reserved, not yet stated | 87 |
 | `imported` | imported fact (Mathlib / library) | 14 |
 
 ```mermaid
@@ -476,7 +476,7 @@ flowchart BT
   lem_th_lemma10 --> def_th_special
   lem_th_lemma11 --> def_th_special
   classDef proved fill:#1f8a4c,color:#fff,stroke:#146236
-  class lem_sut_basic,prop_sut_two_composite,prop_sut_explicit,lem_sut_factor,thm_sut_sutcliffe2,thm_sut_sutcliffe3,lem_sut_lemma1,lem_sut_lemma2,thm_sut_main,cor_sut_main,lem_th_lemma25 proved
+  class lem_sut_basic,prop_sut_two_composite,prop_sut_explicit,lem_sut_factor,thm_sut_sutcliffe2,thm_sut_sutcliffe3,lem_sut_lemma1,lem_sut_lemma2,thm_sut_main,cor_sut_main,lem_borel_basic,lem_reduction,cor_reduction_finite,thm_sierpinski,lem_baire1_fsigma,lem_finite_valued,lem_th_lemma25 proved
   classDef defined fill:#b7e1c5,color:#123,stroke:#4c9a68
   class def_sut_solution,def_borel_classes,def_fn_classes,def_arcs,def_ccset defined
   classDef sorry fill:#f2c14e,color:#222,stroke:#b8902e
@@ -484,7 +484,7 @@ flowchart BT
   classDef partial fill:#f7dd9b,color:#222,stroke:#b8902e
   class cor_bf_honorary,thm_construct_H partial
   classDef planned fill:#eeeeee,color:#333,stroke:#999
-  class lem_borel_basic,lem_reduction,cor_reduction_finite,thm_sierpinski,lem_baire1_fsigma,lem_finite_valued,lem_finite_valued_ops,lem_approx_char,lem_approx_finite,lem_uniform_approx,lem_approx_real,thm_baire1_char,lem_uniform_limit_fsigma,thm_extension,def_fold,lem_fold,lem_fold_factor,thm_sphere_baire1,thm_sphere_extension,thm_honorary_char,lem_honorary_invariance,thm_kuratowski,cor_baire_continuity_point,lem_meager_subspace,def_additive_classes,lem_additive_basic,lem_baire_precomp,lem_baire_imp_class,lem_equiv,lem_intervals_open,lem_two_sided,lem_monotone_extend,lem_monotone_compose,lem_baire_criterion,cor_path_arc,lem_subarc,lem_cluster,lem_disjoint_arcs,def_charts,lem_charts,lem_crosscut_H,lem_strip,lem_disc_geometry,lem_open_components,lem_transfer,lem_locality,def_acc,lem_mm_lemma2,lem_mm_lemma3,cor_mm_corollaries,thm_mcmillan_H,lem_th_lemma7,lem_th_lemma8,lem_th_lemma15,prop_gdelta_remark,lem_homeo_values,def_regions,lem_B_char,lem_region_geometry,def_special_family,lem_special_from_fsigma,lem_special_sequence,def_special_pair,lem_special_pair_exists,lem_special_pair_shrink,thm_construct_A,lem_monotone_inverse,lem_closed_graph,thm_construct_B,thm_construct_C,thm_construct_D,thm_construct_E,def_meets_in,lem_figure5,cor_borel,def_trapezoid,lem_th_lemma23,lem_th_lemma24,thm_th_thm9,prop_th_example,lem_ha_lemma,lem_general_limit_endpoints,lem_ha_sequences,lem_ha_estimates,cor_ha_corollary,cor_ha_analytic,def_asymptotic,lem_cube_lemma,def_th_special,lem_th_special_implies,lem_th_lemma9,lem_th_lemma10,lem_th_lemma11 planned
+  class lem_finite_valued_ops,lem_approx_char,lem_approx_finite,lem_uniform_approx,lem_approx_real,thm_baire1_char,lem_uniform_limit_fsigma,thm_extension,def_fold,lem_fold,lem_fold_factor,thm_sphere_baire1,thm_sphere_extension,thm_honorary_char,lem_honorary_invariance,thm_kuratowski,cor_baire_continuity_point,lem_meager_subspace,def_additive_classes,lem_additive_basic,lem_baire_precomp,lem_baire_imp_class,lem_equiv,lem_intervals_open,lem_two_sided,lem_monotone_extend,lem_monotone_compose,lem_baire_criterion,cor_path_arc,lem_subarc,lem_cluster,lem_disjoint_arcs,def_charts,lem_charts,lem_crosscut_H,lem_strip,lem_disc_geometry,lem_open_components,lem_transfer,lem_locality,def_acc,lem_mm_lemma2,lem_mm_lemma3,cor_mm_corollaries,thm_mcmillan_H,lem_th_lemma7,lem_th_lemma8,lem_th_lemma15,prop_gdelta_remark,lem_homeo_values,def_regions,lem_B_char,lem_region_geometry,def_special_family,lem_special_from_fsigma,lem_special_sequence,def_special_pair,lem_special_pair_exists,lem_special_pair_shrink,thm_construct_A,lem_monotone_inverse,lem_closed_graph,thm_construct_B,thm_construct_C,thm_construct_D,thm_construct_E,def_meets_in,lem_figure5,cor_borel,def_trapezoid,lem_th_lemma23,lem_th_lemma24,thm_th_thm9,prop_th_example,lem_ha_lemma,lem_general_limit_endpoints,lem_ha_sequences,lem_ha_estimates,cor_ha_corollary,cor_ha_analytic,def_asymptotic,lem_cube_lemma,def_th_special,lem_th_special_implies,lem_th_lemma9,lem_th_lemma10,lem_th_lemma11 planned
   classDef imported fill:#dbe8f6,color:#1c3a5e,stroke:#6b8fb8
   class fact_banach,fact_borel_baire,fact_tietze_arc,fact_tietze_ext,fact_hyperspace,fact_baire_category,fact_crosscut,fact_bagemihl,fact_vitali,fact_poisson,fact_jordan_access,fact_analytic_nonborel,fact_kierst,fact_normal imported
 ```
@@ -510,13 +510,13 @@ flowchart BT
 | Item | Kind | Lean | Depends on | Status |
 |---|---|---|---|---|
 | def:borel-classes<br/>*$Fs$, $Gd$, $Fsd$, ambiguous sets* | definition | `TJK.IsFσ` ([src](../TJK/Defs.lean))<br/>`TJK.IsFσδ` ([src](../TJK/Defs.lean))<br/>`TJK.IsAmbiguous` ([src](../TJK/Defs.lean)) |  | `defined` |
-| lem:borel-basic<br/>*closure properties* | lemma | `TJK.IsFσ.iUnion`<br/>`TJK.IsFσ.inter`<br/>`TJK.IsFσδ.iInter`<br/>`TJK.IsFσδ.union`<br/>`TJK.IsOpen.isFσ`<br/>`TJK.Set.Countable.isFσ`<br/>`TJK.isFσ_subtype_iff`<br/>`TJK.isGδ_subtype_iff`<br/>`TJK.isFσδ_subtype_iff`<br/>`TJK.IsFσδ.of_subtype` | `def:borel-classes` | `planned` |
+| lem:borel-basic<br/>*closure properties* | lemma | `TJK.IsFσ.iUnion` ([src](../TJK/Baire/Basic.lean))<br/>`TJK.IsFσ.inter` ([src](../TJK/Baire/Basic.lean))<br/>`TJK.IsFσδ.iInter` ([src](../TJK/Baire/Basic.lean))<br/>`TJK.IsFσδ.union` ([src](../TJK/Baire/Basic.lean))<br/>`TJK.IsOpen.isFσ` ([src](../TJK/Baire/Basic.lean))<br/>`TJK.Set.Countable.isFσ` ([src](../TJK/Baire/Basic.lean))<br/>`TJK.isFσ_subtype_iff` ([src](../TJK/Baire/Basic.lean))<br/>`TJK.isGδ_subtype_iff` ([src](../TJK/Baire/Basic.lean))<br/>`TJK.isFσδ_subtype_iff` ([src](../TJK/Baire/Basic.lean))<br/>`TJK.IsFσδ.of_subtype` ([src](../TJK/Baire/Basic.lean)) | `def:borel-classes` | `proved` |
 | def:fn-classes<br/>*function classes* | definition | `TJK.IsFσMeasurable` ([src](../TJK/Defs.lean))<br/>`TJK.IsBaireOne` ([src](../TJK/Defs.lean))<br/>`TJK.IsHonoraryBaireTwo` ([src](../TJK/Defs.lean))<br/>`TJK.BaireClass` ([src](../TJK/Defs.lean)) | `def:borel-classes` | `defined` |
-| lem:reduction<br/>*reduction;* | lemma | `TJK.reduction` | `lem:borel-basic` | `planned` |
-| cor:reduction-finite<br/>*finite reduction* | corollary | `TJK.reduction_finite` | `lem:reduction` | `planned` |
-| thm:sierpinski<br/>*Sierpi'nski* | theorem | `TJK.sierpinski_ambiguous` | `lem:reduction`, `lem:borel-basic` | `planned` |
-| lem:baire1-fsigma | lemma | `TJK.IsBaireOne.isFσMeasurable` | `def:fn-classes`, `lem:borel-basic` | `planned` |
-| lem:finite-valued<br/>*Banach's Hilfssatz 3* | lemma | `TJK.finiteValued_ambiguous` | `def:fn-classes`, `lem:borel-basic` | `planned` |
+| lem:reduction<br/>*reduction;* | lemma | `TJK.reduction` ([src](../TJK/Baire/Basic.lean)) | `lem:borel-basic` | `proved` |
+| cor:reduction-finite<br/>*finite reduction* | corollary | `TJK.reduction_finite` ([src](../TJK/Baire/Basic.lean)) | `lem:reduction` | `proved` |
+| thm:sierpinski<br/>*Sierpi'nski* | theorem | `TJK.sierpinski_ambiguous` ([src](../TJK/Baire/Basic.lean)) | `lem:reduction`, `lem:borel-basic` | `proved` |
+| lem:baire1-fsigma | lemma | `TJK.IsBaireOne.isFσMeasurable` ([src](../TJK/Baire/Basic.lean)) | `def:fn-classes`, `lem:borel-basic` | `proved` |
+| lem:finite-valued<br/>*Banach's Hilfssatz 3* | lemma | `TJK.finiteValued_ambiguous` ([src](../TJK/Baire/Basic.lean)) | `def:fn-classes`, `lem:borel-basic` | `proved` |
 | lem:finite-valued-ops | lemma | `TJK.FiniteValued.add`<br/>`TJK.FiniteValued.sub` | `lem:finite-valued` | `planned` |
 | lem:approx-char | lemma | `TJK.approx_indicator` | `lem:reduction`, `lem:borel-basic` | `planned` |
 | lem:approx-finite | lemma | `TJK.approx_finiteValued` | `lem:finite-valued`, `lem:approx-char` | `planned` |

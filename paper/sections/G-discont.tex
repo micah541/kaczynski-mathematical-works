@@ -189,10 +189,14 @@ for $\theta$ in it, the line through $\langle x_0,y_0\rangle$ with inclination $
 For every $\eps>0$ there is a strictly increasing $h:\R\to\R$ with $m^1(h(\R))=0$ and $\abs{x-h(x)}\le\eps$ for all $x$.
 \end{lemma}
 \begin{proof}
-For $t\in[0,1)$ with binary digits $t=\sum_ia_i2^{-i}$ (not ending in $1$'s) put $c(t)=\sum_i2a_i3^{-i}$. Then $c$ maps $[0,1)$ into
-the Cantor set, which is null, and is strictly increasing: if $t<t'$ first differ at digit $k$, then
-$c(t)<\sum_{i<k}2a_i3^{-i}+3^{-k}<c(t')$, the first inequality being strict because the digits of $t$ do not end in $1$'s. Put
-$h(x)=n\eps+\eps c(x/\eps-n)$ for $x\in[n\eps,(n+1)\eps)$, $n\in\Z$.
+Put $g(t)=\sum_{i\ge0}\lfloor2^it\rfloor3^{-i}$ (for $t\in[0,1)$ this is $\tfrac32$ times the point of the Cantor set whose
+ternary digits are twice the binary digits of $t$). Each term is nondecreasing in $t$, and if $t<t'$ then
+$\lfloor2^it\rfloor<\lfloor2^it'\rfloor$ once $2^i(t'-t)\ge1$, so $g$ is strictly increasing. Since
+$2^it-1<\lfloor2^it\rfloor\le2^it$, we get $3t-\tfrac32\le g(t)\le3t$. If $k=\lfloor2^Nt\rfloor$ and $a=k/2^N$, then
+$\lfloor2^it\rfloor=\lfloor2^ia\rfloor$ for $i<N$ and $\lfloor2^{N+j}t\rfloor\le k2^j+2^j=\lfloor2^{N+j}a\rfloor+2^j$, so
+$g(a)\le g(t)\le g(a)+\sum_j2^j3^{-N-j}=g(a)+3^{1-N}$. Hence $g([m,m+1))$ ($m\in\Z$) is covered by $2^N$ intervals of
+length $3^{1-N}$, so it is null, and $g(\R)=\bigcup_mg([m,m+1))$ is null. Finally put $h(x)=\tfrac\eps3g(x/\eps)$: it is
+strictly increasing, $h(\R)=\tfrac\eps3g(\R)$ is null, and $0\le x-h(x)\le\eps/2$.
 \end{proof}
 
 \begin{theorem}[{\cite[Theorem 10]{Diss}}]\label{thm:th-thm10}
