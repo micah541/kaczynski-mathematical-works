@@ -7,10 +7,11 @@ Every node is a numbered item of the [companion paper](../paper/main.pdf). Arrow
 
 | Status | Meaning | Count |
 |---|---|---|
+| `proved` | proved (no `sorry`) | 11 |
 | `defined` | definition written in Lean | 5 |
-| `sorry` | stated in Lean, proof is `sorry` | 23 |
+| `sorry` | stated in Lean, proof is `sorry` | 13 |
 | `partial` | some Lean declarations exist | 2 |
-| `planned` | Lean name reserved, not yet stated | 94 |
+| `planned` | Lean name reserved, not yet stated | 93 |
 | `imported` | imported fact (Mathlib / library) | 14 |
 
 ```mermaid
@@ -474,14 +475,16 @@ flowchart BT
   lem_th_lemma10 --> lem_th_lemma9
   lem_th_lemma10 --> def_th_special
   lem_th_lemma11 --> def_th_special
+  classDef proved fill:#1f8a4c,color:#fff,stroke:#146236
+  class lem_sut_basic,prop_sut_two_composite,prop_sut_explicit,lem_sut_factor,thm_sut_sutcliffe2,thm_sut_sutcliffe3,lem_sut_lemma1,lem_sut_lemma2,thm_sut_main,cor_sut_main,lem_th_lemma25 proved
   classDef defined fill:#b7e1c5,color:#123,stroke:#4c9a68
   class def_sut_solution,def_borel_classes,def_fn_classes,def_arcs,def_ccset defined
   classDef sorry fill:#f2c14e,color:#222,stroke:#b8902e
-  class lem_sut_basic,prop_sut_two_composite,prop_sut_explicit,lem_sut_factor,thm_sut_sutcliffe2,thm_sut_sutcliffe3,lem_sut_lemma1,lem_sut_lemma2,thm_sut_main,cor_sut_main,thm_mcmillan,thm_mm_thm2,thm_bf_fsigma,thm_homeo,thm_cc_realize,thm_construct_F,thm_baire_plus_one,thm_th_thm10,cor_ae_zero,cor_nonmeasurable,thm_ha_example,thm_ha_theorem,thm_cube sorry
+  class thm_mcmillan,thm_mm_thm2,thm_bf_fsigma,thm_homeo,thm_cc_realize,thm_construct_F,thm_baire_plus_one,thm_th_thm10,cor_ae_zero,cor_nonmeasurable,thm_ha_example,thm_ha_theorem,thm_cube sorry
   classDef partial fill:#f7dd9b,color:#222,stroke:#b8902e
   class cor_bf_honorary,thm_construct_H partial
   classDef planned fill:#eeeeee,color:#333,stroke:#999
-  class lem_borel_basic,lem_reduction,cor_reduction_finite,thm_sierpinski,lem_baire1_fsigma,lem_finite_valued,lem_finite_valued_ops,lem_approx_char,lem_approx_finite,lem_uniform_approx,lem_approx_real,thm_baire1_char,lem_uniform_limit_fsigma,thm_extension,def_fold,lem_fold,lem_fold_factor,thm_sphere_baire1,thm_sphere_extension,thm_honorary_char,lem_honorary_invariance,thm_kuratowski,cor_baire_continuity_point,lem_meager_subspace,def_additive_classes,lem_additive_basic,lem_baire_precomp,lem_baire_imp_class,lem_equiv,lem_intervals_open,lem_two_sided,lem_monotone_extend,lem_monotone_compose,lem_baire_criterion,cor_path_arc,lem_subarc,lem_cluster,lem_disjoint_arcs,def_charts,lem_charts,lem_crosscut_H,lem_strip,lem_disc_geometry,lem_open_components,lem_transfer,lem_locality,def_acc,lem_mm_lemma2,lem_mm_lemma3,cor_mm_corollaries,thm_mcmillan_H,lem_th_lemma7,lem_th_lemma8,lem_th_lemma15,prop_gdelta_remark,lem_homeo_values,def_regions,lem_B_char,lem_region_geometry,def_special_family,lem_special_from_fsigma,lem_special_sequence,def_special_pair,lem_special_pair_exists,lem_special_pair_shrink,thm_construct_A,lem_monotone_inverse,lem_closed_graph,thm_construct_B,thm_construct_C,thm_construct_D,thm_construct_E,def_meets_in,lem_figure5,cor_borel,def_trapezoid,lem_th_lemma23,lem_th_lemma24,thm_th_thm9,prop_th_example,lem_th_lemma25,lem_ha_lemma,lem_general_limit_endpoints,lem_ha_sequences,lem_ha_estimates,cor_ha_corollary,cor_ha_analytic,def_asymptotic,lem_cube_lemma,def_th_special,lem_th_special_implies,lem_th_lemma9,lem_th_lemma10,lem_th_lemma11 planned
+  class lem_borel_basic,lem_reduction,cor_reduction_finite,thm_sierpinski,lem_baire1_fsigma,lem_finite_valued,lem_finite_valued_ops,lem_approx_char,lem_approx_finite,lem_uniform_approx,lem_approx_real,thm_baire1_char,lem_uniform_limit_fsigma,thm_extension,def_fold,lem_fold,lem_fold_factor,thm_sphere_baire1,thm_sphere_extension,thm_honorary_char,lem_honorary_invariance,thm_kuratowski,cor_baire_continuity_point,lem_meager_subspace,def_additive_classes,lem_additive_basic,lem_baire_precomp,lem_baire_imp_class,lem_equiv,lem_intervals_open,lem_two_sided,lem_monotone_extend,lem_monotone_compose,lem_baire_criterion,cor_path_arc,lem_subarc,lem_cluster,lem_disjoint_arcs,def_charts,lem_charts,lem_crosscut_H,lem_strip,lem_disc_geometry,lem_open_components,lem_transfer,lem_locality,def_acc,lem_mm_lemma2,lem_mm_lemma3,cor_mm_corollaries,thm_mcmillan_H,lem_th_lemma7,lem_th_lemma8,lem_th_lemma15,prop_gdelta_remark,lem_homeo_values,def_regions,lem_B_char,lem_region_geometry,def_special_family,lem_special_from_fsigma,lem_special_sequence,def_special_pair,lem_special_pair_exists,lem_special_pair_shrink,thm_construct_A,lem_monotone_inverse,lem_closed_graph,thm_construct_B,thm_construct_C,thm_construct_D,thm_construct_E,def_meets_in,lem_figure5,cor_borel,def_trapezoid,lem_th_lemma23,lem_th_lemma24,thm_th_thm9,prop_th_example,lem_ha_lemma,lem_general_limit_endpoints,lem_ha_sequences,lem_ha_estimates,cor_ha_corollary,cor_ha_analytic,def_asymptotic,lem_cube_lemma,def_th_special,lem_th_special_implies,lem_th_lemma9,lem_th_lemma10,lem_th_lemma11 planned
   classDef imported fill:#dbe8f6,color:#1c3a5e,stroke:#6b8fb8
   class fact_banach,fact_borel_baire,fact_tietze_arc,fact_tietze_ext,fact_hyperspace,fact_baire_category,fact_crosscut,fact_bagemihl,fact_vitali,fact_poisson,fact_jordan_access,fact_analytic_nonborel,fact_kierst,fact_normal imported
 ```
@@ -491,16 +494,16 @@ flowchart BT
 | Item | Kind | Lean | Depends on | Status |
 |---|---|---|---|---|
 | def:sut-solution<br/>*digit solutions* | definition | `TJK.Sutcliffe.IsSolution` ([src](../TJK/Sutcliffe.lean))<br/>`TJK.Sutcliffe.HasSolution` ([src](../TJK/Sutcliffe.lean)) |  | `defined` |
-| lem:sut-basic<br/>*basic inequalities* | lemma | `TJK.Sutcliffe.two_digit_basic` ([src](../TJK/Sutcliffe.lean))<br/>`TJK.Sutcliffe.three_digit_basic` ([src](../TJK/Sutcliffe.lean)) | `def:sut-solution` | `sorry` |
-| prop:sut-two-composite<br/>*Sutcliffe, Theorem 2, first half* | proposition | `TJK.Sutcliffe.not_prime_of_two_digit` ([src](../TJK/Sutcliffe.lean)) | `def:sut-solution`, `lem:sut-basic` | `sorry` |
-| prop:sut-explicit<br/>*explicit solutions* | proposition | `TJK.Sutcliffe.explicit_two_digit` ([src](../TJK/Sutcliffe.lean))<br/>`TJK.Sutcliffe.explicit_three_digit` ([src](../TJK/Sutcliffe.lean)) | `def:sut-solution` | `sorry` |
-| lem:sut-factor<br/>*factorization* | lemma | `TJK.Sutcliffe.exists_factor` ([src](../TJK/Sutcliffe.lean)) |  | `sorry` |
-| thm:sut-sutcliffe2<br/>*Sutcliffe, Theorem 2* | theorem | `TJK.Sutcliffe.two_digit_iff` ([src](../TJK/Sutcliffe.lean)) | `prop:sut-two-composite`, `prop:sut-explicit`, `lem:sut-factor` | `sorry` |
-| thm:sut-sutcliffe3<br/>*Sutcliffe, Theorem 3* | theorem | `TJK.Sutcliffe.three_digit_of_two_digit` ([src](../TJK/Sutcliffe.lean)) | `lem:sut-basic`, `lem:sut-factor`, `prop:sut-explicit`, `prop:sut-two-composite` | `sorry` |
-| lem:sut-lemma1 | lemma | `TJK.Sutcliffe.kaczynski_lemma1` ([src](../TJK/Sutcliffe.lean)) |  | `sorry` |
-| lem:sut-lemma2 | lemma | `TJK.Sutcliffe.kaczynski_lemma2` ([src](../TJK/Sutcliffe.lean)) | `lem:sut-basic` | `sorry` |
-| thm:sut-main<br/>*Kaczynski ; Sutcliffe's conjecture* | theorem | `TJK.Sutcliffe.two_digit_of_three_digit` ([src](../TJK/Sutcliffe.lean)) | `lem:sut-lemma1`, `lem:sut-lemma2`, `lem:sut-basic`, `thm:sut-sutcliffe2` | `sorry` |
-| cor:sut-main | corollary | `TJK.Sutcliffe.three_digit_iff` ([src](../TJK/Sutcliffe.lean)) | `thm:sut-main`, `thm:sut-sutcliffe2`, `thm:sut-sutcliffe3` | `sorry` |
+| lem:sut-basic<br/>*basic inequalities* | lemma | `TJK.Sutcliffe.two_digit_basic` ([src](../TJK/Sutcliffe.lean))<br/>`TJK.Sutcliffe.three_digit_basic` ([src](../TJK/Sutcliffe.lean)) | `def:sut-solution` | `proved` |
+| prop:sut-two-composite<br/>*Sutcliffe, Theorem 2, first half* | proposition | `TJK.Sutcliffe.not_prime_of_two_digit` ([src](../TJK/Sutcliffe.lean)) | `def:sut-solution`, `lem:sut-basic` | `proved` |
+| prop:sut-explicit<br/>*explicit solutions* | proposition | `TJK.Sutcliffe.explicit_two_digit` ([src](../TJK/Sutcliffe.lean))<br/>`TJK.Sutcliffe.explicit_three_digit` ([src](../TJK/Sutcliffe.lean)) | `def:sut-solution` | `proved` |
+| lem:sut-factor<br/>*factorization* | lemma | `TJK.Sutcliffe.exists_factor` ([src](../TJK/Sutcliffe.lean)) |  | `proved` |
+| thm:sut-sutcliffe2<br/>*Sutcliffe, Theorem 2* | theorem | `TJK.Sutcliffe.two_digit_iff` ([src](../TJK/Sutcliffe.lean)) | `prop:sut-two-composite`, `prop:sut-explicit`, `lem:sut-factor` | `proved` |
+| thm:sut-sutcliffe3<br/>*Sutcliffe, Theorem 3* | theorem | `TJK.Sutcliffe.three_digit_of_two_digit` ([src](../TJK/Sutcliffe.lean)) | `lem:sut-basic`, `lem:sut-factor`, `prop:sut-explicit`, `prop:sut-two-composite` | `proved` |
+| lem:sut-lemma1 | lemma | `TJK.Sutcliffe.kaczynski_lemma1` ([src](../TJK/Sutcliffe.lean)) |  | `proved` |
+| lem:sut-lemma2 | lemma | `TJK.Sutcliffe.kaczynski_lemma2` ([src](../TJK/Sutcliffe.lean)) | `lem:sut-basic` | `proved` |
+| thm:sut-main<br/>*Kaczynski ; Sutcliffe's conjecture* | theorem | `TJK.Sutcliffe.two_digit_of_three_digit` ([src](../TJK/Sutcliffe.lean)) | `lem:sut-lemma1`, `lem:sut-lemma2`, `lem:sut-basic`, `thm:sut-sutcliffe2` | `proved` |
+| cor:sut-main | corollary | `TJK.Sutcliffe.three_digit_iff` ([src](../TJK/Sutcliffe.lean)) | `thm:sut-main`, `thm:sut-sutcliffe2`, `thm:sut-sutcliffe3` | `proved` |
 
 ## B Baire functions
 
@@ -632,7 +635,7 @@ flowchart BT
 | lem:th-lemma24 | lemma | `TJK.Discont.isTrapezoid_biUnion` | `def:trapezoid` | `planned` |
 | thm:th-thm9 | theorem | `TJK.Discont.outerMeasure_union_segments` | `lem:th-lemma23`, `lem:th-lemma24`, `def:trapezoid` | `planned` |
 | prop:th-example | proposition | `TJK.Discont.segments_not_disjoint_example` | `fact:baire-category` | `planned` |
-| lem:th-lemma25 | lemma | `TJK.Discont.exists_strictMono_null_range` |  | `planned` |
+| lem:th-lemma25 | lemma | `TJK.Discont.exists_strictMono_null_range` ([src](../TJK/Discont/NullRange.lean)) |  | `proved` |
 | thm:th-thm10 | theorem | `TJK.Discont.exists_disjoint_null_arcs` ([src](../TJK/MainTheorems.lean)) | `lem:th-lemma25`, `thm:th-thm9`, `def:arcs` | `sorry` |
 | cor:ae-zero<br/>*;* | corollary | `TJK.Discont.exists_ae_zero_boundaryFn` ([src](../TJK/MainTheorems.lean)) | `thm:th-thm10`, `def:ccset` | `sorry` |
 | fact:vitali<br/>*non-measurable sets* | fact | `TJK.Discont.exists_not_nullMeasurableSet` |  | `imported` |
