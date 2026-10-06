@@ -429,17 +429,22 @@ $O$ meets $A$ and $O\cap A\subseteq\cl_A N$, a contradiction.
 These are needed only in Section~\ref{sec:discont}.
 
 \begin{definition}[{\cite[\S3]{Diss}}]\label{def:additive-classes}
-\lean{TJK.AddClass, TJK.MulClass}
+\lean{TJK.AddMulClass, TJK.AddClass, TJK.MulClass, TJK.IsAddClassMeasurable}
 \uses{def:borel-classes}
 $P^1(M)$ is the family of open subsets of $M$ and $Q^1(M)$ that of closed subsets. For an ordinal
 $\xi>1$, $P^\xi(M)$ consists of the countable unions of members of $\bigcup_{\eta<\xi}Q^\eta(M)$, and
 $Q^\xi(M)$ of the countable intersections of members of $\bigcup_{\eta<\xi}P^\eta(M)$. A function
 $f:M\to Y$ is \emph{of class $P^\xi$} if $f^{-1}(U)\in P^\xi(M)$ for every open $U\subseteq Y$.
+(In Lean the classes are one inductive predicate; no set belongs to a class of index $0$.)
 \end{definition}
 
 \begin{lemma}\label{lem:additive-basic}
-\lean{TJK.mulClass_iff_compl, TJK.AddClass.mono, TJK.AddClass.iUnion, TJK.AddClass.inter,
-  TJK.MulClass.iInter, TJK.AddClass.preimage, TJK.AddClass.subtype_iff, TJK.AddClass.measurableSet}
+\lean{TJK.mulClass_iff_compl, TJK.AddClass.mono, TJK.MulClass.mono, TJK.AddClass.iUnion,
+  TJK.AddClass.union, TJK.AddClass.inter, TJK.MulClass.iInter, TJK.MulClass.inter, TJK.MulClass.union,
+  TJK.AddClass.addClass_of_lt, TJK.AddClass.mulClass_of_lt, TJK.MulClass.addClass_of_lt,
+  TJK.MulClass.mulClass_of_lt, TJK.addClass_two_iff, TJK.mulClass_two_iff, TJK.AddClass.preimage,
+  TJK.AddClass.subtype_iff, TJK.MulClass.subtype_iff, TJK.AddClass.measurableSet,
+  TJK.MulClass.measurableSet}
 \uses{def:additive-classes, lem:borel-basic}
 (a) $E\in Q^\xi$ iff $M\setminus E\in P^\xi$. (b) $P^\xi$ and $Q^\xi$ are closed under finite unions and
 intersections, $P^\xi$ under countable unions, $Q^\xi$ under countable intersections. (c) If $\eta<\xi$
@@ -448,25 +453,25 @@ $Q^2(M)$ that of $\Gd$ sets. (e) Continuous preimages preserve each class. (f) F
 $P^\xi(L)=\{D\cap L:D\in P^\xi(M)\}$. (g) Every member of every class is a Borel set.
 \end{lemma}
 \begin{proof}
-Transfinite induction on $\xi$. (c) for $\eta=1$ uses that in a metric space open sets are $\Fs$ and closed
+(a), (e), (f), (g): induction on the definition. (c) for $\eta=1$ uses that in a metric space open sets are $\Fs$ and closed
 sets are $\Gd$ (Lemma~\ref{lem:borel-basic}(a)); for $\eta>1$ it is immediate from the definitions. For (b), $(\bigcup A_n)\cap(\bigcup B_m)=\bigcup A_n\cap B_m$, and
 $A_n\in Q^{\eta_1}$, $B_m\in Q^{\eta_2}$ both lie in $Q^{\max(\eta_1,\eta_2)}$ by (c). The rest is
 routine.
 \end{proof}
 
 \begin{lemma}\label{lem:baire-precomp}
-\lean{TJK.BaireClass.comp_continuous, TJK.BaireClass.mono}
+\lean{TJK.BaireClass.comp_continuous, TJK.BaireClass.restrict, TJK.BaireClass.mono}
 \uses{def:fn-classes}
 If $f:M\to Y$ is of Baire class $\xi$ and $g:K\to M$ is continuous, then $f\circ g$ is of Baire class
-$\xi$. In particular restrictions to subspaces keep the class. If $1\le\xi\le\xi'$, Baire class $\xi$
+$\xi$. In particular restrictions to subspaces keep the class. If $\xi\le\xi'$, Baire class $\xi$
 is contained in Baire class $\xi'$.
 \end{lemma}
 \begin{proof}
-Induction on $\xi$; for the last claim use constant sequences.
+Induction on $\xi$; for the last claim with $\xi<\xi'$ use constant sequences.
 \end{proof}
 
 \begin{lemma}\label{lem:baire-imp-class}
-\lean{TJK.BaireClass.addClass_preimage}
+\lean{TJK.BaireClass.addClass_preimage, TJK.BaireClass.measurable, TJK.IsAddClassMeasurable.measurable}
 \uses{def:additive-classes, lem:additive-basic, lem:baire-precomp, lem:baire1-fsigma}
 If $f:M\to Y$ is of Baire class $\xi$ ($Y$ any metric space), then $f$ is of class $P^{\xi+1}$. In
 particular it is Borel measurable.
@@ -496,7 +501,8 @@ class $\xi$ for some countable ordinal $\xi$.
 
 \begin{lemma}[{\cite[Lemma 18]{Diss}}]\label{lem:equiv}
 \lean{TJK.CountablyEquiv, TJK.CountablyEquiv.equivalence, TJK.CountablyEquiv.diff,
-  TJK.CountablyEquiv.iInter, TJK.CountablyEquiv.iUnion}
+  TJK.CountablyEquiv.iInter, TJK.CountablyEquiv.iUnion, TJK.CountablyEquiv.inter,
+  TJK.CountablyEquiv.union}
 Write $A\approx B$ if $A\setminus B$ and $B\setminus A$ are countable. This is an equivalence relation;
 $A\approx E$ implies $S\setminus A\approx S\setminus E$; and if $A_n\approx E_n$ for $n$ in a countable
 set, then $\bigcap A_n\approx\bigcap E_n$ and $\bigcup A_n\approx\bigcup E_n$.
@@ -506,40 +512,46 @@ $(\bigcap A_n)\setminus(\bigcap E_n)\subseteq\bigcup_n(A_n\setminus E_n)$, and s
 \end{proof}
 
 \begin{lemma}[{\cite[Lemma 19]{Diss}}, {\cite[Lemma 1]{MMJ}}]\label{lem:intervals-open}
-\lean{TJK.countable_biUnion_diff_interior_real, TJK.countable_biUnion_diff_interior_circle}
+\lean{TJK.countable_biUnion_diff_interior_real, TJK.exists_isOpen_countablyEquiv_real,
+  TJK.countable_biUnion_image_diff, TJK.countable_biUnion_diff_interior_circle,
+  TJK.countable_isolated_right, TJK.countable_isolated_left}
 \uses{lem:equiv}
 If $\mathcal I$ is a family of nondegenerate intervals of $\R$ (resp.\ nondegenerate closed arcs of $C$),
 then $\bigcup_{I\in\mathcal I}I\setminus\bigcup_{I\in\mathcal I}I^*$ is countable. In particular every
 union of nondegenerate intervals is $\approx$ an open set.
 \end{lemma}
 \begin{proof}
-$\bigcup I^*$ is open, so it is the disjoint union of its countably many components $J_n$. If $x_0$
-lies in $\bigcup I$ but not in $\bigcup I^*$, then $x_0$ is an endpoint of some $I_0$; $I_0^*\subseteq
-J_n$ for some $n$, so $x_0\in\overline{J_n}\setminus J_n$ is an endpoint of $J_n$. There are countably
-many such endpoints.
+Let $U=\bigcup_{\mathcal I}I^*$, which is open. If $x$ lies in some $I\in\mathcal I$ but not in $U$,
+pick $y\in I\setminus\{x\}$; if $x<y$ then $(x,y)\subseteq I^*\subseteq U$, so $x$ is a point of
+$\R\setminus U$ isolated from the right in $\R\setminus U$; symmetrically if $y<x$. Points of a set
+$S\subseteq\R$ with $(x,y)\cap S=\emptyset$ for some $y>x$ are countably many, since the intervals
+$(x,y)$ for distinct such $x$ may be chosen pairwise disjoint. For the circle, write the arcs as
+$e^{i[a,b]}$, $a<b$, with relative interiors $\supseteq e^{i(a,b)}$; a point $e^{it}$ of the first union
+not in $\bigcup e^{i(a,b)}$ has $t$ in the countable real exceptional set of the family $\{[a,b]\}$.
 \end{proof}
 
 \begin{lemma}[two-sided limit points]\label{lem:two-sided}
 \lean{TJK.countable_not_twoSided}
+\uses{lem:intervals-open}
 For $F\subseteq\R$, the set of points of $\overline F$ that are not two-sided limit points of $F$ is
 countable. (Here $x$ is a \emph{two-sided limit point} of $F$ if every interval $(x-r,x)$ and $(x,x+r)$, $r>0$,
 meets $F$.)
 \end{lemma}
 \begin{proof}
-If $x\in\overline F$ and $(x,x+r)\cap F=\emptyset$, then $(x,x+r)$ misses $\overline F$, so $x$ is the
-left endpoint of a component of $\R\setminus\overline F$. There are countably many components; argue
-symmetrically on the left.
+If $x\in\overline F$ and $(x,x+r)\cap F=\emptyset$, then $(x,x+r)$ misses $\overline F$, so $x$ is a point
+of $\overline F$ isolated from the right in $\overline F$; there are countably many such points (proof
+of Lemma~\ref{lem:intervals-open}). Argue symmetrically on the left.
 \end{proof}
 
 \begin{lemma}[{\cite[Lemma 20]{Diss}}]\label{lem:monotone-extend}
 \lean{TJK.MonotoneOn.exists_monotone_extension_of_dist_le}
-Let $h$ be weakly increasing on a nonempty $E\subseteq\R$ with $\abs{x-h(x)}\le1$ on $E$. Then $h$
+Let $h$ be weakly increasing on $E\subseteq\R$ with $\abs{x-h(x)}\le1$ on $E$. Then $h$
 extends to a weakly increasing $h_1:\R\to\R$.
 \end{lemma}
 \begin{proof}
-Let $e=\inf E$. For $x>e$ put $h_1(x)=\sup h((-\infty,x]\cap E)$, which is finite since
-$h(t)\le t+1\le x+1$ there. If $e>-\infty$ put $h_1(x)=\inf h(E)$ for $x\le e$, finite since
-$h\ge e-1$ on $E$. Monotonicity and $h_1|_E=h$ are immediate.
+Put $h_1(x)=\sup\bigl(\{x-1\}\cup h((-\infty,x]\cap E)\bigr)$, finite since $h(t)\le t+1\le x+1$ there.
+It is weakly increasing, and for $x\in E$ the supremum is attained at $h(x)$ because $h(t)\le h(x)$ for
+$t\le x$ in $E$ and $x-1\le h(x)$.
 \end{proof}
 
 \begin{lemma}[{\cite[Lemma 21]{Diss}}]\label{lem:monotone-compose}

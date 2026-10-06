@@ -273,57 +273,55 @@ If $u(p_n)\not\to u(p)$, a subsequence converges in $[-\infty,\infty]$ to some $
 \end{proof}
 
 \begin{theorem}[{\cite[(B)]{TAMSb}}; {\cite[Theorem 6]{Diss}}]\label{thm:construct-B}
-\lean{TJK.Construct.exists_h}
-\uses{lem:monotone-inverse, lem:closed-graph, thm:baire1-char, def:regions, def:fn-classes}
+\lean{TJK.Construct.exists_h, TJK.Construct.exists_h_bounded, TJK.Construct.seg_mem_stolz}
+\uses{lem:monotone-inverse, thm:baire1-char, def:regions, def:fn-classes}
 Let $E\subseteq X$ and let $\varphi:E\to\R^m$ be of honorary Baire class $\le2$. There is a continuous $h:\Hp\to\R^m$ such
 that for each $p\in E$ there is a segment $\lambda_p$ at $p$, contained in $s(p,1,3\pi/8)\cup\{p\}$, along which
 $h\to\varphi(p)$. If $\varphi$ is bounded, $h$ can be taken bounded.
 \end{theorem}
 \begin{proof}
-Let $\varphi=\psi$ on $E\setminus N_0$ with $N_0$ countable and $\psi\in\mathcal B_1(E,\R^m)$. Let $N\supseteq N_0$ be a countably
-infinite subset of $X$, enumerated injectively as $s_1,s_2,\dots$, and let $w(s_n)=(\sqrt2-1)2^{-n-1}$, so
-$\sum_sw(s)<\sqrt2-1=\cot(3\pi/8)$. Define on $X$
+Let $\varphi=\psi$ on $E\setminus N_0$ with $N_0$ countable and $\psi\in\mathcal B_1(E,\R^m)$. Fix an injection
+$e:N_0\to\N$, put $s_{e(x)}=x$ for $x\in N_0$ and $s_n=1$ for $n\notin e(N_0)$; so $s_n=s_k\in X$ implies $n=k$. Let
+$w(n)=2^{-n-3}$ and
 \[
-f(x)=x+\sum_{s\in N,\ s<x}w(s),
+c(x)=\sum_{n:\ s_n<x}w(n)\in[0,\tfrac14],
 \]
-which is strictly increasing with $\abs{f(x)-x}<\sqrt2-1$. Let $f^*$ be as in Lemma~\ref{lem:monotone-inverse}(a).
+which is weakly increasing with $c(q)\ge c(s_n)+w(n)$ whenever $q>s_n$.
 
-\emph{The function $u$.} For $\langle x,y\rangle$ with $0<y<1$ the function $v\mapsto v-f^*\bigl((x-(1-y)v)/y\bigr)$ is
-continuous and strictly increasing, and lies in $[v-1,v+1]$; so it has a unique zero $u(x,y)\in[-1,1]$. If
-$\langle x_n,y_n\rangle\to\langle x,y\rangle$ and $u(x_n,y_n)\to u_0$, then $u_0\in[-1,1]$ and continuity of $f^*$ gives
-$u_0=f^*((x-(1-y)u_0)/y)$, so $u_0=u(x,y)$; by Lemma~\ref{lem:closed-graph}, $u$ is continuous.
+\emph{The function $u$.} For $y>0$ let $u(x,y)=\sup(\{-1\}\cup\{p\in X:p+yc(p)\le x\})$. Since $p\mapsto p+yc(p)$ is
+strictly increasing, $x\mapsto u(x,y)$ is continuous and weakly increasing (proof of Lemma~\ref{lem:monotone-inverse}(a)).
+As $0\le c\le1$, $u(x-\abs{y-y'},y)\le u(x,y')\le u(x+\abs{y-y'},y)$, so $u$ is continuous on $\Hp$. Clearly
+$u(x,y)=p$ if $p\in X$, $p+yc(p)\le x$, and $x<q+yc(q)$ for all $q\in X$ with $q>p$. Hence (*) $u=p$ along the line
+$x=p+ay$ whenever $p\in X$ and $c(p)\le a\le c(q)$ for all $q>p$.
 
 \emph{The function $h_0$.} By Theorem~\ref{thm:baire1-char} there are continuous $g_n:\R\to\R^m$ with $g_n\to\psi$ on $E$.
-For $n\ge2$ and $1/(n+1)\le y\le1/n$ put
+With $\Delta(t)=(1-\abs t)\vee0$ put
 \[
-h_0(x,y)=\bigl(yn(n+1)-n\bigr)g_n(u(x,y))+\bigl((n+1)-yn(n+1)\bigr)g_{n+1}(u(x,y)),
+h_0(x,y)=\sum_{n\ge0}\Delta(1/y-n)\,g_n(u(x,y)).
 \]
-and $h_0(x,y)=h_0(x,\tfrac12)$ for $y\ge\frac12$. The two formulas agree at $y=1/n$, so $h_0$ is continuous on $\Hp$; the
-coefficients lie in $[0,1]$ and add up to $1$.
+The terms vanish for $n\ge1/y+1$, so the sum is locally finite and $h_0$ is continuous on $\Hp$. For $n\le1/y\le n+1$ it is a
+convex combination of $g_n(u)$ and $g_{n+1}(u)$; so if $u=p\in E$ along a line at $p$, then $h_0\to\psi(p)$ along it.
 
-\emph{The correction.} Let $l_n=f(s_n)=\sup_{x\le s_n}f(x)$, $r_n=\inf_{x>s_n}f(x)=l_n+w(s_n)$, $z_n=\varphi(s_n)-\psi(s_n)$ if
-$s_n\in E$ and $z_n=0$ otherwise, $t_n(x,y)=(x-(1-y)s_n)/y$, and
+\emph{The corrections.} Let $z_n=\varphi(s_n)-\psi(s_n)$ if $s_n\in E$ and $z_n=0$ otherwise, and
 \[
-\Lambda_n(x,y)=\bigl[(1-ny)\vee0\bigr]\Bigl[\Bigl(1-\frac{\abs{r_n+l_n-2t_n(x,y)}}{r_n-l_n}\Bigr)\vee0\Bigr]z_n .
+\Lambda_n(x,y)=\bigl[(1-ny)\vee0\bigr]\,T_n\Bigl(\frac{x-s_n}y\Bigr)z_n,\qquad
+T_n(\tau)=\Bigl(1-\frac{\abs{2\tau-2c(s_n)-w(n)}}{w(n)}\Bigr)\vee0 .
 \]
-$\Lambda_n$ is continuous and vanishes for $y\ge1/n$, and its second factor vanishes unless $l_n<t_n<r_n$. So
-$h=h_0+\sum_n\Lambda_n$ is continuous on $\Hp$.
+$T_n$ vanishes outside $(c(s_n),c(s_n)+w(n))$ and equals $1$ at the midpoint; $\Lambda_n$ is continuous on $\Hp$ and
+vanishes for $ny\ge1$. So $h=h_0+\sum_n\Lambda_n$ is continuous on $\Hp$.
 
-\emph{Points of $E$.} Let $p\in E$ and let $\lambda$ be the part with $0<y\le\frac12$ of the line $x=(f(p)-p)y+p$. On $\lambda$,
-$t_n=f(p)+(p-s_n)(1/y-1)$, which is $\ge f(p)\ge r_n$ if $p>s_n$, is $\le f(p)<l_n$ if $p<s_n$, and equals $l_n$ if $p=s_n$;
-so every $\Lambda_n$ vanishes on $\lambda$. Also $(x-(1-y)p)/y=f(p)$ there, so $u=p$, and $h_0$ lies on the segment from
-$g_n(p)$ to $g_{n+1}(p)$ when $1/(n+1)\le y\le1/n$. Hence $h\to\psi(p)$ along $\lambda$, which is $\varphi(p)$ unless
-$p\in N_0$.
+\emph{Points of $E\setminus N_0$.} Let $\lambda$ be the line $x=p+c(p)y$, $y>0$. By (*), $u=p$ on $\lambda$. There
+$\tau_n=(x-s_n)/y=(p-s_n)/y+c(p)$ is $>c(s_n)+w(n)$ if $s_n<p$ and $\le c(s_n)$ if $s_n\ge p$, so every $\Lambda_n$
+vanishes on $\lambda$, and $h\to\psi(p)=\varphi(p)$.
 
-\emph{Points of $N_0$.} Let $p=s_m\in E$, $\mu_m=(r_m+l_m)/2$, and let $\lambda'$ be the part with $0<y\le\frac12$ of the line
-$x=(\mu_m-s_m)y+s_m$. On $\lambda'$, $t_n=\mu_m+(s_m-s_n)(1/y-1)$. If $s_n<s_m$ then $t_n>l_m\ge r_n$; if $s_n>s_m$ then
-$t_n<r_m\le l_n$; so $\Lambda_n=0$ for $n\ne m$, while $\Lambda_m=[(1-my)\vee0]z_m\to z_m$. For $a<s_m<b$ we have
-$f(a)\le l_m<\mu_m<r_m\le f(b)$, hence $a\le f^*(\mu_m)\le b$; so $f^*(\mu_m)=s_m$ and $u=s_m$ on $\lambda'$. Thus
-$h\to\psi(s_m)+z_m=\varphi(s_m)$ along $\lambda'$.
+\emph{Points of $N_0$.} Let $p=s_k$ and let $\lambda'$ be the line $x=p+(c(p)+w(k)/2)y$, $y>0$. By (*), $u=p$ on
+$\lambda'$. For $n\ne k$ with $z_n\ne0$ we have $s_n\in X$, so $s_n\ne s_k$, and $\tau_n=(s_k-s_n)/y+c(s_k)+w(k)/2$ is
+$>c(s_n)+w(n)$ if $s_n<s_k$ and $<c(s_n)$ if $s_n>s_k$; so $\Lambda_n=0$ on $\lambda'$, while $\Lambda_k=[(1-ky)\vee0]z_k\to z_k$.
+Thus $h\to\psi(p)+z_k=\varphi(p)$ along $\lambda'$.
 
-The slopes satisfy $\abs{f(p)-p}<\sqrt2-1$ and $0\le\mu_m-s_m<\sqrt2-1$, so $\lambda,\lambda'\subseteq s(p,1,3\pi/8)$. If
-$\varphi$ is bounded, choose $b$ with $\varphi(E)\subseteq(-b,b)^m$ and clamp each coordinate of $h$ to $[-b,b]$; the limits
-along $\lambda_p$ are unchanged.
+The slopes lie in $[0,\frac5{16}]$, and $\frac5{16}<\sqrt2-1=\tan(\pi/8)=\cot(3\pi/8)$, so the parts of $\lambda,\lambda'$
+with $0<y<1$ lie in $s(p,1,3\pi/8)$. If $\norm{\varphi}\le b$ on $E$ (sup norm), clamp each coordinate of $h$ to $[-b,b]$;
+the limits along the segments are unchanged.
 \end{proof}
 
 \subsection{The function $k$}

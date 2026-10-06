@@ -10,3 +10,5 @@ import TJK.Construct.Special
 import TJK.Construct.G
 import TJK.Baire.Sphere
 import TJK.Discont.Segments
+import TJK.Baire.Higher
+import TJK.Construct.H
