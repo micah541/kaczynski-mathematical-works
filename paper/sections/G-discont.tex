@@ -238,11 +238,14 @@ measure zero such that $\varphi$ is a boundary function for $f$.
 Put $f=\varphi(x)$ on $\gamma_x\setminus\{x\}$ and $f=0$ elsewhere; $f$ is constant along each $\gamma_x$.
 \end{proof}
 
-\begin{fact}[non-measurable sets]\label{fact:vitali}
+\begin{lemma}[non-measurable sets; Vitali]\label{fact:vitali}
 \lean{TJK.Discont.exists_not_nullMeasurableSet}
-\source{Vitali; Mathlib may provide it}
 There is a subset of $\R$ that is not Lebesgue measurable.
-\end{fact}
+\end{lemma}
+\begin{proof}
+Let $V\subseteq[0,1]$ contain one point of each coset of $\mathbb Q$ in $\R$. The translates $V+q$, $q\in\mathbb Q\cap[-1,1]$, are pairwise disjoint, cover $[0,1]$ and lie in $[-1,2]$.
+If $V$ were measurable they would all have measure $\lambda(V)$, so $1\le\sum_q\lambda(V)\le 3$ by countable additivity, impossible whether $\lambda(V)=0$ or $\lambda(V)>0$.
+\end{proof}
 
 \begin{corollary}[{\cite[Theorem 10, Corollary 2]{Diss}}]\label{cor:nonmeasurable}
 \lean{TJK.Discont.exists_measurable_nonmeasurable_boundaryFn}

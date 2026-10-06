@@ -14,3 +14,4 @@ import TJK.Baire.Higher
 import TJK.Construct.H
 import TJK.Plane.Basic
 import TJK.Construct.Realize
+import TJK.Discont.Vitali
