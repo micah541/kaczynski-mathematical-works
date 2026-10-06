@@ -267,54 +267,69 @@ We use the folding device of \cite[(F)(I)]{TAMSb}. Write points of $\Sph$ as $\l
 let $T(z)=4z^3-3z$.
 
 \begin{definition}[the fold]\label{def:fold}
-\lean{TJK.Fold.fold, TJK.Fold.U, TJK.Fold.V, TJK.Fold.ZU, TJK.Fold.ZV}
+\lean{TJK.Fold.fold, TJK.Fold.U, TJK.Fold.V, TJK.Fold.ZU, TJK.Fold.ZV, TJK.Fold.p₁, TJK.Fold.chart,
+  TJK.Fold.chartInv}
 Let $s=2^{-1/2}$ and
 \begin{gather*}
 U=\{-s<z\le1\},\quad V=\{-1\le z<s\},\quad Z_U=\{s<z\le1\},\quad Z_V=\{-1\le z<-s\},\\
 \Phi\langle x,y,z\rangle=\begin{cases}\langle x(4z^2-1),\,y(4z^2-1),\,T(z)\rangle,&\abs z\ge s,\\
 \langle x,y,-z\rangle,&\abs z\le s,\end{cases}
 \end{gather*}
-all subsets of $\Sph$. Let $p_1=\langle1,0,0\rangle$ and let $\sigma:\Sph\setminus\{p_1\}\to\R^2$ be
-stereographic projection from $p_1$.
+all subsets of $\Sph$. Equivalently, with $\kappa(z)=\max(0,2z^2-1)$,
+$\Phi\langle x,y,z\rangle=\langle x(1+2\kappa(z)),\,y(1+2\kappa(z)),\,z(2\kappa(z)-1)\rangle$ (the form used in Lean).
+Let $p_1=\langle1,0,0\rangle$ and let $\sigma:\Sph\setminus\{p_1\}\to\R^2$ be stereographic projection from $p_1$, a
+homeomorphism onto $\R^2$ (Mathlib's \texttt{stereographic'}).
 \end{definition}
 
 \begin{lemma}[properties of the fold]\label{lem:fold}
-\lean{TJK.Fold.continuous_fold, TJK.Fold.fold_mapsTo, TJK.Fold.homeomorph_ZU, TJK.Fold.homeomorph_ZV,
+\lean{TJK.Fold.continuous_fold, TJK.Fold.foldE_mem, TJK.Fold.cubic_inv, TJK.Fold.secE_spec,
+  TJK.Fold.secU, TJK.Fold.secV, TJK.Fold.fold_secU, TJK.Fold.fold_secV, TJK.Fold.secU_mem_ZU,
+  TJK.Fold.secV_mem_ZV, TJK.Fold.continuousOn_secU, TJK.Fold.continuousOn_secV, TJK.Fold.fold_surjOn,
   TJK.Fold.fibre_card_le_three, TJK.Fold.isOpen_U, TJK.Fold.isOpen_V, TJK.Fold.U_union_V,
-  TJK.Fold.bounded_chart}
+  TJK.Fold.bounded_chart, TJK.Fold.ne_p₁_of_mem, TJK.Fold.chartInv_chart, TJK.Fold.continuous_chartInv,
+  TJK.Fold.continuousOn_chart}
 \uses{def:fold}
-(i) $\Phi$ is a continuous map $\Sph\to\Sph$. (ii) $\Phi$ restricts to homeomorphisms $Z_U\to U$ and
-$Z_V\to V$. (iii) Each fibre of $\Phi$ has at most three points. (iv) $U,V$ are open and
-$U\cup V=\Sph$. (v) $Z_U\cup Z_V\subseteq\Sph\setminus\{p_1\}$ and $\sigma(Z_U\cup Z_V)$ is bounded.
+(i) $\Phi$ is a continuous map $\Sph\to\Sph$. (ii) There are maps $\Phi_U^{-1}:U\to Z_U$ and
+$\Phi_V^{-1}:V\to Z_V$, continuous on the open sets $U$, $V$, with $\Phi\circ\Phi_U^{-1}=\mathrm{id}_U$,
+$\Phi\circ\Phi_V^{-1}=\mathrm{id}_V$; in particular $\Phi(Z_U\cup Z_V)=\Sph$. (iii) Each fibre of $\Phi$ has at
+most three points. (iv) $U,V$ are open and $U\cup V=\Sph$. (v) $Z_U\cup Z_V\subseteq\Sph\setminus\{p_1\}$ and
+$\sigma(Z_U\cup Z_V)$ is bounded.
 \end{lemma}
 \begin{proof}
 On $\Sph$, $(x^2+y^2)(4z^2-1)^2+T(z)^2=(1-z^2)(16z^4-8z^2+1)+z^2(16z^4-24z^2+9)=1$, so $\Phi$ maps into
 $\Sph$. At $z=\pm s$ we have $4z^2-1=1$ and $T(\pm s)=\mp s$, so the two formulas agree and $\Phi$ is
-continuous by the pasting lemma. $T'(z)=12z^2-3>0$ for $\abs z>1/2$, so $T$ is a strictly increasing
-bijection $[s,1]\to[-s,1]$ and $[-1,-s]\to[-1,s]$. Given $\langle x',y',z'\rangle\in U$, put
-$z=T^{-1}(z')\in(s,1]$, $c=4z^2-1\in(1,3]$, $x=x'/c$, $y=y'/c$; the identity above shows
-$\langle x,y,z\rangle\in\Sph$, and this is a continuous inverse of $\Phi|_{Z_U}$. Likewise for $Z_V$.
-$\Phi$ is injective on each of $Z_U$, $\{\abs z\le s\}$, $Z_V$, which cover $\Sph$; this gives (iii). (iv)
-is clear. (v): $\cl(Z_U\cup Z_V)=\{\abs z\ge s\}$ is compact and misses $p_1$.
+continuous by the pasting lemma. Since $T(\cos\theta)=\cos3\theta$, the map
+$\tau(z')=\cos(\arccos(z')/3)$ is continuous on $[-1,1]$, and for $z'\in(-s,1]$ we have
+$\arccos z'<3\pi/4$, so $\tau(z')\in(s,1]$ and $T(\tau(z'))=z'$. Given $\langle x',y',z'\rangle\in U$, put
+$z=\tau(z')$, $c=4z^2-1>1$, $x=x'/c$, $y=y'/c$; the identity above shows $\langle x,y,z\rangle\in\Sph$, it lies in
+$Z_U$, $\Phi\langle x,y,z\rangle=\langle x',y',z'\rangle$, and it depends continuously on
+$\langle x',y',z'\rangle\in U$; this is $\Phi_U^{-1}$. Since $T$ is odd, $\Phi_V^{-1}\langle x',y',z'\rangle$ is obtained
+in the same way with $z=-\tau(-z')$. (iii): if $\Phi(p)=\Phi(q)$ and $p,q$ have the same height $z$, then $p=q$
+(as $1+2\kappa(z)\ge1$). On $\{\abs z\le s\}$ the height of $\Phi$ is $-z$; on $Z_U$ and on $Z_V$ it is $T(z)$, and
+$T(a)-T(b)=(a-b)(4(a^2+ab+b^2)-3)$ with $4(a^2+ab+b^2)>3$ when $ab>0$, $a^2,b^2>1/2$. So $\Phi$ is injective on each
+of $Z_U$, $\{\abs z\le s\}$, $Z_V$, which cover $\Sph$. (iv) is clear. (v): $\{\abs z\ge s\}\supseteq Z_U\cup Z_V$ is
+compact and misses $p_1$, and $\sigma$ is continuous on $\Sph\setminus\{p_1\}$.
 \end{proof}
 
 \begin{lemma}[fold factorisation]\label{lem:fold-factor}
 \lean{TJK.Fold.exists_factor}
 \uses{lem:fold, thm:sierpinski, lem:borel-basic}
-Let $f:M\to\Sph$ be of class $\Fs$. There is $\psi:M\to Z_U\cup Z_V$ with $\Phi\circ\psi=f$ such that
+Let $f:M\to\Sph$ be of class $\Fs$. There is $\psi:M\to Z_U\cup Z_V$ of class $\Fs$ with $\Phi\circ\psi=f$ such that
 $\sigma\circ\psi:M\to\R^2$ is bounded and of class $\Fs$.
 \end{lemma}
 \begin{proof}
 $f^{-1}(U)$ is $\Fs$ and $M\setminus f^{-1}(V)$ is $\Gd$, and $M\setminus f^{-1}(V)\subseteq f^{-1}(U)$ since $U\cup V=\Sph$.
 Theorem~\ref{thm:sierpinski} gives an ambiguous $K$ with $M\setminus f^{-1}(V)\subseteq K\subseteq f^{-1}(U)$; put
 $L=M\setminus K$, so $f(K)\subseteq U$, $f(L)\subseteq V$. Let $\Phi_U=\Phi|_{Z_U}:Z_U\to U$ and $\Phi_V=\Phi|_{Z_V}:Z_V\to V$
-(homeomorphisms by Lemma~\ref{lem:fold}), and define $\psi=\Phi_U^{-1}\circ f$ on $K$, $\psi=\Phi_V^{-1}\circ f$ on $L$. For
-$G\subseteq\Sph\setminus\{p_1\}$ open, $\psi^{-1}(G)=[K\cap f^{-1}(\Phi_U(Z_U\cap G))]\cup[L\cap f^{-1}(\Phi_V(Z_V\cap G))]$, and
-$\Phi_U(Z_U\cap G)$ is open in $U$, hence in $\Sph$; so $\psi^{-1}(G)$ is $\Fs$. Boundedness is Lemma~\ref{lem:fold}(v).
+and define $\psi=\Phi_U^{-1}\circ f$ on $K$, $\psi=\Phi_V^{-1}\circ f$ on $L$ (Lemma~\ref{lem:fold}(ii)). For
+$G\subseteq\Sph$ open, $\psi^{-1}(G)=[K\cap f^{-1}(U\cap(\Phi_U^{-1})^{-1}(G))]\cup[L\cap f^{-1}(V\cap(\Phi_V^{-1})^{-1}(G))]$, and
+$U\cap(\Phi_U^{-1})^{-1}(G)$ is open since $\Phi_U^{-1}$ is continuous on the open set $U$; so $\psi$ is of class $\Fs$.
+Since $\psi$ avoids $p_1$ and $\sigma$ is continuous on the open set $\Sph\setminus\{p_1\}$, $\sigma\circ\psi$ is of
+class $\Fs$. Boundedness is Lemma~\ref{lem:fold}(v).
 \end{proof}
 
 \begin{theorem}[{\cite[Appendix, Theorem (a)]{TAMSb}}; cf.\ {\cite[Theorem 1]{Diss}}]\label{thm:sphere-baire1}
-\lean{TJK.sphere_baireOne_iff}
+\lean{TJK.sphere_baireOne_iff, TJK.IsFσMeasurable.isBaireOne_pi, TJK.Continuous.comp_isBaireOne}
 \uses{lem:fold-factor, thm:baire1-char, lem:baire1-fsigma}
 A function $f:M\to\Sph$ is in $\mathcal B_1(M,\Sph)$ if and only if it is of class $\Fs$.
 \end{theorem}
@@ -340,8 +355,9 @@ $F=\Phi\circ\sigma^{-1}\circ G$, and $F|_E=\Phi\circ\psi=f$.
 \end{proof}
 
 \begin{theorem}[honorary Baire class 2; {\cite[Theorem 2]{Diss}}, {\cite[Appendix, Theorem (b)]{TAMSb}}]\label{thm:honorary-char}
-\lean{TJK.isHonoraryBaireTwo_iff_euclidean, TJK.isHonoraryBaireTwo_iff_sphere,
-  TJK.isHonoraryBaireTwo_iff_closed_preimage}
+\lean{TJK.isHonoraryBaireTwo_tfae_pi, TJK.isHonoraryBaireTwo_tfae_euclidean, TJK.isHonoraryBaireTwo_tfae_sphere,
+  TJK.isHonoraryBaireTwo_tfae_of_extend, TJK.isFσMeasurable_restrict_compl_iff,
+  TJK.exists_countable_isFσMeasurable_iff, TJK.exists_isBaireOne_eq_of_countable}
 \uses{thm:baire1-char, thm:sphere-baire1, thm:extension, thm:sphere-extension, lem:borel-basic, lem:baire1-fsigma}
 Let $Y$ be $\R^m$ or $\Sph$ and $f:M\to Y$. The following are equivalent.
 \begin{enumerate}[label=(\arabic*)]
@@ -362,19 +378,21 @@ in $M\setminus N$ exchange $\Fs(M\setminus N)$ and $\Gd(M\setminus N)$.
 \end{proof}
 
 \begin{lemma}[invariance of honorary Baire class 2]\label{lem:honorary-invariance}
-\lean{TJK.IsHonoraryBaireTwo.restrict, TJK.IsHonoraryBaireTwo.comp_homeomorph}
+\lean{TJK.IsHonoraryBaireTwo.restrict, TJK.IsHonoraryBaireTwo.comp_homeomorph,
+  TJK.IsHonoraryBaireTwo.comp_continuous_injective, TJK.IsHonoraryBaireTwo.continuous_comp,
+  TJK.IsBaireOne.comp_continuous}
 \uses{def:fn-classes}
 If $f:M\to Y$ is of honorary Baire class $\le2$, so are $f|_{M'}$ for $M'\subseteq M$ and $f\circ h$ for a
-homeomorphism $h:M''\to M$.
+homeomorphism (indeed any continuous injection) $h:M''\to M$, and $g\circ f$ for continuous $g:Y\to Y'$.
 \end{lemma}
 \begin{proof}
-Restrict (resp.\ compose with $h$) the Baire-one function, its continuous approximants and the countable set.
+Restrict (resp.\ compose with $h$ or $g$) the Baire-one function, its continuous approximants and the countable set.
 \end{proof}
 
 \subsection{Points of continuity}
 
 \begin{theorem}[Baire, Kuratowski {\cite[p.~301]{Kuratowski}}]\label{thm:kuratowski}
-\lean{TJK.IsBaireOne.meagre_discontinuity}
+\lean{TJK.IsBaireOne.meagre_discontinuity, TJK.isNowhereDense_diff_interior}
 \uses{def:fn-classes}
 If $A$ and $Y$ are metric spaces and $f\in\mathcal B_1(A,Y)$, then the set of points of $A$ at which
 $f$ is discontinuous is of the first category in $A$.
@@ -399,7 +417,7 @@ By the Baire category theorem $P$ is not of the first category in itself.
 \end{proof}
 
 \begin{lemma}\label{lem:meager-subspace}
-\lean{TJK.isMeagre_of_isMeagre_subtype}
+\lean{TJK.isMeagre_of_isMeagre_subtype, TJK.IsNowhereDense.image_val}
 A subset of $A\subseteq M$ that is of the first category in $A$ is of the first category in $M$.
 \end{lemma}
 \begin{proof}
