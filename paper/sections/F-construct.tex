@@ -373,25 +373,28 @@ function for $f$.
 \end{theorem}
 \begin{proof}
 Let $g$ be given by Theorem~\ref{thm:construct-A} and $h$ (bounded, with $\C=\R^2$) by Theorem~\ref{thm:construct-B} for
-$E=A$, both restricted to $Q$. For $t\in(0,1]$ let $d_1(t)$ (resp.\ $d_2(t)$) be the supremum of the $\delta\in(0,1]$ such that
-$z_1,z_2\in Q$, $\operatorname{Im}z_j\ge t$, $\abs{z_1-z_2}<\delta$ imply $\abs{h(z_1)-h(z_2)}\le t$ (resp.\
-$\abs{g(z_1)-g(z_2)}\le t$); these are positive by uniform continuity on $[-1,1]\times[t,1]$, and weakly increasing. Let
-$d(t)=\min\{\frac14d_1(t/2),\frac14d_2(t/2),t/4\}$, $k$ as in Theorem~\ref{thm:construct-C}, and $f=h+gk$.
+$E=A$, both restricted to $Q$. For $t\in(0,1]$ let $D(t)$ be the supremum of the $\delta\in(0,1]$ such that
+$z_1,z_2\in[-1,1]\times[t,1]$, $\abs{z_1-z_2}<\delta$ imply $\abs{h(z_1)-h(z_2)}\le t$ and $\abs{g(z_1)-g(z_2)}\le t$;
+it is positive by uniform continuity on the compact set $[-1,1]\times[t,1]$, and weakly increasing. Let
+$d(t)=\min\{\frac14D(t/2),t/4\}$, $k$ as in Theorem~\ref{thm:construct-C}, and $f=h+gk$; $f$ is bounded since $h$, $g$, $k$ are.
 
 If $x\in A$, $h\to\varphi(x)$ along a segment in $s(x,1,3\pi/8)$, along which $gk\to0$; a short initial piece of this
-segment lies in $Q^\circ$ (Lemma~\ref{lem:subarc}). So $\varphi$ is a boundary function and $A\subseteq\CC(f)$. Conversely let $f$ have a limit along an arc $\gamma$ at $x\in X$ in $Q^\circ$; we show $g\to0$ along
-$\gamma$, so $x\in A$ by Theorem~\ref{thm:construct-A}(b). If not, there are $\eps\in(0,1]$ and $z_n=\langle x_n,y_n\rangle\in\gamma\setminus\{x\}$,
-$z_n\to x$, with $\abs{g(z_n)}\ge\eps$. Fix $n$ large: $y_n<3\eps/16$, and the other endpoint of $\gamma$ is farther than $y_n$
-from $z_n$. Let $a=4y_n/3\le1$. By Lemma~\ref{lem:subarc}(b) a connected $\gamma'\subseteq\gamma\cap\overline{S(d(a),z_n)}$
-contains $z_n$ and a point at distance $d(a)$ from it. Since $d(a)\le a/4=y_n/3$, $\gamma'\subseteq[-1,1]\times[a/2,a]$, and
-Theorem~\ref{thm:construct-C} gives $p,q\in\gamma'$ with $\abs{k(p)-k(q)}\ge2$. As $\abs{p-q}\le2d(a)<d_1(a/2)$ and
-$\abs{p-z_n},\abs{q-z_n}\le d(a)<d_2(a/2)$, all with imaginary parts $\ge a/2$, we get $\abs{h(p)-h(q)}\le a/2$ and
-$\abs{g(p)-g(z_n)},\abs{g(q)-g(z_n)}\le a/2<\eps/8$. Hence
+segment lies in $Q^\circ$ (Lemma~\ref{lem:subarc}). So $\varphi$ is a boundary function and $A\subseteq\CC(f)$. Conversely
+let $f\to q$ along an arc $\gamma$ at $x\in X$ in $Q^\circ$; we show $g\to0$ along $\gamma$, so $x\in A$ by
+Theorem~\ref{thm:construct-A}(b). Let $\eps\in(0,1]$ and $r>0$ with $\abs{f(z)-q}<\eps/2$ for $z\in\gamma\setminus\{x\}$,
+$\abs{z-x}<r$. Let $z_0=\langle x_0,y\rangle\in\gamma\setminus\{x\}$ with $\abs{z_0-x}<\min\{r/2,3\eps/16\}$, and suppose
+$g(z_0)\ge\eps$. Let $a=4y/3\le1$. As $\abs{x-z_0}\ge y>d(a)$, Lemma~\ref{lem:subarc}(b), applied to a parametrization of
+$\gamma$ from $x$ to $z_0$, gives a connected $\gamma'\subseteq\gamma\cap\overline{S(d(a),z_0)}$ containing $z_0$ and a
+point at distance $d(a)$ from it. Since $d(a)\le a/4=y/3$, $\gamma'\subseteq([-1,1]\times[a/2,a])\setminus\{x\}$, and
+Theorem~\ref{thm:construct-C} gives $p,q'\in\gamma'$ with $\abs{k(p)-k(q')}\ge2$. As $\abs{p-q'}\le2d(a)<D(a/2)$ and
+$\abs{p-z_0},\abs{q'-z_0}\le d(a)<D(a/2)$, we get $\abs{h(p)-h(q')}\le a/2$ and
+$\abs{g(p)-g(z_0)},\abs{g(q')-g(z_0)}\le a/2<\eps/8$. Hence
 \[
-\abs{f(p)-f(q)}\ge\abs{g(z_n)}\abs{k(p)-k(q)}-\abs{k(p)}\abs{g(p)-g(z_n)}-\abs{k(q)}\abs{g(q)-g(z_n)}-\abs{h(p)-h(q)}
+\abs{f(p)-f(q')}\ge g(z_0)\abs{k(p)-k(q')}-\abs{k(p)}\abs{g(p)-g(z_0)}-\abs{k(q')}\abs{g(q')-g(z_0)}-\abs{h(p)-h(q')}
 >2\eps-\tfrac{2\sqrt2+1}8\eps>\eps .
 \]
-Since $\abs{p-z_n},\abs{q-z_n}\le y_n/3\to0$, $f$ has no limit along $\gamma$, a contradiction.
+But $\abs{p-x},\abs{q'-x}\le y/3+\abs{z_0-x}<r$, so $\abs{f(p)-f(q')}<\eps$, a contradiction. Hence $g<\eps$ on
+$\gamma\setminus\{x\}$ near $x$.
 \end{proof}
 
 \begin{theorem}[{\cite[(E)]{TAMSb}}]\label{thm:construct-E}
