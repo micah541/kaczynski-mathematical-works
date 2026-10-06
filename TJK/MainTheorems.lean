@@ -4,6 +4,7 @@ Proofs are filled in other files; here they may be `sorry`.
 Blueprint: `paper/main.tex`; each theorem names its blueprint label.
 -/
 import TJK.Defs
+import TJK.Discont.Segments
 
 open Set Filter Topology MeasureTheory
 
@@ -91,14 +92,30 @@ theorem Discont.baireClass_succ_of_boundaryFn {Y : Type} [MetricSpace Y]
 /-- Dissertation Theorem 10 (blueprint `thm:th-thm10`). -/
 theorem Discont.exists_disjoint_null_arcs :
     ∃ γ : ℝ → Set ℂ, (∀ x : ℝ, IsArcAt upper (x : ℂ) (γ x)) ∧
-      Pairwise (fun x y => Disjoint (γ x) (γ y)) ∧ volume (⋃ x, γ x) = 0 := by
-  sorry
+      Pairwise (fun x y => Disjoint (γ x) (γ y)) ∧ volume (⋃ x, γ x) = 0 :=
+  Discont.exists_disjoint_null_arcs'
 
 /-- 1965 paper, Theorem 6 (blueprint `cor:ae-zero`). -/
 theorem Discont.exists_ae_zero_boundaryFn {Y : Type*} [MetricSpace Y] (y₀ : Y) (φ : ℝ → Y) :
     ∃ f : ℂ → Y, (∀ᵐ z ∂volume, f z = y₀) ∧
       IsBoundaryFunction upper f realAxis (fun z => φ z.re) := by
-  sorry
+  classical
+  obtain ⟨γ, hγ, hdisj, hnull⟩ := Discont.exists_disjoint_null_arcs
+  have huniq : ∀ (w : ℂ) (x : ℝ) (h : ∃ x' : ℝ, w ∈ γ x'), w ∈ γ x → h.choose = x := by
+    intro w x h hw
+    by_contra hne
+    exact (Set.disjoint_left.mp (hdisj hne) h.choose_spec) hw
+  refine ⟨fun z => if h : ∃ x : ℝ, z ∈ γ x then φ h.choose else y₀, ?_, ?_⟩
+  · refine MeasureTheory.ae_iff.2 (measure_mono_null (fun z hz => ?_) hnull)
+    by_contra hz'
+    simp only [Set.mem_iUnion, not_exists] at hz'
+    simp [hz'] at hz
+  · intro z hz
+    have hzx : z = ((z.re : ℝ) : ℂ) := Complex.ext (by simp) (by simpa using hz)
+    refine ⟨γ z.re, hzx ▸ hγ z.re, ?_⟩
+    refine tendsto_const_nhds.congr' (eventually_nhdsWithin_of_forall fun w hw => ?_)
+    have h : ∃ x : ℝ, w ∈ γ x := ⟨z.re, hw.1⟩
+    simp only [dif_pos h, huniq w z.re h hw.1]
 
 /-- Dissertation Theorem 10, Corollary 2 (blueprint `cor:nonmeasurable`). -/
 theorem Discont.exists_measurable_nonmeasurable_boundaryFn :

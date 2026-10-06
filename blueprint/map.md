@@ -7,9 +7,9 @@ Every node is a numbered item of the [companion paper](../paper/main.pdf). Arrow
 
 | Status | Meaning | Count |
 |---|---|---|
-| `proved` | proved (no `sorry`) | 47 |
+| `proved` | proved (no `sorry`) | 49 |
 | `defined` | definition written in Lean | 10 |
-| `sorry` | stated in Lean, proof is `sorry` | 13 |
+| `sorry` | stated in Lean, proof is `sorry` | 11 |
 | `partial` | some Lean declarations exist | 2 |
 | `planned` | Lean name reserved, not yet stated | 52 |
 | `imported` | imported fact (Mathlib / library) | 14 |
@@ -424,8 +424,6 @@ flowchart BT
   cor_borel --> lem_additive_basic
   lem_th_lemma23 --> def_trapezoid
   lem_th_lemma24 --> def_trapezoid
-  thm_th_thm9 --> lem_th_lemma23
-  thm_th_thm9 --> lem_th_lemma24
   thm_th_thm9 --> def_trapezoid
   prop_th_example --> fact_baire_category
   thm_th_thm10 --> lem_th_lemma25
@@ -476,11 +474,11 @@ flowchart BT
   lem_th_lemma10 --> def_th_special
   lem_th_lemma11 --> def_th_special
   classDef proved fill:#1f8a4c,color:#fff,stroke:#146236
-  class lem_sut_basic,prop_sut_two_composite,prop_sut_explicit,lem_sut_factor,thm_sut_sutcliffe2,thm_sut_sutcliffe3,lem_sut_lemma1,lem_sut_lemma2,thm_sut_main,cor_sut_main,lem_borel_basic,lem_reduction,cor_reduction_finite,thm_sierpinski,lem_baire1_fsigma,lem_finite_valued,lem_finite_valued_ops,lem_approx_char,lem_approx_finite,lem_uniform_approx,lem_approx_real,thm_baire1_char,lem_uniform_limit_fsigma,thm_extension,lem_fold,lem_fold_factor,thm_sphere_baire1,thm_sphere_extension,thm_honorary_char,lem_honorary_invariance,thm_kuratowski,cor_baire_continuity_point,lem_meager_subspace,lem_B_char,lem_region_geometry,lem_special_from_fsigma,lem_special_sequence,lem_special_pair_exists,lem_special_pair_shrink,thm_construct_A,lem_monotone_inverse,lem_closed_graph,thm_construct_C,lem_th_lemma23,lem_th_lemma24,thm_th_thm9,lem_th_lemma25 proved
+  class lem_sut_basic,prop_sut_two_composite,prop_sut_explicit,lem_sut_factor,thm_sut_sutcliffe2,thm_sut_sutcliffe3,lem_sut_lemma1,lem_sut_lemma2,thm_sut_main,cor_sut_main,lem_borel_basic,lem_reduction,cor_reduction_finite,thm_sierpinski,lem_baire1_fsigma,lem_finite_valued,lem_finite_valued_ops,lem_approx_char,lem_approx_finite,lem_uniform_approx,lem_approx_real,thm_baire1_char,lem_uniform_limit_fsigma,thm_extension,lem_fold,lem_fold_factor,thm_sphere_baire1,thm_sphere_extension,thm_honorary_char,lem_honorary_invariance,thm_kuratowski,cor_baire_continuity_point,lem_meager_subspace,lem_B_char,lem_region_geometry,lem_special_from_fsigma,lem_special_sequence,lem_special_pair_exists,lem_special_pair_shrink,thm_construct_A,lem_monotone_inverse,lem_closed_graph,thm_construct_C,lem_th_lemma23,lem_th_lemma24,thm_th_thm9,lem_th_lemma25,thm_th_thm10,cor_ae_zero proved
   classDef defined fill:#b7e1c5,color:#123,stroke:#4c9a68
   class def_sut_solution,def_borel_classes,def_fn_classes,def_fold,def_arcs,def_ccset,def_regions,def_special_family,def_special_pair,def_trapezoid defined
   classDef sorry fill:#f2c14e,color:#222,stroke:#b8902e
-  class thm_mcmillan,thm_mm_thm2,thm_bf_fsigma,thm_homeo,thm_cc_realize,thm_construct_F,thm_baire_plus_one,thm_th_thm10,cor_ae_zero,cor_nonmeasurable,thm_ha_example,thm_ha_theorem,thm_cube sorry
+  class thm_mcmillan,thm_mm_thm2,thm_bf_fsigma,thm_homeo,thm_cc_realize,thm_construct_F,thm_baire_plus_one,cor_nonmeasurable,thm_ha_example,thm_ha_theorem,thm_cube sorry
   classDef partial fill:#f7dd9b,color:#222,stroke:#b8902e
   class cor_bf_honorary,thm_construct_H partial
   classDef planned fill:#eeeeee,color:#333,stroke:#999
@@ -630,14 +628,14 @@ flowchart BT
 | lem:figure5<br/>*the ``Figure 5'' argument of* | lemma | `TJK.Discont.figure5` | `lem:crosscut-H`, `fact:tietze-arc` | `planned` |
 | thm:baire-plus-one<br/>*;* | theorem | `TJK.Discont.baireClass_succ_of_boundaryFn` ([src](../TJK/MainTheorems.lean)) | `def:meets-in`, `lem:figure5`, `lem:strip`, `lem:subarc`, `lem:intervals-open`, `lem:equiv`, `lem:monotone-extend`, `lem:monotone-compose`, `lem:baire-precomp`, `lem:baire-imp-class`, `lem:additive-basic`, `lem:baire-criterion` | `sorry` |
 | cor:borel<br/>*;* | corollary | `TJK.Discont.measurable_of_boundaryFn`<br/>`TJK.Discont.baireClass_succ_of_boundaryFn_real` | `thm:baire-plus-one`, `fact:borel-baire`, `lem:baire-imp-class`, `lem:additive-basic` | `planned` |
-| def:trapezoid<br/>*trapezoids* | definition | `TJK.Discont.closedTrapezoid` ([src](../TJK/Discont/Segments.lean))<br/>`TJK.Discont.IsTrapezoid` ([src](../TJK/Discont/Segments.lean))<br/>`TJK.Discont.segTrap` ([src](../TJK/Discont/Segments.lean)) |  | `defined` |
+| def:trapezoid<br/>*trapezoids* | definition | `TJK.Discont.closedTrapezoidE` ([src](../TJK/Discont/Segments.lean))<br/>`TJK.Discont.closedTrapezoid` ([src](../TJK/Discont/Segments.lean))<br/>`TJK.Discont.IsTrapezoid` ([src](../TJK/Discont/Segments.lean))<br/>`TJK.Discont.segTrap` ([src](../TJK/Discont/Segments.lean)) |  | `defined` |
 | lem:th-lemma23 | lemma | `TJK.Discont.segTrap_subset_union` ([src](../TJK/Discont/Segments.lean)) | `def:trapezoid` | `proved` |
 | lem:th-lemma24 | lemma | `TJK.Discont.isTrapezoid_biUnion` ([src](../TJK/Discont/Segments.lean)) | `def:trapezoid` | `proved` |
-| thm:th-thm9 | theorem | `TJK.Discont.outerMeasure_union_segments` ([src](../TJK/Discont/Segments.lean)) | `lem:th-lemma23`, `lem:th-lemma24`, `def:trapezoid` | `proved` |
+| thm:th-thm9 | theorem | `TJK.Discont.outerMeasure_union_segments` ([src](../TJK/Discont/Segments.lean))<br/>`TJK.Discont.outerMeasure_union_segments_le` ([src](../TJK/Discont/Segments.lean))<br/>`TJK.Discont.le_outerMeasure_union_segments` ([src](../TJK/Discont/Segments.lean)) | `def:trapezoid` | `proved` |
 | prop:th-example | proposition | `TJK.Discont.segments_not_disjoint_example` | `fact:baire-category` | `planned` |
 | lem:th-lemma25 | lemma | `TJK.Discont.exists_strictMono_null_range` ([src](../TJK/Discont/NullRange.lean)) |  | `proved` |
-| thm:th-thm10 | theorem | `TJK.Discont.exists_disjoint_null_arcs` ([src](../TJK/MainTheorems.lean)) | `lem:th-lemma25`, `thm:th-thm9`, `def:arcs` | `sorry` |
-| cor:ae-zero<br/>*;* | corollary | `TJK.Discont.exists_ae_zero_boundaryFn` ([src](../TJK/MainTheorems.lean)) | `thm:th-thm10`, `def:ccset` | `sorry` |
+| thm:th-thm10 | theorem | `TJK.Discont.exists_disjoint_null_arcs` ([src](../TJK/MainTheorems.lean)) | `lem:th-lemma25`, `thm:th-thm9`, `def:arcs` | `proved` |
+| cor:ae-zero<br/>*;* | corollary | `TJK.Discont.exists_ae_zero_boundaryFn` ([src](../TJK/MainTheorems.lean)) | `thm:th-thm10`, `def:ccset` | `proved` |
 | fact:vitali<br/>*non-measurable sets* | fact | `TJK.Discont.exists_not_nullMeasurableSet` |  | `imported` |
 | cor:nonmeasurable | corollary | `TJK.Discont.exists_measurable_nonmeasurable_boundaryFn` ([src](../TJK/MainTheorems.lean)) | `cor:ae-zero`, `fact:vitali` | `sorry` |
 

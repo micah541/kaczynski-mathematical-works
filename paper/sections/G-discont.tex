@@ -101,18 +101,23 @@ the outer measures. A \emph{segment} below means a closed line segment with one 
 other $\langle a_1(s),1\rangle\in X_1$; write $\ell_s(y)=(1-y)a_0(s)+ya_1(s)$.
 
 \begin{definition}[trapezoids]\label{def:trapezoid}
-\lean{TJK.Discont.closedTrapezoid, TJK.Discont.IsTrapezoid, TJK.Discont.segTrap}
+\lean{TJK.Discont.closedTrapezoidE, TJK.Discont.closedTrapezoid, TJK.Discont.IsTrapezoid, TJK.Discont.segTrap}
 For $a_0\le b_0$, $a_1\le b_1$ in $[-\infty,+\infty]$ with $a_i<+\infty$ and $b_i>-\infty$ (and $0\cdot(\pm\infty)=0$), let
 $T(a_0,b_0;a_1,b_1)=\{\langle x,y\rangle:0\le y\le1,\ x\in\R,\ (1-y)a_0+ya_1\le x\le(1-y)b_0+yb_1\}$, a \emph{closed trapezoid}; $\emptyset$
-is also one. $S$ is a \emph{trapezoid} if $T^\circ\subseteq S\subseteq T$ for a closed trapezoid $T$, where $T^\circ$ is the interior
-of $T$ \emph{relative to the strip} $\{0\le y\le1\}$. For disjoint segments
-$s,s'$ with $a_i(s)\le a_i(s')$, $T(s,s')=T(s',s)=T(a_0(s),a_0(s');a_1(s),a_1(s'))$; and $T(s,s)=s$.
+is also one. $S$ is a \emph{trapezoid} if $S=\emptyset$ or $T^\circ\subseteq S\subseteq T$ for a closed trapezoid $T$, where
+$T^\circ=\{\langle x,y\rangle:0\le y\le1,\ (1-y)a_0+ya_1<x<(1-y)b_0+yb_1\}$ is the interior of $T$ \emph{relative to the strip}
+$\{0\le y\le1\}$. For segments $s,s'$, $T(s,s')$ is the set of $\langle x,y\rangle$ with $0\le y\le1$ and $x$ between $\ell_s(y)$
+and $\ell_{s'}(y)$; for disjoint $s,s'$ with $a_i(s)\le a_i(s')$ this is $T(a_0(s),a_0(s');a_1(s),a_1(s'))$, and $T(s,s)=s$.
+(In Lean a segment is given by its pair of abscissas $\langle a_0(s),a_1(s)\rangle$.)
 \end{definition}
 A trapezoid $S$ is Lebesgue measurable and
 $m(S)=\frac12\bigl[(b_0-a_0)+(b_1-a_1)\bigr]=\frac12\bigl[m^1(S\cap X_0)+m^1(S\cap X_1)\bigr]$: integrate the lengths
 $(1-y)(b_0-a_0)+y(b_1-a_1)$ of the horizontal sections, and note that $S\cap X_i$ lies between $(a_i,b_i)$ and $[a_i,b_i]$.
-(The restrictions $a_i<+\infty$, $b_i>-\infty$ exclude the degenerate sides $a_i=b_i=\pm\infty$, for which the formula fails.) Two disjoint segments $s\ne s'$ satisfy either $\ell_s<\ell_{s'}$ on $[0,1]$
-or $\ell_s>\ell_{s'}$ on $[0,1]$, since $\ell_s-\ell_{s'}$ is affine and does not vanish.
+(The restrictions $a_i<+\infty$, $b_i>-\infty$ exclude the degenerate sides $a_i=b_i=\pm\infty$, for which the formula fails.)
+Only the case of finite parameters and $S=T$ is used below (\texttt{volume\_closedTrapezoid}). Two disjoint segments $s\ne s'$
+satisfy either $a_i(s)<a_i(s')$ for $i=0,1$ or $a_i(s)>a_i(s')$ for $i=0,1$ (otherwise $\ell_s-\ell_{s'}$, which is affine, changes sign
+on $[0,1]$), hence either $\ell_s<\ell_{s'}$ on $[0,1]$ or $\ell_s>\ell_{s'}$ on $[0,1]$. In particular a set $\Sigma$ of pairwise
+disjoint segments is totally ordered by $s\preceq s'\iff a_0(s)\le a_0(s')\text{ and }a_1(s)\le a_1(s')$.
 
 \begin{lemma}[{\cite[Lemma 23]{Diss}}]\label{lem:th-lemma23}
 \lean{TJK.Discont.segTrap_subset_union}
@@ -133,42 +138,46 @@ intervals is an interval, and it contains $\ell_{s_1}(y)$ and $\ell_{s_3}(y)$.
 If $\Sigma$ is a set of pairwise disjoint segments, $\bigcup_{s,s'\in\Sigma}T(s,s')$ is a trapezoid.
 \end{lemma}
 \begin{proof}
-Let $A_i=\inf_sa_i(s)$, $B_i=\sup_sa_i(s)$ and $T=T(A_0,B_0;A_1,B_1)$. The union lies in $T$. The segments are totally ordered and
-both $a_0$ and $a_1$ increase along the order; so a sequence $s_k$ descending in this order with $a_0(s_k)\to A_0$ also
-has $a_1(s_k)\to A_1$ (given $s$ with $a_1(s)$ close to $A_1$, eventually $s_k\preceq s$), whence $\inf_s\ell_s(y)=(1-y)A_0+yA_1$,
-and similarly for the supremum. Hence every
-$\langle x,y\rangle\in T^\circ$ satisfies $\ell_s(y)<x<\ell_{s'}(y)$ for some $s,s'\in\Sigma$, so it lies in $T(s,s')$.
+We may assume $\Sigma\ne\emptyset$. Let $A_i=\inf_sa_i(s)$, $B_i=\sup_sa_i(s)$ (in $[-\infty,+\infty]$) and $T=T(A_0,B_0;A_1,B_1)$.
+Since $(1-y)A_0+yA_1\le\ell_s(y)\le(1-y)B_0+yB_1$ for all $s$, the union lies in $T$. Let $\langle x,y\rangle\in T^\circ$. From
+$(1-y)A_0+yA_1<x$ we get $s_1,s_2\in\Sigma$ with $(1-y)a_0(s_1)+ya_1(s_2)<x$ (if $y=1$ or $y=0$
+only one parameter matters; if $A_0=-\infty$ and $y<1$ take any $s_2$ and $a_0(s_1)$ small; symmetrically if $A_1=-\infty$ and $y>0$;
+if both are finite approximate each within $\delta=\frac12[x-(1-y)A_0-yA_1]$). The
+$\preceq$-smaller $s$ of $s_1,s_2$ has $\ell_s(y)\le(1-y)a_0(s_1)+ya_1(s_2)<x$. Likewise there is $s'\in\Sigma$ with $x<\ell_{s'}(y)$,
+so $\langle x,y\rangle\in T(s,s')$.
 \end{proof}
 
 \begin{theorem}[{\cite[Theorem 9]{Diss}}]\label{thm:th-thm9}
-\lean{TJK.Discont.outerMeasure_union_segments}
-\uses{lem:th-lemma23, lem:th-lemma24, def:trapezoid}
+\lean{TJK.Discont.outerMeasure_union_segments, TJK.Discont.outerMeasure_union_segments_le, TJK.Discont.le_outerMeasure_union_segments}
+\uses{def:trapezoid}
 Let $\Sigma$ be a set of pairwise disjoint segments and $S=\bigcup\Sigma$. Then
 $m_e(S)=\frac12\bigl[m^1_e(S\cap X_0)+m^1_e(S\cap X_1)\bigr]$.
 \end{theorem}
 \begin{proof}
-We may assume $\Sigma\ne\emptyset$. Let $\eps>0$ and $E_i=S\cap X_i$. Choose open $U\supseteq S$ with $m(U)\le m_e(S)+\eps$ and
-relatively open $G_i\supseteq E_i$ in $X_i$ with $m^1(G_i)\le m^1_e(E_i)+\eps$ (when these are finite). Let
-$V=\{\langle(1-y)u_0+yu_1,y\rangle:u_0\in G_0,u_1\in G_1,y\in\R\}$. $V$ is open (if $\langle x,y\rangle=\langle(1-y)u_0+yu_1,y\rangle$, then
-nearby points are $\langle(1-y')(u_0+t)+y'(u_1+t),y'\rangle$ with small $t$), $S\subseteq V$ and $V\cap X_i=G_i$. Put $W=U\cap V$.
+Let $E_i=S\cap X_i$, identified with $\{a_i(s):s\in\Sigma\}\subseteq\R$. (The dissertation proves both inequalities at once using
+Lemmas~\ref{lem:th-lemma23} and~\ref{lem:th-lemma24}; we give a shorter argument for each.)
 
-For $s,s'\in\Sigma$ write $s\equiv s'$ if $T(s,s')\subseteq W$. By Lemma~\ref{lem:th-lemma23} (with $T(s_1,s_2)\cap T(s_2,s_3)\supseteq s_2$)
-this is an equivalence relation; let $\Gamma$ be the set of classes. \emph{$\Gamma$ is countable:} for $s\in\Sigma$, $s$ is compact
-and in $W$, so there is $\delta_s>0$ such that $N_s=\{\langle x,y\rangle:0\le y\le1,\ \abs{x-\ell_s(y)}<\delta_s\}\subseteq W$. Let
-$J_i(s)=(a_i(s)-\delta_s,a_i(s)+\delta_s)$. If $J_0(s)\cap J_0(s')\ne\emptyset$ and $J_1(s)\cap J_1(s')\ne\emptyset$, then
-$\abs{\ell_s(y)-\ell_{s'}(y)}<\delta_s+\delta_{s'}$ for all $y$, so $T(s,s')\subseteq N_s\cup N_{s'}\subseteq W$ and $s\equiv s'$.
-Choosing $s(C)\in C$ for $C\in\Gamma$, the open rectangles $J_0(s(C))\times J_1(s(C))$ are pairwise disjoint, so $\Gamma$ is countable.
+\emph{Upper bound.} It suffices to show $m_e(S)\le\frac12[m^1(G_0)+m^1(G_1)]$ for all open $G_i\supseteq E_i$ (outer regularity);
+we may assume $m^1(G_i)<\infty$, so every component of $G_i$ is a bounded open interval. Group the segments by the pair $(I,J)$ of
+components of $G_0,G_1$ containing $a_0(s),a_1(s)$; there are countably many classes $C$. For a class $C$ let
+$\alpha_C,\beta_C$ ($\gamma_C,\delta_C$) be the infimum and supremum of $a_0(s)$ ($a_1(s)$) over $s\in C$. Every $s\in C$ lies in the closed
+trapezoid $T_C=T(\alpha_C,\beta_C;\gamma_C,\delta_C)$, of area $\frac12[(\beta_C-\alpha_C)+(\delta_C-\gamma_C)]$, and
+$(\alpha_C,\beta_C)\subseteq I$, $(\gamma_C,\delta_C)\subseteq J$. The intervals $(\alpha_C,\beta_C)$ are pairwise disjoint: for classes
+with different $I$ this is clear; if $C\ne C'$ have the same $I$ but different (disjoint) $J,J'$ and $x$ lies in both intervals,
+take $s_1,s_2\in C$, $s_1',s_2'\in C'$ with $a_0(s_1),a_0(s_1')<x<a_0(s_2),a_0(s_2')$; by the order of disjoint segments,
+$a_1(s_1)<a_1(s_2')$ and $a_1(s_1')<a_1(s_2)$, so either $a_1(s_1)\in[a_1(s_1'),a_1(s_2')]\subseteq J'$ or $a_1(s_1')\in[a_1(s_1),a_1(s_2)]\subseteq J$,
+contradicting $J\cap J'=\emptyset$. The same holds for $(\gamma_C,\delta_C)$. Hence
+$m_e(S)\le\sum_Cm(T_C)=\frac12\bigl[\sum_C(\beta_C-\alpha_C)+\sum_C(\delta_C-\gamma_C)\bigr]\le\frac12[m^1(G_0)+m^1(G_1)]$.
 
-For $C\in\Gamma$ let $T(C)=\bigcup_{s,s'\in C}T(s,s')$, a trapezoid by Lemma~\ref{lem:th-lemma24}, with $C\subseteq T(C)\subseteq W$. If
-$C_1\ne C_2$ then $T(C_1)\cap T(C_2)=\emptyset$: otherwise some $T(s_1,s_1')\cap T(s_2,s_2')\ne\emptyset$ and
-Lemma~\ref{lem:th-lemma23} gives $T(s_1,s_2)\subseteq W$, i.e.\ $s_1\equiv s_2$. Let $K_i(C)=T(C)\cap X_i$; these are intervals,
-pairwise disjoint for fixed $i$, and $E_i\subseteq\bigcup_CK_i(C)\subseteq W\cap X_i\subseteq G_i$. Put
-\[
-a=m\Bigl(\bigcup_CT(C)\Bigr)=\sum_Cm(T(C))=\tfrac12\Bigl[m^1\Bigl(\bigcup_CK_0(C)\Bigr)+m^1\Bigl(\bigcup_CK_1(C)\Bigr)\Bigr].
-\]
-Since $S\subseteq\bigcup_CT(C)\subseteq W\subseteq U$, $m_e(S)\le a\le m_e(S)+\eps$; and
-$\frac12[m^1_e(E_0)+m^1_e(E_1)]\le a\le\frac12[m^1(G_0)+m^1(G_1)]\le\frac12[m^1_e(E_0)+m^1_e(E_1)]+\eps$. Let $\eps\to0$ (the infinite
-cases are covered by the same inequalities).
+\emph{Lower bound.} First a one-dimensional fact: if $Q\subseteq\R^2$ is totally ordered componentwise, then
+$m^1_e(\pi_1Q)+m^1_e(\pi_2Q)\le m^1_e(\{q_1+q_2:q\in Q\})$. Indeed, let $G$ be open containing the right-hand set and group
+the $q\in Q$ by the component $I$ of $G$ containing $q_1+q_2$. For $q,q',r,r'$ in one class, with $u=q\wedge r$ and
+$v=q'\vee r'\vee u$ (again in the class, as $Q$ is a chain), $(q'_1-q_1)^++(r'_2-r_2)^+\le(v_1+v_2)-(u_1+u_2)\le m^1(I)$; taking
+suprema and infima, $m^1_e(\pi_1Q_I)+m^1_e(\pi_2Q_I)\le m^1(I)$, and summing over the countably many classes gives the claim.
+Now for $0<y<1$ the section $S^y=\{x:\langle x,y\rangle\in S\}=\{(1-y)a_0(s)+ya_1(s)\}$; applying the fact to
+$Q=\{\langle(1-y)a_0(s),ya_1(s)\rangle\}$, which is a chain, gives $m^1_e(S^y)\ge(1-y)m^1_e(E_0)+ym^1_e(E_1)$. Let $M\supseteq S$ be a
+measurable hull. By Tonelli,
+$m_e(S)=m(M)=\int m^1(M^y)\,dy\ge\int_0^1[(1-y)m^1_e(E_0)+ym^1_e(E_1)]\,dy=\frac12[m^1_e(E_0)+m^1_e(E_1)]$.
 \end{proof}
 
 \begin{proposition}[{\cite[example after Theorem 9]{Diss}}]\label{prop:th-example}
@@ -205,13 +214,18 @@ strictly increasing, $h(\R)=\tfrac\eps3g(\R)$ is null, and $0\le x-h(x)\le\eps/2
 There is a family $(\gamma_x)_{x\in\R}$ of arcs, $\gamma_x$ an arc at $x$, pairwise disjoint, whose union has planar measure zero.
 \end{theorem}
 \begin{proof}
-Choose by Lemma~\ref{lem:th-lemma25} strictly increasing $h_n$ with $h_n(\R)$ null and $\abs{x-h_n(x)}\le1/n$. For $x\in\R$ let
-$X_x:[0,1]\to\R$ be $X_x(0)=x$ and, on $[1/(n+1),1/n]$, the affine function with $X_x(1/(n+1))=h_{n+1}(x)$ and $X_x(1/n)=h_n(x)$.
-It is continuous (at $0$ because $\abs{X_x(y)-x}\le1/n$ there), so $\gamma_x=\{\langle X_x(y),y\rangle:0\le y\le1\}$ is an arc at $x$.
-If $x<x'$ then $X_x<X_{x'}$ everywhere, so the arcs are disjoint. Let $S_n$ be the union over $x$ of the segments
-$\{\langle X_x(y),y\rangle:1/(n+1)\le y\le1/n\}$. After the affine change of variable $y\mapsto n(n+1)(y-1/(n+1))$, which multiplies
-areas by $n(n+1)$, Theorem~\ref{thm:th-thm9} applies; the end sets lie in $h_{n+1}(\R)$ and $h_n(\R)$, so $m_e(S_n)=0$.
-Hence $\bigcup_x\gamma_x\subseteq X_0\cup\bigcup_nS_n$ is null.
+(Formalized as \texttt{TJK.Discont.exists\_disjoint\_null\_arcs'}.)
+Choose by Lemma~\ref{lem:th-lemma25} strictly increasing $h_n$ ($n\ge0$) with $h_n(\R)$ null and $\abs{x-h_n(x)}\le2^{-n}$. Let
+$\rho_k(y)=\max(0,\min(1,2^{k+1}y-1))$, which rises from $0$ at $y=2^{-k-1}$ to $1$ at $y=2^{-k}$, and put
+$X_x(y)=x+\sum_{k\ge0}(h_k(x)-h_{k+1}(x))\rho_k(y)$. The terms are bounded by $2\cdot2^{-k}$, so $X_x$ is continuous, and $X_x(0)=x$.
+For $2^{-k-1}\le y\le2^{-k}$ we have $\rho_n(y)=0$ for $n<k$ and $\rho_n(y)=1$ for $n>k$, and the series telescopes (as
+$h_n(x)\to x$) to $X_x(y)=(1-\rho_k(y))h_{k+1}(x)+\rho_k(y)h_k(x)$: on $[2^{-k-1},2^{-k}]$, $X_x$ is affine from $h_{k+1}(x)$ to $h_k(x)$.
+So $\gamma_x=\{\langle X_x(y),y\rangle:0\le y\le1\}$ is an arc at $x$ (injective in $y$), lying in $\Hp$ except for $x$.
+If $x<x'$ then $X_x<X_{x'}$ on $[0,1]$, so the arcs are disjoint. Let $S_k$ be the union over $x$ of the segments
+$\{\langle X_x(y),y\rangle:2^{-k-1}\le y\le2^{-k}\}$; these are pairwise disjoint. Under the affine map
+$\langle u,t\rangle\mapsto\langle u,(1+t)2^{-k-1}\rangle$, $S_k$ is the image of the union of the disjoint segments from
+$\langle h_{k+1}(x),0\rangle$ to $\langle h_k(x),1\rangle$, whose end sets lie in the null sets $h_{k+1}(\R)$, $h_k(\R)$; by
+Theorem~\ref{thm:th-thm9} that union is null, hence so is $S_k$. Thus $\bigcup_x\gamma_x\subseteq X_0\cup\bigcup_kS_k$ is null.
 \end{proof}
 
 \begin{corollary}[{\cite[Theorem 10, Corollary 1]{Diss}}; {\cite[Theorem 6]{JMM}}]\label{cor:ae-zero}
