@@ -190,57 +190,49 @@ Let $A\subseteq X$ be $\Fsd$. There is a continuous $g:\Hp\to[0,1]$ such that
 (b) if $x\in\R$ and $g\to0$ along some arc at $x$ in $\Hp$, then $x\in A$.
 \end{theorem}
 \begin{proof}
-Take $\mathcal F_n$ as in Lemma~\ref{lem:special-sequence} and $E_n=E(\mathcal F_n)$. Fix sequences
+Take $\mathcal F_n$ as in Lemma~\ref{lem:special-sequence} and $E_n=E(\mathcal F_n)$. Fix strictly monotone sequences
 $\beta_n\uparrow\pi/4$ in $(0,\pi/4)$, $\alpha_n\downarrow\pi/4$ in $(\pi/4,\pi/3)$, $\theta_n\uparrow3\pi/8$ in
-$(\pi/3,3\pi/8)$, all strictly monotone.
+$(\pi/3,3\pi/8)$ (Lean: $t_n=\pi/(24(n+2))$, $\beta_n=\pi/4-2t_n$, $\alpha_n=\pi/4+2t_n$, $\theta_n=3\pi/8-t_n$). For a
+special pair $(\eps,\delta)$ of $\mathcal F_n$ let $U$ be the union of the \emph{pieces} $s(x,\eps(x),\theta_n)$,
+$x\in E_n$, and $B(F,\delta(F),\alpha_n,\beta_n)$, $F\in\mathcal F^2_n$.
 
-\emph{Claim.} If $x\in E_{n+1}\setminus E_n$, there is a unique $F\in\mathcal F_n^2$ with $x\in F\cap J(F)^*$; and no
-$x\in E_n$ lies in $F\cap J(F)^*$ for any $F\in\mathcal F_n^2$. Indeed $x\in K\subseteq F$ for some $K\in\mathcal F_{n+1}$,
-$F\in\mathcal F_n$; if $x$ were an endpoint of $J(F)$ it would be in $E_n$; uniqueness and the last assertion follow from
-the remark after Definition~\ref{def:special-family}. Likewise each $K\in\mathcal F^2_{n+1}$ lies in a unique
-$F\in\mathcal F_n$, and $F\in\mathcal F_n^2$.
+\emph{Properties of $U$.} The pieces are open and pairwise disjoint ((iii)--(v) of Definition~\ref{def:special-pair}).
+Each piece lies in $\{y<\eps(x)\}$ or $\{y<\delta(F)\}$, so by (i), (ii) only finitely many pieces meet $\{y>y_0/2\}$;
+hence a point $\langle x_0,y_0\rangle\in\cl U\cap\Hp$ lies in the closure of one piece. By (R2) the closure of a piece meets $\R$
+only in $\bigcup\mathcal F_n$ (an $x\in E_n$ lies in some member of $\mathcal F_n$).
 
-\emph{Construction.} Let $(\eps(1,\cdot),\delta(1,\cdot))$ be any special $\alpha_1,\beta_1,\theta_1$ pair for $\mathcal F_1$.
-Given $(\eps(n,\cdot),\delta(n,\cdot))$, take any special $\alpha_{n+1},\beta_{n+1},\theta_{n+1}$ pair $(\eps,\delta)$ for
-$\mathcal F_{n+1}$ and set: for $x\in E_{n+1}\setminus E_n$, with $F$ from the Claim, $\eps(n+1,x)=\min\{\eps(x),\zeta(x)\}$,
-where $\zeta(x)>0$ is given by (R10) for $B(F,\delta(n,F),\alpha_n,\beta_n)$ and $\theta_{n+1}>\beta_n$; for
-$x\in E_{n+1}\cap E_n$, $\eps(n+1,x)=\min\{\eps(x),\frac12\eps(n,x)\}$; for $K\in\mathcal F^2_{n+1}$, $K\subseteq F$,
-$\delta(n+1,K)=\min\{\delta(K),\frac12\delta(n,F)\}$. By Lemma~\ref{lem:special-pair-shrink} this is a special pair, and by
-(R3), (R7), (R10):
-\begin{enumerate}[label=(\roman*)]
-\item if $x\in E_{n+1}$, $F\in\mathcal F_n^2$, $x\in F\cap J(F)^*$, then
-  $\cl s(x,\eps(n+1,x),\theta_{n+1})\cap\Hp\subseteq B(F,\delta(n,F),\alpha_n,\beta_n)$;
-\item if $x\in E_{n+1}\cap E_n$, then $\cl s(x,\eps(n+1,x),\theta_{n+1})\cap\Hp\subseteq s(x,\eps(n,x),\theta_n)$;
-\item if $K\in\mathcal F^2_{n+1}$, $F\in\mathcal F^2_n$, $K\subseteq F$, then
-  $\cl B(K,\delta(n+1,K),\alpha_{n+1},\beta_{n+1})\cap\Hp\subseteq B(F,\delta(n,F),\alpha_n,\beta_n)$.
-\end{enumerate}
+\emph{Small angles and regions.} (1) If $x\in F\in\mathcal F_n$ and $\theta_n<\theta'<\pi/2$, there is $\zeta>0$ with
+$\cl s(x,\zeta,\theta')\cap\Hp\subseteq U$: if $x$ is an endpoint of $J(F)$, then $x\in E_n$ and (R3) with $\zeta=\eps(x)/2$
+applies; otherwise $x\in F\cap J(F)^*$, so $F\in\mathcal F_n^2$ and (R10) (with $\beta_n<\theta'$) applies to
+$B(F,\delta(F),\alpha_n,\beta_n)$. (2) If $K\in\mathcal F^2_{n+1}$, $K\subseteq F\in\mathcal F_n$, then $F\in\mathcal F^2_n$, and
+(R7) with $\eta=\delta(F)/2$ gives $\cl B(K,\eta,\alpha_{n+1},\beta_{n+1})\cap\Hp\subseteq U$.
 
-\emph{The sets $U_n$.} Let $U_n$ be the union of the sets $s(x,\eps(n,x),\theta_n)$, $x\in E_n$, and
-$B(F,\delta(n,F),\alpha_n,\beta_n)$, $F\in\mathcal F^2_n$. These pieces are open and pairwise disjoint, so each component
-$W$ of $U_n$ lies in one piece, and by (R2)
-\begin{equation}\label{eq:A1}
-\overline W\cap\R\subseteq\textstyle\bigcup\mathcal F_n .
-\end{equation}
-Each piece lies in $\{y<\eps(n,x)\}$ or $\{y<\delta(n,F)\}$, so by (i), (ii) of Definition~\ref{def:special-pair} the
-pieces form a locally finite family in $\Hp$, and $\cl U_n\cap\Hp$ is the union of the closures of the pieces. By
-(i)--(iii) and the Claim, $\cl U_{n+1}\cap\Hp\subseteq U_n$; in particular $U_{n+1}\subseteq U_n$.
+\emph{Construction.} Let $(\eps_0,\delta_0)$ be any special $\alpha_0,\beta_0,\theta_0$ pair for $\mathcal F_0$. Given
+$(\eps_n,\delta_n)$ with set $U_n$, take any special $\alpha_{n+1},\beta_{n+1},\theta_{n+1}$ pair $(\eps,\delta)$ for
+$\mathcal F_{n+1}$, and let $\eps_{n+1}(x)=\min\{\eps(x),\zeta(x)\}$ for $x\in E_{n+1}$ with $\zeta(x)$ from (1) (for $\theta'=\theta_{n+1}$
+and a member of $\mathcal F_n$ containing $x$), and $\delta_{n+1}(K)=\min\{\delta(K),\eta(K)\}$ with $\eta(K)$ from (2). By
+Lemma~\ref{lem:special-pair-shrink} this is a special pair, and by the properties of $U_{n+1}$,
+$\cl U_{n+1}\cap\Hp\subseteq U_n$; in particular $U_{n+1}\cap\Hp\subseteq U_n$.
 
 \emph{The function.} Let $g_n:\Hp\to[0,1]$ be continuous with $g_n=1$ on $\Hp\setminus U_n$ and $g_n=0$ on
-$\cl U_{n+1}\cap\Hp$ (Urysohn), and $g=\sum_n2^{-n}g_n$. Then $g$ is continuous with values in $[0,1]$, and
+$\cl U_{n+1}\cap\Hp$ (Urysohn in the metric space $\Hp$), and $g=\sum_n2^{-n-1}g_n$. Then $g$ is continuous with values in
+$[0,1]$, and
 \begin{equation}\label{eq:A23}
-g\ge2^{1-n}\text{ on }\Hp\setminus U_n,\qquad g\le2^{-n}\text{ on }U_{n+1}.
+g\ge2^{-n-1}\text{ on }\Hp\setminus U_n,\qquad g\le2^{-n-1}\text{ on }U_{n+1},
 \end{equation}
+the latter because $g_m=0$ on $U_{n+1}\subseteq\cl U_{m+1}$ for $m\le n$.
 
-(a) Let $x_0\in A$ and $n\in\N$. Then $x_0\in F$ for some $F\in\mathcal F_{n+1}$. If $x_0\in E_{n+1}$, put
-$\eta=\eps(n+1,x_0)$; as $\theta_{n+1}<3\pi/8$, $s(x_0,\eta,3\pi/8)\subseteq s(x_0,\eps(n+1,x_0),\theta_{n+1})\subseteq U_{n+1}$.
-Otherwise $x_0\in F\cap J(F)^*$ with $F\in\mathcal F^2_{n+1}$, and (R10) with $\beta_{n+1}<3\pi/8$ gives $\eta>0$ with
-$s(x_0,\eta,3\pi/8)\subseteq B(F,\delta(n+1,F),\alpha_{n+1},\beta_{n+1})\subseteq U_{n+1}$. In both cases $g\le2^{-n}$ on
-$s(x_0,1,3\pi/8)\cap\{y<\eta\}$.
+(a) Let $x_0\in A$ and $n\in\N$. Then $x_0\in F$ for some $F\in\mathcal F_{n+1}$, and (1) with $\theta'=3\pi/8$ gives $\zeta>0$
+with $s(x_0,\zeta,3\pi/8)\subseteq U_{n+1}$. So $g\le2^{-n-1}$ on $s(x_0,1,3\pi/8)\cap\{\abs{z-x_0}<\zeta\}$.
 
-(b) If $g\to0$ along an arc $\gamma$ at $x$, then for each $n$ a subarc $\gamma'$ at $x$ has $g<2^{1-n}$ on
-$\gamma'\setminus\{x\}$, which therefore lies in $U_n$, hence in one component $W$; so $x\in\overline W\cap\R\subseteq\bigcup\mathcal F_n$
-by \eqref{eq:A1}. Thus $x\in\bigcap_n\bigcup\mathcal F_n=A$.
+(b) If $g\to0$ along an arc $\gamma$ at $x$, then for each $n$ there is $r>0$ with $g<2^{-n-1}$ on
+$(\gamma\setminus\{x\})\cap S(r,x)$. Parametrizing $\gamma$ from $x$, a connected set $C=p((0,t_0])$ lies in this set and has
+$x\in\overline C$ (Lean: \texttt{TJK.IsArcAt.exists\_tail}). By \eqref{eq:A23}, $C\subseteq U_n$; a connected subset of a union of
+disjoint open pieces lies in one piece, so $x$ lies in the closure of a piece, hence $x\in\bigcup\mathcal F_n$.
+Thus $x\in\bigcap_n\bigcup\mathcal F_n=A$.
 \end{proof}
+In Lean, $g$ is a function $\C\to\R$, continuous on $\Hp$ and mapping $\Hp$ into $[0,1]$, and (a) is
+$g\to0$ along $\mathcal N_{s(x,1,3\pi/8)}(x)$.
 
 \begin{theorem}[{\cite[Theorem 4]{Diss}}]\label{thm:cc-realize}
 \lean{TJK.Construct.exists_curvConvSet_eq_upperHalfPlane}
