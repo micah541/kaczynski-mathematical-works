@@ -6,6 +6,7 @@ Blueprint: `paper/main.tex`; each theorem names its blueprint label.
 import TJK.Defs
 import TJK.Discont.Segments
 import TJK.Discont.Vitali
+import TJK.BoundaryFn.Homeo
 import TJK.Construct.Realize
 
 open Set Filter Topology MeasureTheory
@@ -55,8 +56,8 @@ disk onto itself is continuous off a countable set. -/
 theorem Homeo.exists_countable_continuousOn (e : disc ≃ₜ disc) (f : ℂ → ℂ)
     (hfe : ∀ z : disc, f z = e z) (E : Set ℂ) (hE : E ⊆ circle) (φ : ℂ → ℂ)
     (hφ : IsBoundaryFunction disc f E φ) :
-    ∃ N ⊆ E, N.Countable ∧ ContinuousOn φ (E \ N) := by
-  sorry
+    ∃ N ⊆ E, N.Countable ∧ ContinuousOn φ (E \ N) :=
+  Homeo.exists_countable_continuousOn' e f hfe E hE φ hφ
 
 /-! ## Realization (Trans. AMS 141, 1969; dissertation Theorems 4, 6, 7) -/
 

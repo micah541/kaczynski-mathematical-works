@@ -124,11 +124,12 @@ $\sigma\subseteq\overline{U_1}\cap\overline{U_2}$.
 \end{fact}
 
 \begin{lemma}[disjoint components have disjoint boundary arcs]\label{lem:disjoint-arcs}
-\lean{TJK.disjoint_boundaryArcs}
+\lean{TJK.disjoint_boundaryArcs, TJK.disc_inter_ball_subset_of_mem_closure}
 \uses{fact:crosscut}
 Let $\sigma,\tau$ be crosscuts of $\D$, $U$ a component of $\D\setminus\sigma$ and $V$ a component of
 $\D\setminus\tau$, with $U\cap V=\emptyset$. Then the arcs $\overline U\cap C$ and $\overline V\cap C$ have
-disjoint relative interiors.
+disjoint relative interiors. (It suffices that $\sigma,\tau$ be closed and meet $C$ only in the endpoints of these
+arcs.)
 \end{lemma}
 \begin{proof}
 Let $p$ be interior to both arcs. Then $p$ is not an endpoint of $\sigma$ or $\tau$, so $p\notin\sigma\cup\tau$,

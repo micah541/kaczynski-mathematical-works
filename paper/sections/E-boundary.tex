@@ -112,7 +112,10 @@ If $q\in\D$ then $z=f^{-1}(f(z))\to f^{-1}(q)\in\D$ as $z\to x$ along the arc, w
 \end{proof}
 
 \begin{theorem}[{\cite[Theorem 1]{JMM}}]\label{thm:homeo}
-\lean{TJK.Homeo.exists_countable_continuousOn}
+\lean{TJK.Homeo.exists_countable_continuousOn, TJK.Homeo.exists_countable_continuousOn', TJK.jumpSet,
+  TJK.Homeo.card_mul_le_of_subset_jumpSet, TJK.Homeo.finite_jumpSet, TJK.Homeo.ncard_jumpSet_mul_le,
+  TJK.exists_crosscut_near, TJK.exists_component_subset_closedBall, TJK.Homeo.exists_image_crosscut,
+  TJK.exists_boundaryArc_of_crosscut, TJK.Homeo.exists_boundaryArc}
 \uses{lem:homeo-values, fact:crosscut, lem:disjoint-arcs, lem:disc-geometry, fact:tietze-arc, lem:subarc, def:ccset}
 Let $f$ be a homeomorphism of $\D$ onto $\D$, regarded as a map $\D\to\C$, let $E\subseteq C$, and let $\varphi:E\to\C$ be a
 boundary function for $f$ (so $\varphi(E)\subseteq C$ by Lemma~\ref{lem:homeo-values}). Then there is a countable $N\subseteq E$ such that $\varphi|_{E\setminus N}$ is continuous. More precisely,
@@ -139,11 +142,10 @@ $\sigma_i$ consists of points of $\beta$ (the compact sets $[u,v]$ and $\beta'$ 
 along $\sigma_i$ at $x_i$; likewise $f\to\varphi(x_i')$ at $x_i'$. Since $\varphi(x_i)\ne\varphi(x_i')$ lie on $C$
 (Lemma~\ref{lem:homeo-values}), $\tau_i=f(\sigma_i\cap\D)\cup\{\varphi(x_i),\varphi(x_i')\}$ is a crosscut of $\D$.
 
-\emph{The small component.} Let $R_i$ be the component of $\D\setminus\sigma_i$ with $\overline{R_i}\cap C$ equal to
-the shorter arc $J_i$ from $x_i$ to $x_i'$ (Fact~\ref{fact:crosscut}); $J_i\subseteq S(\delta,x_i)$ by
-Lemma~\ref{lem:disc-geometry}(c). The connected set $\D\setminus\overline{S(\delta',x_i)}$
-(Lemma~\ref{lem:disc-geometry}(b)) misses $\sigma_i$ and has $-x_i\notin J_i$ in its closure, so it lies in the
-other component; hence $R_i\subseteq S(\delta,x_i)$. So $R_1,\dots,R_m$ are pairwise disjoint.
+\emph{The small component.} The connected set $\D\setminus\overline{S(\delta',x_i)}$
+(Lemma~\ref{lem:disc-geometry}(b)) misses $\sigma_i$, so it lies in one of the two components of $\D\setminus\sigma_i$
+(Fact~\ref{fact:crosscut}); let $R_i$ be the other one. Then $R_i\subseteq\overline{S(\delta',x_i)}\subseteq S(\delta,x_i)$,
+so $R_1,\dots,R_m$ are pairwise disjoint.
 
 \emph{Images.} $f$ maps $\D\setminus\sigma_i$ homeomorphically onto $\D\setminus\tau_i$, so $f(R_i)$ is a component
 of $\D\setminus\tau_i$, and by Fact~\ref{fact:crosscut} $\overline{f(R_i)}\cap C$ is a closed arc $A_i$ with
