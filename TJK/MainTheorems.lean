@@ -5,6 +5,7 @@ Blueprint: `paper/main.tex`; each theorem names its blueprint label.
 -/
 import TJK.Defs
 import TJK.Discont.Segments
+import TJK.Construct.Realize
 
 open Set Filter Topology MeasureTheory
 
@@ -62,8 +63,8 @@ theorem Homeo.exists_countable_continuousOn (e : disc ≃ₜ disc) (f : ℂ → 
 curvilinear convergence of a bounded continuous function in the upper half-plane. -/
 theorem Construct.exists_curvConvSet_eq_upperHalfPlane (A : Set ℝ) (hA : IsFσδ A) :
     ∃ f : ℂ → ℂ, ContinuousOn f upper ∧ Bornology.IsBounded (f '' upper) ∧
-      curvConvSet upper realAxis f = ((↑) : ℝ → ℂ) '' A := by
-  sorry
+      curvConvSet upper realAxis f = ((↑) : ℝ → ℂ) '' A :=
+  Construct.exists_curvConvSet_eq_upperHalfPlane' A hA
 
 /-- McMillan's problem, answered (Trans. AMS 141, (F); blueprint `thm:construct-F`). -/
 theorem Construct.exists_f_sphere (A : Set ℂ) (hA : A ⊆ circle) (hAF : IsFσδ A)

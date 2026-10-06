@@ -39,7 +39,7 @@ $g(0)$ and $g(1)$.
 \end{fact}
 
 \begin{corollary}[paths may replace arcs]\label{cor:path-arc}
-\lean{TJK.exists_arcAt_of_path}
+\lean{TJK.exists_arcAt_of_path, TJK.tendsto_of_nhdsWithin_le_map, TJK.clusterSet_subset_of_nhdsWithin_le_map}
 \uses{fact:tietze-arc, def:ccset}
 Let $\Omega$ be open, $p\in\partial\Omega$, and $g:[0,1]\to\R^n$ continuous with $g(1)=p$ and
 $g([0,1))\subseteq\Omega$. Then $g([0,1])$ contains an arc $\gamma$ at $p$, and for every
@@ -54,7 +54,9 @@ limit $t^*<1$ with $g(t^*)=p$, which is impossible. So $t_k\to1$.
 \end{proof}
 
 \begin{lemma}[subarcs and exits]\label{lem:subarc}
-\lean{TJK.IsArcAt.exists_subarc_subset, TJK.IsArcAt.tendsto_subarc, TJK.exists_exit_subpath}
+\lean{TJK.IsArcAt.exists_subarc_subset, TJK.IsArcAt.tendsto_subarc, TJK.IsArcAt.clusterSet_subarc,
+  TJK.IsArc.nhdsWithin_subarc, TJK.exists_exit_subpath, TJK.IsArcAt.exists_subarc_firstHit,
+  TJK.IsArcAt.exists_subarc_strip}
 \uses{def:ccset}
 (a) If $\gamma$ is an arc at $p$ and $W$ is a neighbourhood of $p$, there is an arc $\gamma'\subseteq\gamma\cap
 W$ at $p$; limits and cluster sets along $\gamma'$ and $\gamma$ coincide. If $f\to q$ along $\gamma$ and
@@ -72,8 +74,8 @@ with $\abs{g(t')-w}\ge r$, and use continuity.
 \end{proof}
 
 \begin{lemma}[cluster sets]\label{lem:cluster}
-\lean{TJK.clusterSet_nonempty, TJK.isCompact_clusterSet, TJK.isConnected_clusterSet,
-  TJK.tendsto_iff_clusterSet_eq_singleton}
+\lean{TJK.clusterSet_eq_iInter_subarc, TJK.clusterSet_nonempty, TJK.isCompact_clusterSet,
+  TJK.isConnected_clusterSet, TJK.tendsto_iff_clusterSet_eq_singleton, TJK.clusterSet_comp}
 \uses{def:ccset, lem:subarc}
 Let $K$ be a compact metric space, $f:\Omega\to K$ continuous and $\gamma$ an arc at $p$. Then
 $C(f,\gamma)=\bigcap_{\gamma'}\overline{f(\gamma'\setminus\{p\})}$, the intersection over the subarcs
@@ -112,7 +114,7 @@ A complete metric space is not of the first category in itself; in it, a countab
 \subsection{Crosscuts}
 
 \begin{fact}[crosscut theorem]\label{fact:crosscut}
-\lean{TJK.crosscut_theorem}
+\lean{TJK.crosscut_theorem, TJK.closure_inter_circle_of_frontier, TJK.IsCrosscut.exists_angles}
 \uses{def:arcs}
 \source{Jordan curve theorem; Newman, Elements, Theorem 11.8 (the $\theta$-curve theorem)}
 Let $\sigma$ be a crosscut of $\D$ with endpoints $a\ne b$, and let $A_1,A_2$ be the two closed arcs of
@@ -136,7 +138,8 @@ $V$, contradicting $U\cap V=\emptyset$.
 \end{proof}
 
 \begin{definition}[charts]\label{def:charts}
-\lean{TJK.cayley, TJK.chartH, TJK.chartD, TJK.stripExp}
+\lean{TJK.cayley, TJK.chartH, TJK.chartD, TJK.stripExp, TJK.openSquare, TJK.baseX, TJK.gOpen,
+  TJK.gClosed}
 \begin{enumerate}[label=(\alph*)]
 \item The Cayley map $\kappa(z)=(z-i)/(z+i)$.
 \item $\Psi_\Hp\langle x,y\rangle=\tan(\pi x/2)+i\,y/(1-y)$ for $\abs x<1$, $0\le y<1$.
@@ -146,8 +149,10 @@ $V$, contradicting $U\cap V=\emptyset$.
 \end{definition}
 
 \begin{lemma}[charts]\label{lem:charts}
-\lean{TJK.cayley_homeomorph, TJK.chartH_homeomorph, TJK.chartD_homeomorph, TJK.stripExp_homeomorph,
-  TJK.chartD_closedPiece}
+\lean{TJK.cayley_isChart, TJK.tendsto_cayley_cobounded, TJK.tendsto_norm_cayleyInv,
+  TJK.chartH_isChart, TJK.chartH_ofReal, TJK.strictMonoOn_tan_pi_mul_div_two, TJK.chartD_isChart,
+  TJK.isClosed_gClosed, TJK.exists_ball_inter_disc_subset_gClosed, TJK.ofReal_not_mem_gClosed,
+  TJK.stripExp_isChart, TJK.stripExp_ofReal, TJK.stripExp_add_I}
 \uses{def:charts}
 (a) $\kappa$ is a homeomorphism of $\Hp\cup\R$ onto $(\D\cup C)\setminus\{1\}$ mapping $\Hp$ onto $\D$
 and $\R$ onto $C\setminus\{1\}$; $\abs{\kappa(z)-1}\to0$ iff $\abs z\to\infty$.
@@ -205,14 +210,19 @@ and $v'\ne v$, $v'<v$, i.e.\ $\operatorname{Re}p'>\operatorname{Re}p$.
 \end{proof}
 
 \begin{lemma}[geometry near a boundary point]\label{lem:disc-geometry}
-\lean{TJK.convex_disc_inter_ball, TJK.isConnected_disc_diff_closedBall, TJK.shortArc_subset_ball}
+\lean{TJK.convex_disc_inter_ball, TJK.isConnected_disc_diff_closedBall, TJK.shortArc_subset_ball,
+  TJK.exists_shortArc, TJK.norm_expI_sub_le, TJK.sum_le_two_pi_of_pairwiseDisjoint, TJK.card_mul_le_two_pi}
 Let $x\in C$ and $0<\delta<2$.
 (a) $\D\cap S(\delta,x)$ is convex.
 (b) $\D\setminus\overline{S(\delta,x)}$ is connected and has $-x$ in its closure.
 (c) If $x'\in C$ and $\abs{x'-x}<\delta$, the shorter closed arc of $C$ from $x$ to $x'$ lies in $S(\delta,x)$.
 Any arc of $C$ between $w_1,w_2$ has length at least $\abs{w_1-w_2}$.
 (d) If $A_1,\dots,A_m$ are closed arcs of $C$ with pairwise disjoint relative interiors, their lengths add up to at most
-$2\pi$. (The length of an arc is the Lebesgue measure of the corresponding set of angles in $[0,2\pi)$.)
+$2\pi$. (The length of an arc is the Lebesgue measure of the corresponding set of angles in $[0,2\pi)$.) In particular,
+if the endpoints of each $A_i$ are at distance $\ge\eps$, then $m\eps\le2\pi$.
+In Lean a closed arc is $\{e^{it}:\theta\le t\le\theta+\ell\}$ with $0\le\ell\le2\pi$ (\texttt{circleArc}), its interior
+is the image of $(\theta,\theta+\ell)$, and its length is $\ell$; (d) is proved by pushing the open angle intervals to
+$\R/2\pi\Z$ with its Haar measure.
 \end{lemma}
 \begin{proof}
 (a) Intersection of convex sets. (b) For $z\in\D$ the convex function $t\mapsto\abs{(1-t)z-tx-x}^2$ has
@@ -235,8 +245,8 @@ $\R^n$ is locally path-connected and second countable.
 \subsection{Transfer}
 
 \begin{lemma}[transfer]\label{lem:transfer}
-\lean{TJK.transfer_isArcAt, TJK.transfer_curvConvSet, TJK.transfer_isBoundaryFunction,
-  TJK.transfer_clusterSet}
+\lean{TJK.IsChart, TJK.transfer_isArcAt, TJK.transfer_tendsto, TJK.transfer_curvConvSet,
+  TJK.transfer_isBoundaryFunction, TJK.transfer_clusterSet}
 \uses{def:ccset}
 Let $\Omega,\Omega'$ be open, $B\subseteq\partial\Omega$, $B'\subseteq\partial\Omega'$, and let
 $\Psi:\Omega\cup B\to\Omega'\cup B'$ be a homeomorphism with $\Psi(\Omega)=\Omega'$. For $f:\Omega'\to Y$:

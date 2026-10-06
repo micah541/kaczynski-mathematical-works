@@ -12,3 +12,5 @@ import TJK.Baire.Sphere
 import TJK.Discont.Segments
 import TJK.Baire.Higher
 import TJK.Construct.H
+import TJK.Plane.Basic
+import TJK.Construct.Realize
