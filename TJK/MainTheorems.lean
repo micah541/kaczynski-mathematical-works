@@ -9,6 +9,7 @@ import TJK.Discont.Vitali
 import TJK.BoundaryFn.Homeo
 import TJK.Construct.Final
 import TJK.McMillan.Basic
+import TJK.BoundaryFn.Fsigma
 import TJK.Construct.Realize
 
 open Set Filter Topology MeasureTheory
@@ -36,22 +37,22 @@ theorem McMillan.isFσδ_clusterSet_subset {K : Type*} [MetricSpace K] [CompactS
 theorem BoundaryFn.exists_countable_isFσMeasurable {Y : Type*} [MetricSpace Y]
     [TopologicalSpace.SeparableSpace Y] (f : ℂ → Y) (hf : ContinuousOn f upper) (E : Set ℂ)
     (hE : E ⊆ realAxis) (φ : ℂ → Y) (hφ : IsBoundaryFunction upper f E φ) :
-    ∃ M ⊆ E, M.Countable ∧ IsFσMeasurable ((E \ M).restrict φ) := by
-  sorry
+    ∃ M ⊆ E, M.Countable ∧ IsFσMeasurable ((E \ M).restrict φ) :=
+  BoundaryFn.exists_countable_isFσMeasurable' f hf E hE φ hφ
 
 /-- Boundary functions on the circle are of honorary Baire class 2: real version
 (1965 paper, Theorem 2; blueprint `cor:bf-honorary`). -/
 theorem BoundaryFn.isHonoraryBaireTwo_disc_real (f : ℂ → ℝ) (hf : ContinuousOn f disc)
     (E : Set ℂ) (hE : E ⊆ circle) (φ : ℂ → ℝ) (hφ : IsBoundaryFunction disc f E φ) :
-    IsHonoraryBaireTwo (E.restrict φ) := by
-  sorry
+    IsHonoraryBaireTwo (E.restrict φ) :=
+  BoundaryFn.isHonoraryBaireTwo_disc_real' f hf E hE φ hφ
 
 /-- Boundary functions on the circle are of honorary Baire class 2: Riemann-sphere version
 (1965 paper, Theorem 3; blueprint `cor:bf-honorary`). -/
 theorem BoundaryFn.isHonoraryBaireTwo_disc_sphere (f : ℂ → Sphere2) (hf : ContinuousOn f disc)
     (E : Set ℂ) (hE : E ⊆ circle) (φ : ℂ → Sphere2) (hφ : IsBoundaryFunction disc f E φ) :
-    IsHonoraryBaireTwo (E.restrict φ) := by
-  sorry
+    IsHonoraryBaireTwo (E.restrict φ) :=
+  BoundaryFn.isHonoraryBaireTwo_disc_sphere' f hf E hE φ hφ
 
 /-- 1965 paper, Theorem 1 (blueprint `thm:homeo`): a boundary function of a homeomorphism of the
 disk onto itself is continuous off a countable set. -/

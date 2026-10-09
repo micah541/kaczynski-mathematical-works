@@ -6,14 +6,14 @@ Sources: \cite[\S5, Lemma 15, Theorem 5]{Diss}; \cite[Theorems 1--3]{JMM}; \cite
 \begin{lemma}[{\cite[Lemma 15]{Diss}}]\label{lem:th-lemma15}
 \lean{TJK.isFσMeasurable_of_sandwich}
 \uses{def:fn-classes, lem:borel-basic, lem:baire-criterion}
-Let $E$ be a metric space, $Y$ a separable metric space and $\varphi:E\to Y$. Suppose that for every open
-$U\subseteq Y$ there are $L\in\Fs(E)$ and a countable $N\subseteq E$ with
-$\varphi^{-1}(U)\subseteq L\subseteq\varphi^{-1}(\overline U)\cup N$. Then there is a countable $M\subseteq E$
-such that $\varphi|_{E\setminus M}$ is of class $\Fs$.
+Let $X$ be a topological space, $E\subseteq X$, $Y$ a separable metric space and $\varphi:X\to Y$. Suppose that for
+every open $U\subseteq Y$ there are $L\in\Fs(X)$ and a countable $N\subseteq X$ with
+$E\cap\varphi^{-1}(U)\subseteq L$ and $E\cap L\subseteq\varphi^{-1}(\overline U)\cup N$. Then there is a countable
+$M\subseteq E$ such that $\varphi|_{E\setminus M}$ is of class $\Fs$.
 \end{lemma}
 \begin{proof}
-Let $\mathcal B$ be a countable base, choose $L(B),N(B)$ for $B\in\mathcal B$, put $M=\bigcup_BN(B)$,
-$E_0=E\setminus M$, $\varphi_0=\varphi|_{E_0}$. For open $W$ let $\mathcal B(W)=\{B:\overline B\subseteq W\}$,
+Let $\mathcal B$ be a countable base, choose $L(B),N(B)$ for $B\in\mathcal B$, put $M=E\cap\bigcup_BN(B)$,
+$E_0=E\setminus M$, $\varphi_0=\varphi|_{E_0}$. For open $W$ let $\mathcal B(W)=\{B\in\mathcal B:\overline B\subseteq W\}$,
 so $W=\bigcup_{\mathcal B(W)}B$ (proof of Lemma~\ref{lem:baire-criterion}). Then
 \[
 \varphi_0^{-1}(W)\subseteq E_0\cap\bigcup_{\mathcal B(W)}L(B)\subseteq
@@ -24,45 +24,57 @@ so $\varphi_0^{-1}(W)=E_0\cap\bigcup_{\mathcal B(W)}L(B)\in\Fs(E_0)$.
 \end{proof}
 
 \begin{theorem}[{\cite[Theorem 5]{Diss}}]\label{thm:bf-fsigma}
-\lean{TJK.BoundaryFn.exists_countable_isFσMeasurable}
+\lean{TJK.BoundaryFn.exists_countable_isFσMeasurable, TJK.BoundaryFn.exists_countable_isFσMeasurable',
+  TJK.BoundaryFn.reachSet, TJK.BoundaryFn.arcSet, TJK.BoundaryFn.mem_arcSet,
+  TJK.BoundaryFn.exists_mem_reachSet, TJK.BoundaryFn.countable_arcSet_inter_closure,
+  TJK.BoundaryFn.exists_countable_isFσMeasurable_disc}
 \uses{lem:th-lemma15, lem:two-sided, lem:crosscut-H, fact:tietze-arc, lem:subarc, lem:open-components,
-  lem:borel-basic, def:ccset}
+  lem:borel-basic, def:ccset, lem:transfer, lem:charts}
 Let $Y$ be a separable metric space, $f:\Hp\to Y$ continuous, $E\subseteq\R$, and $\varphi:E\to Y$ a
 boundary function for $f$. There is a countable $M\subseteq E$ such that $\varphi|_{E\setminus M}$ is of
-class $\Fs$.
+class $\Fs$. The same holds for $f:\D\to Y$ continuous and $E\subseteq C$.
 \end{theorem}
 \begin{proof}
-By Lemma~\ref{lem:th-lemma15} it suffices, given open $U\subseteq Y$, to find $L\in\Fs(E)$ and countable
-$N$ with $\varphi^{-1}(U)\subseteq L\subseteq\varphi^{-1}(\overline U)\cup N$. Let $W=Y\setminus\overline U$ and
+By Lemma~\ref{lem:th-lemma15} it suffices, given open $U\subseteq Y$, to find $L\in\Fs(\C)$ and countable
+$N$ with $E\cap\varphi^{-1}(U)\subseteq L$ and $E\cap L\subseteq\varphi^{-1}(\overline U)\cup N$. Let
+$W=Y\setminus\overline U$, so $U\cap W=\emptyset$, and for $c>0$
 \begin{align*}
-E_n&=\{x\in\R:\text{some arc $\gamma$ at $x$ has its other endpoint on $X_n$ and }\gamma\setminus\{x\}\subseteq f^{-1}(U)\},\\
-K&=\{x\in\R:\text{some arc $\gamma$ at $x$ has }\gamma\setminus\{x\}\subseteq f^{-1}(W)\}.
+E_c&=\{x\in\R:\text{some arc $\gamma$ at $x$ has a point $z$ with $\operatorname{Im}z\ge c$, and }
+f(\gamma\setminus\{x\})\subseteq U\},\\
+K&=\{x\in\R:\text{some arc $\gamma$ at $x$ has }f(\gamma\setminus\{x\})\subseteq W\}.
 \end{align*}
-If $x\in\varphi^{-1}(U)$, a subarc of the arc at $x$ along which $f\to\varphi(x)$ is mapped into $U$
-(Lemma~\ref{lem:subarc}); cutting it at its first point on a line $X_n$ below its other endpoint shows
-$x\in E_n$. So $\varphi^{-1}(U)\subseteq\bigcup_nE_n$, and likewise $\varphi^{-1}(W)\subseteq K$.
+If $x\in E\cap\varphi^{-1}(U)$, a subarc $\gamma'$ of the arc at $x$ along which $f\to\varphi(x)$ has
+$f(\gamma'\setminus\{x\})\subseteq U$ (Lemma~\ref{lem:subarc}); its other endpoint lies in $\Hp$, so $x\in E_{1/n}$
+for some $n$. So $E\cap\varphi^{-1}(U)\subseteq\bigcup_nE_{1/n}$, and likewise $E\cap\varphi^{-1}(W)\subseteq K$.
 
-\emph{$K\cap\overline{E_n}$ is countable.} Fix $n$. For $x\in K$ choose (Lemma~\ref{lem:subarc}) an arc
-$\gamma_x$ at $x$ with $\gamma_x\setminus\{x\}\subseteq\Hp_n\cap f^{-1}(W)$, and let $U_x$ be the component of
-the open set $\Hp_n\cap f^{-1}(W)$ containing $\gamma_x\setminus\{x\}$. Let $T$ be the set of points of
-$K\cap\overline{E_n}$ that are two-sided limit points of $E_n$. We claim $x\mapsto U_x$ is injective on $T$,
-so $T$ is countable (Lemma~\ref{lem:open-components}). Let $x<y$ in $T$ with $U_x=U_y$. Joining
-$\gamma_x$ and $\gamma_y$ by a path in $U_x$ and applying Fact~\ref{fact:tietze-arc}, we get a crosscut $\alpha'$
-of $\Hp$ from $x$ to $y$ with $\alpha'\setminus\{x,y\}\subseteq U_x\subseteq\Hp_n\cap f^{-1}(W)$. Let $A$ be the
-unbounded component of $\Hp\setminus\alpha'$ (Lemma~\ref{lem:crosscut-H}); since $\max_{\alpha'}\operatorname{Im}<1/n$,
-$X_n\subseteq A$. Choose $w\in(x,y)\cap E_n$ and an arc $\beta$ at $w$ ending on $X_n$ with
-$\beta\setminus\{w\}\subseteq f^{-1}(U)$. Then $\beta\setminus\{w\}$ is connected, misses $\alpha'$ (as
-$f^{-1}(U)\cap f^{-1}(W)=\emptyset$) and meets $X_n\subseteq A$, so it lies in $A$; hence
-$w\in\overline A\cap\R=\R\setminus(x,y)$, a contradiction. The points of $\overline{E_n}$ that are not two-sided
-limit points of $E_n$ form a countable set (Lemma~\ref{lem:two-sided}). Hence $K\cap\overline{E_n}$ is countable.
+\emph{$K\cap\overline{E_c}$ is countable.} Let $O=\{z\in\Hp:\operatorname{Im}z<c,\ f(z)\in W\}$, an open set. For
+$x\in K$ choose (Lemma~\ref{lem:subarc}) an arc $\gamma_x$ from $x$ to $b_x$ with $\gamma_x\setminus\{x\}\subseteq O$,
+and let $U_x$ be the component of $O$ containing $b_x$. Let $T$ be the set of points of $K\cap\overline{E_c}$
+that are two-sided limit points of $E_c$. We claim $x\mapsto U_x$ is injective on $T$, so $T$ is countable
+(Lemma~\ref{lem:open-components}). Let $x<y$ in $T$ with $U_x=U_y$. Joining $\gamma_x$ and $\gamma_y$ by a path in
+$U_x$ and applying Fact~\ref{fact:tietze-arc}, we get a crosscut $\alpha'$ of $\Hp$ from $x$ to $y$ with
+$\alpha'\setminus\{x,y\}\subseteq O$; in particular $\operatorname{Im}<c$ on $\alpha'$. Let $A$ be the unbounded component
+of $\Hp\setminus\alpha'$ (Lemma~\ref{lem:crosscut-H}); it contains every point above $\alpha'$. Choose
+$w\in(x,y)\cap E_c$ and an arc $\beta$ at $w$ with $f(\beta\setminus\{w\})\subseteq U$ and a point $z_0$,
+$\operatorname{Im}z_0\ge c$. Then $\beta\setminus\{w\}$ is connected, misses $\alpha'$ (as $U\cap W=\emptyset$) and
+contains $z_0\in A$, so it lies in $A$; hence $w\in\overline A\cap\R=\R\setminus(x,y)$, a contradiction. The points
+of $\overline{E_c}$ that are not two-sided limit points of $E_c$ form a countable set (Lemma~\ref{lem:two-sided}).
+Hence $K\cap\overline{E_c}$ is countable.
 
-Put $N=E\cap K\cap\bigcup_n\overline{E_n}$ (countable) and $L=E\cap\bigcup_n\overline{E_n}\in\Fs(E)$. Then
-$\varphi^{-1}(U)\subseteq L\subseteq N\cup(E\setminus K)\subseteq N\cup(E\setminus\varphi^{-1}(W))=N\cup\varphi^{-1}(\overline U)$.
+Put $L=\bigcup_n\overline{E_{1/n}}$, an $\Fs$ set, and $N=\bigcup_n(K\cap\overline{E_{1/n}})$, countable. Then
+$E\cap\varphi^{-1}(U)\subseteq L$, and if $x\in E\cap L$ with $\varphi(x)\notin\overline U$, then $x\in K$, so $x\in N$.
+
+For $\D$, Lemma~\ref{lem:transfer} with $\kappa$ shows that $\varphi\circ\kappa$ is a boundary function for
+$f\circ\kappa$ on $E'=\kappa^{-1}(E\setminus\{1\})$; if $\varphi\circ\kappa$ is of class $\Fs$ on $E'\setminus M'$, then
+$\varphi$ is of class $\Fs$ on $E\setminus(\kappa(M')\cup\{1\})$, since $\kappa^{-1}$ is continuous there.
 \end{proof}
 
 \begin{corollary}[{\cite[Theorem 5, Corollary]{Diss}}; {\cite[Theorems 2, 3]{JMM}}]\label{cor:bf-honorary}
-\lean{TJK.BoundaryFn.isHonoraryBaireTwo_upperHalfPlane, TJK.BoundaryFn.isHonoraryBaireTwo_disc_real, TJK.BoundaryFn.isHonoraryBaireTwo_disc_sphere}
-\uses{thm:bf-fsigma, thm:honorary-char, lem:transfer, lem:charts, lem:borel-basic}
+\lean{TJK.BoundaryFn.isHonoraryBaireTwo_upperHalfPlane, TJK.BoundaryFn.isHonoraryBaireTwo_upperHalfPlane_sphere,
+  TJK.BoundaryFn.isHonoraryBaireTwo_disc_real, TJK.BoundaryFn.isHonoraryBaireTwo_disc_real',
+  TJK.BoundaryFn.isHonoraryBaireTwo_disc_sphere, TJK.BoundaryFn.isHonoraryBaireTwo_disc_sphere',
+  TJK.BoundaryFn.isFσMeasurable_restrict_preimage}
+\uses{thm:bf-fsigma, thm:honorary-char, lem:borel-basic}
 Let $Y$ be $\R^m$ or $\Sph$. If $f:\Hp\to Y$ (resp.\ $f:\D\to Y$) is continuous, $E\subseteq\R$ (resp.\
 $E\subseteq C$) and $\varphi:E\to Y$ is a boundary function for $f$, then $\varphi$ is of honorary Baire class
 $\le2$. In particular (\cite[Theorems 2, 3]{JMM}) a finite-valued boundary function on $C$ of a continuous
@@ -70,10 +82,7 @@ real function in $\D$ is of honorary Baire class $2(C,\R)$, and a boundary funct
 continuous map $\D\to\Sph$ is of honorary Baire class $2(C,\Sph)$.
 \end{corollary}
 \begin{proof}
-For $\Hp$ combine Theorem~\ref{thm:bf-fsigma} with Theorem~\ref{thm:honorary-char}(2)$\Rightarrow$(1). For
-$\D$, Lemma~\ref{lem:transfer} with $\kappa$ shows that $\varphi\circ\kappa$ is a boundary function for
-$f\circ\kappa$ on $\kappa^{-1}(E\setminus\{1\})$; so $\varphi|_{E\setminus(\kappa(M)\cup\{1\})}$ is of class $\Fs$ for
-a countable $M$, and Theorem~\ref{thm:honorary-char} applies.
+Combine Theorem~\ref{thm:bf-fsigma} with Theorem~\ref{thm:honorary-char}(2)$\Rightarrow$(1).
 \end{proof}
 
 \begin{fact}[Bagemihl's ambiguous point theorem {\cite{Bag}}]\label{fact:bagemihl}
@@ -86,16 +95,16 @@ different limits is countable.
 
 \begin{proposition}[{\cite[remark after Corollary 4]{MMJ}}]\label{prop:gdelta-remark}
 \lean{TJK.McMillan.isFσδ_limit_mem_of_isGδ}
-\uses{thm:mcmillan, cor:bf-honorary, fact:bagemihl, lem:borel-basic, lem:equiv, lem:baire1-fsigma, def:fn-classes}
+\uses{thm:mcmillan, thm:bf-fsigma, fact:bagemihl, lem:borel-basic, def:fn-classes}
 In Corollary~\ref{cor:mm-corollaries}(1) it suffices that $E$ be a $\Gd$ subset of $\Sph$.
 \end{proposition}
 \begin{proof}
 $A=\CC(f)$ is $\Fsd$ (Theorem~\ref{thm:mcmillan}). Choose any boundary function $\varphi:A\to\Sph$. By
-Corollary~\ref{cor:bf-honorary}, $\varphi=\psi$ off a countable $N_0$, with $\psi\in\mathcal B_1(A,\Sph)$. Off the
+Theorem~\ref{thm:bf-fsigma}, $\varphi$ is of class $\Fs$ on $A\setminus M$ for a countable $M$. Off the
 countable set $Z$ of Fact~\ref{fact:bagemihl}, every arc limit of $f$ at $x\in A$ equals $\varphi(x)$; so the set
-in question differs from $\psi^{-1}(E)$ by a countable set. Writing $E=\bigcap_jO_j$ with $O_j$ open,
-$\psi^{-1}(E)=\bigcap_j\psi^{-1}(O_j)$ is $\Fsd$ in $A$, hence in $C$; adding or removing countably many points
-keeps a set $\Fsd$.
+$S$ in question satisfies $S=(P\setminus Z)\cup(S\cap(M\cup Z))$ with $P=(\varphi|_{A\setminus M})^{-1}(E)$. Writing
+$E=\bigcap_jO_j$ with $O_j$ open, $P=\bigcap_j(\varphi|_{A\setminus M})^{-1}(O_j)$ is $\Fsd$ in $A\setminus M$, hence in
+$C$, as $A\setminus M$ is $\Fsd$. Countable sets are $\Fs$ and their complements $\Gd$, so $S$ is $\Fsd$.
 \end{proof}
 
 \subsection{Homeomorphisms}
