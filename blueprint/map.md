@@ -9,9 +9,9 @@ Every node is a numbered item of the [companion paper](../paper/main.pdf). Arrow
 |---|---|---|
 | `proved` | proved (no `sorry`) | 77 |
 | `defined` | definition written in Lean | 15 |
-| `conditional` | proof written, but it uses a declaration that still has `sorry` | 18 |
-| `sorry` | stated in Lean, proof is `sorry` | 4 |
-| `planned` | Lean name reserved, not yet stated | 11 |
+| `conditional` | proof written, but it uses a declaration that still has `sorry` | 20 |
+| `sorry` | stated in Lean, proof is `sorry` | 3 |
+| `planned` | Lean name reserved, not yet stated | 10 |
 | `imported` | imported fact (Mathlib / library) | 13 |
 
 ```mermaid
@@ -475,11 +475,11 @@ flowchart BT
   classDef defined fill:#b7e1c5,color:#123,stroke:#4c9a68
   class def_sut_solution,def_borel_classes,def_fn_classes,def_fold,def_additive_classes,def_arcs,def_ccset,def_charts,def_acc,def_regions,def_special_family,def_special_pair,def_meets_in,def_trapezoid,def_asymptotic defined
   classDef sorry fill:#f2c14e,color:#222,stroke:#b8902e
-  class thm_baire_plus_one,thm_ha_example,thm_ha_theorem,thm_cube sorry
+  class thm_ha_example,thm_ha_theorem,thm_cube sorry
   classDef conditional fill:#d9ead3,color:#222,stroke:#b8902e,stroke-dasharray: 4 2
-  class lem_baire_criterion,cor_path_arc,lem_crosscut_H,lem_strip,lem_mm_lemma2,lem_mm_lemma3,thm_mcmillan,thm_mm_thm2,cor_mm_corollaries,thm_mcmillan_H,lem_th_lemma7,lem_th_lemma8,thm_bf_fsigma,cor_bf_honorary,prop_gdelta_remark,thm_homeo,lem_figure5,lem_cube_lemma conditional
+  class lem_baire_criterion,cor_path_arc,lem_crosscut_H,lem_strip,lem_mm_lemma2,lem_mm_lemma3,thm_mcmillan,thm_mm_thm2,cor_mm_corollaries,thm_mcmillan_H,lem_th_lemma7,lem_th_lemma8,thm_bf_fsigma,cor_bf_honorary,prop_gdelta_remark,thm_homeo,lem_figure5,thm_baire_plus_one,cor_borel,lem_cube_lemma conditional
   classDef planned fill:#eeeeee,color:#333,stroke:#999
-  class cor_borel,prop_th_example,lem_ha_lemma,lem_ha_estimates,cor_ha_corollary,cor_ha_analytic,def_th_special,lem_th_special_implies,lem_th_lemma9,lem_th_lemma10,lem_th_lemma11 planned
+  class prop_th_example,lem_ha_lemma,lem_ha_estimates,cor_ha_corollary,cor_ha_analytic,def_th_special,lem_th_special_implies,lem_th_lemma9,lem_th_lemma10,lem_th_lemma11 planned
   classDef imported fill:#dbe8f6,color:#1c3a5e,stroke:#6b8fb8
   class fact_banach,fact_borel_baire,fact_tietze_arc,fact_tietze_ext,fact_hyperspace,fact_baire_category,fact_crosscut,fact_bagemihl,fact_poisson,fact_jordan_access,fact_analytic_nonborel,fact_kierst,fact_normal imported
 ```
@@ -623,8 +623,8 @@ flowchart BT
 |---|---|---|---|---|
 | def:meets-in | definition | `TJK.Discont.MeetsIn` ([src](../TJK/Discont/Baire.lean)) | `def:arcs` | `defined` |
 | lem:figure5<br/>*the ``Figure 5'' argument of* | lemma | `TJK.Discont.figure5` ([src](../TJK/Discont/Baire.lean)) | `lem:crosscut-H`, `fact:tietze-arc` | `conditional` |
-| thm:baire-plus-one<br/>*;* | theorem | `TJK.Discont.baireClass_succ_of_boundaryFn` ([src](../TJK/MainTheorems.lean)) | `def:meets-in`, `lem:figure5`, `lem:strip`, `lem:subarc`, `lem:intervals-open`, `lem:equiv`, `lem:monotone-extend`, `lem:monotone-compose`, `lem:baire-precomp`, `lem:baire-imp-class`, `lem:additive-basic`, `lem:baire-criterion` | `sorry` |
-| cor:borel<br/>*;* | corollary | `TJK.Discont.measurable_of_boundaryFn`<br/>`TJK.Discont.baireClass_succ_of_boundaryFn_real` | `thm:baire-plus-one`, `fact:borel-baire`, `lem:baire-imp-class`, `lem:additive-basic` | `planned` |
+| thm:baire-plus-one<br/>*;* | theorem | `TJK.Discont.baireClass_succ_of_boundaryFn` ([src](../TJK/MainTheorems.lean)) | `def:meets-in`, `lem:figure5`, `lem:strip`, `lem:subarc`, `lem:intervals-open`, `lem:equiv`, `lem:monotone-extend`, `lem:monotone-compose`, `lem:baire-precomp`, `lem:baire-imp-class`, `lem:additive-basic`, `lem:baire-criterion` | `conditional` |
+| cor:borel<br/>*;* | corollary | `TJK.Discont.measurable_of_boundaryFn` ([src](../TJK/Discont/Baire.lean))<br/>`TJK.Discont.baireClass_succ_of_boundaryFn_real` ([src](../TJK/Discont/Baire.lean)) | `thm:baire-plus-one`, `fact:borel-baire`, `lem:baire-imp-class`, `lem:additive-basic` | `conditional` |
 | def:trapezoid<br/>*trapezoids* | definition | `TJK.Discont.closedTrapezoidE` ([src](../TJK/Discont/Segments.lean))<br/>`TJK.Discont.closedTrapezoid` ([src](../TJK/Discont/Segments.lean))<br/>`TJK.Discont.IsTrapezoid` ([src](../TJK/Discont/Segments.lean))<br/>`TJK.Discont.segTrap` ([src](../TJK/Discont/Segments.lean)) |  | `defined` |
 | lem:th-lemma23 | lemma | `TJK.Discont.segTrap_subset_union` ([src](../TJK/Discont/Segments.lean)) | `def:trapezoid` | `proved` |
 | lem:th-lemma24 | lemma | `TJK.Discont.isTrapezoid_biUnion` ([src](../TJK/Discont/Segments.lean)) | `def:trapezoid` | `proved` |

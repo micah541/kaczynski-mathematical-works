@@ -8,24 +8,25 @@ Sources: \cite[Chapter II]{Diss}; \cite[Theorems 4--6]{JMM}. We work in $\Hp$ wi
 \begin{definition}\label{def:meets-in}
 \lean{TJK.Discont.MeetsIn}
 \uses{def:arcs}
-For arcs $\gamma_x,\gamma_y$ at $x,y\in\R$ and $n\in\N$, $\gamma_x$ \emph{meets $\gamma_y$ in $\overline{\Hp}_n$} if there are
-subarcs $\gamma_x'\ni x$ and $\gamma_y'\ni y$ of them, contained in $\overline{\Hp}_n$, with $\gamma_x'\cap\gamma_y'\ne\emptyset$.
-If $\gamma_x$ meets $\gamma_y$ in $\overline\Hp_n$ and $n'\le n$, it meets $\gamma_y$ in $\overline\Hp_{n'}$.
+For arcs $\gamma_x,\gamma_y$ at $x,y\in\R$ and $c>0$, $\gamma_x$ \emph{meets $\gamma_y$ below height $c$} if there are
+subarcs $\gamma_x'\subseteq\gamma_x$ at $x$ and $\gamma_y'\subseteq\gamma_y$ at $y$, contained in $\{\operatorname{Im}z\le c\}$,
+with $\gamma_x'\cap\gamma_y'\ne\emptyset$. This relation is symmetric, and if it holds for $c$ it holds for every $c'\ge c$.
 \end{definition}
 
 \begin{lemma}[{the ``Figure 5'' argument of \cite[proof of Theorem 8]{Diss}}]\label{lem:figure5}
 \lean{TJK.Discont.figure5}
 \uses{lem:crosscut-H, fact:tietze-arc}
-Let $x<t<y$ be real, let $\alpha,\beta$ be arcs at $x,y$ contained in $\overline\Hp_n$ with $\alpha\cap\beta\ne\emptyset$, and let
-$\tau$ be an arc at $t$, contained in $\overline\Hp_n$, whose other endpoint lies on $X_n$. Then $\tau$ meets $\alpha\cup\beta$.
+Let $x<t<y$ be real, let $\alpha,\beta$ be arcs at $x,y$ in $\Hp$, contained in $\{\operatorname{Im}z\le c\}$, with
+$\alpha\cap\beta\ne\emptyset$, and let $\tau$ be an arc at $t$ in $\Hp$ whose other endpoint $p$ has $\operatorname{Im}p=c$.
+Then $\tau$ meets $\alpha\cup\beta$.
 \end{lemma}
 \begin{proof}
-By Fact~\ref{fact:tietze-arc}, $\alpha\cup\beta$ contains a simple arc $\sigma$ from $x$ to $y$, a crosscut of $\Hp$ contained in
-$\overline\Hp_n$. Suppose $\tau\cap\sigma=\emptyset$. Let $V,U$ be the bounded and unbounded components of $\Hp\setminus\sigma$
-(Lemma~\ref{lem:crosscut-H}). A small half-disk $S(r,t)\cap\Hp$ misses $\sigma$, is connected, and meets $V$ because
-$t\in(x,y)\subseteq\overline V$; so it lies in $V$, and therefore so does the connected set $\tau\setminus\{t\}$. Its endpoint $q$
-on $X_n$ is then in the open set $V$, so $q+i\eps\in V$ for small $\eps>0$; but $\{\operatorname{Im}z>1/n\}\subseteq U$ since
-$\max_\sigma\operatorname{Im}\le1/n$. Contradiction.
+$\alpha\cup\beta$ is path connected, so by Fact~\ref{fact:tietze-arc} it contains a simple arc $\sigma$ from $x$ to $y$, a
+crosscut of $\Hp$ with $\max_\sigma\operatorname{Im}\le c$. Suppose $\tau\cap\sigma=\emptyset$, and let $V,U$ be the bounded and
+unbounded components of $\Hp\setminus\sigma$ (Lemma~\ref{lem:crosscut-H}). The connected set $\tau\setminus\{t\}$ lies in
+$U\cup V$, hence in $U$ or in $V$; and $t\in\overline{\tau\setminus\{t\}}$. If it lies in $U$, then
+$t\in\overline U\cap\R=\R\setminus(x,y)$, which is false. If it lies in $V$, then $p\in V$, so $p+i\eps\in V$ for small $\eps>0$;
+but $p+i\eps\in U$ since it lies above $\sigma$. Contradiction.
 \end{proof}
 
 \begin{theorem}[{\cite[Theorem 8]{Diss}}; {\cite[Theorem 4]{JMM}}]\label{thm:baire-plus-one}
@@ -36,49 +37,50 @@ Let $Y$ be a separable arcwise connected metric space, $\xi\ge1$, $f:\Hp\to Y$ o
 $\varphi:E\to Y$ a boundary function for $f$. Then $\varphi$ is of Baire class $\xi+1$.
 \end{theorem}
 \begin{proof}
-Let $U\subseteq Y$ be open, $V=Y\setminus\overline U$, $A=\varphi^{-1}(U)$, $B=\varphi^{-1}(V)$, $P=A\cup B$. For $x\in P$ choose
-(Lemma~\ref{lem:subarc}) an arc $\gamma_x$ at $x$ with $f\to\varphi(x)$ along it, $\gamma_x\subseteq\{\abs{z-x}\le1\}$, and
-$\gamma_x\setminus\{x\}\subseteq f^{-1}(U)$ if $x\in A$, $\subseteq f^{-1}(V)$ if $x\in B$. If $x\in A$ and $y\in B$ then
-$\gamma_x\cap\gamma_y=\emptyset$. Let
-\begin{align*}
-L_a&=\{x\in A:\forall n\ \exists y\in P\setminus\{x\},\ \gamma_y\text{ meets }\gamma_x\text{ in }\overline\Hp_n\},&
-M_a&=A\setminus L_a,\\
-L_b&=\{x\in B:\forall n\ \exists y\in P\setminus\{x\},\ \gamma_y\text{ meets }\gamma_x\text{ in }\overline\Hp_n\},&
-M_b&=B\setminus L_b,
-\end{align*}
-$L=L_a\cup L_b$, $M=M_a\cup M_b$. For $x\in M$ let $n(x)$ be such that $\gamma_x$ meets no $\gamma_y$ ($y\ne x$) in
-$\overline\Hp_{n(x)}$; the same then holds for all $n\ge n(x)$. Let $K_n$ be the set of $x\in P$ such that $\gamma_x$ meets $X_n$
-and, if $x\in M$, $n\ge n(x)$. Then $K_n\subseteq K_{n+1}$ and $P=\bigcup_nK_n$.
-
-\emph{Step 1: $L_a\approx G_a\cap P$ for a $\Gd$ set $G_a$, and $L_b\approx G_b\cap P$ for a $\Gd$ set $G_b$.} Let $x\in L_a$
-and $n\in\N$; choose $y\in P\setminus\{x\}$ with $\gamma_y$ meeting $\gamma_x$ in $\overline\Hp_n$, and let $I^n_x$ be the closed
-interval with endpoints $x,y$. We claim $I^n_x\subseteq L_a\cup(\R\setminus K_n)$. Let $t\in I^n_x\cap K_n$. If $t\ne x,y$, let
-$\tau$ be the subarc of $\gamma_t$ from $t$ to its first point on $X_n$; by Lemma~\ref{lem:figure5}, $\gamma_t$ meets $\gamma_x$ or
-$\gamma_y$ in $\overline\Hp_n$. The same holds trivially for $t=y$. If $t\in M$ this contradicts $n\ge n(t)$; so $t\notin M$.
-Since $\gamma_x$ meets $\gamma_y$ and $x\in A$, $y\notin B$, so $y\in A$; likewise $t\in A$. Hence $t\in A\setminus M=L_a$.
-Put $W_n=\bigcup_{x\in L_a}I^n_x$. Then $L_a\subseteq W_n\cap P\subseteq(L_a\cup(\R\setminus K_n))\cap P$, so
-$L_a=\bigcap_n(W_n\cap P)$. By Lemma~\ref{lem:intervals-open} each $W_n$ is $\approx$ an open set $O_n$; let
-$G_a=\bigcap_nO_n$. By Lemma~\ref{lem:equiv}, $L_a\approx G_a\cap P$. The same argument applies to $L_b$.
-
-\emph{Step 2: $M_a\approx F\cap P$ with $F\in P^{\xi+2}(\R)$.} For $x\in M\cap K_n$ let $p_n(x)$ be the first point of $X_n$
-reached along $\gamma_x$ from $x$, and $h^0_n(x)=\operatorname{Re}p_n(x)$. If $x<x'$ in $M\cap K_n$, the subarcs from $x$ to
-$p_n(x)$ and from $x'$ to $p_n(x')$ are disjoint (as $n\ge n(x)$), so $h_n^0(x)<h_n^0(x')$ by Lemma~\ref{lem:strip}. Also
-$\abs{x-h_n^0(x)}\le1$. By Lemma~\ref{lem:monotone-extend} extend $h_n^0$ to a weakly increasing $h_n:\R\to\R$ (take
-$h_n=\mathrm{id}$ if $M\cap K_n=\emptyset$), and let $g_n(x)=f(h_n(x)+i/n)$. By Lemmas~\ref{lem:baire-precomp}
-and~\ref{lem:monotone-compose} there is a countable $N$ such that each $g_n|_{M\setminus N}$ is of Baire class $\xi$. For
-$x\in M$ and $n$ large, $x\in M\cap K_n$ and $g_n(x)=f(p_n(x))$ with $p_n(x)\in\gamma_x$, $\operatorname{Im}p_n(x)=1/n$; so
-$p_n(x)\to x$ along $\gamma_x$ and $g_n(x)\to\varphi(x)$. Hence $\varphi|_{M\setminus N}$ is of Baire class $\xi+1$, hence of
-class $P^{\xi+2}$ (Lemma~\ref{lem:baire-imp-class}), so $A\cap(M\setminus N)=D\cap(M\setminus N)$ for some
-$D\in P^{\xi+2}(\R)$ (Lemma~\ref{lem:additive-basic}(f)). Then
+Let $U\subseteq Y$ be open, $V=Y\setminus\overline U$, $A=\varphi^{-1}(U)$, $B=\varphi^{-1}(V)$, $P=A\cup B$. By
+Lemma~\ref{lem:baire-criterion} (with $\xi+1\ge2$) it suffices to find $T\in P^{\xi+2}(\R)$ with $A\subseteq T$ and
+$T\cap B=\emptyset$: then $\varphi^{-1}(U)\subseteq T\cap E\subseteq\varphi^{-1}(\overline U)$ and $T\cap E\in P^{\xi+2}(E)$.
+For $x\in P$ choose (Lemma~\ref{lem:subarc}) an arc $\gamma_x$ at $x$ with $f\to\varphi(x)$ along it,
+$\gamma_x\subseteq\{\abs{z-x}\le1\}$, and $f(\gamma_x\setminus\{x\})\subseteq U$ if $x\in A$, $\subseteq V$ if $x\in B$. Then
+$\gamma_x\cap\gamma_y=\emptyset$ for $x\in A$, $y\in B$. Write $c_n=1/(n+1)$ and ``meets at $n$'' for ``meets below height
+$c_n$''. Let
 \[
-M_a=A\cap M\approx D\cap M=D\cap(P\setminus L)\approx D\cap\bigl(\R\setminus(G_a\cup G_b)\bigr)\cap P=:F\cap P,
+L=\{x\in P:\forall n\ \exists y\in P\setminus\{x\},\ \gamma_x\text{ meets }\gamma_y\text{ at }n\},\qquad M=P\setminus L,
 \]
-and $F\in P^{\xi+2}(\R)$ because $\R\setminus(G_a\cup G_b)$ is $\Fs$, i.e.\ in $P^2\subseteq P^{\xi+2}$.
+and let $K_n$ be the set of $x\in P$ such that $\gamma_x$ reaches the line $\operatorname{Im}z=c_n$ and, if $x\in M$, $\gamma_x$
+meets no $\gamma_y$, $y\in P\setminus\{x\}$, at $n$. Every $x\in P$ is in some $K_n$, and every $x\in M$ is in $K_n$ for all
+large $n$ (an arc at $x$ reaches every small height; and ``meets'' is monotone in the height).
 
-\emph{Step 3.} $A=L_a\cup M_a\approx(G_a\cup F)\cap P$, and $G_a\in Q^2\subseteq P^{\xi+2}$ since $\xi\ge1$. Correcting by
-countable sets (countable sets are in $P^2$ and co-countable sets in $Q^2$), $A=T\cap P$ for some $T\in P^{\xi+2}(\R)$. Then
-$T\cap B=A\cap B=\emptyset$, so $\varphi^{-1}(U)=A\subseteq T\cap E\subseteq E\setminus B=\varphi^{-1}(\overline U)$, and
-$T\cap E\in P^{\xi+2}(E)$. By Lemma~\ref{lem:baire-criterion} (with $\xi+1\ge2$), $\varphi$ is of Baire class $\xi+1$.
+\emph{Step 1: $L\cap A\approx G_a\cap P$ and $L\cap B\approx G_b\cap P$ for $\Gd$ sets $G_a,G_b$.} Let $x\in L\cap A$,
+$y\in P\setminus\{x\}$ with $\gamma_x$ meeting $\gamma_y$ at $n$. We claim $[x,y]\cap K_n\subseteq L\cap A$ (with $[x,y]$ the
+closed interval between $x$ and $y$). First, $\gamma_x\cap\gamma_y\ne\emptyset$, so $y\in A$. Let $t\in[x,y]\cap K_n$, $t\ne x$.
+If $t=y$, $\gamma_t$ meets $\gamma_x$ at $n$. Otherwise let $\tau$ be the subarc of $\gamma_t$ from $t$ to its first point on
+$\operatorname{Im}z=c_n$; by Lemma~\ref{lem:figure5}, $\tau$ meets one of the two meeting subarcs, so $\gamma_t$ meets $\gamma_x$
+or $\gamma_y$ at $n$. Since $t\in K_n$, this gives $t\notin M$, so $t\in L$; and $\gamma_t$ meets an arc of a point of $A$, so
+$t\in A$. Let $W_n$ be the union of the intervals $[x,y]$ over all such pairs $(x,y)$. Then
+$L\cap A=\bigcap_n(W_n\cap P)$: ``$\subseteq$'' since $x\in[x,y]$; and if $t\in P\cap\bigcap_nW_n$, take $m$ with $t\in K_m$, then
+$t\in L\cap A$ by the claim. By Lemma~\ref{lem:intervals-open} each $W_n\approx O_n$ with $O_n$ open; let $G_a=\bigcap_nO_n$. By
+Lemma~\ref{lem:equiv}, $L\cap A\approx G_a\cap P$. Exchanging $A$ and $B$ gives $G_b$.
+
+\emph{Step 2: $M\cap A\approx D\cap M$ with $D\in P^{\xi+2}(\R)$.} For $x\in K_n$ let $p_n(x)$ be the first point of
+$\operatorname{Im}z=c_n$ reached along $\gamma_x$ from $x$. If $x<x'$ in $M\cap K_n$, the subarcs from $x$ to $p_n(x)$ and from
+$x'$ to $p_n(x')$ are disjoint (they would otherwise meet at $n$), so $\operatorname{Re}p_n(x)<\operatorname{Re}p_n(x')$ by
+Lemma~\ref{lem:strip}. Also $\abs{x-\operatorname{Re}p_n(x)}\le1$. By Lemma~\ref{lem:monotone-extend} there is a weakly increasing
+$h_n:\R\to\R$ equal to $\operatorname{Re}p_n$ on $M\cap K_n$; let $g_n(x)=f(h_n(x)+ic_n)$. By Lemmas~\ref{lem:baire-precomp}
+and~\ref{lem:monotone-compose} there is a countable $N$ such that each $g_n|_{M\setminus N}$ is of Baire class $\xi$. For
+$x\in M$ and $n$ large, $g_n(x)=f(p_n(x))$ with $p_n(x)\in\gamma_x\setminus\{x\}$ and $\operatorname{Im}p_n(x)\to0$; as $\gamma_x$
+is compact and meets $\R$ only at $x$, $p_n(x)\to x$ along $\gamma_x$, so $g_n(x)\to\varphi(x)$. Hence $\varphi|_{M\setminus N}$ is
+of Baire class $\xi+1$, hence of class $P^{\xi+2}$ (Lemma~\ref{lem:baire-imp-class}), so $A\cap(M\setminus N)=D\cap(M\setminus N)$
+for some $D\in P^{\xi+2}(\R)$ (Lemma~\ref{lem:additive-basic}(f)).
+
+\emph{Step 3.} From Step 1, $L\approx(G_a\cup G_b)\cap P$, so
+$M\cap A\approx D\cap M\approx D\cap\bigl(P\setminus(G_a\cup G_b)\bigr)$ and
+\[
+A=(L\cap A)\cup(M\cap A)\approx T_0\cap P,\qquad T_0=G_a\cup\bigl(D\setminus(G_a\cup G_b)\bigr)\in P^{\xi+2}(\R),
+\]
+since $G_a\in Q^2\subseteq P^{\xi+2}$ and $\R\setminus(G_a\cup G_b)$ is $\Fs$. With the countable sets
+$C_1=A\setminus T_0$ and $C_2=(T_0\cap P)\setminus A$, the set $T=(T_0\setminus C_2)\cup C_1$ is in $P^{\xi+2}(\R)$ (countable sets
+are $\Fs$), contains $A$, and misses $B$.
 \end{proof}
 
 \begin{corollary}[{\cite[Theorem 8, Corollary]{Diss}}; {\cite[Theorems 4, 5]{JMM}}]\label{cor:borel}

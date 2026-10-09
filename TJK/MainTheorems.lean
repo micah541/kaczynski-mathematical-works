@@ -10,6 +10,7 @@ import TJK.BoundaryFn.Homeo
 import TJK.Construct.Final
 import TJK.McMillan.Basic
 import TJK.BoundaryFn.Fsigma
+import TJK.Discont.Baire
 import TJK.Construct.Realize
 
 open Set Filter Topology MeasureTheory
@@ -92,8 +93,8 @@ theorem Discont.baireClass_succ_of_boundaryFn {Y : Type} [MetricSpace Y]
     [TopologicalSpace.SeparableSpace Y] [PathConnectedSpace Y] (ξ : Ordinal.{0}) (hξ : 1 ≤ ξ)
     (f : ℂ → Y) (hf : BaireClass ξ (upper.restrict f)) (E : Set ℂ) (hE : E ⊆ realAxis)
     (φ : ℂ → Y) (hφ : IsBoundaryFunction upper f E φ) :
-    BaireClass (ξ + 1) (E.restrict φ) := by
-  sorry
+    BaireClass (ξ + 1) (E.restrict φ) :=
+  Discont.baireClass_succ_of_boundaryFn' ξ hξ f hf E hE φ hφ
 
 /-- Dissertation Theorem 10 (blueprint `thm:th-thm10`). -/
 theorem Discont.exists_disjoint_null_arcs :
