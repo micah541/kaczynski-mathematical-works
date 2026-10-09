@@ -7,12 +7,12 @@ Every node is a numbered item of the [companion paper](../paper/main.pdf). Arrow
 
 | Status | Meaning | Count |
 |---|---|---|
-| `proved` | proved (no `sorry`) | 71 |
+| `proved` | proved (no `sorry`) | 75 |
 | `defined` | definition written in Lean | 12 |
-| `conditional` | proof written, but it uses a declaration that still has `sorry` | 3 |
-| `sorry` | stated in Lean, proof is `sorry` | 8 |
+| `conditional` | proof written, but it uses a declaration that still has `sorry` | 7 |
+| `sorry` | stated in Lean, proof is `sorry` | 7 |
 | `partial` | some Lean declarations exist | 2 |
-| `planned` | Lean name reserved, not yet stated | 29 |
+| `planned` | Lean name reserved, not yet stated | 22 |
 | `imported` | imported fact (Mathlib / library) | 13 |
 
 ```mermaid
@@ -475,17 +475,17 @@ flowchart BT
   lem_th_lemma10 --> def_th_special
   lem_th_lemma11 --> def_th_special
   classDef proved fill:#1f8a4c,color:#fff,stroke:#146236
-  class lem_sut_basic,prop_sut_two_composite,prop_sut_explicit,lem_sut_factor,thm_sut_sutcliffe2,thm_sut_sutcliffe3,lem_sut_lemma1,lem_sut_lemma2,thm_sut_main,cor_sut_main,lem_borel_basic,lem_reduction,cor_reduction_finite,thm_sierpinski,lem_baire1_fsigma,lem_finite_valued,lem_finite_valued_ops,lem_approx_char,lem_approx_finite,lem_uniform_approx,lem_approx_real,thm_baire1_char,lem_uniform_limit_fsigma,thm_extension,lem_fold,lem_fold_factor,thm_sphere_baire1,thm_sphere_extension,thm_honorary_char,lem_honorary_invariance,thm_kuratowski,cor_baire_continuity_point,lem_meager_subspace,lem_additive_basic,lem_baire_precomp,lem_baire_imp_class,lem_equiv,lem_intervals_open,lem_two_sided,lem_monotone_extend,lem_monotone_compose,lem_subarc,lem_cluster,lem_disjoint_arcs,lem_charts,lem_disc_geometry,lem_open_components,lem_transfer,lem_locality,lem_homeo_values,lem_B_char,lem_region_geometry,lem_special_from_fsigma,lem_special_sequence,lem_special_pair_exists,lem_special_pair_shrink,thm_construct_A,thm_cc_realize,lem_monotone_inverse,lem_closed_graph,thm_construct_B,thm_construct_C,thm_construct_D,lem_th_lemma23,lem_th_lemma24,thm_th_thm9,lem_th_lemma25,thm_th_thm10,cor_ae_zero,fact_vitali,cor_nonmeasurable proved
+  class lem_sut_basic,prop_sut_two_composite,prop_sut_explicit,lem_sut_factor,thm_sut_sutcliffe2,thm_sut_sutcliffe3,lem_sut_lemma1,lem_sut_lemma2,thm_sut_main,cor_sut_main,lem_borel_basic,lem_reduction,cor_reduction_finite,thm_sierpinski,lem_baire1_fsigma,lem_finite_valued,lem_finite_valued_ops,lem_approx_char,lem_approx_finite,lem_uniform_approx,lem_approx_real,thm_baire1_char,lem_uniform_limit_fsigma,thm_extension,lem_fold,lem_fold_factor,thm_sphere_baire1,thm_sphere_extension,thm_honorary_char,lem_honorary_invariance,thm_kuratowski,cor_baire_continuity_point,lem_meager_subspace,lem_additive_basic,lem_baire_precomp,lem_baire_imp_class,lem_equiv,lem_intervals_open,lem_two_sided,lem_monotone_extend,lem_monotone_compose,lem_subarc,lem_cluster,lem_disjoint_arcs,lem_charts,lem_disc_geometry,lem_open_components,lem_transfer,lem_locality,lem_homeo_values,lem_B_char,lem_region_geometry,lem_special_from_fsigma,lem_special_sequence,lem_special_pair_exists,lem_special_pair_shrink,thm_construct_A,thm_cc_realize,lem_monotone_inverse,lem_closed_graph,thm_construct_B,thm_construct_C,thm_construct_D,thm_construct_E,thm_construct_F,thm_construct_H,lem_th_lemma23,lem_th_lemma24,thm_th_thm9,lem_th_lemma25,thm_th_thm10,cor_ae_zero,fact_vitali,cor_nonmeasurable,lem_ha_sequences proved
   classDef defined fill:#b7e1c5,color:#123,stroke:#4c9a68
   class def_sut_solution,def_borel_classes,def_fn_classes,def_fold,def_additive_classes,def_arcs,def_ccset,def_charts,def_regions,def_special_family,def_special_pair,def_trapezoid defined
   classDef sorry fill:#f2c14e,color:#222,stroke:#b8902e
-  class thm_mcmillan,thm_mm_thm2,thm_bf_fsigma,thm_construct_F,thm_baire_plus_one,thm_ha_example,thm_ha_theorem,thm_cube sorry
+  class thm_mcmillan,thm_mm_thm2,thm_bf_fsigma,thm_baire_plus_one,thm_ha_example,thm_ha_theorem,thm_cube sorry
   classDef conditional fill:#d9ead3,color:#222,stroke:#b8902e,stroke-dasharray: 4 2
-  class lem_baire_criterion,cor_path_arc,thm_homeo conditional
+  class lem_baire_criterion,cor_path_arc,lem_crosscut_H,lem_strip,lem_mm_lemma2,lem_mm_lemma3,thm_homeo conditional
   classDef partial fill:#f7dd9b,color:#222,stroke:#b8902e
-  class cor_bf_honorary,thm_construct_H partial
+  class def_acc,cor_bf_honorary partial
   classDef planned fill:#eeeeee,color:#333,stroke:#999
-  class lem_crosscut_H,lem_strip,def_acc,lem_mm_lemma2,lem_mm_lemma3,cor_mm_corollaries,thm_mcmillan_H,lem_th_lemma7,lem_th_lemma8,lem_th_lemma15,prop_gdelta_remark,thm_construct_E,def_meets_in,lem_figure5,cor_borel,prop_th_example,lem_ha_lemma,lem_general_limit_endpoints,lem_ha_sequences,lem_ha_estimates,cor_ha_corollary,cor_ha_analytic,def_asymptotic,lem_cube_lemma,def_th_special,lem_th_special_implies,lem_th_lemma9,lem_th_lemma10,lem_th_lemma11 planned
+  class cor_mm_corollaries,thm_mcmillan_H,lem_th_lemma7,lem_th_lemma8,lem_th_lemma15,prop_gdelta_remark,def_meets_in,lem_figure5,cor_borel,prop_th_example,lem_ha_lemma,lem_general_limit_endpoints,lem_ha_estimates,cor_ha_corollary,cor_ha_analytic,def_asymptotic,lem_cube_lemma,def_th_special,lem_th_special_implies,lem_th_lemma9,lem_th_lemma10,lem_th_lemma11 planned
   classDef imported fill:#dbe8f6,color:#1c3a5e,stroke:#6b8fb8
   class fact_banach,fact_borel_baire,fact_tietze_arc,fact_tietze_ext,fact_hyperspace,fact_baire_category,fact_crosscut,fact_bagemihl,fact_poisson,fact_jordan_access,fact_analytic_nonborel,fact_kierst,fact_normal imported
 ```
@@ -559,15 +559,15 @@ flowchart BT
 | cor:path-arc<br/>*paths may replace arcs* | corollary | `TJK.exists_arcAt_of_path` ([src](../TJK/Plane/Basic.lean))<br/>`TJK.tendsto_of_nhdsWithin_le_map` ([src](../TJK/Plane/Basic.lean))<br/>`TJK.clusterSet_subset_of_nhdsWithin_le_map` ([src](../TJK/Plane/Basic.lean)) | `fact:tietze-arc`, `def:ccset` | `conditional` |
 | lem:subarc<br/>*subarcs and exits* | lemma | `TJK.IsArcAt.exists_subarc_subset` ([src](../TJK/Plane/Basic.lean))<br/>`TJK.IsArcAt.tendsto_subarc` ([src](../TJK/Plane/Basic.lean))<br/>`TJK.IsArcAt.clusterSet_subarc` ([src](../TJK/Plane/Basic.lean))<br/>`TJK.IsArc.nhdsWithin_subarc` ([src](../TJK/Plane/Basic.lean))<br/>`TJK.exists_exit_subpath` ([src](../TJK/Plane/Basic.lean))<br/>`TJK.IsArcAt.exists_subarc_firstHit` ([src](../TJK/Plane/Basic.lean))<br/>`TJK.IsArcAt.exists_subarc_strip` ([src](../TJK/Plane/Basic.lean)) | `def:ccset` | `proved` |
 | lem:cluster<br/>*cluster sets* | lemma | `TJK.clusterSet_eq_iInter_subarc` ([src](../TJK/Plane/Basic.lean))<br/>`TJK.clusterSet_nonempty` ([src](../TJK/Plane/Basic.lean))<br/>`TJK.isCompact_clusterSet` ([src](../TJK/Plane/Basic.lean))<br/>`TJK.isConnected_clusterSet` ([src](../TJK/Plane/Basic.lean))<br/>`TJK.tendsto_iff_clusterSet_eq_singleton` ([src](../TJK/Plane/Basic.lean))<br/>`TJK.clusterSet_comp` ([src](../TJK/Plane/Basic.lean)) | `def:ccset`, `lem:subarc` | `proved` |
-| fact:tietze-ext<br/>*Tietze extension* | fact | `TJK.tietze_bounded_complex` |  | `imported` |
-| fact:hyperspace<br/>*hyperspace* | fact | `TJK.compactSpace_nonemptyCompacts` |  | `imported` |
+| fact:tietze-ext<br/>*Tietze extension* | fact | `TJK.tietze_bounded_complex` ([src](../TJK/Construct/Final.lean)) |  | `imported` |
+| fact:hyperspace<br/>*hyperspace* | fact | `TJK.compactSpace_nonemptyCompacts` ([src](../TJK/McMillan/Basic.lean)) |  | `imported` |
 | fact:baire-category<br/>*Baire category theorem* | fact | `TJK.baire_category` |  | `imported` |
 | fact:crosscut<br/>*crosscut theorem* | fact | `TJK.crosscut_theorem` ([src](../TJK/Plane/Basic.lean))<br/>`TJK.closure_inter_circle_of_frontier` ([src](../TJK/Plane/Basic.lean))<br/>`TJK.IsCrosscut.exists_angles` ([src](../TJK/Plane/Basic.lean)) | `def:arcs` | `imported` |
 | lem:disjoint-arcs<br/>*disjoint components have disjoint boundary arcs* | lemma | `TJK.disjoint_boundaryArcs` ([src](../TJK/BoundaryFn/Homeo.lean))<br/>`TJK.disc_inter_ball_subset_of_mem_closure` ([src](../TJK/BoundaryFn/Homeo.lean)) | `fact:crosscut` | `proved` |
 | def:charts<br/>*charts* | definition | `TJK.cayley` ([src](../TJK/Plane/Basic.lean))<br/>`TJK.chartH` ([src](../TJK/Plane/Basic.lean))<br/>`TJK.chartD` ([src](../TJK/Plane/Basic.lean))<br/>`TJK.stripExp` ([src](../TJK/Plane/Basic.lean))<br/>`TJK.openSquare` ([src](../TJK/Plane/Basic.lean))<br/>`TJK.baseX` ([src](../TJK/Plane/Basic.lean))<br/>`TJK.gOpen` ([src](../TJK/Plane/Basic.lean))<br/>`TJK.gClosed` ([src](../TJK/Plane/Basic.lean)) |  | `defined` |
 | lem:charts<br/>*charts* | lemma | `TJK.cayley_isChart` ([src](../TJK/Plane/Basic.lean))<br/>`TJK.tendsto_cayley_cobounded` ([src](../TJK/Plane/Basic.lean))<br/>`TJK.tendsto_norm_cayleyInv` ([src](../TJK/Plane/Basic.lean))<br/>`TJK.chartH_isChart` ([src](../TJK/Plane/Basic.lean))<br/>`TJK.chartH_ofReal` ([src](../TJK/Plane/Basic.lean))<br/>`TJK.strictMonoOn_tan_pi_mul_div_two` ([src](../TJK/Plane/Basic.lean))<br/>`TJK.chartD_isChart` ([src](../TJK/Plane/Basic.lean))<br/>`TJK.isClosed_gClosed` ([src](../TJK/Plane/Basic.lean))<br/>`TJK.exists_ball_inter_disc_subset_gClosed` ([src](../TJK/Plane/Basic.lean))<br/>`TJK.ofReal_not_mem_gClosed` ([src](../TJK/Plane/Basic.lean))<br/>`TJK.stripExp_isChart` ([src](../TJK/Plane/Basic.lean))<br/>`TJK.stripExp_ofReal` ([src](../TJK/Plane/Basic.lean))<br/>`TJK.stripExp_add_I` ([src](../TJK/Plane/Basic.lean)) | `def:charts` | `proved` |
-| lem:crosscut-H<br/>*crosscuts of the half-plane* | lemma | `TJK.crosscutH_theorem` | `fact:crosscut`, `lem:charts` | `planned` |
-| lem:strip<br/>*order of disjoint arcs in a strip* | lemma | `TJK.strip_order` | `lem:crosscut-H`, `lem:charts` | `planned` |
+| lem:crosscut-H<br/>*crosscuts of the half-plane* | lemma | `TJK.crosscutH_theorem` ([src](../TJK/Plane/Crosscut.lean)) | `fact:crosscut`, `lem:charts` | `conditional` |
+| lem:strip<br/>*order of disjoint arcs in a strip* | lemma | `TJK.strip_order` ([src](../TJK/Plane/Crosscut.lean)) | `lem:crosscut-H`, `lem:charts` | `conditional` |
 | lem:disc-geometry<br/>*geometry near a boundary point* | lemma | `TJK.convex_disc_inter_ball` ([src](../TJK/Plane/Basic.lean))<br/>`TJK.isConnected_disc_diff_closedBall` ([src](../TJK/Plane/Basic.lean))<br/>`TJK.shortArc_subset_ball` ([src](../TJK/Plane/Basic.lean))<br/>`TJK.exists_shortArc` ([src](../TJK/Plane/Basic.lean))<br/>`TJK.norm_expI_sub_le` ([src](../TJK/Plane/Basic.lean))<br/>`TJK.sum_le_two_pi_of_pairwiseDisjoint` ([src](../TJK/Plane/Basic.lean))<br/>`TJK.card_mul_le_two_pi` ([src](../TJK/Plane/Basic.lean)) |  | `proved` |
 | lem:open-components | lemma | `TJK.countable_connectedComponents_of_isOpen` ([src](../TJK/Plane/Basic.lean)) |  | `proved` |
 | lem:transfer<br/>*transfer* | lemma | `TJK.IsChart` ([src](../TJK/Plane/Basic.lean))<br/>`TJK.transfer_isArcAt` ([src](../TJK/Plane/Basic.lean))<br/>`TJK.transfer_tendsto` ([src](../TJK/Plane/Basic.lean))<br/>`TJK.transfer_curvConvSet` ([src](../TJK/Plane/Basic.lean))<br/>`TJK.transfer_isBoundaryFunction` ([src](../TJK/Plane/Basic.lean))<br/>`TJK.transfer_clusterSet` ([src](../TJK/Plane/Basic.lean)) | `def:ccset` | `proved` |
@@ -577,9 +577,9 @@ flowchart BT
 
 | Item | Kind | Lean | Depends on | Status |
 |---|---|---|---|---|
-| def:acc<br/>*accessible points and crosscut arcs* | definition | `TJK.McMillan.crossArc`<br/>`TJK.McMillan.I`<br/>`TJK.McMillan.I0`<br/>`TJK.McMillan.acc` | `def:arcs`, `fact:crosscut` | `planned` |
-| lem:mm-lemma2 | lemma | `TJK.McMillan.countable_acc_diff_I0` | `def:acc`, `lem:intervals-open`, `fact:tietze-arc` | `planned` |
-| lem:mm-lemma3 | lemma | `TJK.McMillan.inter_nonempty` | `def:acc`, `fact:crosscut`, `fact:tietze-arc` | `planned` |
+| def:acc<br/>*accessible points and crosscut arcs* | definition | `TJK.McMillan.crossArc`<br/>`TJK.McMillan.I`<br/>`TJK.McMillan.I0` ([src](../TJK/McMillan/Basic.lean))<br/>`TJK.McMillan.acc` ([src](../TJK/McMillan/Basic.lean)) | `def:arcs`, `fact:crosscut` | `partial` |
+| lem:mm-lemma2 | lemma | `TJK.McMillan.countable_acc_diff_I0` ([src](../TJK/McMillan/Basic.lean)) | `def:acc`, `lem:intervals-open`, `fact:tietze-arc` | `conditional` |
+| lem:mm-lemma3 | lemma | `TJK.McMillan.inter_nonempty` ([src](../TJK/McMillan/Basic.lean)) | `def:acc`, `fact:crosscut`, `fact:tietze-arc` | `conditional` |
 | thm:mcmillan<br/>*McMillan ;* | theorem | `TJK.McMillan.isFσδ_curvConvSet` ([src](../TJK/MainTheorems.lean)) | `lem:mm-lemma2`, `lem:mm-lemma3`, `cor:path-arc`, `lem:subarc`, `lem:open-components`, `lem:borel-basic` | `sorry` |
 | thm:mm-thm2 | theorem | `TJK.McMillan.isFσδ_clusterSet_subset` ([src](../TJK/MainTheorems.lean)) | `lem:mm-lemma2`, `lem:mm-lemma3`, `cor:path-arc`, `lem:subarc`, `lem:cluster`, `lem:open-components`, `lem:borel-basic`, `fact:hyperspace` | `sorry` |
 | cor:mm-corollaries | corollary | `TJK.McMillan.cor1`<br/>`TJK.McMillan.cor2`<br/>`TJK.McMillan.cor3`<br/>`TJK.McMillan.cor4` | `thm:mm-thm2`, `lem:cluster` | `planned` |
@@ -619,9 +619,9 @@ flowchart BT
 | thm:construct-B<br/>*;* | theorem | `TJK.Construct.exists_h` ([src](../TJK/Construct/H.lean))<br/>`TJK.Construct.exists_h_bounded` ([src](../TJK/Construct/H.lean))<br/>`TJK.Construct.seg_mem_stolz` ([src](../TJK/Construct/H.lean)) | `lem:monotone-inverse`, `thm:baire1-char`, `def:regions`, `def:fn-classes` | `proved` |
 | thm:construct-C | theorem | `TJK.Construct.exists_k` ([src](../TJK/Construct/K.lean)) |  | `proved` |
 | thm:construct-D | theorem | `TJK.Construct.exists_f_Q` ([src](../TJK/Construct/D.lean)) | `thm:construct-A`, `thm:construct-B`, `thm:construct-C`, `lem:subarc`, `def:ccset` | `proved` |
-| thm:construct-E | theorem | `TJK.Construct.exists_f_disc` | `thm:construct-D`, `lem:transfer`, `lem:locality`, `lem:charts`, `lem:borel-basic`, `fact:tietze-ext`, `def:ccset`, `lem:honorary-invariance` | `planned` |
-| thm:construct-F<br/>*; McMillan's problem* | theorem | `TJK.Construct.exists_f_sphere` ([src](../TJK/MainTheorems.lean)) | `thm:construct-E`, `lem:fold`, `lem:fold-factor`, `def:fold`, `lem:baire1-fsigma`, `thm:honorary-char`, `lem:cluster` | `sorry` |
-| thm:construct-H<br/>*half-plane versions;* | theorem | `TJK.Construct.exists_f_upperHalfPlane`<br/>`TJK.Construct.exists_f_upperHalfPlane_sphere`<br/>`TJK.Construct.exists_boundaryFn_euclidean` ([src](../TJK/MainTheorems.lean))<br/>`TJK.Construct.exists_boundaryFn_sphere` | `thm:construct-D`, `thm:construct-B`, `thm:construct-F`, `lem:transfer`, `lem:charts`, `lem:fold`, `lem:fold-factor`, `thm:honorary-char`, `lem:cluster`, `lem:subarc`, `lem:honorary-invariance` | `partial` |
+| thm:construct-E | theorem | `TJK.Construct.exists_f_disc` ([src](../TJK/Construct/Final.lean)) | `thm:construct-D`, `lem:transfer`, `lem:locality`, `lem:charts`, `lem:borel-basic`, `fact:tietze-ext`, `def:ccset`, `lem:honorary-invariance` | `proved` |
+| thm:construct-F<br/>*; McMillan's problem* | theorem | `TJK.Construct.exists_f_sphere` ([src](../TJK/MainTheorems.lean)) | `thm:construct-E`, `lem:fold`, `lem:fold-factor`, `def:fold`, `lem:baire1-fsigma`, `thm:honorary-char`, `lem:cluster` | `proved` |
+| thm:construct-H<br/>*half-plane versions;* | theorem | `TJK.Construct.exists_f_upperHalfPlane` ([src](../TJK/Construct/Final.lean))<br/>`TJK.Construct.exists_f_upperHalfPlane_sphere` ([src](../TJK/Construct/Final.lean))<br/>`TJK.Construct.exists_boundaryFn_euclidean` ([src](../TJK/MainTheorems.lean))<br/>`TJK.Construct.exists_boundaryFn_sphere` ([src](../TJK/Construct/Final.lean)) | `thm:construct-D`, `thm:construct-B`, `thm:construct-F`, `lem:transfer`, `lem:charts`, `lem:fold`, `lem:fold-factor`, `thm:honorary-char`, `lem:cluster`, `lem:subarc`, `lem:honorary-invariance` | `proved` |
 
 ## G Discontinuous functions
 
@@ -646,11 +646,11 @@ flowchart BT
 
 | Item | Kind | Lean | Depends on | Status |
 |---|---|---|---|---|
-| fact:poisson<br/>*Poisson integrals* | fact | `TJK.Harmonic.poisson_bounded_harmonic`<br/>`TJK.Harmonic.poisson_tendsto_of_continuousAt`<br/>`TJK.Harmonic.hp_radial_limit_poisson` |  | `imported` |
-| fact:jordan-access<br/>*Jordan curve theorem and accessibility* | fact | `TJK.Harmonic.jordan_accessible` |  | `imported` |
+| fact:poisson<br/>*Poisson integrals* | fact | `TJK.Harmonic.poisson_bounded_harmonic` ([src](../TJK/Harmonic/Example.lean))<br/>`TJK.Harmonic.poisson_tendsto_of_continuousAt` ([src](../TJK/Harmonic/Example.lean))<br/>`TJK.Harmonic.hp_radial_limit_poisson` ([src](../TJK/Harmonic/Example.lean)) |  | `imported` |
+| fact:jordan-access<br/>*Jordan curve theorem and accessibility* | fact | `TJK.Harmonic.jordan_accessible` ([src](../TJK/Harmonic/Example.lean)) |  | `imported` |
 | lem:ha-lemma | lemma | `TJK.Harmonic.accessible_avoiding_domains` | `fact:jordan-access` | `planned` |
 | lem:general-limit-endpoints<br/>*general limits along an arc* | lemma | `TJK.Harmonic.asymptotic_at_endpoint` | `def:ccset` | `planned` |
-| lem:ha-sequences<br/>*the intervals* | lemma | `TJK.Harmonic.exists_intervals` |  | `planned` |
+| lem:ha-sequences<br/>*the intervals* | lemma | `TJK.Harmonic.exists_intervals` ([src](../TJK/Harmonic/Example.lean)) |  | `proved` |
 | lem:ha-estimates<br/>*estimates* | lemma | `TJK.Harmonic.omega_jordan`<br/>`TJK.Harmonic.omega_closure_disjoint`<br/>`TJK.Harmonic.diam_omega_tendsto`<br/>`TJK.Harmonic.fn_le_eps`<br/>`TJK.Harmonic.fn_le_eps_sqrt`<br/>`TJK.Harmonic.fn_tendsto_zero` | `lem:ha-sequences`, `fact:poisson` | `planned` |
 | thm:ha-example<br/>*; answer to* | theorem | `TJK.Harmonic.exists_bounded_harmonic_boundaryFn_not_baireOne` ([src](../TJK/MainTheorems.lean)) | `lem:ha-estimates`, `lem:ha-sequences`, `lem:ha-lemma`, `lem:general-limit-endpoints`, `fact:poisson`, `cor:baire-continuity-point`, `lem:baire-precomp`, `def:ccset` | `sorry` |
 | thm:ha-theorem | theorem | `TJK.Harmonic.isMeagre_asymptotic_diff_generalLimit` ([src](../TJK/MainTheorems.lean)) | `fact:poisson`, `cor:bf-honorary`, `thm:kuratowski`, `lem:meager-subspace` | `sorry` |

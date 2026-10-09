@@ -405,8 +405,8 @@ Let $A\subseteq C$ be $\Fsd$ and $\varphi:A\to\C$ bounded and of honorary Baire 
 $f:\D\to\C$ with $\CC(f)=A$ such that $\varphi$ is a boundary function for $f$.
 \end{theorem}
 \begin{proof}
-If $A=\emptyset$ take $f(z)=\exp\bigl(i/(1-\abs z)\bigr)$: along any arc, $1/(1-\abs z)$ tends to $+\infty$ continuously, so
-$f$ has no limit. Otherwise rotate so that $1\in A$. Let $A'=\Psi_\D^{-1}(A\setminus\{1\})\subseteq X$, which is $\Fsd$, and
+If $A=\emptyset$ take $f(z)=\sin\bigl(1/(1-\abs z)\bigr)$: along any arc at $x\in C$, every tail contains a connected set on
+which $1/(1-\abs z)$ takes all values in some $[t_0,\infty)$, so $f$ takes the values $1$ and $-1$ there and has no limit. Otherwise rotate so that $1\in A$ (the rotation is a chart of $\D\cup C$ onto itself, Lemma~\ref{lem:transfer}). Let $A'=\Psi_\D^{-1}(A\setminus\{1\})\subseteq X$, which is $\Fsd$, and
 apply Theorem~\ref{thm:construct-D} to $A'$ and $\varphi\circ\Psi_\D$ (of honorary Baire class $\le2$ by
 Lemma~\ref{lem:honorary-invariance}), obtaining $f_1$; put $f_0=f_1\circ\Psi_\D^{-1}$ on
 $G^\circ$. On the set $G''$ of Lemma~\ref{lem:charts}(c), which is closed in $\D$, $f_0$ is continuous and bounded; set
@@ -430,11 +430,10 @@ $\Phi(\psi_0(x))=\varphi(x)$ (possible since $\Phi(Z_U\cup Z_V)=\Sph$). Then $\s
 (Lemma~\ref{lem:fold}(v)) and of honorary Baire class $\le2$ (Theorem~\ref{thm:honorary-char}). By
 Theorem~\ref{thm:construct-E} there is a bounded continuous $f_1:\D\to\C$ with $\CC(f_1)=A$ and boundary function
 $\sigma\circ\psi_0$. Put $f=\Phi\circ\sigma^{-1}\circ f_1$. Then $f\to\Phi(\psi_0(x))=\varphi(x)$ along the arcs at $x\in A$. If
-$x\notin A$ and $\gamma$ is an arc at $x$, $f_1$ has no limit along $\gamma$, so its cluster set (with values in a closed disk
-$K$ containing $f_1(\D)$) is a connected set with more than one point (Lemma~\ref{lem:cluster}), hence infinite; by
-Lemma~\ref{lem:cluster} with $\Theta=\Phi\circ\sigma^{-1}|_K$, $C(f,\gamma)$ is its image under $\Theta$, which is at most
-three-to-one, so $C(f,\gamma)$ is infinite and $f$ has no limit
-along $\gamma$.
+$f\to q$ along an arc $\gamma$ at $x\in C$, let $K$ be a closed disk containing $f_1(\D)$ and $\Theta=\Phi\circ\sigma^{-1}|_K$, which
+is at most three-to-one. By Lemma~\ref{lem:cluster}, $\Theta(C(f_1,\gamma))=C(f,\gamma)=\{q\}$, so $C(f_1,\gamma)\subseteq\Theta^{-1}(q)$
+is finite; being nonempty and connected (in a $T_1$ space a connected set with two points is infinite), it is a single point
+$\{w\}$, and $f_1\to w$ along $\gamma$. Hence $x\in\CC(f_1)=A$.
 \end{proof}
 
 \begin{theorem}[half-plane versions; {\cite[Theorems 4, 6, 7]{Diss}}]\label{thm:construct-H}

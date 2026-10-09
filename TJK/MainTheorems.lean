@@ -7,6 +7,7 @@ import TJK.Defs
 import TJK.Discont.Segments
 import TJK.Discont.Vitali
 import TJK.BoundaryFn.Homeo
+import TJK.Construct.Final
 import TJK.Construct.Realize
 
 open Set Filter Topology MeasureTheory
@@ -72,15 +73,15 @@ theorem Construct.exists_curvConvSet_eq_upperHalfPlane (A : Set ℝ) (hA : IsFσ
 theorem Construct.exists_f_sphere (A : Set ℂ) (hA : A ⊆ circle) (hAF : IsFσδ A)
     (φ : ℂ → Sphere2) (hφ : IsHonoraryBaireTwo (A.restrict φ)) :
     ∃ f : ℂ → Sphere2, ContinuousOn f disc ∧ curvConvSet disc circle f = A ∧
-      IsBoundaryFunction disc f A φ := by
-  sorry
+      IsBoundaryFunction disc f A φ :=
+  Construct.exists_f_sphere' A hA hAF φ hφ
 
 /-- Dissertation Theorem 6 (blueprint `thm:construct-H` (b)). -/
 theorem Construct.exists_boundaryFn_euclidean {m : ℕ} (E : Set ℝ)
     (φ : ℝ → EuclideanSpace ℝ (Fin m)) (hφ : IsHonoraryBaireTwo (E.restrict φ)) :
     ∃ f : ℂ → EuclideanSpace ℝ (Fin m), ContinuousOn f upper ∧
-      IsBoundaryFunction upper f (((↑) : ℝ → ℂ) '' E) (fun z => φ z.re) := by
-  sorry
+      IsBoundaryFunction upper f (((↑) : ℝ → ℂ) '' E) (fun z => φ z.re) :=
+  Construct.exists_boundaryFn_euclidean' E φ hφ
 
 /-! ## Discontinuous functions (dissertation Chapter II; 1965 paper, Theorems 4–6) -/
 
