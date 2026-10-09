@@ -100,7 +100,7 @@ whole space.
 
 \begin{fact}[hyperspace]\label{fact:hyperspace}
 \lean{TJK.compactSpace_nonemptyCompacts}
-\source{Hausdorff, Mengenlehre p.~150; Mathlib: EMetric.NonemptyCompacts.compactSpace}
+\source{Hausdorff, Mengenlehre p.~150; Mathlib: the \texttt{CompactSpace (NonemptyCompacts K)} instance (Vietoris topology = Hausdorff metric topology)}
 If $K$ is a compact metric space, the space $\mathcal C(K)$ of nonempty closed subsets of $K$ with the Hausdorff metric is
 compact.
 \end{fact}
@@ -178,7 +178,7 @@ $\ge1$. (d) is elementary.
 \end{proof}
 
 \begin{lemma}[crosscuts of the half-plane]\label{lem:crosscut-H}
-\lean{TJK.crosscutH_theorem}
+\lean{TJK.crosscutH_theorem, TJK.crosscut_components, TJK.cayley_ofReal}
 \uses{fact:crosscut, lem:charts}
 Let $\sigma$ be a crosscut of $\Hp$ with endpoints $a<b$. Then $\Hp\setminus\sigma$ has exactly two
 components, a bounded one $V$ with $\overline V\cap\R=[a,b]$, and an unbounded one $U$ with
@@ -186,11 +186,15 @@ $\overline U\cap\R=\R\setminus(a,b)$; moreover $\sigma\subseteq\overline U\cap\o
 $U\supseteq\{\operatorname{Im}z>\max_\sigma\operatorname{Im}\}$.
 \end{lemma}
 \begin{proof}
-$\kappa(\sigma)$ is a crosscut of $\D$ with endpoints in $C\setminus\{1\}$
-(Lemma~\ref{lem:charts}(a)); apply Fact~\ref{fact:crosscut}. The component whose closed arc avoids $1$
-has closure a compact subset of $\overline\D\setminus\{1\}$, so its preimage $V$ is bounded, and $\kappa$
-maps $[a,b]$ onto that arc. The half-plane above $\sigma$ is connected, unbounded and disjoint from
-$\sigma$, so it lies in $U$.
+On $\R$, $\kappa(x)=e^{i\vartheta(x)}$ with $\vartheta(x)=\pi+2\arctan x$, an increasing bijection of $\R$ onto
+$(0,2\pi)$. So $\kappa(\sigma)$ is a crosscut of $\D$ from $e^{i\vartheta(a)}$ to $e^{i\vartheta(b)}$
+(Lemma~\ref{lem:charts}(a)), and $\kappa$ maps $[a,b]$ onto the arc $A_1=\{e^{it}:\vartheta(a)\le t\le\vartheta(b)\}$
+and $\R\setminus(a,b)$ onto the complementary closed arc $A_2\ni1$. Fact~\ref{fact:crosscut} gives the
+components $U_1,U_2$ of $\D\setminus\kappa(\sigma)$ with $\overline{U_i}\cap C=A_i$; put $V=\kappa^{-1}(U_1)$,
+$U=\kappa^{-1}(U_2)$. Since $\kappa$ is a homeomorphism of $\Hp\cup\R$ onto $(\D\cup C)\setminus\{1\}$, closures
+correspond at points of $\Hp\cup\R$, which gives the traces on $\R$ and $\sigma\subseteq\overline U\cap\overline V$.
+As $1\notin\overline{U_1}$, $\abs{1-w}\ge r>0$ on $U_1$, so $\abs{\kappa^{-1}(w)}\le2/r$ there and $V$ is bounded.
+The half-plane above $\sigma$ is convex, unbounded and disjoint from $\sigma$, so it lies in $U$.
 \end{proof}
 
 \begin{lemma}[order of disjoint arcs in a strip]\label{lem:strip}

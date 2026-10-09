@@ -85,25 +85,6 @@ theorem disjoint_boundaryArcs {σ τ : Set ℂ} {θ ℓ θ' ℓ' : ℝ} (hℓ : 
     rw [mem_ball, dist_comm]; exact lt_of_lt_of_le hw (min_le_right _ _)
   exact disjoint_left.1 hUV hwU (hrV ⟨hwD, hw'⟩)
 
-/-- Two distinct points of `C` are `e^{iθ}` and `e^{i(θ + ℓ)}` with `0 < ℓ < 2π`. -/
-theorem exists_angles_of_ne {a b : ℂ} (ha : a ∈ circle) (hb : b ∈ circle) (hab : a ≠ b) :
-    ∃ θ ℓ : ℝ, 0 < ℓ ∧ ℓ < 2 * π ∧ expI θ = a ∧ expI (θ + ℓ) = b := by
-  have h1 := expI_arg (mem_sphere_zero_iff_norm.1 ha)
-  have h2 := expI_arg (mem_sphere_zero_iff_norm.1 hb)
-  set d := toIcoMod Real.two_pi_pos 0 (Complex.arg b - Complex.arg a) with hd
-  have hdI := toIcoMod_mem_Ico Real.two_pi_pos 0 (Complex.arg b - Complex.arg a)
-  rw [← hd, zero_add] at hdI
-  have hk := toIcoMod_add_toIcoDiv_zsmul Real.two_pi_pos 0 (Complex.arg b - Complex.arg a)
-  rw [← hd, zsmul_eq_mul] at hk
-  have he : expI (Complex.arg a + d) = b := by
-    rw [← h2, ← expI_add_int_mul (Complex.arg a + d)
-      (toIcoDiv Real.two_pi_pos 0 (Complex.arg b - Complex.arg a))]
-    congr 1; linarith
-  have hd0 : 0 < d := by
-    refine lt_of_le_of_ne hdI.1 fun h0 => hab ?_
-    rw [← he, ← h0, add_zero, h1]
-  exact ⟨Complex.arg a, d, hd0, hdI.2, h1, he⟩
-
 /-! ### Homeomorphisms of the disk -/
 
 namespace Homeo

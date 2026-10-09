@@ -8,6 +8,7 @@ import TJK.Discont.Segments
 import TJK.Discont.Vitali
 import TJK.BoundaryFn.Homeo
 import TJK.Construct.Final
+import TJK.McMillan.Basic
 import TJK.Construct.Realize
 
 open Set Filter Topology MeasureTheory
@@ -19,15 +20,15 @@ namespace TJK
 /-- McMillan's theorem (blueprint `thm:mcmillan`). -/
 theorem McMillan.isFσδ_curvConvSet {K : Type*} [MetricSpace K] [CompleteSpace K]
     [TopologicalSpace.SeparableSpace K] (f : ℂ → K) (hf : ContinuousOn f disc) :
-    IsFσδ (curvConvSet disc circle f) := by
-  sorry
+    IsFσδ (curvConvSet disc circle f) :=
+  McMillan.isFσδ_curvConvSet' f hf
 
 /-- Kaczynski's generalization to cluster sets (blueprint `thm:mm-thm2`). -/
 theorem McMillan.isFσδ_clusterSet_subset {K : Type*} [MetricSpace K] [CompactSpace K]
     (ℰ : Set (TopologicalSpace.NonemptyCompacts K)) (hℰ : IsClosed ℰ) (f : ℂ → K)
     (hf : ContinuousOn f disc) :
-    IsFσδ {x | x ∈ circle ∧ ∃ γ, IsArcAt disc x γ ∧ ∃ E ∈ ℰ, clusterSet f γ x ⊆ (E : Set K)} := by
-  sorry
+    IsFσδ {x | x ∈ circle ∧ ∃ γ, IsArcAt disc x γ ∧ ∃ E ∈ ℰ, clusterSet f γ x ⊆ (E : Set K)} :=
+  McMillan.isFσδ_clusterSet_subset' ℰ hℰ f hf
 
 /-! ## Boundary functions of continuous functions -/
 

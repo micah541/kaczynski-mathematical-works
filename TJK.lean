@@ -18,3 +18,5 @@ import TJK.Discont.Vitali
 import TJK.Construct.D
 import TJK.BoundaryFn.Homeo
 import TJK.Construct.Final
+import TJK.Plane.Crosscut
+import TJK.McMillan.Basic
