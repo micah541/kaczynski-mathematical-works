@@ -11,6 +11,7 @@ import TJK.Construct.Final
 import TJK.McMillan.Basic
 import TJK.BoundaryFn.Fsigma
 import TJK.Discont.Baire
+import TJK.Cube.Basic
 import TJK.Construct.Realize
 
 open Set Filter Topology MeasureTheory
@@ -145,6 +146,6 @@ theorem Cube.exists_not_measurableSet_curvConvSet :
     ∃ f : EuclideanSpace ℝ (Fin 3) → ℂ, ContinuousOn f Cube.openCube ∧
       Bornology.IsBounded (f '' Cube.openCube) ∧
       ¬ MeasurableSet (curvConvSet Cube.openCube (frontier Cube.openCube) f) := by
-  sorry
+  exact Cube.exists_not_measurableSet_curvConvSet'
 
 end TJK

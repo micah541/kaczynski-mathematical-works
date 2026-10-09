@@ -39,11 +39,14 @@ of real point asymptotic values of $s$ lying in $(-1,1)$, and $E$ is not a Borel
 \end{lemma}
 \begin{proof}
 Let $A$ be analytic and not Borel, $h$ as in Fact~\ref{fact:kierst}, and $\rho(w)=w/(1+\abs w)$, a homeomorphism of $\C$ onto $\D$ mapping
-$\R$ onto $(-1,1)$. Put $s(x,y)=\rho\bigl(h((1-y)e^{ix})\bigr)$ for $0<y<1$ and $s(x,y)=\rho(h(0))$ for $y\ge1$. Let $b\in(-1,1)$.
-If $b$ is an asymptotic value of $s$ along $v=\langle x(t),y(t)\rangle$ (so $y(t)\to0$), then $\rho^{-1}(b)$ is an asymptotic value of $h$ along
-$(1-y(t))e^{ix(t)}$, hence lies in $A$. If $a\in A$, by Fact~\ref{fact:normal} $a$ is a point asymptotic value of $h$ at some $e^{ip}$, along a
-path $w(t)\to e^{ip}$; writing $w(t)=r(t)e^{i\vartheta(t)}$ with $\vartheta$ continuous (for $t$ near $1$), $\vartheta(t)\to p+2\pi k$, and $\rho(a)$
-is a point asymptotic value of $s$ at $p+2\pi k$ along $\langle\vartheta(t),1-r(t)\rangle$. Thus both sets equal $\rho(A)$, which is not Borel.
+$\R$ onto $(-1,1)$, with inverse $u\mapsto u/(1-\abs u)$. Put $s(x,y)=\rho\bigl(h(\max\{1-y,0\}e^{ix})\bigr)$, continuous on $\Hp$
+with $\abs s<1$. Let $b\in(-1,1)$. If $b$ is an asymptotic value of $s$ along $v=\langle x(t),y(t)\rangle$, then $y(t)=\dist(v(t),\C\setminus\Hp)\to0$, and
+$\rho^{-1}(b)$ is an asymptotic value of $h$ along $w=(1-y)e^{ix}$ (for $y<1$, $\dist(w,\C\setminus\D)\le\abs{w-e^{ix}}=y$); as $\rho^{-1}(b)$ is real,
+it lies in $A$. If $a\in A$, by Fact~\ref{fact:normal} $a$ is a point asymptotic value of $h$ at some $e^{ip}$, $p=\arg e^{ip}$, along a path
+$w(t)\to e^{ip}$. For $t$ near $1$, $w(t)e^{-ip}$ lies near $1$, off the negative axis, so $\vartheta(t)=p+\arg(w(t)e^{-ip})$ is continuous,
+$\vartheta(t)\to p$ and $\abs{w(t)}e^{i\vartheta(t)}=w(t)$. Hence $\rho(a)$ is a point asymptotic value of $s$ at $p$ along
+$\langle\vartheta(t),1-\abs{w(t)}\rangle$. Since point asymptotic values are asymptotic values, both sets equal $\rho(A)$, which is not Borel
+($A=\rho^{-1}(\rho(A))$ and $\rho$ is continuous).
 \end{proof}
 
 \begin{remark}
@@ -58,42 +61,41 @@ There is a bounded continuous $f:K^\circ\to\C$ on the open cube $K^\circ=(-1,1)\
 is not a Borel set. (So McMillan's theorem does not extend to three dimensions.)
 \end{theorem}
 \begin{proof}
-Let $s,E$ be as in Lemma~\ref{lem:cube-lemma} and $g(x,y)=s(x/y,y)$ on $Q$.
+Let $s,E$ be as in Lemma~\ref{lem:cube-lemma}, $g(x,y)=s(x/y,y)$ for $y>0$, so $\abs g<1$.
 
-\emph{$E$ is the set of real point asymptotic values of $g$ at $\langle0,0\rangle$ in $(-1,1)$.} If $g\to b$ along a path
-$\langle x(t),y(t)\rangle\to\langle0,0\rangle$ in $Q^\circ$, then $s\to b$ along $\langle x/y,y\rangle$, whose second coordinate tends to $0$; so $b\in E$. If
-$s\to b$ along $\langle u(t),v(t)\rangle\to\langle p,0\rangle$, then $g\to b$ along $\langle u(t)v(t),v(t)\rangle\to\langle0,0\rangle$, which lies in $Q^\circ$ for $t$ near $1$.
-
-\emph{Construction.} Let $d_0(t)$ be the supremum of the $\delta\in(0,1]$ such that $z,z'\in Q$, $\operatorname{Im}z,\operatorname{Im}z'\ge t$,
-$\abs{z-z'}<\delta$ imply $\abs{g(z)-g(z')}\le t$; let $d(t)=\min\{\frac14d_0(t/2),\frac14t\}$, and $k$ as in Theorem~\ref{thm:construct-C}
-(so $\abs k\le\sqrt2\le2$). Here $d_0(t)>0$ because $g$ is uniformly continuous on the compact set $[-1,1]\times[t,1]$,
-and $d_0$ is weakly increasing (raising $t$ shrinks the region and loosens the tolerance); so $d$ is positive and weakly
-increasing, as Theorem~\ref{thm:construct-C} requires. Put $f(x,y,z)=(g(x,y)-z)\,k(x,y)$. For any three points $P=\langle x,y,z\rangle$, $P'$, $P''$ of $K^\circ$, writing
-$g'=g(x',y')$ etc.,
+\emph{Construction.} For $t\in\R$ let $K_t=[-1,1]\times[t,1]$ and let $d_0(t)$ be the supremum of the $\delta\in[0,1]$ such that $z,z'\in K_t$,
+$\abs{z-z'}<\delta$ imply $\abs{g(z)-g(z')}\le t$. Raising $t$ shrinks $K_t$ and loosens the tolerance, so $d_0$ is weakly increasing; for $t>0$,
+$d_0(t)>0$ because $g$ is uniformly continuous on the compact set $K_t$. Let $d(t)=\min\{\frac12d_0(t/2),\frac14t\}$, positive and weakly increasing
+on $(0,1]$, and $k$ as in Theorem~\ref{thm:construct-C} (so $\abs k\le\sqrt2\le2$). Put $f(x,y,z)=(g(x,y)-z)\,k(x,y)$, continuous on $K^\circ$ with
+$\abs f\le4$. For $c,e',e'',k',k''\in\C$ with $\abs{k'},\abs{k''}\le2$,
 \begin{equation}\label{eq:cube1}
-\abs{f(P')-f(P'')}\ge\abs{g-z}\abs{k'-k''}-2\abs{g'-g}-2\abs{g-g''}-2\abs{z-z'}-2\abs{z''-z},
+\abs{(c+e')k'-(c+e'')k''}\ge\abs c\abs{k'-k''}-2\abs{e'}-2\abs{e''},
 \end{equation}
-because $f(P')-f(P'')=(g-z)(k'-k'')+\bigl((g'-z')-(g-z)\bigr)k'-\bigl((g''-z'')-(g-z)\bigr)k''$.
+because $(c+e')k'-(c+e'')k''=c(k'-k'')+e'k'-e''k''$.
 
-Let $L=\{\langle0,0,z\rangle:-1<z<1\}$ and $F=\CC(f)$. We show $F\cap L=\{\langle0,0,b\rangle:b\in E\}$; then $F$ is not Borel, since
-otherwise $F\cap L$ would be.
+Let $F=\CC(f)$. We show that for $b\in(-1,1)$, $\langle0,0,b\rangle\in F$ iff $b\in E$; then $F$ is not Borel, since otherwise
+$\{b\in(-1,1):\langle0,0,b\rangle\in F\}=E$ would be.
 
-If $b\in E$, take an arc $\gamma$ at $\langle0,0\rangle$ in $Q^\circ$ along which $g\to b$; along $\gamma'=\{\langle x,y,b\rangle:\langle x,y\rangle\in\gamma\}$,
-$g-z\to0$, so $f\to0$, and $\langle0,0,b\rangle\in F$.
+If $b\in E$, $s\to b$ along a path $\langle u(t),v(t)\rangle\to\langle p,0\rangle$ in $\Hp$. Along $c(t)=\langle u(t)v(t),v(t),b\rangle\to\langle0,0,b\rangle$,
+which lies in $K^\circ$ for $t$ near $1$, $g=s(u,v)\to b$, so $f\to0$. By Corollary~\ref{cor:path-arc} (applied to $c$ restricted to some $[t_0,1)$
+and closed up by $\langle0,0,b\rangle$, which lies in $\partial K^\circ$), $\langle0,0,b\rangle\in F$.
 
-Conversely let $f$ converge along an arc $\gamma'$ at $\langle0,0,b\rangle$ in $K^\circ$, and let $\gamma$ be its projection to the $\langle x,y\rangle$-plane,
-a path ending at $\langle0,0\rangle$ and otherwise in $Q^\circ$. We claim $g(x,y)-z\to0$ along $\gamma'$; then $g\to b$ along $\gamma$, so $b$ is a
-point asymptotic value of $g$ at $\langle0,0\rangle$ and $b\in E$. If not, there are $\eps>0$ and points $\langle x_n,y_n,z_n\rangle\in\gamma'$
-converging to $\langle0,0,b\rangle$ with $\abs{g(x_n,y_n)-z_n}\ge\eps$. Since the only point of $\gamma'$ with $y=0$ is its endpoint, there is
-$\delta>0$ such that points of $\gamma'$ with $y\le\delta$ have $z$-coordinates within $\eps/8$ of each other. Fix $n$ large, with
-$y_n<\min\{3\eps/32,3\delta/4,3/4\}$ and with the projection of the other endpoint of $\gamma'$ farther than $y_n$ from
-$\langle x_n,y_n\rangle$, and put $a=4y_n/3$. By Lemma~\ref{lem:subarc}(b) applied to (a parametrization of) $\gamma$, there is a
-connected $\gamma^*\subseteq\gamma\cap\overline{S(d(a),\langle x_n,y_n\rangle)}$ containing $\langle x_n,y_n\rangle$ and a point at distance $d(a)$ from it.
-As $d(a)\le a/4$, $\gamma^*\subseteq[-1,1]\times[a/2,a]$, and Theorem~\ref{thm:construct-C} gives points $\langle x_n',y_n'\rangle$,
-$\langle x_n'',y_n''\rangle$ of $\gamma^*$ with $\abs{k'-k''}\ge2$; lift them to points of $\gamma'$ with third coordinates $z_n',z_n''$. These have
-$y\le a<\delta$, so $\abs{z_n'-z_n},\abs{z_n''-z_n}<\eps/8$; and $\abs{g(x_n,y_n)-g'},\abs{g(x_n,y_n)-g''}\le a/2<\eps/16$ by the choice of
-$d$. By \eqref{eq:cube1}, $\abs{f(P_n')-f(P_n'')}\ge2\eps-\frac\eps4-\frac\eps2>\eps$. Since $P_n',P_n''\to\langle0,0,b\rangle$ along $\gamma'$, $f$ does
-not converge along $\gamma'$: a contradiction.
+Conversely let $f\to q$ along an arc $\gamma'=q_0([0,1])$ at $q_0(0)=\langle0,0,b\rangle$ in $K^\circ$. We claim $g(x,y)-z\to0$ along $\gamma'$.
+Then $g\to b$ along $\gamma'$, so $s\to b$ along $v(t)=\langle x/y,y\rangle(q_0(1-t))$, $t\in[0,1)$, a path in $\Hp$ whose second coordinate tends
+to $0$: $b$ is an asymptotic value of $s$, so $b\in E$.
+
+If the claim fails, there is $\eps>0$ such that $\abs{g(x,y)-z}\ge\eps$ at points of $\gamma'\setminus\{\langle0,0,b\rangle\}$ arbitrarily close to $\langle0,0,b\rangle$.
+Choose $r_1>0$ with $\abs{f(P)-q}<\eps/2$ for $P\in\gamma'\setminus\{\langle0,0,b\rangle\}$ within $r_1$ of $\langle0,0,b\rangle$, and put $r=\min\{r_1,\eps/16\}$. As $\gamma'$
+is compact and its only point with $y=0$ is $\langle0,0,b\rangle$, there is $\delta>0$ such that points of $\gamma'$ with $y\le\delta$ lie within $r$ of
+$\langle0,0,b\rangle$. Take $P_n=q_0(t_n)=\langle x_n,y_n,z_n\rangle$ with $\abs{g(x_n,y_n)-z_n}\ge\eps$ and $0<y_n<\min\{3\delta/4,3\eps/32,3/4\}$; put
+$a=4y_n/3\le1$, so $a\le\delta$ and $a<\eps/8$. The projection $\Phi$ of $q_0$ to the $\langle x,y\rangle$-plane has $\Phi(0)=\langle0,0\rangle$ at distance
+$\ge y_n>d(a)$ from $\Phi(t_n)$, so by Lemma~\ref{lem:subarc}(b) there is an interval $J\ni t_n$ with $\gamma^*=\Phi(J)$ in the closed disc of radius
+$d(a)\le a/4$ about $\langle x_n,y_n\rangle$ and containing a point at distance $d(a)$ from it. Then $\gamma^*\subseteq[-1,1]\times[a/2,a]$
+is connected, and Theorem~\ref{thm:construct-C} gives $\tau',\tau''\in J$ with $\abs{k'-k''}\ge2$ at $\Phi(\tau'),\Phi(\tau'')$. The points
+$P_n'=q_0(\tau')$, $P_n''=q_0(\tau'')$ have $a/2\le y\le a\le\delta$, so they differ from $\langle0,0,b\rangle$ and lie within $r$ of it; hence
+$\abs{f(P_n')-f(P_n'')}<\eps$, $\abs{z_n'-z_n},\abs{z_n''-z_n}<2r\le\eps/8$, and, as $\Phi(\tau'),\langle x_n,y_n\rangle\in K_{a/2}$ are closer than
+$d(a)<d_0(a/2)$, $\abs{g'-g(x_n,y_n)},\abs{g''-g(x_n,y_n)}\le a/2<\eps/16$. Applying \eqref{eq:cube1} with $c=g(x_n,y_n)-z_n$, $c+e'=g'-z_n'$,
+$c+e''=g''-z_n''$ gives $\eps>\abs{f(P_n')-f(P_n'')}\ge2\eps-4(\eps/16+\eps/8)=\frac54\eps$, a contradiction.
 \end{proof}
 
 \begin{remark}

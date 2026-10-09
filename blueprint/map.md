@@ -9,8 +9,8 @@ Every node is a numbered item of the [companion paper](../paper/main.pdf). Arrow
 |---|---|---|
 | `proved` | proved (no `sorry`) | 77 |
 | `defined` | definition written in Lean | 15 |
-| `conditional` | proof written, but it uses a declaration that still has `sorry` | 20 |
-| `sorry` | stated in Lean, proof is `sorry` | 3 |
+| `conditional` | proof written, but it uses a declaration that still has `sorry` | 21 |
+| `sorry` | stated in Lean, proof is `sorry` | 2 |
 | `planned` | Lean name reserved, not yet stated | 10 |
 | `imported` | imported fact (Mathlib / library) | 13 |
 
@@ -475,9 +475,9 @@ flowchart BT
   classDef defined fill:#b7e1c5,color:#123,stroke:#4c9a68
   class def_sut_solution,def_borel_classes,def_fn_classes,def_fold,def_additive_classes,def_arcs,def_ccset,def_charts,def_acc,def_regions,def_special_family,def_special_pair,def_meets_in,def_trapezoid,def_asymptotic defined
   classDef sorry fill:#f2c14e,color:#222,stroke:#b8902e
-  class thm_ha_example,thm_ha_theorem,thm_cube sorry
+  class thm_ha_example,thm_ha_theorem sorry
   classDef conditional fill:#d9ead3,color:#222,stroke:#b8902e,stroke-dasharray: 4 2
-  class lem_baire_criterion,cor_path_arc,lem_crosscut_H,lem_strip,lem_mm_lemma2,lem_mm_lemma3,thm_mcmillan,thm_mm_thm2,cor_mm_corollaries,thm_mcmillan_H,lem_th_lemma7,lem_th_lemma8,thm_bf_fsigma,cor_bf_honorary,prop_gdelta_remark,thm_homeo,lem_figure5,thm_baire_plus_one,cor_borel,lem_cube_lemma conditional
+  class lem_baire_criterion,cor_path_arc,lem_crosscut_H,lem_strip,lem_mm_lemma2,lem_mm_lemma3,thm_mcmillan,thm_mm_thm2,cor_mm_corollaries,thm_mcmillan_H,lem_th_lemma7,lem_th_lemma8,thm_bf_fsigma,cor_bf_honorary,prop_gdelta_remark,thm_homeo,lem_figure5,thm_baire_plus_one,cor_borel,lem_cube_lemma,thm_cube conditional
   classDef planned fill:#eeeeee,color:#333,stroke:#999
   class prop_th_example,lem_ha_lemma,lem_ha_estimates,cor_ha_corollary,cor_ha_analytic,def_th_special,lem_th_special_implies,lem_th_lemma9,lem_th_lemma10,lem_th_lemma11 planned
   classDef imported fill:#dbe8f6,color:#1c3a5e,stroke:#6b8fb8
@@ -660,7 +660,7 @@ flowchart BT
 | fact:kierst<br/>*Kierst* | fact | `TJK.Cube.kierst` ([src](../TJK/Cube/Basic.lean)) |  | `imported` |
 | fact:normal<br/>*Lehto–Virtanen ; Bagemihl–Seidel* | fact | `TJK.Cube.asymptotic_is_point_asymptotic` ([src](../TJK/Cube/Basic.lean)) |  | `imported` |
 | lem:cube-lemma | lemma | `TJK.Cube.exists_s` ([src](../TJK/Cube/Basic.lean)) | `fact:analytic-nonborel`, `fact:kierst`, `fact:normal`, `def:asymptotic`, `cor:path-arc` | `conditional` |
-| thm:cube | theorem | `TJK.Cube.exists_not_measurableSet_curvConvSet` ([src](../TJK/MainTheorems.lean)) | `lem:cube-lemma`, `thm:construct-C`, `lem:subarc`, `cor:path-arc`, `def:asymptotic` | `sorry` |
+| thm:cube | theorem | `TJK.Cube.exists_not_measurableSet_curvConvSet` ([src](../TJK/MainTheorems.lean)) | `lem:cube-lemma`, `thm:construct-C`, `lem:subarc`, `cor:path-arc`, `def:asymptotic` | `conditional` |
 
 ## Z Variants
 
