@@ -483,21 +483,23 @@ $f^{-1}(U)=\bigcup_{k,N}\bigcap_{n\ge N}f_n^{-1}(V_k)$; by induction $f_n^{-1}(V
 Q^{\eta_n+1}\subseteq Q^\xi$, so the intersections lie in $Q^\xi$ and the union in $P^{\xi+1}$.
 \end{proof}
 
-\begin{fact}[Banach {\cite{Banach}}]\label{fact:banach}
+\begin{theorem}[Banach {\cite{Banach}}]\label{fact:banach}
 \lean{TJK.banach_baireClass_of_addClass}
 \uses{def:additive-classes, def:fn-classes}
 \source{Banach 1931, quoted in Diss \S3}
 Let $Y$ be a separable, arcwise connected metric space and $\xi\ge2$. If $f:M\to Y$ is of class
 $P^{\xi+1}$, then $f$ is of Baire class $\xi$.
-\end{fact}
+\end{theorem}
+\begin{proof}Formalized in \texttt{TJK/Baire/Banach.lean}: approximate by finitely valued maps with preimages of lower class, using a dense sequence and a finite priority rule, then interpolate along a path through finitely many points of $Y$; induction on $\xi$. For the second statement every Borel set lies in some $P^\xi\cap Q^\xi$, $\xi<\omega_1$.\end{proof}
 
-\begin{fact}[Lebesgue--Hausdorff--Banach]\label{fact:borel-baire}
+\begin{theorem}[Lebesgue--Hausdorff--Banach]\label{fact:borel-baire}
 \lean{TJK.borel_measurable_exists_baireClass}
 \uses{def:fn-classes}
 \source{Hausdorff, Set Theory p.~294 (for Y = R, as quoted in Diss \S3); general Y: Banach 1931 with the Borel hierarchy; cf. Kuratowski, Topology I \S31}
 Let $Y$ be a separable, arcwise connected metric space. Every Borel-measurable $f:M\to Y$ is of Baire
 class $\xi$ for some countable ordinal $\xi$.
-\end{fact}
+\end{theorem}
+\begin{proof}Formalized in \texttt{TJK/Baire/Banach.lean}: approximate by finitely valued maps with preimages of lower class, using a dense sequence and a finite priority rule, then interpolate along a path through finitely many points of $Y$; induction on $\xi$. For the second statement every Borel set lies in some $P^\xi\cap Q^\xi$, $\xi<\omega_1$.\end{proof}
 
 \begin{lemma}[{\cite[Lemma 18]{Diss}}]\label{lem:equiv}
 \lean{TJK.CountablyEquiv, TJK.CountablyEquiv.equivalence, TJK.CountablyEquiv.diff,
@@ -576,5 +578,5 @@ $\varphi^{-1}(U)\subseteq T\subseteq\varphi^{-1}(\overline U)$. Then $\varphi$ i
 Let $\mathcal B$ be a countable base of $Y$. For open $W$ let $\mathcal B(W)=\{B\in\mathcal
 B:\overline B\subseteq W\}$; then $W=\bigcup_{\mathcal B(W)}B=\bigcup_{\mathcal B(W)}\overline B$ (for
 $p\in W$ with $S(r,p)\subseteq W$ choose $p\in B\subseteq S(r/2,p)$). With $T(B)$ as in the hypothesis,
-$\varphi^{-1}(W)=\bigcup_{B\in\mathcal B(W)}T(B)\in P^{\xi+1}(E)$. Conclude by Fact~\ref{fact:banach}.
+$\varphi^{-1}(W)=\bigcup_{B\in\mathcal B(W)}T(B)\in P^{\xi+1}(E)$. Conclude by Theorem~\ref{fact:banach}.
 \end{proof}

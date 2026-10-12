@@ -11,6 +11,7 @@ import TJK.Construct.G
 import TJK.Baire.Sphere
 import TJK.Discont.Segments
 import TJK.Baire.Higher
+import TJK.Baire.Banach
 import TJK.Construct.H
 import TJK.Plane.Arc
 import TJK.Plane.JordanCrosscut

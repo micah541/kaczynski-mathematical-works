@@ -11,6 +11,7 @@ import TJK.Plane.Basic
 import TJK.Plane.Crosscut
 import TJK.Baire.Basic
 import TJK.Baire.Higher
+import TJK.Baire.Banach
 
 open _root_.Set Filter Topology Metric Complex
 

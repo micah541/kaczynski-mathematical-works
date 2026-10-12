@@ -438,26 +438,6 @@ theorem BaireClass.measurable [PerfectlyNormalSpace X] [PerfectlyNormalSpace Y] 
 
 end BaireClasses
 
-/-! ## Imported facts (blueprint `fact:banach`, `fact:borel-baire`) -/
-
-/-- **Banach (1931).** For `ξ ≥ 2`, a function of class `P^{ξ+1}` from a metric space to a
-separable, arcwise connected metric space is of Baire class `ξ`. Imported. -/
-theorem banach_baireClass_of_addClass {M Y : Type*} [MetricSpace M] [MetricSpace Y]
-    [SeparableSpace Y] [PathConnectedSpace Y] {ξ : Ordinal.{0}} (hξ : 2 ≤ ξ) {f : M → Y}
-    (hf : IsAddClassMeasurable (ξ + 1) f) : BaireClass ξ f := by
-  sorry
-
-/-- **Lebesgue–Hausdorff–Banach.** Every Borel measurable function from a metric space to a
-separable, arcwise connected metric space is of Baire class `ξ` for some countable ordinal `ξ`.
-Imported. -/
-theorem borel_measurable_exists_baireClass {M Y : Type*} [MetricSpace M] [MeasurableSpace M]
-    [BorelSpace M] [MetricSpace Y] [SeparableSpace Y] [PathConnectedSpace Y] [MeasurableSpace Y]
-    [BorelSpace Y] {f : M → Y} (hf : Measurable f) :
-    ∃ ξ : Ordinal.{0}, ξ < Ordinal.omega 1 ∧ BaireClass ξ f := by
-  sorry
-
-/-! ## Countable equivalence (blueprint `lem:equiv`) -/
-
 section CountablyEquiv
 
 variable {α : Type*}
@@ -655,31 +635,5 @@ theorem BaireClass.comp_monotone {Y : Type*} [TopologicalSpace Y] {ξ : Ordinal.
   exact hf.comp_continuous hc
 
 end Monotone
-
-/-! ## A criterion for Baire class `ξ` (blueprint `lem:baire-criterion`) -/
-
-/-- **Dissertation Lemma 22.** Let `Y` be a separable arcwise connected metric space and `ξ ≥ 2`.
-If for every open `U ⊆ Y` some `T ∈ P^{ξ+1}(E)` satisfies `φ⁻¹(U) ⊆ T ⊆ φ⁻¹(closure U)`, then `φ`
-is of Baire class `ξ`. -/
-theorem baireClass_of_sandwich {E Y : Type*} [MetricSpace E] [MetricSpace Y] [SeparableSpace Y]
-    [PathConnectedSpace Y] {ξ : Ordinal.{0}} (hξ : 2 ≤ ξ) {φ : E → Y}
-    (h : ∀ U : Set Y, IsOpen U → ∃ T : Set E, AddClass (ξ + 1) T ∧ φ ⁻¹' U ⊆ T ∧
-      T ⊆ φ ⁻¹' closure U) : BaireClass ξ φ := by
-  refine banach_baireClass_of_addClass hξ fun W hW => ?_
-  choose T hT hUT hTU using h
-  have hbasis := isBasis_countableBasis Y
-  have hcount : {B ∈ countableBasis Y | closure B ⊆ W}.Countable :=
-    (countable_countableBasis Y).mono (sep_subset _ _)
-  have := hcount.to_subtype
-  have key : φ ⁻¹' W = ⋃ B : {B ∈ countableBasis Y | closure B ⊆ W},
-      T B (hbasis.isOpen B.2.1) := by
-    apply Subset.antisymm
-    · intro x hx
-      obtain ⟨B, hB, hxB, hBW⟩ := hbasis.exists_closure_subset (hW.mem_nhds hx)
-      exact mem_iUnion.2 ⟨⟨B, hB, hBW⟩, hUT _ _ hxB⟩
-    · exact iUnion_subset fun B => (hTU _ _).trans (preimage_mono B.2.2)
-  rw [key]
-  have h1 : (1 : Ordinal.{0}) ≤ ξ + 1 := le_add_self
-  exact AddClass.iUnion (fun B => hT _ _) h1
 
 end TJK

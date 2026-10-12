@@ -7,11 +7,11 @@ Every node is a numbered item of the [companion paper](../paper/main.pdf). Arrow
 
 | Status | Meaning | Count |
 |---|---|---|
-| `proved` | proved (no `sorry`) | 95 |
+| `proved` | proved (no `sorry`) | 100 |
 | `defined` | definition written in Lean | 15 |
-| `conditional` | proof written, but it uses a declaration that still has `sorry` | 11 |
+| `conditional` | proof written, but it uses a declaration that still has `sorry` | 8 |
 | `planned` | Lean name reserved, not yet stated | 6 |
-| `imported` | imported fact (Mathlib / library) | 11 |
+| `imported` | imported fact (Mathlib / library) | 9 |
 
 ```mermaid
 flowchart BT
@@ -471,15 +471,15 @@ flowchart BT
   lem_th_lemma10 --> def_th_special
   lem_th_lemma11 --> def_th_special
   classDef proved fill:#1f8a4c,color:#fff,stroke:#146236
-  class lem_sut_basic,prop_sut_two_composite,prop_sut_explicit,lem_sut_factor,thm_sut_sutcliffe2,thm_sut_sutcliffe3,lem_sut_lemma1,lem_sut_lemma2,thm_sut_main,cor_sut_main,lem_borel_basic,lem_reduction,cor_reduction_finite,thm_sierpinski,lem_baire1_fsigma,lem_finite_valued,lem_finite_valued_ops,lem_approx_char,lem_approx_finite,lem_uniform_approx,lem_approx_real,thm_baire1_char,lem_uniform_limit_fsigma,thm_extension,lem_fold,lem_fold_factor,thm_sphere_baire1,thm_sphere_extension,thm_honorary_char,lem_honorary_invariance,thm_kuratowski,cor_baire_continuity_point,lem_meager_subspace,lem_additive_basic,lem_baire_precomp,lem_baire_imp_class,lem_equiv,lem_intervals_open,lem_two_sided,lem_monotone_extend,lem_monotone_compose,fact_tietze_arc,cor_path_arc,lem_subarc,lem_cluster,fact_crosscut,lem_disjoint_arcs,lem_charts,lem_crosscut_H,lem_strip,lem_disc_geometry,lem_open_components,lem_transfer,lem_locality,lem_mm_lemma2,lem_mm_lemma3,thm_mcmillan,thm_mm_thm2,cor_mm_corollaries,thm_mcmillan_H,lem_th_lemma7,lem_th_lemma8,lem_th_lemma15,thm_bf_fsigma,cor_bf_honorary,lem_homeo_values,thm_homeo,lem_B_char,lem_region_geometry,lem_special_from_fsigma,lem_special_sequence,lem_special_pair_exists,lem_special_pair_shrink,thm_construct_A,thm_cc_realize,lem_monotone_inverse,lem_closed_graph,thm_construct_B,thm_construct_C,thm_construct_D,thm_construct_E,thm_construct_F,thm_construct_H,lem_figure5,lem_th_lemma23,lem_th_lemma24,thm_th_thm9,lem_th_lemma25,thm_th_thm10,cor_ae_zero,fact_vitali,cor_nonmeasurable,lem_general_limit_endpoints,lem_ha_sequences,lem_ha_estimates proved
+  class lem_sut_basic,prop_sut_two_composite,prop_sut_explicit,lem_sut_factor,thm_sut_sutcliffe2,thm_sut_sutcliffe3,lem_sut_lemma1,lem_sut_lemma2,thm_sut_main,cor_sut_main,lem_borel_basic,lem_reduction,cor_reduction_finite,thm_sierpinski,lem_baire1_fsigma,lem_finite_valued,lem_finite_valued_ops,lem_approx_char,lem_approx_finite,lem_uniform_approx,lem_approx_real,thm_baire1_char,lem_uniform_limit_fsigma,thm_extension,lem_fold,lem_fold_factor,thm_sphere_baire1,thm_sphere_extension,thm_honorary_char,lem_honorary_invariance,thm_kuratowski,cor_baire_continuity_point,lem_meager_subspace,lem_additive_basic,lem_baire_precomp,lem_baire_imp_class,fact_banach,fact_borel_baire,lem_equiv,lem_intervals_open,lem_two_sided,lem_monotone_extend,lem_monotone_compose,lem_baire_criterion,fact_tietze_arc,cor_path_arc,lem_subarc,lem_cluster,fact_crosscut,lem_disjoint_arcs,lem_charts,lem_crosscut_H,lem_strip,lem_disc_geometry,lem_open_components,lem_transfer,lem_locality,lem_mm_lemma2,lem_mm_lemma3,thm_mcmillan,thm_mm_thm2,cor_mm_corollaries,thm_mcmillan_H,lem_th_lemma7,lem_th_lemma8,lem_th_lemma15,thm_bf_fsigma,cor_bf_honorary,lem_homeo_values,thm_homeo,lem_B_char,lem_region_geometry,lem_special_from_fsigma,lem_special_sequence,lem_special_pair_exists,lem_special_pair_shrink,thm_construct_A,thm_cc_realize,lem_monotone_inverse,lem_closed_graph,thm_construct_B,thm_construct_C,thm_construct_D,thm_construct_E,thm_construct_F,thm_construct_H,lem_figure5,thm_baire_plus_one,cor_borel,lem_th_lemma23,lem_th_lemma24,thm_th_thm9,lem_th_lemma25,thm_th_thm10,cor_ae_zero,fact_vitali,cor_nonmeasurable,lem_general_limit_endpoints,lem_ha_sequences,lem_ha_estimates proved
   classDef defined fill:#b7e1c5,color:#123,stroke:#4c9a68
   class def_sut_solution,def_borel_classes,def_fn_classes,def_fold,def_additive_classes,def_arcs,def_ccset,def_charts,def_acc,def_regions,def_special_family,def_special_pair,def_meets_in,def_trapezoid,def_asymptotic defined
   classDef conditional fill:#d9ead3,color:#222,stroke:#b8902e,stroke-dasharray: 4 2
-  class lem_baire_criterion,prop_gdelta_remark,thm_baire_plus_one,cor_borel,lem_ha_lemma,thm_ha_example,thm_ha_theorem,cor_ha_corollary,cor_ha_analytic,lem_cube_lemma,thm_cube conditional
+  class prop_gdelta_remark,lem_ha_lemma,thm_ha_example,thm_ha_theorem,cor_ha_corollary,cor_ha_analytic,lem_cube_lemma,thm_cube conditional
   classDef planned fill:#eeeeee,color:#333,stroke:#999
   class prop_th_example,def_th_special,lem_th_special_implies,lem_th_lemma9,lem_th_lemma10,lem_th_lemma11 planned
   classDef imported fill:#dbe8f6,color:#1c3a5e,stroke:#6b8fb8
-  class fact_banach,fact_borel_baire,fact_tietze_ext,fact_hyperspace,fact_baire_category,fact_bagemihl,fact_poisson,fact_jordan_access,fact_analytic_nonborel,fact_kierst,fact_normal imported
+  class fact_tietze_ext,fact_hyperspace,fact_baire_category,fact_bagemihl,fact_poisson,fact_jordan_access,fact_analytic_nonborel,fact_kierst,fact_normal imported
 ```
 
 ## A Sutcliffe's problem
@@ -532,14 +532,14 @@ flowchart BT
 | lem:additive-basic | lemma | `TJK.mulClass_iff_compl` ([src](../TJK/Baire/Higher.lean))<br/>`TJK.AddClass.mono` ([src](../TJK/Baire/Higher.lean))<br/>`TJK.MulClass.mono` ([src](../TJK/Baire/Higher.lean))<br/>`TJK.AddClass.iUnion` ([src](../TJK/Baire/Higher.lean))<br/>`TJK.AddClass.union` ([src](../TJK/Baire/Higher.lean))<br/>`TJK.AddClass.inter` ([src](../TJK/Baire/Higher.lean))<br/>`TJK.MulClass.iInter` ([src](../TJK/Baire/Higher.lean))<br/>`TJK.MulClass.inter` ([src](../TJK/Baire/Higher.lean))<br/>`TJK.MulClass.union` ([src](../TJK/Baire/Higher.lean))<br/>`TJK.AddClass.addClass_of_lt` ([src](../TJK/Baire/Higher.lean))<br/>`TJK.AddClass.mulClass_of_lt` ([src](../TJK/Baire/Higher.lean))<br/>`TJK.MulClass.addClass_of_lt` ([src](../TJK/Baire/Higher.lean))<br/>`TJK.MulClass.mulClass_of_lt` ([src](../TJK/Baire/Higher.lean))<br/>`TJK.addClass_two_iff` ([src](../TJK/Baire/Higher.lean))<br/>`TJK.mulClass_two_iff` ([src](../TJK/Baire/Higher.lean))<br/>`TJK.AddClass.preimage` ([src](../TJK/Baire/Higher.lean))<br/>`TJK.AddClass.subtype_iff` ([src](../TJK/Baire/Higher.lean))<br/>`TJK.MulClass.subtype_iff` ([src](../TJK/Baire/Higher.lean))<br/>`TJK.AddClass.measurableSet` ([src](../TJK/Baire/Higher.lean))<br/>`TJK.MulClass.measurableSet` ([src](../TJK/Baire/Higher.lean)) | `def:additive-classes`, `lem:borel-basic` | `proved` |
 | lem:baire-precomp | lemma | `TJK.BaireClass.comp_continuous` ([src](../TJK/Baire/Higher.lean))<br/>`TJK.BaireClass.restrict` ([src](../TJK/Baire/Higher.lean))<br/>`TJK.BaireClass.mono` ([src](../TJK/Baire/Higher.lean)) | `def:fn-classes` | `proved` |
 | lem:baire-imp-class | lemma | `TJK.BaireClass.addClass_preimage` ([src](../TJK/Baire/Higher.lean))<br/>`TJK.BaireClass.measurable` ([src](../TJK/Baire/Higher.lean))<br/>`TJK.IsAddClassMeasurable.measurable` ([src](../TJK/Baire/Higher.lean)) | `def:additive-classes`, `lem:additive-basic`, `lem:baire-precomp`, `lem:baire1-fsigma` | `proved` |
-| fact:banach<br/>*Banach* | fact | `TJK.banach_baireClass_of_addClass` ([src](../TJK/Baire/Higher.lean)) | `def:additive-classes`, `def:fn-classes` | `imported` |
-| fact:borel-baire<br/>*Lebesgue–Hausdorff–Banach* | fact | `TJK.borel_measurable_exists_baireClass` ([src](../TJK/Baire/Higher.lean)) | `def:fn-classes` | `imported` |
+| fact:banach<br/>*Banach* | theorem | `TJK.banach_baireClass_of_addClass` ([src](../TJK/Baire/Banach.lean)) | `def:additive-classes`, `def:fn-classes` | `proved` |
+| fact:borel-baire<br/>*Lebesgue–Hausdorff–Banach* | theorem | `TJK.borel_measurable_exists_baireClass` ([src](../TJK/Baire/Banach.lean)) | `def:fn-classes` | `proved` |
 | lem:equiv | lemma | `TJK.CountablyEquiv` ([src](../TJK/Baire/Higher.lean))<br/>`TJK.CountablyEquiv.equivalence` ([src](../TJK/Baire/Higher.lean))<br/>`TJK.CountablyEquiv.diff` ([src](../TJK/Baire/Higher.lean))<br/>`TJK.CountablyEquiv.iInter` ([src](../TJK/Baire/Higher.lean))<br/>`TJK.CountablyEquiv.iUnion` ([src](../TJK/Baire/Higher.lean))<br/>`TJK.CountablyEquiv.inter` ([src](../TJK/Baire/Higher.lean))<br/>`TJK.CountablyEquiv.union` ([src](../TJK/Baire/Higher.lean)) |  | `proved` |
 | lem:intervals-open<br/>*,* | lemma | `TJK.countable_biUnion_diff_interior_real` ([src](../TJK/Baire/Higher.lean))<br/>`TJK.exists_isOpen_countablyEquiv_real` ([src](../TJK/Baire/Higher.lean))<br/>`TJK.countable_biUnion_image_diff` ([src](../TJK/Baire/Higher.lean))<br/>`TJK.countable_biUnion_diff_interior_circle` ([src](../TJK/Baire/Higher.lean))<br/>`TJK.countable_isolated_right` ([src](../TJK/Baire/Higher.lean))<br/>`TJK.countable_isolated_left` ([src](../TJK/Baire/Higher.lean)) | `lem:equiv` | `proved` |
 | lem:two-sided<br/>*two-sided limit points* | lemma | `TJK.countable_not_twoSided` ([src](../TJK/Baire/Higher.lean)) | `lem:intervals-open` | `proved` |
 | lem:monotone-extend | lemma | `TJK.MonotoneOn.exists_monotone_extension_of_dist_le` ([src](../TJK/Baire/Higher.lean)) |  | `proved` |
 | lem:monotone-compose | lemma | `TJK.BaireClass.comp_monotone` ([src](../TJK/Baire/Higher.lean)) | `lem:baire-precomp` | `proved` |
-| lem:baire-criterion | lemma | `TJK.baireClass_of_sandwich` ([src](../TJK/Baire/Higher.lean)) | `fact:banach`, `lem:additive-basic` | `conditional` |
+| lem:baire-criterion | lemma | `TJK.baireClass_of_sandwich` ([src](../TJK/Baire/Banach.lean)) | `fact:banach`, `lem:additive-basic` | `proved` |
 
 ## C Arcs and crosscuts
 
@@ -621,8 +621,8 @@ flowchart BT
 |---|---|---|---|---|
 | def:meets-in | definition | `TJK.Discont.MeetsIn` ([src](../TJK/Discont/Baire.lean)) | `def:arcs` | `defined` |
 | lem:figure5<br/>*the ``Figure 5'' argument of* | lemma | `TJK.Discont.figure5` ([src](../TJK/Discont/Baire.lean)) | `lem:crosscut-H`, `fact:tietze-arc` | `proved` |
-| thm:baire-plus-one<br/>*;* | theorem | `TJK.Discont.baireClass_succ_of_boundaryFn` ([src](../TJK/MainTheorems.lean)) | `def:meets-in`, `lem:figure5`, `lem:strip`, `lem:subarc`, `lem:intervals-open`, `lem:equiv`, `lem:monotone-extend`, `lem:monotone-compose`, `lem:baire-precomp`, `lem:baire-imp-class`, `lem:additive-basic`, `lem:baire-criterion` | `conditional` |
-| cor:borel<br/>*;* | corollary | `TJK.Discont.measurable_of_boundaryFn` ([src](../TJK/Discont/Baire.lean))<br/>`TJK.Discont.baireClass_succ_of_boundaryFn_real` ([src](../TJK/Discont/Baire.lean)) | `thm:baire-plus-one`, `fact:borel-baire`, `lem:baire-imp-class`, `lem:additive-basic` | `conditional` |
+| thm:baire-plus-one<br/>*;* | theorem | `TJK.Discont.baireClass_succ_of_boundaryFn` ([src](../TJK/MainTheorems.lean)) | `def:meets-in`, `lem:figure5`, `lem:strip`, `lem:subarc`, `lem:intervals-open`, `lem:equiv`, `lem:monotone-extend`, `lem:monotone-compose`, `lem:baire-precomp`, `lem:baire-imp-class`, `lem:additive-basic`, `lem:baire-criterion` | `proved` |
+| cor:borel<br/>*;* | corollary | `TJK.Discont.measurable_of_boundaryFn` ([src](../TJK/Discont/Baire.lean))<br/>`TJK.Discont.baireClass_succ_of_boundaryFn_real` ([src](../TJK/Discont/Baire.lean)) | `thm:baire-plus-one`, `fact:borel-baire`, `lem:baire-imp-class`, `lem:additive-basic` | `proved` |
 | def:trapezoid<br/>*trapezoids* | definition | `TJK.Discont.closedTrapezoidE` ([src](../TJK/Discont/Segments.lean))<br/>`TJK.Discont.closedTrapezoid` ([src](../TJK/Discont/Segments.lean))<br/>`TJK.Discont.IsTrapezoid` ([src](../TJK/Discont/Segments.lean))<br/>`TJK.Discont.segTrap` ([src](../TJK/Discont/Segments.lean)) |  | `defined` |
 | lem:th-lemma23 | lemma | `TJK.Discont.segTrap_subset_union` ([src](../TJK/Discont/Segments.lean)) | `def:trapezoid` | `proved` |
 | lem:th-lemma24 | lemma | `TJK.Discont.isTrapezoid_biUnion` ([src](../TJK/Discont/Segments.lean)) | `def:trapezoid` | `proved` |
