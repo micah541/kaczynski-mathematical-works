@@ -226,14 +226,67 @@ theorem HasLogOn.of_homotopy {K : Set ℂ} {H : ℝ → ℂ → ℂ}
     (hH : ContinuousOn (fun x : ℝ × ℂ => H x.1 x.2) (Icc 0 1 ×ˢ K))
     (hH0 : ∀ s ∈ Icc (0 : ℝ) 1, ∀ w ∈ K, H s w ≠ 0) (h0 : HasLogOn (H 0) K) :
     HasLogOn (H 1) K := by
-  sorry
+  classical
+  obtain ⟨f, hf, hfg⟩ := h0
+  have hc : Continuous fun x : unitInterval × K => ((x.1 : ℝ), (x.2 : ℂ)) := by fun_prop
+  let Hc : C(unitInterval × K, {z : ℂ // z ≠ 0}) :=
+    ⟨fun x => ⟨H x.1 x.2, hH0 x.1 x.1.2 x.2 x.2.2⟩,
+      (hH.comp_continuous hc fun x => ⟨x.1.2, x.2.2⟩).subtype_mk _⟩
+  let f0 : C(K, ℂ) := ⟨K.domRestrict f, (continuousOn_iff_continuous_domRestrict).1 hf⟩
+  have H_0 : ∀ a, Hc (0, a) = (fun z : ℂ ↦ (⟨_, z.exp_ne_zero⟩ : {z : ℂ // z ≠ 0})) (f0 a) := by
+    intro a; ext; exact (hfg a a.2).symm
+  set L := isCoveringMap_exp.liftHomotopy Hc f0 H_0
+  have hL := isCoveringMap_exp.liftHomotopy_lifts Hc f0 H_0
+  refine ⟨fun w => if h : w ∈ K then L (1, ⟨w, h⟩) else 0, ?_, ?_⟩
+  · rw [continuousOn_iff_continuous_domRestrict]
+    have : K.domRestrict (fun w => if h : w ∈ K then L (1, ⟨w, h⟩) else 0) =
+        fun a => L (1, a) := by
+      ext a; simp only [Set.domRestrict_apply, dif_pos a.2]
+    rw [this]; fun_prop
+  · intro w hw
+    have := congrArg Subtype.val (congrFun hL (1, ⟨w, hw⟩))
+    simp only [dif_pos hw]
+    exact this
+
+/-- A continuous function with `exp ∘ h = 1` on a preconnected set is constant there (its values
+lie in the discrete group `2πiℤ`). -/
+theorem eq_of_exp_eq_one {α : Type*} [TopologicalSpace α] {S : Set α} (hS : IsPreconnected S)
+    {h : α → ℂ} (hc : ContinuousOn h S) (h1 : ∀ x ∈ S, exp (h x) = 1) {x y : α} (hx : x ∈ S)
+    (hy : y ∈ S) : h x = h y := by
+  refine hS.constant_of_mapsTo (T := (AddSubgroup.zmultiples (2 * π * I) : Set ℂ))
+    (isDiscrete_iff_discreteTopology.2 (NormedSpace.discreteTopology_zmultiples _)) hc
+    (fun x hx => ?_) hx hy
+  obtain ⟨n, hn⟩ := exp_eq_one_iff.1 (h1 x hx)
+  exact ⟨n, by simp only [hn, zsmul_eq_mul]⟩
 
 /-- `w ↦ w - c` has no continuous logarithm on a circle centred at `c`. Proof: with
 `g(t) = f(c + r e^{it}) - log r - it`, `exp ∘ g = 1`, so `g` is constant on `[0, 2π]` (connected,
 values in `2πiℤ`), but `g(2π) = g(0) - 2πi`. Estimate: ~0.5 session. -/
 theorem not_hasLogOn_sub_sphere (c : ℂ) {r : ℝ} (hr : 0 < r) :
     ¬ HasLogOn (fun w => w - c) (sphere c r) := by
-  sorry
+  rintro ⟨f, hf, hfg⟩
+  set γ : ℝ → ℂ := fun t => c + r * exp (t * I)
+  have hγ : Continuous γ := by fun_prop
+  have hγS : ∀ t, γ t ∈ sphere c r := fun t => by
+    rw [mem_sphere_iff_norm, show γ t - c = r * exp (t * I) by simp [γ], norm_mul,
+      Complex.norm_exp_ofReal_mul_I, mul_one, Complex.norm_real, Real.norm_of_nonneg hr.le]
+  have hr0 : (r : ℂ) ≠ 0 := ofReal_ne_zero.2 hr.ne'
+  have key := eq_of_exp_eq_one isPreconnected_univ
+    (h := fun t : ℝ => f (γ t) - (t * I + log r))
+    ((hf.comp_continuous hγ hγS).sub (by fun_prop)).continuousOn
+    (fun t _ => by
+      rw [exp_sub, hfg _ (hγS t), exp_add, exp_log hr0]
+      simp only [γ, add_sub_cancel_left]
+      field_simp)
+    (mem_univ 0) (mem_univ (2 * π))
+  have hγ2 : γ (2 * π) = γ 0 := by
+    simp only [γ]; congr 2
+    rw [show ((2 * π : ℝ) : ℂ) * I = 2 * π * I by push_cast; ring, exp_two_pi_mul_I]; simp
+  simp only [hγ2] at key
+  have : ((2 * π : ℝ) : ℂ) * I = 0 := by
+    push_cast at key ⊢
+    linear_combination key
+  simp [Real.pi_ne_zero, I_ne_zero] at this
 
 /-- Every continuous nonvanishing function on an arc has a continuous logarithm. Proof: the
 parametrization `p : [0,1] → σ` is a homeomorphism; contract along `H s w = g (p (s · p⁻¹ w))`
@@ -246,7 +299,56 @@ theorem admitsLogs_of_isArc {σ : Set ℂ} {a b : ℂ} (hσ : IsArc σ a b) : Ad
 subarcs of an arc used in (P4)). Estimate: shares the proof of `admitsLogs_of_isArc`. -/
 theorem admitsLogs_image_Icc {γ : ℝ → ℂ} {s t : ℝ} (hγ : ContinuousOn γ (Icc s t))
     (hinj : InjOn γ (Icc s t)) : AdmitsLogs (γ '' Icc s t) := by
-  sorry
+  classical
+  intro g hg hg0
+  set K := γ '' Icc s t
+  rcases (Icc s t).eq_empty_or_nonempty with he | ⟨s₀, hs₀⟩
+  · rw [show K = ∅ by simp [K, he]]
+    exact ⟨fun _ => 0, continuousOn_empty _, fun w hw => hw.elim⟩
+  have hst : s ≤ t := hs₀.1.trans hs₀.2
+  -- the inverse of `γ` on `K` is continuous (compact to Hausdorff)
+  haveI : CompactSpace (Icc s t) := isCompact_iff_compactSpace.1 isCompact_Icc
+  let e : Icc s t → K := fun x => ⟨γ x, mem_image_of_mem _ x.2⟩
+  have he_cont : Continuous e :=
+    ((continuousOn_iff_continuous_domRestrict.1 hγ)).subtype_mk _
+  have he_bij : Bijective e := by
+    refine ⟨fun x y hxy => Subtype.ext (hinj x.2 y.2 (congrArg Subtype.val hxy)), ?_⟩
+    rintro ⟨w, x, hx, rfl⟩
+    exact ⟨⟨x, hx⟩, rfl⟩
+  set E := Equiv.ofBijective e he_bij
+  have hE : Continuous E.symm := he_cont.continuous_symm_of_equiv_compact_to_t2 (f := E)
+  set ψ : ℂ → ℝ := fun w => if h : w ∈ K then (E.symm ⟨w, h⟩ : ℝ) else s
+  have hψK : ∀ w ∈ K, ψ w ∈ Icc s t := fun w hw => by
+    simp only [ψ, dif_pos hw]; exact (E.symm ⟨w, hw⟩).2
+  have hγψ : ∀ w ∈ K, γ (ψ w) = w := fun w hw => by
+    simp only [ψ, dif_pos hw]
+    exact congrArg Subtype.val (E.apply_symm_apply ⟨w, hw⟩)
+  have hψ : ContinuousOn ψ K := by
+    rw [continuousOn_iff_continuous_domRestrict]
+    have : K.domRestrict ψ = fun w => (E.symm w : ℝ) := by
+      ext w; simp only [Set.domRestrict_apply, ψ, dif_pos w.2]
+    rw [this]; fun_prop
+  -- contract `K` onto `γ s` along `γ`
+  set H : ℝ → ℂ → ℂ := fun u w => g (γ (s + u * (ψ w - s)))
+  have hmem : ∀ x ∈ Icc (0 : ℝ) 1 ×ˢ K, s + x.1 * (ψ x.2 - s) ∈ Icc s t := by
+    rintro ⟨u, w⟩ ⟨hu, hw⟩
+    have h1 := hψK w hw
+    have h2 : 0 ≤ u * (ψ w - s) := mul_nonneg hu.1 (by linarith [h1.1])
+    have h3 : u * (ψ w - s) ≤ 1 * (ψ w - s) :=
+      mul_le_mul_of_nonneg_right hu.2 (by linarith [h1.1])
+    constructor <;> simp only at h2 h3 ⊢ <;> linarith [h1.2]
+  have hH : ContinuousOn (fun x : ℝ × ℂ => H x.1 x.2) (Icc 0 1 ×ˢ K) := by
+    have hlin : ContinuousOn (fun x : ℝ × ℂ => s + x.1 * (ψ x.2 - s)) (Icc 0 1 ×ˢ K) :=
+      continuousOn_const.add (continuousOn_fst.mul
+        ((hψ.comp continuousOn_snd fun x hx => hx.2).sub continuousOn_const))
+    exact hg.comp (hγ.comp hlin hmem) fun x hx => mem_image_of_mem _ (hmem x hx)
+  have hH0 : ∀ u ∈ Icc (0 : ℝ) 1, ∀ w ∈ K, H u w ≠ 0 := fun u hu w hw =>
+    hg0 _ (mem_image_of_mem _ (hmem (u, w) ⟨hu, hw⟩))
+  have hstart : HasLogOn (H 0) K := by
+    refine (hasLogOn_const (c := g (γ s)) (hg0 _ (mem_image_of_mem _ ⟨le_rfl, hst⟩)) K).congr ?_
+    intro w _; simp [H]
+  refine (HasLogOn.of_homotopy hH hH0 hstart).congr fun w hw => ?_
+  simp only [H, one_mul, add_sub_cancel, hγψ w hw]
 
 /-- Gluing logarithms across a single common point. -/
 theorem HasLogOn.union_of_inter_eq_singleton {g : ℂ → ℂ} {K L : Set ℂ} {p : ℂ}
@@ -284,7 +386,9 @@ theorem HasLogOn.sub_eq_const {g f₁ f₂ : ℂ → ℂ} {S : Set ℂ} (hS : Is
     (hf₁ : ContinuousOn f₁ S) (hf₂ : ContinuousOn f₂ S)
     (h₁ : ∀ w ∈ S, exp (f₁ w) = g w) (h₂ : ∀ w ∈ S, exp (f₂ w) = g w) {x y : ℂ}
     (hx : x ∈ S) (hy : y ∈ S) : f₁ x - f₂ x = f₁ y - f₂ y := by
-  sorry
+  refine eq_of_exp_eq_one hS (h := fun w => f₁ w - f₂ w) (hf₁.sub hf₂) (fun w hw => ?_) hx hy
+  have h0 : g w ≠ 0 := by rw [← h₁ w hw]; exact exp_ne_zero _
+  rw [exp_sub, h₁ w hw, h₂ w hw, div_self h0]
 
 /-- A path in `Kᶜ` from `z'` to `z` gives a logarithm of `(w - z)/(w - z')` on `K`
 (`HasLogOn.of_homotopy` with `H s w = (w - γ s)/(w - z')`, starting from the constant `1`).
