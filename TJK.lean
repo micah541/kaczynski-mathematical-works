@@ -13,6 +13,7 @@ import TJK.Discont.Segments
 import TJK.Baire.Higher
 import TJK.Construct.H
 import TJK.Plane.Arc
+import TJK.Plane.JordanCrosscut
 import TJK.Plane.Basic
 import TJK.Construct.Realize
 import TJK.Discont.Vitali
