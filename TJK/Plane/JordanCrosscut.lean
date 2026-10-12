@@ -415,6 +415,60 @@ theorem hasLogOn_div_of_joinedIn {K : Set ℂ} {z z' : ℂ} (h : JoinedIn Kᶜ z
       simp only [H, Path.extend_zero, div_self (hne w hw)]
   exact (HasLogOn.of_homotopy hH hH0 hstart).congr fun w _ => by simp [H]
 
+/-- Eilenberg's criterion when the component `U` of `z` in `Kᶜ` is bounded. If `z' ∉ U`, glue
+`exp F · (w - z')` on `U` (`F` a Tietze extension of the logarithm) with `w - z` off `U`; they
+agree on `frontier U ⊆ K`. The result is continuous and nonvanishing on `ℂ`, so (contracting `ℂ`
+to `z`) it has a logarithm on a large circle around `z`, where it equals `w - z`. -/
+theorem mem_connectedComponentIn_of_hasLogOn_aux {K : Set ℂ} (hK : IsCompact K) {z z' : ℂ}
+    (hz : z ∉ K) (hz' : z' ∉ K) (h : HasLogOn (fun w => (w - z) / (w - z')) K) {R : ℝ}
+    (hR : connectedComponentIn Kᶜ z ⊆ closedBall 0 R) :
+    z' ∈ connectedComponentIn Kᶜ z := by
+  classical
+  by_contra hz'U
+  set U := connectedComponentIn Kᶜ z with hUdef
+  have hKo : IsOpen Kᶜ := hK.isClosed.isOpen_compl
+  have hUo : IsOpen U := hKo.connectedComponentIn
+  obtain ⟨f, hf, hfg⟩ := h
+  obtain ⟨F, hF⟩ := ContinuousMap.exists_restrict_eq hK.isClosed
+    (⟨K.domRestrict f, hf.domRestrict⟩ : C(K, ℂ))
+  have hFK : ∀ w ∈ K, F w = f w := fun w hw => by
+    have := congrArg (fun g : C(K, ℂ) => g ⟨w, hw⟩) hF
+    exact this
+  have hfr : frontier U ⊆ K := by
+    intro a ha
+    by_contra haK
+    rw [hUo.frontier_eq] at ha
+    obtain ⟨x, hx1, hx2⟩ := mem_closure_iff.1 ha.1 _ hKo.connectedComponentIn
+      (mem_connectedComponentIn (F := Kᶜ) haK)
+    apply ha.2
+    rw [hUdef, connectedComponentIn_eq hx2, ← connectedComponentIn_eq hx1]
+    exact mem_connectedComponentIn haK
+  set φ : ℂ → ℂ := fun w => if w ∈ U then exp (F w) * (w - z') else w - z
+  have hφ : Continuous φ := by
+    refine Continuous.if (fun a ha => ?_) (by fun_prop) (by fun_prop)
+    have haK : a ∈ K := hfr ha
+    rw [hFK a haK, hfg a haK, div_mul_cancel₀ _ (sub_ne_zero.2 fun e : a = z' => hz' (e ▸ haK))]
+  have hφ0 : ∀ w, φ w ≠ 0 := by
+    intro w
+    by_cases hw : w ∈ U
+    · simp only [φ, if_pos hw]
+      exact mul_ne_zero (exp_ne_zero _) (sub_ne_zero.2 fun e => hz'U (e ▸ hw))
+    · simp only [φ, if_neg hw]
+      exact sub_ne_zero.2 fun e => hw (e ▸ mem_connectedComponentIn (F := Kᶜ) hz)
+  set r : ℝ := |R| + ‖z‖ + 1
+  have hr : 0 < r := by positivity
+  have hsph : ∀ w ∈ sphere z r, w ∉ U := fun w hw hwU => by
+    have h1 := mem_closedBall_zero_iff.1 (hR hwU)
+    have h2 := mem_sphere_iff_norm.1 hw
+    have h3 := norm_sub_le w z
+    linarith [le_abs_self R]
+  set H : ℝ → ℂ → ℂ := fun s w => φ (z + s * (w - z))
+  have hlog := HasLogOn.of_homotopy (K := sphere z r) (H := H)
+    (Continuous.continuousOn (by fun_prop)) (fun s _ w _ => hφ0 _)
+    ((hasLogOn_const (hφ0 z) _).congr fun w _ => by simp [H])
+  exact not_hasLogOn_sub_sphere z hr (hlog.congr fun w hw => by
+    simp only [H, ofReal_one, one_mul, add_sub_cancel, φ, if_neg (hsph w hw)])
+
 /-- **Eilenberg's criterion** (the hard direction). If `(w - z)/(w - z')` has a continuous
 logarithm on the compact set `K`, then `z` and `z'` lie in the same component of `Kᶜ`.
 
@@ -424,11 +478,55 @@ use `-f`). Extend `f` to `F : ℂ → ℂ` by Tietze (`ContinuousMap.exists_rest
 `φ = exp F · (w - z')` on `closure U` and `φ = w - z` off `U`; they agree on
 `frontier U ⊆ K`, so `φ` is continuous, and nonvanishing on `ℂ`. Then `φ = exp h` globally
 (`Complex.exists_continuousOn_eqOn_exp_comp` on `univ`), so `w - z` has a logarithm on a large
-circle around `z`, contradicting `not_hasLogOn_sub_sphere`. Estimate: ~1.5–2 sessions. -/
+circle around `z`, contradicting `not_hasLogOn_sub_sphere`. (In Lean: the bounded case is
+`mem_connectedComponentIn_of_hasLogOn_aux`, which contracts `ℂ` to `z` instead of taking a global
+logarithm; `exp '' {Re > log ρ}` is a preconnected subset of `Kᶜ` containing all `|w| > ρ`.) -/
 theorem mem_connectedComponentIn_of_hasLogOn {K : Set ℂ} (hK : IsCompact K) {z z' : ℂ}
     (hz : z ∉ K) (hz' : z' ∉ K) (h : HasLogOn (fun w => (w - z) / (w - z')) K) :
     z' ∈ connectedComponentIn Kᶜ z := by
-  sorry
+  obtain ⟨R, hR⟩ := hK.isBounded.subset_closedBall 0
+  set ρ : ℝ := |R| + 1
+  have hρ : 0 < ρ := by positivity
+  -- the outside of a large disc, as a preconnected subset of `Kᶜ`
+  set S : Set ℂ := exp '' {x : ℂ | Real.log ρ < x.re}
+  have hSc : IsPreconnected S :=
+    (convex_halfSpace_re_gt _).isPreconnected.image _ continuous_exp.continuousOn
+  have hSK : S ⊆ Kᶜ := by
+    rintro _ ⟨x, hx, rfl⟩ hxK
+    have h1 := mem_closedBall_zero_iff.1 (hR hxK)
+    rw [norm_exp] at h1
+    have h2 : Real.exp (Real.log ρ) < Real.exp x.re := Real.exp_lt_exp.2 hx
+    rw [Real.exp_log hρ] at h2
+    linarith [le_abs_self R]
+  have hbig : ∀ w : ℂ, ρ < ‖w‖ → w ∈ S := fun w hw => by
+    have hw0 : w ≠ 0 := by rintro rfl; rw [norm_zero] at hw; linarith
+    exact ⟨log w, by
+      show Real.log ρ < (log w).re
+      rw [log_re]; exact Real.log_lt_log hρ hw,
+      exp_log hw0⟩
+  -- each component of `Kᶜ` is bounded or contains `S`
+  have hdich : ∀ y, y ∉ K → connectedComponentIn Kᶜ y ⊆ closedBall 0 ρ ∨
+      ∀ w ∈ S, w ∈ connectedComponentIn Kᶜ y := by
+    intro y _
+    by_cases hsub : connectedComponentIn Kᶜ y ⊆ closedBall 0 ρ
+    · exact Or.inl hsub
+    · right
+      obtain ⟨w, hw, hwρ⟩ := not_subset.1 hsub
+      have hwS : w ∈ S := hbig w (by simpa using hwρ)
+      intro v hv
+      rw [connectedComponentIn_eq hw]
+      exact hSc.subset_connectedComponentIn hwS hSK hv
+  have hp : ((ρ + 1 : ℝ) : ℂ) ∈ S := hbig _ (by
+    rw [Complex.norm_real, Real.norm_of_nonneg (by linarith)]; linarith)
+  rcases hdich z hz with h1 | h1
+  · exact mem_connectedComponentIn_of_hasLogOn_aux hK hz hz' h h1
+  rcases hdich z' hz' with h2 | h2
+  · have := mem_connectedComponentIn_of_hasLogOn_aux hK hz' hz
+      (h.inv.congr fun w _ => by simp only [inv_div]) h2
+    rw [← connectedComponentIn_eq this]
+    exact mem_connectedComponentIn hz'
+  · rw [connectedComponentIn_eq (h1 _ hp), ← connectedComponentIn_eq (h2 _ hp)]
+    exact mem_connectedComponentIn hz'
 
 /-- If `|z| < 1 < |z'|`, `(w - z)/(w - z')` has no logarithm on `C`. Proof: `w - z'` has one
 (`-z'(1 - w/z')`, principal branch), hence so would `w - z`, and then `w` (homotopy
@@ -608,12 +706,69 @@ theorem component_disjoint {F : Set ℂ} {z₁ z₂ : ℂ} (hz₂ : z₂ ∈ F)
 /-- (Q) All points of `𝔻` near the open arc `A°` (disjoint from the closed set `σ`) lie in one
 component of `𝔻 \ σ`. Proof: for `p, q ∈ A°`, the compact sub-arc between them has distance
 `ρ > 0` from `σ`; join `z ∈ ball p r ∩ 𝔻` to `z' ∈ ball q r ∩ 𝔻` by segments to `(1 - ε)p`,
-`(1 - ε)q` and the arc `t ↦ (1 - ε) e^{it}` (`ε < ρ`). Estimate: ~1 session. -/
+`(1 - ε)q` and the arc `t ↦ (1 - ε) e^{it}` (`ε < ρ`). (In Lean: chain the convex sets
+`ball p₀ δ ∩ 𝔻`, the arc `(1 - ε/2) e^{i[t₀, t]}`, and `ball p ε ∩ 𝔻`.) -/
 theorem exists_component_near_arc {σ : Set ℂ} (hσc : IsClosed σ) {θ ℓ : ℝ} (hℓ : 0 < ℓ)
     (hdisj : Disjoint σ (circleArcOpen' θ ℓ)) :
     ∃ z₀ ∈ disc \ σ, ∀ p ∈ circleArcOpen' θ ℓ, ∃ r > 0,
       ball p r ∩ disc ⊆ connectedComponentIn (disc \ σ) z₀ := by
-  sorry
+  have hc : Continuous expI' := by unfold expI'; fun_prop
+  -- `(1 - ε/2) q` lies in `ball q ε ∩ 𝔻` for `|q| = 1`
+  have hscale : ∀ {q : ℂ}, ‖q‖ = 1 → ∀ {ε : ℝ}, 0 < ε → ε < 2 →
+      ((1 - ε / 2 : ℝ) : ℂ) * q ∈ ball q ε ∩ disc := by
+    intro q hq ε hε hε2
+    constructor
+    · rw [mem_ball, dist_eq_norm, show ((1 - ε / 2 : ℝ) : ℂ) * q - q = ((-(ε / 2) : ℝ) : ℂ) * q by
+        push_cast; ring, norm_mul, Complex.norm_real, hq, mul_one, Real.norm_eq_abs, abs_neg,
+        abs_of_pos (by linarith)]
+      linarith
+    · rw [mem_ball_zero_iff, norm_mul, Complex.norm_real, hq, mul_one,
+        Real.norm_of_nonneg (by linarith)]
+      linarith
+  have hnorm : ∀ s, ‖expI' s‖ = 1 := fun s => mem_sphere_zero_iff_norm.1 (expI'_mem_circle s)
+  have hconv : ∀ q ε, IsPreconnected (ball q ε ∩ disc) := fun q ε =>
+    ((convex_ball q ε).inter (convex_ball 0 1)).isPreconnected
+  have ht₀ : θ + ℓ / 2 ∈ Ioo θ (θ + ℓ) := ⟨by linarith, by linarith⟩
+  set t₀ := θ + ℓ / 2
+  have hp₀σ : expI' t₀ ∉ σ := fun h => disjoint_left.1 hdisj h ⟨t₀, ht₀, rfl⟩
+  obtain ⟨δ, hδ, hδσ⟩ := Metric.isOpen_iff.1 hσc.isOpen_compl _ hp₀σ
+  set δ' := min δ 1
+  have hδ' : 0 < δ' := lt_min hδ one_pos
+  have hδ'1 : δ' ≤ 1 := min_le_right _ _
+  set z₀ := ((1 - δ' / 2 : ℝ) : ℂ) * expI' t₀
+  have hz₀ := hscale (hnorm t₀) hδ' (by linarith)
+  have hB0 : ball (expI' t₀) δ' ∩ disc ⊆ connectedComponentIn (disc \ σ) z₀ :=
+    (hconv _ _).subset_connectedComponentIn hz₀
+      fun w hw => ⟨hw.2, hδσ (ball_subset_ball (min_le_left _ _) hw.1)⟩
+  refine ⟨z₀, ⟨hz₀.2, hδσ (ball_subset_ball (min_le_left _ _) hz₀.1)⟩, ?_⟩
+  rintro _ ⟨t, ht, rfl⟩
+  have hIsub : uIcc t₀ t ⊆ Ioo θ (θ + ℓ) := ordConnected_Ioo.uIcc_subset ht₀ ht
+  obtain ⟨ρ, hρ, hρσ⟩ := (isCompact_uIcc.image hc).exists_thickening_subset_open
+    hσc.isOpen_compl (by
+      rintro _ ⟨s, hs, rfl⟩ h
+      exact disjoint_left.1 hdisj h ⟨s, hIsub hs, rfl⟩)
+  set ε := min ρ δ'
+  have hε : 0 < ε := lt_min hρ hδ'
+  have hε2 : ε < 2 := by have := min_le_right ρ δ'; linarith
+  have hball : ∀ s ∈ uIcc t₀ t, ball (expI' s) ε ⊆ σᶜ := fun s hs =>
+    (ball_subset_ball (min_le_left _ _)).trans
+      ((ball_subset_thickening (mem_image_of_mem _ hs) _).trans hρσ)
+  have hq₀ : ((1 - ε / 2 : ℝ) : ℂ) * expI' t₀ ∈ connectedComponentIn (disc \ σ) z₀ := by
+    have := hscale (hnorm t₀) hε hε2
+    exact hB0 ⟨ball_subset_ball (min_le_right _ _) this.1, this.2⟩
+  have hT : (fun s => ((1 - ε / 2 : ℝ) : ℂ) * expI' s) '' uIcc t₀ t ⊆
+      connectedComponentIn (disc \ σ) z₀ := by
+    rw [connectedComponentIn_eq hq₀]
+    refine (isPreconnected_uIcc.image _ (continuous_const.mul hc).continuousOn)
+      |>.subset_connectedComponentIn ⟨t₀, left_mem_uIcc, rfl⟩ ?_
+    rintro _ ⟨s, hs, rfl⟩
+    have := hscale (hnorm s) hε hε2
+    exact ⟨this.2, hball s hs this.1⟩
+  have hq := hT ⟨t, right_mem_uIcc, rfl⟩
+  refine ⟨ε, hε, ?_⟩
+  rw [connectedComponentIn_eq hq]
+  exact (hconv _ _).subset_connectedComponentIn (hscale (hnorm t) hε hε2)
+    fun w hw => ⟨hw.2, hball t right_mem_uIcc hw.1⟩
 
 /-- `σ` misses both open arcs. -/
 theorem disjoint_arcOpen {σ : Set ℂ} {θ ℓ : ℝ} (hℓ : 0 < ℓ) (hℓ' : ℓ < 2 * π)
