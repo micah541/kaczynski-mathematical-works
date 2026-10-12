@@ -12,6 +12,7 @@ import TJK.McMillan.Basic
 import TJK.BoundaryFn.Fsigma
 import TJK.Discont.Baire
 import TJK.Cube.Basic
+import TJK.Harmonic.Theorem
 import TJK.Construct.Realize
 
 open Set Filter Topology MeasureTheory
@@ -121,7 +122,7 @@ theorem Discont.exists_measurable_nonmeasurable_boundaryFn :
 theorem Harmonic.exists_bounded_harmonic_boundaryFn_not_baireOne :
     ∃ f : ℂ → ℝ, InnerProductSpace.HarmonicOnNhd f disc ∧ Bornology.IsBounded (f '' disc) ∧
       ∃ φ : ℂ → ℝ, IsBoundaryFunction disc f circle φ ∧ ¬ IsBaireOne (circle.restrict φ) := by
-  sorry
+  exact Harmonic.exists_bounded_harmonic_boundaryFn_not_baireOne'
 
 /-- Blueprint `thm:ha-theorem`: for a harmonic function with bounded `p`-th integral means
 (`p > 1`), the points with an asymptotic value but no general limit form a set of the first
@@ -132,7 +133,7 @@ theorem Harmonic.isMeagre_asymptotic_diff_generalLimit (u : ℂ → ℝ)
       ∫ θ in (0 : ℝ)..(2 * Real.pi), |u (r * Complex.exp (θ * Complex.I))| ^ p ≤ B) :
     IsMeagre ((Subtype.val : circle → ℂ) ⁻¹'
       (curvConvSet disc circle u \ {ζ | ∃ L, Tendsto u (𝓝[disc] ζ) (𝓝 L)})) := by
-  sorry
+  exact Harmonic.isMeagre_asymptotic_diff_generalLimit' u hu p hp hmean
 
 /-! ## The cube (Proc. AMS 23, 1969) -/
 

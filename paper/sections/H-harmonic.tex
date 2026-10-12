@@ -2,107 +2,116 @@
 \section{Bounded harmonic functions}\label{sec:harmonic}
 % ===========================================================================
 Source: \cite{TAMSa}. A function $u$ defined in $\D$ has the \emph{asymptotic value} $a$ at $\zeta\in C$ if $u\to a$ along some arc
-at $\zeta$, and the \emph{general limit} $a$ at $\zeta$ if $u(z)\to a$ as $z\to\zeta$, $z\in\D$. $P_r(\theta)=(1-r^2)/(1-2r\cos\theta+r^2)$
-is the Poisson kernel, $\Delta(S,T)=\inf\{\abs{s-t+2m\pi}:s\in S,t\in T,m\in\Z\}$ for $S,T\subseteq\R$, and $\expi S=\{e^{it}:t\in S\}$.
+at $\zeta$, and the \emph{general limit} $a$ at $\zeta$ if $u(z)\to a$ as $z\to\zeta$, $z\in\D$. $P(z,\zeta)=(1-\abs z^2)/\abs{\zeta-z}^2$
+is the Poisson kernel ($P_r(\theta-t)=P(re^{i\theta},e^{it})$), $P[\varphi](z)=\frac1{2\pi}\int_0^{2\pi}P(z,e^{it})\varphi(e^{it})\,dt$, and
+$\expi S=\{e^{it}:t\in S\}$.
 
 \begin{fact}[Poisson integrals {\cite[pp.~32--38]{Hoffman}}]\label{fact:poisson}
 \lean{TJK.Harmonic.poisson_bounded_harmonic, TJK.Harmonic.poisson_tendsto_of_continuousAt,
   TJK.Harmonic.hp_radial_limit_poisson}
-\source{Hoffman, Banach spaces of analytic functions, pp.~32--38; Mathlib has the Poisson kernel (Analysis/Complex/Poisson)}
-(i) If $\varphi$ is a bounded measurable real function on $C$, its Poisson integral
-$P[\varphi](re^{i\theta})=\frac1{2\pi}\int_{-\pi}^{\pi}\varphi(e^{it})P_r(\theta-t)\,dt$ is a bounded harmonic function in $\D$ with
+\source{Hoffman, Banach spaces of analytic functions, pp.~32--38; (i) is proved in Lean from Mathlib's Poisson and Cauchy integral formulas}
+(i) If $\varphi$ is a bounded measurable real function on $C$, $P[\varphi]$ is a bounded harmonic function in $\D$ with
 $\abs{P[\varphi]}\le\sup\abs\varphi$.
-(ii) If $\varphi\in L^1(C)$ is defined on a set $S$ of full measure, $\zeta_0\in S$, and $\varphi|_S$ is continuous at $\zeta_0$, then
+(ii) If $\varphi\in L^1(C)$, $S\subseteq C$ has full measure, $\zeta_0\in S$, and $\varphi|_S$ is continuous at $\zeta_0$, then
 $P[\varphi]$ has general limit $\varphi(\zeta_0)$ at $\zeta_0$.
-(iii) If $u$ is harmonic in $\D$ and $\{\int_{-\pi}^\pi\abs{u(re^{i\theta})}^pd\theta:0\le r<1\}$ is bounded for some $p>1$, then the
-radial limit of $u$ exists at almost every point of $C$, the function $\psi$ so defined almost everywhere is in $L^1(C)$, and
-$u=P[\psi]$.
+(iii) If $u$ is harmonic in $\D$ and $\{\int_{0}^{2\pi}\abs{u(re^{i\theta})}^pd\theta:0\le r<1\}$ is bounded for some $p>1$, then the
+radial limit $\psi$ of $u$ exists at almost every point of $C$, $\psi\in L^1(C)$, and $u=P[\psi]$.
 \end{fact}
+\noindent (i) is proved: $P(z,\zeta)=\operatorname{Re}\frac{\zeta+z}{\zeta-z}$ and $\frac{\zeta+z}{\zeta(\zeta-z)}=\frac2{\zeta-z}-\frac1\zeta$, so
+$P[\varphi]=\operatorname{Re}(2F-F(0))$ with $F(z)=\frac1{2\pi i}\oint\frac{\varphi(\zeta)}{\zeta-z}d\zeta$ holomorphic in $\D$; and
+$\abs{P[\varphi]}\le P[\sup\abs\varphi]=\sup\abs\varphi$ since $P\ge0$ and $P[1]=1$.
 
 \begin{fact}[Jordan curve theorem and accessibility]\label{fact:jordan-access}
 \lean{TJK.Harmonic.jordan_accessible}
 \source{Jordan curve theorem; Newman, Elements, corollary on p.~164}
-If $\Gamma\subseteq\C$ is a Jordan curve, $\C\setminus\Gamma$ has exactly two components, a bounded one $B$ and an unbounded one,
-each with frontier $\Gamma$, and every point $p\in\Gamma$ is accessible from $B$: there is a simple arc $\gamma$ with endpoint $p$ and
+Let $e:\R\to\C$ be continuous with $e(-\pi)=e(\pi)$ and $e$ injective on $[-\pi,\pi)$, and $\Gamma=e([-\pi,\pi])$. Then
+$\C\setminus\Gamma$ is the union of two disjoint connected open sets, a bounded one $B$ and an unbounded one, each with frontier
+$\Gamma$, and every point $p\in\Gamma$ is accessible from $B$: there is a simple arc $\gamma$ with endpoint $p$ and
 $\gamma\setminus\{p\}\subseteq B$.
 \end{fact}
 
 \begin{lemma}[{\cite[Lemma]{TAMSa}}]\label{lem:ha-lemma}
-\lean{TJK.Harmonic.accessible_avoiding_domains}
+\lean{TJK.Harmonic.DomainFamily.accessible_avoiding_domains}
 \uses{fact:jordan-access}
-Let $(I_n)$ be pairwise disjoint nondegenerate closed arcs of $C$ and $(\Omega_n)$ Jordan domains in $\D$ with
-$\overline{\Omega_n}\cap C=I_n$, $\overline{\Omega_n}\cap\overline{\Omega_m}=\emptyset$ for $n\ne m$, and $\diam\Omega_n\to0$. Then every point of
-$C\setminus\bigcup_nI_n^*$ is accessible by a simple arc in $\D\setminus\bigcup_n\overline{\Omega_n}$.
+Let $-\pi<a_n<b_n<\pi$ with the intervals $[a_n,b_n]$ pairwise disjoint, $I_n=\expi[a_n,b_n]$, and let $\Omega_n\subseteq\D$ be connected
+sets (``Jordan domains along $I_n$'') with: a simple arc $\Gamma_n=g_n([a_n,b_n])$ ($g_n$ continuous, injective on $[a_n,b_n]$) from
+$e^{ia_n}$ to $e^{ib_n}$ with $g_n((a_n,b_n))\subseteq\D$, $\Gamma_n\subseteq\overline{\Omega_n}$, $\Gamma_n\cap\Omega_n=\emptyset$,
+$\overline{\Omega_n}\subseteq\Omega_n\cup\Gamma_n\cup I_n$, and $\overline{\Omega_n}$ meeting the open arc $I_n^*$; the
+$\overline{\Omega_n}$ pairwise disjoint; and $\sup_{t\in[a_n,b_n]}\abs{g_n(t)-e^{it}}\to0$ (e.g.\ $\diam\Omega_n\to0$). Then every point
+of $C\setminus\bigcup_nI_n^*$ is accessible by a simple arc in $\D\setminus\bigcup_n\overline{\Omega_n}$.
 \end{lemma}
 \begin{proof}
-$\partial\Omega_n$ is a Jordan curve containing $I_n$; let $\Gamma_n=\partial\Omega_n\setminus I_n^*$, an arc with the endpoints of $I_n$, and
-$\phi_n:I_n\to\Gamma_n$ a homeomorphism fixing the endpoints. Let $\Gamma=(C\setminus\bigcup_nI_n^*)\cup\bigcup_n\Gamma_n$ and define $\phi:C\to\Gamma$
-by $\phi=\phi_n$ on $I_n$ and $\phi=\mathrm{id}$ elsewhere; let $\phi_p$ use only $\phi_1,\dots,\phi_p$. Each $\phi_p$ is continuous, and
-$\abs{\phi_p-\phi}\le\sup_{n>p}\diam\Omega_n\to0$, so $\phi$ is continuous; it is injective and $C$ is compact, so $\Gamma$ is a Jordan
-curve. Each $\Omega_n$ misses $\Gamma$; a small disk about an interior point of $I_n$ misses $\Gamma$ and meets both $\Omega_n$ and
-$\C\setminus\overline\D$, which lies in the unbounded component; so $\Omega_n$ lies in the unbounded component. The points of
-$C\setminus\Gamma=\bigcup I_n^*$ also lie in the unbounded component (they are limits of points outside $\overline\D$ near which
-$\Gamma$ is absent), and $\overline{\Omega_n}\subseteq\Omega_n\cup\Gamma_n\cup I_n$. Hence the bounded component $B$
-(Fact~\ref{fact:jordan-access}) lies in $\D\setminus\bigcup_n\overline{\Omega_n}$, and each point of $C\setminus\bigcup I_n^*\subseteq\Gamma$
-is accessible from $B$.
+Let $\phi(t)=g_n(t)$ for $t\in[a_n,b_n]$ and $\phi(t)=e^{it}$ elsewhere, and $\phi_p$ the same using only $g_1,\dots,g_p$. Each
+$\phi_p$ is continuous ($g_n=e^{it}$ at $a_n,b_n$), and $\abs{\phi_p-\phi}\le\sup_{n>p}\sup_t\abs{g_n(t)-e^{it}}\to0$, so $\phi$ is
+continuous; $\phi(-\pi)=\phi(\pi)$; and $\phi$ is injective on $[-\pi,\pi)$ (the $\Gamma_n\subseteq\overline{\Omega_n}$ are disjoint, and
+$\Gamma_n$ meets $C$ only at its endpoints). Let $\Gamma=\phi([-\pi,\pi])\subseteq\overline\D$ and $B,U$ as in
+Fact~\ref{fact:jordan-access}. Each ray $\{tz:t\ge1\}$, $\abs z>1$, is connected, misses $\Gamma$ and is unbounded, so lies in $U$. A
+point $e^{it}$, $t\in(a_n,b_n)$, is not in $\Gamma$; a small disc about it misses $\Gamma$ and contains points of modulus $>1$, so
+lies in $U$. Each $\Omega_n$ is connected, misses $\Gamma$, and meets $U$ (near a point of $I_n^*\cap\overline{\Omega_n}$), so
+$\Omega_n\subseteq U$. Hence a point $z\in B$ satisfies $\abs z\le1$; if $\abs z=1$ then either $z\in I_n^*\subseteq U$ or
+$z\in\Gamma$, impossible; so $z\in\D$; and $z\notin\overline{\Omega_n}\subseteq\Omega_n\cup\Gamma_n\cup I_n$. So
+$B\subseteq\D\setminus\bigcup_n\overline{\Omega_n}$, and each point of $C\setminus\bigcup I_n^*\subseteq\Gamma$ is accessible from
+$B$.
 \end{proof}
 
 \begin{lemma}[general limits along an arc]\label{lem:general-limit-endpoints}
-\lean{TJK.Harmonic.asymptotic_at_endpoint}
+\lean{TJK.Harmonic.asymptotic_at_endpoint, TJK.Harmonic.asymptotic_at_endpoints}
 \uses{def:ccset}
 Let $u:\D\to\R$ have general limit $c$ at every point of an open arc $J$ of $C$. Then $u$ has the asymptotic value $c$ at each endpoint
 of $J$.
 \end{lemma}
 \begin{proof}
-Let $J=\expi(t_0,t_1)$ and $\tau_k=t_0+(t_1-t_0)2^{-k-1}$. By compactness of $\expi[\tau_k,\tau_0]$ there is $\rho_k\in(0,1/k)$ with
-$\abs{u(re^{it})-c}<1/k$ for $t\in[\tau_k,\tau_0]$ and $1-\rho_k<r<1$; we may take $\rho_k$ decreasing. Let $r(t)$ be continuous on
-$(t_0,\tau_0]$, affine on each $[\tau_{k+1},\tau_k]$, with $r(\tau_k)=1-\rho_{k+1}/2$. Then $\{r(t)e^{it}\}\cup\{e^{it_0}\}$ is an arc at
-$e^{it_0}$ along which $u\to c$.
+Let $\zeta_0=e^{it_0}$ be an endpoint and $w(s)=e^{i(t_0+s\ell)}\in J$ for $0<s\le1$ (suitable $\ell\ne0$, $\abs\ell<2\pi$). Let
+$F=\{z\in\D:\abs{z-\zeta_0}\le\abs{u(z)-c}\}\cup\{0\}$, $h(s)=\operatorname{dist}(w(s),F)$, $m(s)=\min(h(s),s,1)$ and
+$Z(s)=(1-m(s)/2)w(s)$. $h$ is continuous, and $h(s)>0$ for $s>0$ because $u\to c$ at $w(s)\ne\zeta_0$; so $Z$ is a simple arc from
+$\zeta_0=Z(0)$ with $Z((0,1])\subseteq\D$. As $\abs{Z(s)-w(s)}<h(s)$, $Z(s)\notin F$, i.e.\ $\abs{u(Z(s))-c}<\abs{Z(s)-\zeta_0}\to0$.
 \end{proof}
 
 \begin{lemma}[the intervals]\label{lem:ha-sequences}
 \lean{TJK.Harmonic.exists_intervals}
-Let $(p_n)$ be a countable dense subset of $(-\pi,\pi)$. There are natural numbers $n(1)<n(2)<\cdots$ and reals $\eps_k$ such that, with
-$\alpha(k)=p_{n(k)}-\pi\eps_k^2/2$ and $\beta(k)=p_{n(k)}+\pi\eps_k^2/2$:
-I.~$0<\eps_k\le2^{-k-1}$; II.~$-\pi<\alpha(k)<\beta(k)<\pi$; III.~the intervals $[\alpha(k),\beta(k)]$ are pairwise disjoint;
-IV.~$\eps_k\le\bigl(\Delta([\alpha(h),\beta(h)],[\alpha(k),\beta(k)])/4\bigr)^4$ for $h<k$; V.~$p_h\in\bigcup_{i\le k}[\alpha(i),\beta(i)]$
-for $h\le n(k)$.
+Let $(p_n)_{n\ge0}$ be a sequence in $(-\pi,\pi)$. There are reals $c_k$, $\eps_k$ ($k\ge0$) such that, with
+$\alpha(k)=c_k-\pi\eps_k^2/2$ and $\beta(k)=c_k+\pi\eps_k^2/2$:
+I.~$0<\eps_k\le2^{-k-2}$; II.~$-\pi<\alpha(k)<\beta(k)<\pi$;
+IV.~$\abs{e^{is}-e^{it}}\ge4\eps_k^{1/4}$ for $s\in[\alpha(h),\beta(h)]$, $t\in[\alpha(k),\beta(k)]$, $h<k$ (so III: the intervals
+$[\alpha(k),\beta(k)]$ are pairwise disjoint); V.~each $p_h$ lies in some $[\alpha(k),\beta(k)]$, $k\le h$.
 \end{lemma}
 \begin{proof}
-Let $n(1)=1$ and choose $\eps_1$ satisfying I, II. Given the first $q$ terms, let $n(q+1)$ be the least $n$ with
-$p_n\notin\bigcup_{i\le q}[\alpha(i),\beta(i)]$ (it exists because this finite union of closed intervals of total length $<2\pi$ cannot
-contain a dense set; and $n(q+1)>n(q)$ by V), and choose $\eps_{q+1}>0$ with I, II and
-$\frac\pi2\eps_{q+1}^2+4\eps_{q+1}^{1/4}\le\frac12\min_{k\le q}\Delta(p_{n(q+1)},[\alpha(k),\beta(k)])$. Then
-$\Delta([\alpha(q+1),\beta(q+1)],[\alpha(k),\beta(k)])\ge4\eps_{q+1}^{1/4}>0$, which gives III and IV, and V holds by the minimality
-of $n(q+1)$.
+Recursively: given the first $q$ intervals, covering $p_0,\dots,p_{q-1}$, let $c_q=p_q$ if $p_q$ is not yet covered, and otherwise
+$c_q=(\pi+\max_{k<q}\beta(k))/2$. Then $c_q$ lies in no earlier interval, so $d=\min_{k<q}\operatorname{dist}(e^{ic_q},I_k)>0$; choose
+$\eps_q>0$ with I, II and $\frac\pi2\eps_q^2+4\eps_q^{1/4}<d$. Since $\abs{e^{ic_q}-e^{it}}\le\abs{c_q-t}\le\frac\pi2\eps_q^2$ for
+$t\in[\alpha(q),\beta(q)]$, IV holds, and V holds for $h\le q$.
 \end{proof}
 
 \begin{lemma}[estimates]\label{lem:ha-estimates}
-\lean{TJK.Harmonic.omega_jordan, TJK.Harmonic.omega_closure_disjoint, TJK.Harmonic.diam_omega_tendsto,
-  TJK.Harmonic.fn_le_eps, TJK.Harmonic.fn_le_eps_sqrt, TJK.Harmonic.fn_tendsto_zero}
-\uses{lem:ha-sequences, fact:poisson}
-With the data of Lemma~\ref{lem:ha-sequences}, let $I_n=\expi[\alpha(n),\beta(n)]$, $\chi_n$ its indicator, $f_n=P[\chi_n]$, and
-$\Omega_n=\{re^{i\theta}:1-\eps_n<r<1,\ \Delta(\theta,[\alpha(n),\beta(n)])<(1-r)^{1/4}\}$. Then $\Omega_n$ is a Jordan domain with
-$\overline{\Omega_n}\cap C=I_n$; $\overline{\Omega_n}\cap\overline{\Omega_m}=\emptyset$ for $n\ne m$; $\diam\Omega_n\to0$; and
+\lean{TJK.Harmonic.Intervals.omega_jordan, TJK.Harmonic.Intervals.omega_closure_disjoint,
+  TJK.Harmonic.Intervals.diam_omega_tendsto, TJK.Harmonic.Intervals.fn_le_eps,
+  TJK.Harmonic.Intervals.fn_le_eps_sqrt, TJK.Harmonic.Intervals.fn_tendsto_zero}
+\uses{lem:ha-sequences, lem:ha-lemma, fact:poisson}
+With the data of Lemma~\ref{lem:ha-sequences}, let $I_n=\expi[\alpha(n),\beta(n)]$, $\chi_n$ its indicator, $f_n=P[\chi_n]$,
+$v(r)=(1-r)^{1/4}$, $H_n(s,r)=re^{i(\alpha(n)-v(r)+s(\beta(n)-\alpha(n)+2v(r)))}$ and $\Omega_n=H_n((0,1)\times(1-\eps_n,1))$, so that
+$re^{i\theta}\in\Omega_n$ whenever $1-\eps_n<r<1$ and $\alpha(n)-v(r)<\theta<\beta(n)+v(r)$. Then the $\Omega_n$, with $\Gamma_n$ the
+image under $H_n$ of the edges $s=0$, $r=1-\eps_n$, $s=1$ of the closed rectangle, satisfy the hypotheses of
+Lemma~\ref{lem:ha-lemma}; $\overline{\Omega_n}$ lies within $\eps_n+\pi\eps_n^2+\eps_n^{1/4}$ of every point of $I_n$ (so
+$\diam\Omega_n\to0$); and
 \begin{enumerate}[label=(\arabic*)]
 \item $0\le f_n\le\eps_n$ on $\D\setminus\Omega_n$;
-\item $f_n(re^{i\theta})\le\eps_n\sqrt{1-r}$ when $r>1-\eps_n$ and $\Delta(\theta,[\alpha(n),\beta(n)])\ge(1-r)^{1/4}$;
-\item $f_n\to0$ along every arc at a point of $C$ that does not meet $\Omega_n$.
+\item $f_n(z)\le\eps_n\sqrt{1-\abs z}$ for $z\in\D\setminus\Omega_n$ with $\abs z>1-\eps_n$;
+\item $f_n\to0$ at every point of $C$ along $\D\setminus\Omega_n$.
 \end{enumerate}
 \end{lemma}
 \begin{proof}
-$\Omega_n$ is the image of $(0,1)\times(1-\eps_n,1)$ under $(s,r)\mapsto r\exp\bigl(i[\alpha(n)-(1-r)^{1/4}+s(\beta(n)-\alpha(n)+2(1-r)^{1/4})]\bigr)$,
-which extends to a homeomorphism of the closed square onto $\overline{\Omega_n}$ taking the edge $r=1$ onto $I_n$. A common point of
-$\overline{\Omega_n}$ and $\overline{\Omega_m}$, $n<m$, would give $\Delta([\alpha(n),\beta(n)],[\alpha(m),\beta(m)])\le2\eps_m^{1/4}$, against IV.
-$\diam\Omega_n\le\eps_n+\pi\eps_n^2+2\eps_n^{1/4}$.
+$H_n$ is continuous and injective on the closed rectangle ($\abs{H_n}=r$, and the angles range over an interval of length
+$<2\pi$), so $\overline{\Omega_n}$ is its image; its edge $r=1$ goes onto $I_n$, giving $\overline{\Omega_n}\subseteq\Omega_n\cup\Gamma_n\cup I_n$,
+and $H_n(\frac12,1)=e^{ic_n}\in I_n^*$. A common point $re^{i\theta}=re^{i\theta'}$ of $\overline{\Omega_h}$ and $\overline{\Omega_k}$, $h<k$,
+has $1-r\le\eps_k$, so $\theta,\theta'$ are within $\eps_k^{1/4}$ of points $s\in[\alpha(h),\beta(h)]$, $t\in[\alpha(k),\beta(k)]$, and
+$\abs{e^{is}-e^{it}}\le2\eps_k^{1/4}$, against IV. A point $H_n(s,r)$ is within $(1-r)+\abs{\theta-t}\le\eps_n+\pi\eps_n^2+\eps_n^{1/4}$
+of $e^{it}$, $t\in I_n$.
 
-For $re^{i\theta}\notin\Omega_n$ either $r\le1-\eps_n$ or ($r>1-\eps_n$ and $\Delta(\theta,[\alpha(n),\beta(n)])\ge(1-r)^{1/4}$). In the first case
-$P_r\le(1+r)/(1-r)\le2/\eps_n$ and $f_n\le\frac1{2\pi}\cdot\pi\eps_n^2\cdot\frac2{\eps_n}=\eps_n$. In the second case, with $v=(1-r)^{1/4}<1$, for
-$t\in[\alpha(n),\beta(n)]$ we have $\cos(\theta-t)\le\cos v\le1-\frac{v^2}2+\frac{v^4}{24}\le1-\frac14\sqrt{1-r}$; as $r>\frac34$,
-\[
-f_n\le\frac1{2\pi}\cdot\pi\eps_n^2\cdot\frac{1-r^2}{\frac12r\sqrt{1-r}}\le\frac83\eps_n^2\sqrt{1-r}\le\eps_n\sqrt{1-r}\le\eps_n,
-\]
-since $\eps_n\le\frac14$. This proves (1) and (2); (3) follows from (2) because $r\to1$ along such an arc.
+Let $z\notin\Omega_n$, $r=\abs z$. If $r\le1-\eps_n$, $P(z,\cdot)\le2/(1-r)\le2/\eps_n$ and $f_n\le\frac1{2\pi}\cdot\pi\eps_n^2\cdot\frac2{\eps_n}=\eps_n$.
+If $r>1-\eps_n$, then $r>\frac34$, and for $t\in[\alpha(n),\beta(n)]$ write $z=re^{i\theta}$ with $\abs{\theta-t}\le\pi$; as $z\notin\Omega_n$,
+$\abs{\theta-t}\ge v=v(r)$, so $\cos(\theta-t)\le\cos v\le1-\frac{v^2}4$ ($v<1$) and
+$\abs{e^{it}-z}^2=1+r^2-2r\cos(\theta-t)\ge\frac r2\sqrt{1-r}$; hence $P(z,e^{it})\le\frac{16}3\sqrt{1-r}$ and
+$f_n\le\frac83\eps_n^2\sqrt{1-r}\le\eps_n\sqrt{1-r}\le\eps_n$, since $\eps_n\le\frac14$. This proves (1) and (2); (3) follows from (2).
 \end{proof}
 
 \begin{theorem}[{\cite{TAMSa}}; answer to {\cite[Problem 5]{BP}}]\label{thm:ha-example}
@@ -112,24 +121,24 @@ since $\eps_n\le\frac14$. This proves (1) and (2); (3) follows from (2) because 
 There are a bounded harmonic function $f$ in $\D$ and a boundary function $\varphi:C\to\R$ for $f$ that is not of Baire class $\le1$.
 \end{theorem}
 \begin{proof}
-With the notation of Lemma~\ref{lem:ha-estimates}, let $\chi=\sum_n\chi_n$ (the indicator of $\bigcup_nI_n$) and $f=P[\chi]=\sum_nf_n$
-(monotone convergence); $f$ is bounded harmonic (Fact~\ref{fact:poisson}(i)).
+Apply Lemma~\ref{lem:ha-sequences} to a dense sequence $(p_n)$ in $(-\pi,\pi)$, and use the notation of Lemma~\ref{lem:ha-estimates}.
+Let $\chi$ be the indicator of $\bigcup_nI_n$ and $f=P[\chi]$; $f$ is bounded harmonic (Fact~\ref{fact:poisson}(i)), and $f=\sum_nf_n$ in
+$\D$ (countable additivity of the integral, the $I_n$ being disjoint).
 
-$\chi$ is continuous with value $1$ on each open arc $I_n^*$, so $f$ has general limit $1$ there (Fact~\ref{fact:poisson}(ii)) and, by
-Lemma~\ref{lem:general-limit-endpoints}, asymptotic value $1$ at $e^{i\alpha(n)}$ and $e^{i\beta(n)}$.
+$\chi$ is continuous with value $1$ at each point of an open arc $I_n^*$, so $f$ has general limit $1$ there (Fact~\ref{fact:poisson}(ii));
+by Lemma~\ref{lem:general-limit-endpoints} (applied to subarcs of $I_n^*$), $f$ has asymptotic value $1$ at every point of $I_n$.
 
 Let $\zeta\in C\setminus\bigcup_nI_n^*$. By Lemma~\ref{lem:ha-lemma} there is an arc $\gamma$ at $\zeta$ meeting no $\Omega_n$. For $m\in\N$ and
-$z\in\gamma$, by (1) and I, $\abs{f(z)}\le\sum_{n\le m}f_n(z)+\sum_{n>m}\eps_n\le\sum_{n\le m}f_n(z)+2^{-m-1}$, and by (3)
-$\limsup\abs{f}\le2^{-m-1}$ along $\gamma$. So $f$ has asymptotic value $0$ at $\zeta$; in particular the endpoints of the $I_n$ are
-ambiguous points. Let $A=\{e^{i\alpha(n)}\}$, $B=\{e^{i\beta(n)}\}$, and define $\varphi=1$ on $\bigcup_nI_n^*\cup B$ and $\varphi=0$ on the rest of
-$C$. Then $\varphi$ is a boundary function for $f$.
+$z\in\gamma\setminus\{\zeta\}$, by (1) and I, $0\le f(z)\le\sum_{n<m}f_n(z)+\sum_{n\ge m}\eps_n\le\sum_{n<m}f_n(z)+2^{-m-1}$, and by (3)
+$\limsup f\le2^{-m-1}$ along $\gamma$. So $f$ has asymptotic value $0$ at $\zeta$. Let $A=\{e^{i\alpha(n)}\}$, $B=\{e^{i\beta(n)}\}$, and
+$\varphi=1$ on $\bigcup_nI_n^*\cup B$, $\varphi=0$ on the rest of $C$. Then $\varphi$ is a boundary function for $f$; $\varphi=0$ on $A$ and
+$\varphi=1$ on $B$ (the closed arcs $I_n$ being disjoint).
 
-By V, every $p_h$ lies in $\bigcup_nI_n$, so $\bigcup_nI_n$ is dense in $C$. Given $e^{i\alpha(n)}$ and a short open arc $O$ ending at it on
-the side away from $I_n$, some $I_m$ meets $O$; since $I_m\cap I_n=\emptyset$, $e^{i\beta(m)}\in O$; and some $I_{m'}$ meets the open arc between
-$e^{i\beta(m)}$ and $e^{i\alpha(n)}$, so lies inside it and $e^{i\alpha(m')}\in O$. Arguing likewise at points of $B$, each point of $A\cup B$
-is a limit of other points of $A$ and of points of $B$. Hence $P=\cl(A\cup B)$ is a nonempty closed (so complete) set in which both $A$
-and $B$ are dense. As $\varphi=0$ on $A$ and $\varphi=1$ on $B$, $\varphi|_P$ is continuous at no point. If $\varphi$ were of Baire class $\le1$, so
-would be $\varphi|_P$, contradicting Corollary~\ref{cor:baire-continuity-point}.
+By V the intervals $[\alpha(k),\beta(k)]$ are dense in $(-\pi,\pi)$. Given $e^{i\alpha(n)}$ and $\delta>0$ small, some $[\alpha(k),\beta(k)]$ meets
+$(\alpha(n)-\delta,\alpha(n))$; it does not contain $\alpha(n)$, so $\beta(k)\in(\alpha(n)-\delta,\alpha(n))$. Hence $A\subseteq\cl B$, and likewise
+$B\subseteq\cl A$. So $P=\cl(A\cup B)$ is a nonempty compact set in which both $A$ and $B$ are dense, and $\varphi|_P$ is continuous at no
+point. If $\varphi$ were of Baire class $\le1$, so would be $\varphi|_P$ (Lemma~\ref{lem:baire-precomp}), contradicting
+Corollary~\ref{cor:baire-continuity-point}.
 \end{proof}
 
 \begin{theorem}[{\cite[Theorem]{TAMSa}}]\label{thm:ha-theorem}
@@ -140,10 +149,11 @@ at which $u$ has an asymptotic value and $G$ the set at which $u$ has a general 
 \end{theorem}
 \begin{proof}
 Let $S$ be the set where the radial limit $\psi$ exists; $S\subseteq A$, $C\setminus S$ is null, and $u=P[\psi]$ (Fact~\ref{fact:poisson}(iii)).
-Extend $\psi|_S$ to a boundary function $\varphi_1$ on $A$. By Corollary~\ref{cor:bf-honorary} there is $\varphi\in\mathcal B_1(A,\R)$ with
-$\varphi=\varphi_1$ off a countable set; then $\varphi=\psi$ almost everywhere and $u=P[\varphi]$. By Theorem~\ref{thm:kuratowski} there is $K\subseteq A$ with
-$A\setminus K$ of the first category in $A$, hence in $C$ (Lemma~\ref{lem:meager-subspace}), such that $\varphi|_A$ is continuous at each point of
-$K$. By Fact~\ref{fact:poisson}(ii), $K\subseteq G$; so $A\setminus G\subseteq A\setminus K$.
+Extend $\psi|_S$ to a boundary function $\varphi_1$ on $A$ (the radius is an arc). By Corollary~\ref{cor:bf-honorary} there is
+$\varphi\in\mathcal B_1(A,\R)$ with $\varphi=\varphi_1$ off a countable set; extend $\varphi$ by $\psi$ off $A$. Countable sets are null, so
+$\varphi=\psi$ almost everywhere and $u=P[\varphi]$. By Theorem~\ref{thm:kuratowski} the set $A\setminus K$ of discontinuity points of $\varphi|_A$
+is of the first category in $A$, hence in $C$ (Lemma~\ref{lem:meager-subspace}). By Fact~\ref{fact:poisson}(ii) (with the full-measure set
+$A\supseteq S$), $K\subseteq G$; so $A\setminus G\subseteq A\setminus K$.
 \end{proof}
 
 \begin{corollary}[{\cite[Corollary]{TAMSa}}]\label{cor:ha-corollary}

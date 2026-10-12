@@ -12,6 +12,7 @@ import TJK.Baire.Sphere
 import TJK.Discont.Segments
 import TJK.Baire.Higher
 import TJK.Construct.H
+import TJK.Plane.Arc
 import TJK.Plane.Basic
 import TJK.Construct.Realize
 import TJK.Discont.Vitali
@@ -23,3 +24,5 @@ import TJK.McMillan.Basic
 import TJK.BoundaryFn.Fsigma
 import TJK.Discont.Baire
 import TJK.Cube.Basic
+import TJK.Harmonic.Example
+import TJK.Harmonic.Theorem

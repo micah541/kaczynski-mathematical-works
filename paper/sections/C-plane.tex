@@ -30,13 +30,28 @@ The pairs $(\Omega,B)$ used are $(\D,C)$, $(\Hp,\R)$ and $(Q^\circ,X)$, and in S
 the open cube with its whole boundary.
 \end{definition}
 
-\begin{fact}[Tietze {\cite{Tietze}}]\label{fact:tietze-arc}
-\lean{TJK.exists_arc_in_path}
+\begin{theorem}[Tietze {\cite{Tietze}}]\label{fact:tietze-arc}
+\lean{TJK.exists_arc_in_path, TJK.exists_arc_in_path'}
 \uses{def:arcs}
-\source{Tietze 1919; also: every path-connected Hausdorff space is arc-connected}
-If $g$ is a path in $\R^n$ with $g(0)\ne g(1)$, then $g([0,1])$ contains a simple arc with endpoints
-$g(0)$ and $g(1)$.
-\end{fact}
+If $g$ is a path in a Hausdorff space (e.g.\ in $\R^n$) with $g(0)\ne g(1)$, then $g([0,1])$
+contains a simple arc with endpoints $g(0)$ and $g(1)$.
+\end{theorem}
+\begin{proof}
+Call a closed $S\subseteq[0,1]$ with $0,1\in S$ \emph{admissible} if $g(x)=g(y)$ whenever $x<y$ lie in
+$S$ and $(x,y)\cap S=\emptyset$. If $S_i$ is a chain of admissible sets and $(x,y)$ is a gap of
+$\bigcap S_i$, compactness gives for each $\varepsilon>0$ an $S_i$ missing
+$[x+\varepsilon,y-\varepsilon]$; the gap of $S_i$ around $\frac{x+y}2$ has ends within $\varepsilon$ of
+$x$ and $y$ with equal $g$-values, so $g(x)=g(y)$ by continuity. By Zorn's lemma there is a minimal
+admissible $m$; minimality ($m\setminus(x,y)$ is admissible when $g(x)=g(y)$) shows that $x<y$ in $m$
+with $g(x)=g(y)$ bound a gap of $m$. Put $r(t)=\max(m\cap[0,t])$ and $f=g\circ r$. Then $f$ is
+continuous ($r$ is right-continuous, $t\mapsto\min(m\cap[t,1])$ is left-continuous, and $g$ agrees at
+the two), $f(0)=g(0)$, $f(1)=g(1)$, $f([0,1])\subseteq g([0,1])$, and every fibre of $f$ is an
+interval. For rationals $p<p'$ such that $K=f([0,p])$ and $L=f([p',1])$ are disjoint, an Urysohn
+function $u$ on the compact Hausdorff space $f([0,1])$ with $u|_K=0$, $u|_L=1$ gives the monotone
+continuous $\varphi_{p,p'}(t)=\max_{s\le t}u(f(s))$, constant on fibres of $f$; a weighted sum $h$ of
+these is continuous, monotone, and $h(s)=h(t)\iff f(s)=f(t)$. As $h$ is a closed quotient map onto
+$[h(0),h(1)]$, $f$ factors through it as an injective path from $g(0)$ to $g(1)$.
+\end{proof}
 
 \begin{corollary}[paths may replace arcs]\label{cor:path-arc}
 \lean{TJK.exists_arcAt_of_path, TJK.tendsto_of_nhdsWithin_le_map, TJK.clusterSet_subset_of_nhdsWithin_le_map}
@@ -47,7 +62,7 @@ $f:\Omega\to Y$: if $f(g(t))\to q$ as $t\to1$ then $f\to q$ along $\gamma$; and 
 contained in the set of limits of $f(g(t_n))$ with $t_n\to1$.
 \end{corollary}
 \begin{proof}
-Fact~\ref{fact:tietze-arc} gives a simple arc $\gamma\subseteq g([0,1])$ from $g(0)$ to $p$; since
+Theorem~\ref{fact:tietze-arc} gives a simple arc $\gamma\subseteq g([0,1])$ from $g(0)$ to $p$; since
 $g(t)\ne p$ for $t<1$, $\gamma\setminus\{p\}\subseteq\Omega$. If $z_k\in\gamma\setminus\{p\}$ and
 $z_k\to p$, write $z_k=g(t_k)$ with $t_k<1$; a subsequence of $t_k$ bounded away from $1$ would have a
 limit $t^*<1$ with $g(t^*)=p$, which is impossible. So $t_k\to1$.

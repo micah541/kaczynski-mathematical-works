@@ -1,5 +1,6 @@
 import Mathlib
 import TJK.Defs
+import TJK.Plane.Arc
 
 /-!
 # Arcs, curvilinear limits, charts and transfer (blueprint §C, fact-free parts)
@@ -331,8 +332,8 @@ variable {E : Type*} [TopologicalSpace E] [T2Space E]
 image of a path with distinct endpoints contains a simple arc with the same endpoints.
 Imported fact; not in Mathlib. -/
 theorem exists_arc_in_path {a b : E} (g : Path a b) (hab : a ≠ b) :
-    ∃ γ ⊆ range g, IsArc γ a b := by
-  sorry
+    ∃ γ ⊆ range g, IsArc γ a b :=
+  exists_arc_in_path' g hab
 
 /-- `cor:path-arc`: if `g(1) = p ∉ Ω` and `g(t) ∈ Ω` for `t < 1`, then `g([0,1])` contains an arc
 `γ` at `p` with `𝓝[γ \ {p}] p ≤ map g (𝓝[<] 1)`; so limits of `f ∘ g` as `t → 1` are limits along
