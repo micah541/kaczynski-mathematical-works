@@ -6,7 +6,7 @@ at $\zeta$, and the \emph{general limit} $a$ at $\zeta$ if $u(z)\to a$ as $z\to\
 is the Poisson kernel ($P_r(\theta-t)=P(re^{i\theta},e^{it})$), $P[\varphi](z)=\frac1{2\pi}\int_0^{2\pi}P(z,e^{it})\varphi(e^{it})\,dt$, and
 $\expi S=\{e^{it}:t\in S\}$.
 
-\begin{fact}[Poisson integrals {\cite[pp.~32--38]{Hoffman}}]\label{fact:poisson}
+\begin{theorem}[Poisson integrals {\cite[pp.~32--38]{Hoffman}}]\label{fact:poisson}
 \lean{TJK.Harmonic.poisson_bounded_harmonic, TJK.Harmonic.poisson_tendsto_of_continuousAt,
   TJK.Harmonic.hp_radial_limit_poisson}
 \source{Hoffman, Banach spaces of analytic functions, pp.~32--38; (i) is proved in Lean from Mathlib's Poisson and Cauchy integral formulas}
@@ -16,7 +16,8 @@ $\abs{P[\varphi]}\le\sup\abs\varphi$.
 $P[\varphi]$ has general limit $\varphi(\zeta_0)$ at $\zeta_0$.
 (iii) If $u$ is harmonic in $\D$ and $\{\int_{0}^{2\pi}\abs{u(re^{i\theta})}^pd\theta:0\le r<1\}$ is bounded for some $p>1$, then the
 radial limit $\psi$ of $u$ exists at almost every point of $C$, $\psi\in L^1(C)$, and $u=P[\psi]$.
-\end{fact}
+\end{theorem}
+\begin{proof}Formalized in \texttt{TJK/Harmonic/Poisson.lean} and \texttt{Example.lean}. (i): $P[\varphi]$ is the real part of a Cauchy-type integral, with $P\ge0$ and $P[1]=1$. (ii): an approximate-identity argument. (iii): the Poisson formula on smaller circles; uniform integrability of $u(s\,\cdot)$ by H\"older; a weak limit of the measures $u(s\,\cdot)^{\pm}d\theta$, absolutely continuous by uniform integrability, whose Radon--Nikodym density $\psi$ represents $u=P[\psi]$; and radial convergence at Lebesgue points of $\psi$ by a dyadic kernel estimate.\end{proof}
 \noindent (i) is proved: $P(z,\zeta)=\operatorname{Re}\frac{\zeta+z}{\zeta-z}$ and $\frac{\zeta+z}{\zeta(\zeta-z)}=\frac2{\zeta-z}-\frac1\zeta$, so
 $P[\varphi]=\operatorname{Re}(2F-F(0))$ with $F(z)=\frac1{2\pi i}\oint\frac{\varphi(\zeta)}{\zeta-z}d\zeta$ holomorphic in $\D$; and
 $\abs{P[\varphi]}\le P[\sup\abs\varphi]=\sup\abs\varphi$ since $P\ge0$ and $P[1]=1$.
@@ -122,10 +123,10 @@ There are a bounded harmonic function $f$ in $\D$ and a boundary function $\varp
 \end{theorem}
 \begin{proof}
 Apply Lemma~\ref{lem:ha-sequences} to a dense sequence $(p_n)$ in $(-\pi,\pi)$, and use the notation of Lemma~\ref{lem:ha-estimates}.
-Let $\chi$ be the indicator of $\bigcup_nI_n$ and $f=P[\chi]$; $f$ is bounded harmonic (Fact~\ref{fact:poisson}(i)), and $f=\sum_nf_n$ in
+Let $\chi$ be the indicator of $\bigcup_nI_n$ and $f=P[\chi]$; $f$ is bounded harmonic (Theorem~\ref{fact:poisson}(i)), and $f=\sum_nf_n$ in
 $\D$ (countable additivity of the integral, the $I_n$ being disjoint).
 
-$\chi$ is continuous with value $1$ at each point of an open arc $I_n^*$, so $f$ has general limit $1$ there (Fact~\ref{fact:poisson}(ii));
+$\chi$ is continuous with value $1$ at each point of an open arc $I_n^*$, so $f$ has general limit $1$ there (Theorem~\ref{fact:poisson}(ii));
 by Lemma~\ref{lem:general-limit-endpoints} (applied to subarcs of $I_n^*$), $f$ has asymptotic value $1$ at every point of $I_n$.
 
 Let $\zeta\in C\setminus\bigcup_nI_n^*$. By Lemma~\ref{lem:ha-lemma} there is an arc $\gamma$ at $\zeta$ meeting no $\Omega_n$. For $m\in\N$ and
@@ -148,11 +149,11 @@ Let $u$ be harmonic in $\D$ with $\{\int\abs{u(re^{i\theta})}^pd\theta:0\le r<1\
 at which $u$ has an asymptotic value and $G$ the set at which $u$ has a general limit. Then $A\setminus G$ is of the first category.
 \end{theorem}
 \begin{proof}
-Let $S$ be the set where the radial limit $\psi$ exists; $S\subseteq A$, $C\setminus S$ is null, and $u=P[\psi]$ (Fact~\ref{fact:poisson}(iii)).
+Let $S$ be the set where the radial limit $\psi$ exists; $S\subseteq A$, $C\setminus S$ is null, and $u=P[\psi]$ (Theorem~\ref{fact:poisson}(iii)).
 Extend $\psi|_S$ to a boundary function $\varphi_1$ on $A$ (the radius is an arc). By Corollary~\ref{cor:bf-honorary} there is
 $\varphi\in\mathcal B_1(A,\R)$ with $\varphi=\varphi_1$ off a countable set; extend $\varphi$ by $\psi$ off $A$. Countable sets are null, so
 $\varphi=\psi$ almost everywhere and $u=P[\varphi]$. By Theorem~\ref{thm:kuratowski} the set $A\setminus K$ of discontinuity points of $\varphi|_A$
-is of the first category in $A$, hence in $C$ (Lemma~\ref{lem:meager-subspace}). By Fact~\ref{fact:poisson}(ii) (with the full-measure set
+is of the first category in $A$, hence in $C$ (Lemma~\ref{lem:meager-subspace}). By Theorem~\ref{fact:poisson}(ii) (with the full-measure set
 $A\supseteq S$), $K\subseteq G$; so $A\setminus G\subseteq A\setminus K$.
 \end{proof}
 

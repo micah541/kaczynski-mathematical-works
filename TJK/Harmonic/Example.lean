@@ -2,6 +2,7 @@ import Mathlib
 import TJK.Defs
 import TJK.Plane.Basic
 import TJK.Baire.Sphere
+import TJK.Harmonic.Poisson
 
 /-!
 # A bounded harmonic function with a boundary function not of Baire class one (blueprint §H)
@@ -38,8 +39,8 @@ Imported fact (Hoffman, pp. 32–38). -/
 theorem poisson_tendsto_of_continuousAt (φ : ℂ → ℝ) (hφ : CircleIntegrable φ 0 1) (S : Set ℂ)
     (hS : ∀ᵐ θ, circleMap 0 1 θ ∈ S) {ζ₀ : ℂ} (hζ₀ : ζ₀ ∈ S ∩ circle)
     (hc : ContinuousWithinAt φ (S ∩ circle) ζ₀) :
-    Tendsto (poisson φ) (𝓝[disc] ζ₀) (𝓝 (φ ζ₀)) := by
-  sorry
+    Tendsto (poisson φ) (𝓝[disc] ζ₀) (𝓝 (φ ζ₀)) :=
+  poisson_tendsto_of_continuousAt' φ hφ S hS hζ₀ hc
 
 /-- `fact:poisson` (iii): a harmonic function in the disc with bounded `p`-th integral means,
 `p > 1`, has radial limits almost everywhere on the circle, and it is the Poisson integral of its
@@ -51,8 +52,8 @@ theorem hp_radial_limit_poisson (u : ℂ → ℝ) (hu : InnerProductSpace.Harmon
     ∃ ψ : ℂ → ℝ, CircleIntegrable ψ 0 1 ∧
       (∀ᵐ θ, Tendsto (fun r : ℝ => u (r * circleMap 0 1 θ)) (𝓝[<] 1)
         (𝓝 (ψ (circleMap 0 1 θ)))) ∧
-      ∀ z ∈ disc, u z = poisson ψ z := by
-  sorry
+      ∀ z ∈ disc, u z = poisson ψ z :=
+  hp_radial_limit_poisson' u hu p hp hmean
 
 /-! ### The Jordan curve theorem (`fact:jordan-access`) -/
 
