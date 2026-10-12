@@ -54,6 +54,108 @@ $\langle\vartheta(t),1-\abs{w(t)}\rangle$. Since point asymptotic values are asy
 Bagemihl--McMillan, and the methods of \cite{TAMSb}, but omits the ``messy construction''.
 \end{remark}
 
+\subsection*{An elementary proof of the lemma}
+We give a proof of Lemma~\ref{lem:cube-lemma} that uses neither Kierst's theorem nor normal functions: only
+Fact~\ref{fact:analytic-nonborel} and plane geometry. The function $s$ is built on a binary tree of segments in $\Hp$
+(a ``dyadic skeleton''); its imaginary part forces every path along which $s$ tends to a real value to follow one branch of the
+tree, and its real part is read off a Souslin representation of the analytic set along the branches.
+
+\emph{Words and the skeleton.} Let $W$ be the set of finite words $u=u_0\dots u_{n-1}$ over $\{0,1\}$; $\abs u=n$, $u\sqsubseteq v$
+means $u$ is a prefix of $v$, $u\sqsubset v$ a proper prefix, $u|k$ is the prefix of length $k$, and $u^-$ is $u$ without its last
+letter ($u\ne\emptyset$). The same notation is used for infinite words $\beta\in\{0,1\}^\N$. Put $x_u=\sum_{i<\abs u}u_i2^{-i-1}$,
+$I_u=[x_u,x_u+2^{-\abs u}]$, $\mu_u=x_u+2^{-\abs u-1}$ (the midpoint of $I_u$), and $c_u=\mu_u+i\,2^{-\abs u}\in\Hp$. For
+$u\ne\emptyset$ let $e_u$ be the segment $[c_{u^-},c_u]$, and for $z\in\Hp$ let $d_u(z)=\dist(z,e_u)/\Im z$.
+
+\begin{enumerate}
+\item[(G1)] Points of $e_u$ have heights in $[2^{-\abs u},2^{1-\abs u}]$.
+\item[(G2)] If $\abs v>k$ and $p\in e_v$, then $\Re p\in I_{v|k}$ and $\dist(\Re p,2^{-k}\Z)\ge\Im p/4$. Indeed, let $j=\abs v$.
+The endpoints of $e_v$ have real parts $\mu_{v^-}$, an odd multiple of $2^{-j}$, at distance $2^{-j}$ from $2^{1-j}\Z\supseteq2^{-k}\Z$,
+and $\mu_v$, an odd multiple of $2^{-j-1}$, at distance $2^{-j-1}$ from $2^{-j}\Z\supseteq2^{-k}\Z$; both lie in $I_v\subseteq I_{v|k}$.
+On $I_{v|k}$ the function $x\mapsto\dist(x,2^{-k}\Z)$ is the minimum of the distances to the two endpoints, hence concave, so along
+$e_v$ (on which $\Re$ is affine) it is at least $2^{-j-1}\ge\Im p/4$ by (G1).
+\item[(G3)] If $u1\sqsubseteq v$ and $p\in e_v$ then $\Re p\ge\mu_u$; if $u0\sqsubseteq v$ then $\Re p\le\mu_u$. (For $v=u1$ the
+endpoints of $e_v$ have real parts $\mu_u<\mu_{u1}$; for $v\sqsupset u1$ both endpoints lie in $I_{u1}=[\mu_u,\mu_u+2^{-\abs u-1}]$.
+Symmetrically for $u0$.)
+\item[(G4)] \emph{Separation.} If $p,p'\in\Hp$, $q\in\R$, $\Re p\ge q$ and $\Re p'\le q-\Im p'/4$, then
+$\abs{p-p'}\ge\max\{\Im p,\Im p'\}/8$. If $\Im p'\ge\frac78\Im p$ then $\abs{p-p'}\ge\Re p-\Re p'\ge\Im p'/4\ge\max\{\Im p,\Im p'\}\cdot\frac7{32}$;
+otherwise $\abs{p-p'}\ge\Im p-\Im p'>\Im p/8$ and $\Im p=\max\{\Im p,\Im p'\}$.
+\item[(G5)] Call $e_v,e_w$ \emph{separated} if $\abs{p-p'}\ge\max\{\Im p,\Im p'\}/8$ for all $p\in e_v$, $p'\in e_w$. This holds
+(a) if $\abs v,\abs w>k$ and $v|k\ne w|k$: if, say, $I_{v|k}$ lies to the left of $I_{w|k}$, let $q$ be the right endpoint of $I_{v|k}$; by
+(G2), $\Re p\le q-\Im p/4$ and $\Re p'\ge q$; apply (G4). (b) if $u1\sqsubseteq v$ and $u0\sqsubset w$: take $q=\mu_u$, the right endpoint
+of $I_{u0}$, and use (G3) for $v$ and (G2) with $k=\abs u+1$ for $w$.
+\item[(G6)] \emph{Nearness.} If $e_v,e_w$ are separated and $d_v(z)<\frac1{32}$, then $d_w(z)>\frac1{12}$. Take $p\in e_v$ with
+$\abs{z-p}<\Im z/32$; then $\Im p>\frac{31}{32}\Im z$, so every $p'\in e_w$ has $\abs{z-p'}\ge\abs{p-p'}-\abs{z-p}>(\frac{31}{256}-\frac8{256})\Im z>\Im z/12$.
+\item[(G7)] If $\Im z<2^{-k-1}$ and $\abs w\le k$, then $d_w(z)\ge1$, by (G1).
+\end{enumerate}
+
+\emph{Coding.} Write $\N^\N$ for the Baire space and $N_\kappa=\{\sigma\in\N^\N:\kappa\sqsubseteq\sigma\}$ for $\kappa\in\N^{<\N}$.
+Every $u\in W$ can be written uniquely as $u=0^{k_0}1\,0^{k_1}1\cdots0^{k_{j-1}}1\,0^r$; put $\kappa(u)=(k_0,\dots,k_{j-1})$ and
+$\ell(u)=\abs u-r$ (the length of the longest prefix of $u$ ending in $1$). Then $u\sqsubseteq v$ implies $\kappa(u)\sqsubseteq\kappa(v)$, and
+$\ell(u)\ge\abs{\kappa(u)}$, the number of $1$'s in $u$. For $\sigma\in\N^\N$ let
+$\beta_\sigma=0^{\sigma_0}1\,0^{\sigma_1}1\cdots$; then $\kappa(\beta_\sigma|m)\sqsubseteq\sigma$ and $\abs{\kappa(\beta_\sigma|m)}\to\infty$. If
+$\beta\in\{0,1\}^\N$ has infinitely many $1$'s, then $\beta=\beta_\sigma$ for some $\sigma$ (the lengths of the $0$-blocks); otherwise
+$\beta=t0^\infty$ with $t$ empty or ending in $1$.
+
+\begin{lemma}[elementary form of Lemma~\ref{lem:cube-lemma}]\label{lem:cube-lemma-elementary}
+\lean{TJK.Cube.Elementary.exists_s'}
+\uses{fact:analytic-nonborel, def:asymptotic}
+The conclusion of Lemma~\ref{lem:cube-lemma} holds, with a proof using only Fact~\ref{fact:analytic-nonborel}.
+\end{lemma}
+\begin{proof}
+Let $A_0\subseteq\R$ be analytic and not Borel, and $A=\varphi(A_0)$ with $\varphi(a)=a/(2(1+\abs a))$, a continuous injection of $\R$
+into $(-\frac12,\frac12)$. $A$ is analytic, and not Borel because $A_0=\varphi^{-1}(A)$. As $A\neq\emptyset$, $A=g(\N^\N)$ for a continuous
+$g:\N^\N\to\R$. For $u\in W$ let $r_u=g(\kappa(u)0^\infty)\in g(N_{\kappa(u)})\subseteq(-\frac12,\frac12)$ and $\psi_u=1/(\ell(u)+2)$. For $z\in\Hp$ put
+\[R(z)=\min\Bigl\{\tfrac12,\ \inf_{u\ne\emptyset}\bigl(r_u+12\,d_u(z)\bigr)\Bigr\},\qquad
+\Psi(z)=\min\Bigl\{1,\ \inf_{u\ne\emptyset}\bigl(\psi_u+16\,d_u(z)\bigr)\Bigr\},\qquad s=R+\tfrac i2\Psi.\]
+\emph{Continuity and bounds.} On $K=\{z:\Im z\ge\eta,\ \abs z\le M\}$ each $z\mapsto c_u+C\dist(z,e_u)/\Im z$ (with $\abs{c_u}\le1$,
+$e_u\subseteq[0,1]\times[0,1]$) is Lipschitz with a constant $C(1/\eta+(M+2)/\eta^2)$ independent of $u$, and the infimum of a family of
+uniformly Lipschitz functions bounded below is Lipschitz with the same constant; so $R,\Psi$, hence $s$, are continuous on $\Hp$.
+As $r_u>-\frac12$, $R\in[-\frac12,\frac12]$; $\Psi\in[0,1]$; so $\abs s\le\sqrt{1/4+1/4}<1$.
+
+\emph{Claim L.} Let $\abs u=k$, $\Im z<2^{-k-1}$ and $d_v(z)<\frac1{32}$ for some $v\sqsupset u$. Then every $w$ with $d_w(z)\le\frac1{12}$
+satisfies $w\sqsupset u$, and $R(z)\ge\min\{\frac12,\inf_{w\sqsupset u}r_w\}$. Indeed if $w\not\sqsupset u$ then either $\abs w\le k$ and
+$d_w(z)\ge1$ by (G7), or $\abs w>k$, $w|k\ne u$, and $d_w(z)>\frac1{12}$ by (G5a), (G6). Then $r_w+12d_w(z)>-\frac12+1=\frac12$.
+
+\emph{Point asymptotic values.} Let $a=g(\sigma)\in A$, $\beta=\beta_\sigma$, $p=\sum_i\beta_i2^{-i-1}=\lim\mu_{\beta|m}$. With
+$\rho_m(y)=\min\{1,\max\{0,2-2^my\}\}$ let $X(y)=\mu_\emptyset+\sum_{m\ge1}(\mu_{\beta|m}-\mu_{\beta|m-1})\rho_m(y)$, a uniformly convergent
+series of continuous functions ($\abs{\mu_{\beta|m}-\mu_{\beta|m-1}}=2^{-m-1}$). For $y\in[2^{-m},2^{1-m}]$, $\rho_j(y)=1$ for $j<m$ and
+$\rho_j(y)=0$ for $j>m$, so with $\lambda=2-2^my\in[0,1]$, $z(y)=X(y)+iy=(1-\lambda)c_{\beta|m-1}+\lambda c_{\beta|m}\in e_{\beta|m}$. Hence
+$X(y)\to p$ as $y\to0$, and $d_{\beta|m}(z(y))=0$, so $\Psi(z(y))\le\psi_{\beta|m}\to0$ (as $\ell(\beta|m)\ge\abs{\kappa(\beta|m)}\to\infty$)
+and $R(z(y))\le r_{\beta|m}\to a$ (as $\kappa(\beta|m)0^\infty\to\sigma$). Given $\eps>0$ choose $j$ with $\abs{g-a}<\eps$ on $N_{\sigma|j}$
+and $k$ with $\abs{\kappa(\beta|k)}\ge j$; for $w\sqsupset\beta|k$, $r_w\in g(N_{\sigma|j})$, so Claim L gives $R(z(y))\ge a-\eps$ for
+$y<2^{-k-1}$. So $s\to a$ along $t\mapsto z(1-t)$, and $a$ is a point asymptotic value of $s$ at $p$.
+
+\emph{Asymptotic values.} Let $s\to b\in\R$ along a path $v:[0,1)\to\Hp$ with $\Im v(t)\to0$. Then $\Psi(v(t))\to0$ and $R(v(t))\to b$. For
+$\abs u=k$ let $\Omega_k(u)=\{z:\Im z<2^{-k-1},\ \exists v\sqsupset u,\ d_v(z)<\frac1{32}\}$, an open set. By Claim L the $\Omega_k(u)$,
+$\abs u=k$, are pairwise disjoint, and every $z$ with $\Im z<2^{-k-1}$ and $\Psi(z)<\frac12$ lies in one of them (some $w$ has
+$d_w(z)<\frac1{32}$; then $\abs w>k$ by (G7); take $u=w|k$). So for each $k$ a tail $v([t_k,1))$, being connected, lies in a single
+$\Omega_k(u_k)$; a common point of two tails and Claim L give $u_k\sqsubseteq u_{k+1}$, so $u_k=\beta|k$ for some $\beta\in\{0,1\}^\N$.
+By (G2), points of $\Omega_k(u)$ have real part within $2^{-k-1}+\Im z/32$ of $\mu_u$, so $v(t)\to p=\lim\mu_{\beta|k}\in\R$: $b$ is a point
+asymptotic value of $s$ at $p$. It remains to show $b\in A$.
+
+\emph{Case 1: $\beta=\beta_\sigma$.} Let $a=g(\sigma)$, and $\eps$, $k$ as above. For $t\ge t_k$ with $\Psi(v(t))<\delta<\frac12$ there is $w$
+with $\psi_w+16d_w(v(t))<\delta$; then $d_w<\frac1{32}$, so $w\sqsupset\beta|k$ by Claim L and $R(v(t))\le r_w+12d_w<a+\eps+\delta$, while
+$R(v(t))\ge a-\eps$. Hence $b=a\in A$.
+
+\emph{Case 2: $\beta=t0^\infty$}, $t$ empty or ending in $1$, $n=\abs t$, so $\psi_{t0^i}=c_0:=1/(n+2)$ for all $i$. Fix $k\ge n$. For $t$ large
+($t\ge t_k$ and $\Psi(v(t))<c_0/2$) there is $w$ with $\psi_w<c_0/2$ and $d_w(v(t))<\frac1{32}$; so $w\sqsupset\beta|k=t0^{k-n}$ (Claim L)
+and $w$ is not of the form $t0^i$; hence $t0^i1\sqsubseteq w$ for some $i\ge k-n$. Thus a tail of $v$ lies in $\bigcup_iS_i$, where
+$S_i=\{z\in\Hp:\exists w\sqsupseteq t0^i1,\ d_w(z)<\frac1{32}\}$ is open. For $i<i'$, $S_i\cap S_{i'}=\emptyset$ by (G5b) (with $u=t0^i$,
+$t0^{i+1}\sqsubset t0^{i'}1$) and (G6). So the tail lies in a single $S_i$. But the tail after $t_{n+i+1}$ also lies in
+$\Omega_{n+i+1}(t0^{i+1})$, and a point of both is within $\Im z/32$ of some $e_w$, $w\sqsupseteq t0^i1$, and of some $e_{w'}$,
+$w'\sqsupset t0^{i+1}$, contradicting (G5b) and (G6). So Case 2 does not occur.
+
+Thus the real asymptotic values of $s$ are exactly the points of $A\subseteq(-\frac12,\frac12)$, all of them point asymptotic values; and
+$A$ is not Borel.
+\end{proof}
+
+\begin{remark}
+In Case 2 the imaginary part does the work: along the branch $t0^\infty$ (the only kind of branch not coding a point of $\N^\N$)
+$\Psi$ stays $\ge c_0$ near the branch, and leaving it means entering one of the disjoint ``side'' regions $S_i$. Paths tending to
+$\infty$ or oscillating along $\R$ are excluded because $\Psi\to0$ forces the path into the regions $\Omega_k(u)$, whose real parts
+are confined to $I_u$ up to $\Im z/32$.
+\end{remark}
+
 \begin{theorem}[{\cite[Theorem]{PAMS}}]\label{thm:cube}
 \lean{TJK.Cube.exists_not_measurableSet_curvConvSet}
 \uses{lem:cube-lemma, thm:construct-C, lem:subarc, cor:path-arc, def:asymptotic}
