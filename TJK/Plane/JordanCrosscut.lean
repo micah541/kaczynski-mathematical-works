@@ -221,7 +221,7 @@ theorem hasLogOn_of_mem_slitPlane {g : ℂ → ℂ} {K : Set ℂ} (hg : Continuo
 /-- Homotopy lifting through `exp`: a logarithm of `H 0` on `K` deforms to one of `H 1` along a
 homotopy through nonvanishing maps. Proof: `IsCoveringMap.liftHomotopy` for
 `Complex.isCoveringMap_exp`, with `A = K` (subtype), then extend the lift at time `1` by `0` off
-`K` (`continuousOn_iff_continuous_restrict`). Estimate: ~0.5 session. -/
+`K` (`continuousOn_iff_continuous_domRestrict`). -/
 theorem HasLogOn.of_homotopy {K : Set ℂ} {H : ℝ → ℂ → ℂ}
     (hH : ContinuousOn (fun x : ℝ × ℂ => H x.1 x.2) (Icc 0 1 ×ˢ K))
     (hH0 : ∀ s ∈ Icc (0 : ℝ) 1, ∀ w ∈ K, H s w ≠ 0) (h0 : HasLogOn (H 0) K) :
@@ -261,7 +261,7 @@ theorem eq_of_exp_eq_one {α : Type*} [TopologicalSpace α] {S : Set α} (hS : I
 
 /-- `w ↦ w - c` has no continuous logarithm on a circle centred at `c`. Proof: with
 `g(t) = f(c + r e^{it}) - log r - it`, `exp ∘ g = 1`, so `g` is constant on `[0, 2π]` (connected,
-values in `2πiℤ`), but `g(2π) = g(0) - 2πi`. Estimate: ~0.5 session. -/
+values in `2πiℤ`), but `g(2π) = g(0) - 2πi`. -/
 theorem not_hasLogOn_sub_sphere (c : ℂ) {r : ℝ} (hr : 0 < r) :
     ¬ HasLogOn (fun w => w - c) (sphere c r) := by
   rintro ⟨f, hf, hfg⟩
@@ -288,15 +288,10 @@ theorem not_hasLogOn_sub_sphere (c : ℂ) {r : ℝ} (hr : 0 < r) :
     linear_combination key
   simp [Real.pi_ne_zero, I_ne_zero] at this
 
-/-- Every continuous nonvanishing function on an arc has a continuous logarithm. Proof: the
-parametrization `p : [0,1] → σ` is a homeomorphism; contract along `H s w = g (p (s · p⁻¹ w))`
-(`HasLogOn.of_homotopy` from a constant), or lift `g ∘ p` directly with
-`IsCoveringMap.exists_path_lifts`. Estimate: ~0.5 session. -/
-theorem admitsLogs_of_isArc {σ : Set ℂ} {a b : ℂ} (hσ : IsArc σ a b) : AdmitsLogs σ := by
-  sorry
-
 /-- Same for the image of a compact interval under a map continuous and injective on it (the
-subarcs of an arc used in (P4)). Estimate: shares the proof of `admitsLogs_of_isArc`. -/
+subarcs of an arc used in (P4)). Proof: `γ` is a homeomorphism of `[s, t]` onto its image
+(compact to Hausdorff); contract along `H u w = g (γ (s + u (γ⁻¹ w - s)))` and apply
+`HasLogOn.of_homotopy` from the constant `g (γ s)`. -/
 theorem admitsLogs_image_Icc {γ : ℝ → ℂ} {s t : ℝ} (hγ : ContinuousOn γ (Icc s t))
     (hinj : InjOn γ (Icc s t)) : AdmitsLogs (γ '' Icc s t) := by
   classical
@@ -307,7 +302,7 @@ theorem admitsLogs_image_Icc {γ : ℝ → ℂ} {s t : ℝ} (hγ : ContinuousOn 
     exact ⟨fun _ => 0, continuousOn_empty _, fun w hw => hw.elim⟩
   have hst : s ≤ t := hs₀.1.trans hs₀.2
   -- the inverse of `γ` on `K` is continuous (compact to Hausdorff)
-  haveI : CompactSpace (Icc s t) := isCompact_iff_compactSpace.1 isCompact_Icc
+  have : CompactSpace (Icc s t) := isCompact_iff_compactSpace.1 isCompact_Icc
   let e : Icc s t → K := fun x => ⟨γ x, mem_image_of_mem _ x.2⟩
   have he_cont : Continuous e :=
     ((continuousOn_iff_continuous_domRestrict.1 hγ)).subtype_mk _
@@ -350,6 +345,16 @@ theorem admitsLogs_image_Icc {γ : ℝ → ℂ} {s t : ℝ} (hγ : ContinuousOn 
   refine (HasLogOn.of_homotopy hH hH0 hstart).congr fun w hw => ?_
   simp only [H, one_mul, add_sub_cancel, hγψ w hw]
 
+/-- Every continuous nonvanishing function on an arc has a continuous logarithm. Proof: the
+parametrization `p.extend` is continuous and injective on `[0, 1]`; apply
+`admitsLogs_image_Icc`. -/
+theorem admitsLogs_of_isArc {σ : Set ℂ} {a b : ℂ} (hσ : IsArc σ a b) : AdmitsLogs σ := by
+  obtain ⟨p, hinj, rfl⟩ := hσ
+  rw [← p.image_extend_of_subset subset_rfl]
+  refine admitsLogs_image_Icc p.continuous_extend.continuousOn fun x hx y hy hxy => ?_
+  rw [Path.extend_apply _ hx, Path.extend_apply _ hy] at hxy
+  exact congrArg Subtype.val (hinj hxy)
+
 /-- Gluing logarithms across a single common point. -/
 theorem HasLogOn.union_of_inter_eq_singleton {g : ℂ → ℂ} {K L : Set ℂ} {p : ℂ}
     (hK : IsClosed K) (hL : IsClosed L) (hKL : K ∩ L = {p}) (h₁ : HasLogOn g K)
@@ -381,7 +386,7 @@ theorem HasLogOn.union_of_inter_eq_singleton {g : ℂ → ℂ} {K L : Set ℂ} {
     · rw [hFL hw, exp_add, hc, mul_one, hfg₂ w hw]
 
 /-- Two logarithms of the same function on a preconnected set differ by a constant (values in
-`2πiℤ`, `IsPreconnected.constant_of_mapsTo`). Estimate: ~0.3 session. -/
+`2πiℤ`, `eq_of_exp_eq_one`). -/
 theorem HasLogOn.sub_eq_const {g f₁ f₂ : ℂ → ℂ} {S : Set ℂ} (hS : IsPreconnected S)
     (hf₁ : ContinuousOn f₁ S) (hf₂ : ContinuousOn f₂ S)
     (h₁ : ∀ w ∈ S, exp (f₁ w) = g w) (h₂ : ∀ w ∈ S, exp (f₂ w) = g w) {x y : ℂ}
@@ -391,11 +396,24 @@ theorem HasLogOn.sub_eq_const {g f₁ f₂ : ℂ → ℂ} {S : Set ℂ} (hS : Is
   rw [exp_sub, h₁ w hw, h₂ w hw, div_self h0]
 
 /-- A path in `Kᶜ` from `z'` to `z` gives a logarithm of `(w - z)/(w - z')` on `K`
-(`HasLogOn.of_homotopy` with `H s w = (w - γ s)/(w - z')`, starting from the constant `1`).
-Estimate: ~0.3 session. -/
+(`HasLogOn.of_homotopy` with `H s w = (w - γ s)/(w - z')`, starting from the constant `1`). -/
 theorem hasLogOn_div_of_joinedIn {K : Set ℂ} {z z' : ℂ} (h : JoinedIn Kᶜ z' z) :
     HasLogOn (fun w => (w - z) / (w - z')) K := by
-  sorry
+  set γ := h.somePath
+  have hγK : ∀ u ∈ Icc (0 : ℝ) 1, γ.extend u ∉ K := fun u hu => by
+    rw [Path.extend_apply _ hu]; exact h.somePath_mem _
+  have hz'K : z' ∉ K := by simpa using hγK 0 ⟨le_rfl, zero_le_one⟩
+  have hne : ∀ w ∈ K, w - z' ≠ 0 := fun w hw => sub_ne_zero.2 fun h => hz'K (h ▸ hw)
+  set H : ℝ → ℂ → ℂ := fun u w => (w - γ.extend u) / (w - z')
+  have hH : ContinuousOn (fun x : ℝ × ℂ => H x.1 x.2) (Icc 0 1 ×ˢ K) := by
+    refine ContinuousOn.div (Continuous.continuousOn (by fun_prop))
+      (Continuous.continuousOn (by fun_prop)) fun x hx => hne x.2 hx.2
+  have hH0 : ∀ u ∈ Icc (0 : ℝ) 1, ∀ w ∈ K, H u w ≠ 0 := fun u hu w hw =>
+    div_ne_zero (sub_ne_zero.2 fun h => hγK u hu (h ▸ hw)) (hne w hw)
+  have hstart : HasLogOn (H 0) K :=
+    (hasLogOn_const one_ne_zero K).congr fun w hw => by
+      simp only [H, Path.extend_zero, div_self (hne w hw)]
+  exact (HasLogOn.of_homotopy hH hH0 hstart).congr fun w _ => by simp [H]
 
 /-- **Eilenberg's criterion** (the hard direction). If `(w - z)/(w - z')` has a continuous
 logarithm on the compact set `K`, then `z` and `z'` lie in the same component of `Kᶜ`.
@@ -414,10 +432,44 @@ theorem mem_connectedComponentIn_of_hasLogOn {K : Set ℂ} (hK : IsCompact K) {z
 
 /-- If `|z| < 1 < |z'|`, `(w - z)/(w - z')` has no logarithm on `C`. Proof: `w - z'` has one
 (`-z'(1 - w/z')`, principal branch), hence so would `w - z`, and then `w` (homotopy
-`w - (1 - s) z`), contradicting `not_hasLogOn_sub_sphere 0`. Estimate: ~0.3 session. -/
+`w - (1 - s) z`), contradicting `not_hasLogOn_sub_sphere 0`. -/
 theorem not_hasLogOn_circle_div {z z' : ℂ} (hz : z ∈ disc) (hz' : 1 < ‖z'‖) :
     ¬ HasLogOn (fun w => (w - z) / (w - z')) circle := by
-  sorry
+  intro hlog
+  have hz1 : ‖z‖ < 1 := mem_ball_zero_iff.1 hz
+  have hz'0 : z' ≠ 0 := by rintro rfl; norm_num at hz'
+  have hz'n : 0 < ‖z'‖ := by linarith
+  have hne : ∀ w ∈ circle, w - z' ≠ 0 := fun w hw h => by
+    rw [sub_eq_zero] at h
+    have := mem_sphere_zero_iff_norm.1 hw
+    rw [h] at this; linarith
+  -- `w - z'` has a logarithm on `C`: `w - z' = -z' (1 - w/z')`, principal branch
+  have hw' : HasLogOn (fun w => w - z') circle := by
+    refine ((hasLogOn_const (neg_ne_zero.2 hz'0) circle).mul
+      (hasLogOn_of_mem_slitPlane (g := fun w => 1 + -(w / z')) (by fun_prop)
+        fun w hw => mem_slitPlane_of_norm_lt_one ?_)).congr fun w _ => ?_
+    · rw [norm_neg, norm_div, mem_sphere_zero_iff_norm.1 hw, div_lt_one hz'n]; exact hz'
+    · simp only; field_simp; ring
+  have hsub : HasLogOn (fun w => w - z) circle :=
+    (hlog.mul hw').congr fun w hw => by simp only; exact div_mul_cancel₀ _ (hne w hw)
+  -- deform `w - z` to `w` through `w - (1 - u) z`
+  set H : ℝ → ℂ → ℂ := fun u w => w - (1 - u) * z
+  have hH : ContinuousOn (fun x : ℝ × ℂ => H x.1 x.2) (Icc 0 1 ×ˢ circle) :=
+    Continuous.continuousOn (by fun_prop)
+  have hH0 : ∀ u ∈ Icc (0 : ℝ) 1, ∀ w ∈ circle, H u w ≠ 0 := fun u hu w hw h => by
+    rw [sub_eq_zero] at h
+    have h1 := mem_sphere_zero_iff_norm.1 hw
+    have h2 : ‖((1 - u : ℝ) : ℂ)‖ ≤ 1 := by
+      rw [Complex.norm_real, Real.norm_of_nonneg (by linarith [hu.2])]; linarith [hu.1]
+    have h3 : ‖((1 - u : ℝ) : ℂ) * z‖ < 1 := by
+      rw [norm_mul]
+      calc ‖((1 - u : ℝ) : ℂ)‖ * ‖z‖ ≤ 1 * ‖z‖ :=
+            mul_le_mul_of_nonneg_right h2 (norm_nonneg _)
+        _ < 1 := by rw [one_mul]; exact hz1
+    push_cast at h3
+    rw [h] at h1; linarith
+  have hend := HasLogOn.of_homotopy hH hH0 (hsub.congr fun w _ => by simp [H])
+  exact not_hasLogOn_sub_sphere 0 one_pos (hend.congr fun w _ => by simp [H])
 
 end Log
 
