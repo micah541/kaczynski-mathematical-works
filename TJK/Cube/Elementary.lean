@@ -266,7 +266,6 @@ theorem claimL_R {u v : Word} {z : ℂ} (hg : range g ⊆ Ioo (-1 / 2) (1 / 2)) 
     (hr : ∀ w : Word, u <+: w → u.length < w.length → a ≤ rr g w) : a ≤ R g z := by
   sorry -- TODO
 
-end Fun
 
 /-! ### Point asymptotic values along branches -/
 
@@ -322,6 +321,8 @@ theorem mem_range_of_isAsymptoticValue (hgc : Continuous g)
     (hb : IsAsymptoticValue' upper (sFun g) (b : ℂ)) :
     b ∈ range g ∧ ∃ p, IsPointAsymptoticValue' upper (sFun g) p (b : ℂ) := by
   sorry -- TODO (`exists_branch`, `not_finite_branch`, `exists_enc_eq`, Claim L)
+
+end Fun
 
 /-! ### `lem:cube-lemma-elementary` -/
 

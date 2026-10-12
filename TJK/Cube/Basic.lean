@@ -2,6 +2,7 @@ import Mathlib
 import TJK.Defs
 import TJK.Plane.Basic
 import TJK.Construct.K
+import TJK.Cube.AnalyticNonBorel
 
 /-!
 # A cube with a non-Borel set of curvilinear convergence (blueprint §I)
@@ -146,8 +147,8 @@ theorem exists_path_of_tendsto {X : Type*} [TopologicalSpace X] {v : ℝ → X} 
 /-- `fact:analytic-nonborel` (Souslin–Lusin): there is an analytic subset of `ℝ` that is not a
 Borel set. Imported fact; Mathlib has analytic sets but not this example. -/
 theorem exists_analytic_not_borel :
-    ∃ A : Set ℝ, MeasureTheory.AnalyticSet A ∧ ¬ MeasurableSet A := by
-  sorry
+    ∃ A : Set ℝ, MeasureTheory.AnalyticSet A ∧ ¬ MeasurableSet A :=
+  exists_analytic_not_borel'
 
 /-- `fact:kierst` (Kierst 1936): for every analytic `A ⊆ ℝ` there is a holomorphic function in
 `𝔻` omitting `i` and `-i` whose set of (finite) asymptotic values is `A ∪ {i, -i}`. Imported

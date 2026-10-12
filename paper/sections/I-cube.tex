@@ -12,11 +12,12 @@ and $f(v(t))\to a$ as $t\to1$; it is a \emph{point asymptotic value at $p$} if m
 Corollary~\ref{cor:path-arc}, $p\in\CC(f)$ iff $f$ has a (finite) point asymptotic value at $p$.
 \end{definition}
 
-\begin{fact}[analytic non-Borel sets]\label{fact:analytic-nonborel}
-\lean{TJK.Cube.exists_analytic_not_borel}
+\begin{theorem}[analytic non-Borel sets]\label{fact:analytic-nonborel}
+\lean{TJK.Cube.exists_analytic_not_borel, TJK.Cube.exists_analytic_not_borel'}
 \source{Souslin--Lusin; Sierpi\'nski, General topology p.~254. Mathlib has MeasureTheory.AnalyticSet}
 There is an analytic subset of $\R$ that is not a Borel set.
-\end{fact}
+\end{theorem}
+\begin{proof}Formalized in \texttt{TJK/Cube/AnalyticNonBorel.lean}: a universal open set in $(\N\to\{0,1\})\times Y$ built from a countable basis gives, by projecting closed graphs, an analytic set universal for analytic subsets of Cantor space; its diagonal is analytic with non-analytic complement, hence not Borel; transfer to $\R$ by a continuous injection of Cantor space.\end{proof}
 
 \begin{fact}[Kierst {\cite{Kierst}}]\label{fact:kierst}
 \lean{TJK.Cube.kierst}
@@ -56,7 +57,7 @@ Bagemihl--McMillan, and the methods of \cite{TAMSb}, but omits the ``messy const
 
 \subsection*{An elementary proof of the lemma}
 We give a proof of Lemma~\ref{lem:cube-lemma} that uses neither Kierst's theorem nor normal functions: only
-Fact~\ref{fact:analytic-nonborel} and plane geometry. The function $s$ is built on a binary tree of segments in $\Hp$
+Theorem~\ref{fact:analytic-nonborel} and plane geometry. The function $s$ is built on a binary tree of segments in $\Hp$
 (a ``dyadic skeleton''); its imaginary part forces every path along which $s$ tends to a real value to follow one branch of the
 tree, and its real part is read off a Souslin representation of the analytic set along the branches.
 
@@ -99,7 +100,7 @@ $\beta=t0^\infty$ with $t$ empty or ending in $1$.
 \begin{lemma}[elementary form of Lemma~\ref{lem:cube-lemma}]\label{lem:cube-lemma-elementary}
 \lean{TJK.Cube.Elementary.exists_s'}
 \uses{fact:analytic-nonborel, def:asymptotic}
-The conclusion of Lemma~\ref{lem:cube-lemma} holds, with a proof using only Fact~\ref{fact:analytic-nonborel}.
+The conclusion of Lemma~\ref{lem:cube-lemma} holds, with a proof using only Theorem~\ref{fact:analytic-nonborel}.
 \end{lemma}
 \begin{proof}
 Let $A_0\subseteq\R$ be analytic and not Borel, and $A=\varphi(A_0)$ with $\varphi(a)=a/(2(1+\abs a))$, a continuous injection of $\R$

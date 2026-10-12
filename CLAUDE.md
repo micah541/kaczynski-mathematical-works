@@ -41,6 +41,8 @@ problem (1968). The source PDFs are in this directory; OCR text is in `txt/`, pa
   server serializes requests, so several workers may share it.
 - **Reliable per-file compile:** `bash scripts/compile1.sh TJK/Defs.lean TJK/Foo.lean` (writes
   `.olean`s like `lake build`).
+- REPL checks do not apply the lakefile options (`autoImplicit = false`) and leak `open`s between
+  chained files; always confirm with a real `lake build` before committing.
 - Use `PYTHONIOENCODING=utf-8` when running `blueprint.py` from bash (names contain `σ`, `δ`).
 
 ## Layout
