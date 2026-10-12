@@ -26,5 +26,6 @@ import TJK.McMillan.Basic
 import TJK.BoundaryFn.Fsigma
 import TJK.Discont.Baire
 import TJK.Cube.Basic
+import TJK.Harmonic.Poisson
 import TJK.Harmonic.Example
 import TJK.Harmonic.Theorem
