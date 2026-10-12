@@ -828,33 +828,308 @@ theorem closure_component_meets_circle {σ : Set ℂ} {a b : ℂ} (hσ : IsArc �
   rw [mem_ball_zero_iff] at this
   norm_num at this
 
+/-- The two closed arcs meet only at the endpoints. -/
+theorem circleArc'_inter_subset {θ ℓ : ℝ} (hℓ : 0 < ℓ) (hℓ' : ℓ < 2 * π) :
+    circleArc' θ ℓ ∩ circleArc' (θ + ℓ) (2 * π - ℓ) ⊆ {expI' θ, expI' (θ + ℓ)} := by
+  rintro _ ⟨⟨t, ht, rfl⟩, ⟨s, hs, hst⟩⟩
+  obtain ⟨n, hn⟩ := expI'_eq_expI' hst
+  have hπ := Real.pi_pos
+  have h1 : (0 : ℝ) ≤ n * (2 * π) := by linarith [ht.2, hs.1]
+  have h2 : (n : ℝ) * (2 * π) ≤ 2 * π := by linarith [ht.1, hs.2]
+  have h1' : (0 : ℝ) ≤ n := by nlinarith
+  have h2' : (n : ℝ) ≤ 1 := by nlinarith
+  have h1'' : (0 : ℤ) ≤ n := by exact_mod_cast h1'
+  have h2'' : n ≤ (1 : ℤ) := by exact_mod_cast h2'
+  rcases (show n = 0 ∨ n = 1 by omega) with rfl | rfl
+  · have : t = θ + ℓ := by
+      simp only [Int.cast_zero, zero_mul, add_zero] at hn; linarith [ht.2, hs.1]
+    rw [this]; exact Or.inr rfl
+  · have : t = θ := by
+      simp only [Int.cast_one, one_mul] at hn; linarith [ht.1, hs.2]
+    rw [this]; exact Or.inl rfl
+
+/-- Near a point `p ∈ C \ K`, `K ⊆ 𝔻̄` closed, every point is joined to `2` in `Kᶜ`. -/
+theorem exists_joinedIn_two {K : Set ℂ} (hK : IsClosed K) (hKB : K ⊆ closedBall 0 1) {p : ℂ}
+    (hpC : p ∈ circle) (hpK : p ∉ K) : ∃ ρ > 0, ∀ z ∈ ball p ρ, JoinedIn Kᶜ z 2 := by
+  obtain ⟨ρ, hρ, hρK⟩ := Metric.isOpen_iff.1 hK.isOpen_compl p hpK
+  have hp1 : ‖p‖ = 1 := mem_sphere_zero_iff_norm.1 hpC
+  set ρ' := min ρ 1
+  have hρ' : 0 < ρ' := lt_min hρ one_pos
+  set u : ℂ := ((1 + ρ' / 2 : ℝ) : ℂ) * p
+  have hu1 : 1 < ‖u‖ := by
+    rw [norm_mul, Complex.norm_real, hp1, mul_one, Real.norm_of_nonneg (by positivity)]
+    linarith
+  have huB : u ∈ ball p ρ := by
+    rw [mem_ball, dist_eq_norm, show u - p = ((ρ' / 2 : ℝ) : ℂ) * p by
+      simp only [u]; push_cast; ring, norm_mul, Complex.norm_real, hp1, mul_one,
+      Real.norm_of_nonneg (by positivity)]
+    have := min_le_left ρ 1; linarith
+  set S : Set ℂ := exp '' {x : ℂ | 0 < x.re}
+  have hSc : IsPathConnected S :=
+    ((convex_halfSpace_re_gt 0).isPathConnected ⟨1, by simp⟩).image continuous_exp
+  have hbig : ∀ w : ℂ, 1 < ‖w‖ → w ∈ S := fun w hw => by
+    have hw0 : w ≠ 0 := by rintro rfl; rw [norm_zero] at hw; linarith
+    exact ⟨log w, by show 0 < (log w).re; rw [log_re]; exact Real.log_pos hw, exp_log hw0⟩
+  have hSK : S ⊆ Kᶜ := by
+    rintro _ ⟨x, hx, rfl⟩ hxK
+    have h1 := mem_closedBall_zero_iff.1 (hKB hxK)
+    rw [norm_exp] at h1
+    have h2 := Real.exp_lt_exp.2 (show (0 : ℝ) < x.re from hx)
+    rw [Real.exp_zero] at h2
+    linarith
+  refine ⟨ρ, hρ, fun z hz => ?_⟩
+  have h1 : JoinedIn Kᶜ z u :=
+    (((convex_ball p ρ).isPathConnected ⟨p, mem_ball_self hρ⟩).joinedIn z hz u huB).mono hρK
+  have h2 : JoinedIn Kᶜ u 2 :=
+    (hSc.joinedIn u (hbig u hu1) 2 (hbig 2 (by norm_num))).mono hSK
+  exact h1.trans h2
+
+/-- Points of one component of an open set are joined inside it. -/
+theorem joinedIn_of_mem_component {U : Set ℂ} (hU : IsOpen U) {x y : ℂ} (hx : x ∈ U)
+    (hy : y ∈ connectedComponentIn U x) : JoinedIn (connectedComponentIn U x) x y :=
+  (hU.connectedComponentIn.isConnected_iff_isPathConnected.1
+    (isConnected_connectedComponentIn_iff.2 hx)).joinedIn x (mem_connectedComponentIn hx) y hy
+
 /-- (P3) The two sides differ. Proof: suppose `z₂ ∈ W(z₁)`. Pick `p ∈ A₁°`, and points
 `z ∈ ball p r ∩ 𝔻` and `z_out = (1 + ε) p`; they are joined in `ℂ \ (σ ∪ A₂)` (through `p`), so
 `(w - z)/(w - z_out)` has a logarithm on `σ ∪ A₂` (`hasLogOn_div_of_joinedIn`). Symmetrically,
 `z` is joined to `z₂` in `𝔻 \ σ` and `z₂` to `z_out` in `ℂ \ (σ ∪ A₁)` (via `A₂°` and
 `ℂ \ 𝔻̄`), so it has one on `σ ∪ A₁`. The two logarithms differ by a constant on the connected `σ`
 (`HasLogOn.sub_eq_const`), so they glue on `A₁ ∪ A₂ = C`, contradicting `not_hasLogOn_circle_div`.
-Estimate: ~1–1.5 sessions. -/
+(In Lean the outside point is `2`, reached through `ℂ \ 𝔻̄` by `exists_joinedIn_two`.) -/
 theorem not_mem_component_of_sides {σ : Set ℂ} {θ ℓ : ℝ} (hℓ : 0 < ℓ) (hℓ' : ℓ < 2 * π)
     (hσ : IsArc σ (expI' θ) (expI' (θ + ℓ))) (hσD : σ \ {expI' θ, expI' (θ + ℓ)} ⊆ disc)
-    {z₁ z₂ : ℂ} (hz₁ : z₁ ∈ disc \ σ) (hz₂ : z₂ ∈ disc \ σ)
+    {z₁ z₂ : ℂ} (_hz₁ : z₁ ∈ disc \ σ) (_hz₂ : z₂ ∈ disc \ σ)
     (h₁ : ∀ p ∈ circleArcOpen' θ ℓ, ∃ r > 0,
       ball p r ∩ disc ⊆ connectedComponentIn (disc \ σ) z₁)
     (h₂ : ∀ p ∈ circleArcOpen' (θ + ℓ) (2 * π - ℓ), ∃ r > 0,
       ball p r ∩ disc ⊆ connectedComponentIn (disc \ σ) z₂) :
     z₂ ∉ connectedComponentIn (disc \ σ) z₁ := by
-  sorry
+  classical
+  intro hz₂W
+  have hσc : IsClosed σ := (arc_isCompact hσ).isClosed
+  obtain ⟨hd₁, hd₂⟩ := disjoint_arcOpen hℓ hℓ' hσD
+  have hc : Continuous expI' := by unfold expI'; fun_prop
+  set A₁ := circleArc' θ ℓ with hA₁def
+  set A₂ := circleArc' (θ + ℓ) (2 * π - ℓ) with hA₂def
+  have hA₁c : IsClosed A₁ := (isCompact_Icc.image hc).isClosed
+  have hA₂c : IsClosed A₂ := (isCompact_Icc.image hc).isClosed
+  have hA₁C : A₁ ⊆ circle := circleArc'_subset_circle _ _
+  have hA₂C : A₂ ⊆ circle := circleArc'_subset_circle _ _
+  have hinter := circleArc'_inter_subset (θ := θ) hℓ hℓ'
+  have hCB : circle ⊆ closedBall (0 : ℂ) 1 := sphere_subset_closedBall
+  have hσB : σ ⊆ closedBall 0 1 := by
+    intro w hw
+    by_cases hwab : w ∈ ({expI' θ, expI' (θ + ℓ)} : Set ℂ)
+    · simp only [mem_insert_iff, mem_singleton_iff] at hwab
+      rcases hwab with h | h <;> rw [h] <;> exact hCB (expI'_mem_circle _)
+    · exact ball_subset_closedBall (hσD ⟨hw, hwab⟩)
+  have hdC : ∀ w, w ∈ disc → w ∉ circle := fun w h1 h2 => by
+    have h1' : ‖w‖ < 1 := mem_ball_zero_iff.1 h1
+    have h2' : ‖w‖ = 1 := mem_sphere_zero_iff_norm.1 h2
+    linarith
+  have he₁ := endpoints_not_mem_circleArcOpen' (θ := θ) hℓ hℓ'.le
+  have he₂ := endpoints_not_mem_circleArcOpen' (θ := θ + ℓ) (by linarith : 0 < 2 * π - ℓ)
+    (by linarith)
+  rw [show θ + ℓ + (2 * π - ℓ) = θ + 2 * π by ring, expI'_add_two_pi] at he₂
+  have hp : expI' (θ + ℓ / 2) ∈ circleArcOpen' θ ℓ :=
+    ⟨θ + ℓ / 2, ⟨by linarith, by linarith⟩, rfl⟩
+  have hq : expI' (θ + ℓ + (2 * π - ℓ) / 2) ∈ circleArcOpen' (θ + ℓ) (2 * π - ℓ) :=
+    ⟨θ + ℓ + (2 * π - ℓ) / 2, ⟨by linarith, by linarith⟩, rfl⟩
+  set p := expI' (θ + ℓ / 2)
+  set q := expI' (θ + ℓ + (2 * π - ℓ) / 2)
+  have hpK₂ : p ∉ σ ∪ A₂ := by
+    rintro (h | h)
+    · exact disjoint_left.1 hd₁ h hp
+    · have h' := hinter ⟨circleArcOpen'_subset _ _ hp, h⟩
+      simp only [mem_insert_iff, mem_singleton_iff] at h'
+      rcases h' with h' | h'
+      · exact he₁.1 (h' ▸ hp)
+      · exact he₁.2 (h' ▸ hp)
+  have hqK₁ : q ∉ σ ∪ A₁ := by
+    rintro (h | h)
+    · exact disjoint_left.1 hd₂ h hq
+    · have h' := hinter ⟨h, circleArcOpen'_subset _ _ hq⟩
+      simp only [mem_insert_iff, mem_singleton_iff] at h'
+      rcases h' with h' | h'
+      · exact he₂.2 (h' ▸ hq)
+      · exact he₂.1 (h' ▸ hq)
+  obtain ⟨r₁, hr₁, hsub₁⟩ := h₁ p hp
+  obtain ⟨r₂, hr₂, hsub₂⟩ := h₂ q hq
+  obtain ⟨ρ₁, hρ₁, hJ₁⟩ := exists_joinedIn_two (hσc.union hA₂c)
+    (union_subset hσB (hA₂C.trans hCB)) (expI'_mem_circle _) hpK₂
+  obtain ⟨ρ₂, hρ₂, hJ₂⟩ := exists_joinedIn_two (hσc.union hA₁c)
+    (union_subset hσB (hA₁C.trans hCB)) (expI'_mem_circle _) hqK₁
+  obtain ⟨z, hzB, hzD⟩ : (ball p (min r₁ ρ₁) ∩ disc).Nonempty :=
+    closure_nonempty_iff.1 ⟨p, mem_closure_ball_inter_disc (expI'_mem_circle _) (lt_min hr₁ hρ₁)⟩
+  obtain ⟨z', hz'B, hz'D⟩ : (ball q (min r₂ ρ₂) ∩ disc).Nonempty :=
+    closure_nonempty_iff.1 ⟨q, mem_closure_ball_inter_disc (expI'_mem_circle _) (lt_min hr₂ hρ₂)⟩
+  have hzW : z ∈ connectedComponentIn (disc \ σ) z₁ :=
+    hsub₁ ⟨ball_subset_ball (min_le_left _ _) hzB, hzD⟩
+  have hz'W : z' ∈ connectedComponentIn (disc \ σ) z₁ := by
+    rw [connectedComponentIn_eq hz₂W]
+    exact hsub₂ ⟨ball_subset_ball (min_le_left _ _) hz'B, hz'D⟩
+  -- a logarithm on `σ ∪ A₂`
+  have hL₂ : HasLogOn (fun w => (w - z) / (w - 2)) (σ ∪ A₂) :=
+    hasLogOn_div_of_joinedIn (hJ₁ z (ball_subset_ball (min_le_right _ _) hzB)).symm
+  -- a logarithm on `σ ∪ A₁`
+  have hWK : ∀ x, connectedComponentIn (disc \ σ) x ⊆ (σ ∪ A₁)ᶜ := fun x w hw => by
+    have := connectedComponentIn_subset _ _ hw
+    rintro (h | h)
+    · exact this.2 h
+    · exact hdC w this.1 (hA₁C h)
+  have hzz' : JoinedIn (σ ∪ A₁)ᶜ z z' := by
+    have := joinedIn_of_mem_component (disc_diff_isOpen hσc)
+      (connectedComponentIn_subset _ _ hzW) (y := z')
+      (by rw [← connectedComponentIn_eq hzW]; exact hz'W)
+    exact this.mono (hWK z)
+  have hL₁ : HasLogOn (fun w => (w - z) / (w - 2)) (σ ∪ A₁) :=
+    hasLogOn_div_of_joinedIn
+      (hzz'.trans (hJ₂ z' (ball_subset_ball (min_le_right _ _) hz'B))).symm
+  -- glue along `σ`
+  obtain ⟨F₁, hF₁, hFg₁⟩ := hL₁
+  obtain ⟨F₂, hF₂, hFg₂⟩ := hL₂
+  have hσpc : IsPreconnected σ := by
+    obtain ⟨γ, -, hγ⟩ := hσ
+    rw [← hγ]; exact (isConnected_range γ.continuous).isPreconnected
+  have ha : expI' θ ∈ σ := arc_left_mem hσ
+  set c := F₂ (expI' θ) - F₁ (expI' θ) with hcdef
+  have hcσ : ∀ w ∈ σ, F₂ w - F₁ w = c := fun w hw =>
+    HasLogOn.sub_eq_const hσpc (hF₂.mono subset_union_left) (hF₁.mono subset_union_left)
+      (fun w hw => hFg₂ w (Or.inl hw)) (fun w hw => hFg₁ w (Or.inl hw)) hw ha
+  have hc1 : exp c = 1 := by
+    have h0 : (expI' θ - z) / (expI' θ - 2) ≠ 0 := by
+      exact fun h => exp_ne_zero (F₁ (expI' θ)) ((hFg₁ _ (Or.inl ha)).trans h)
+    rw [hcdef, exp_sub, hFg₂ _ (Or.inl ha), hFg₁ _ (Or.inl ha)]
+    exact div_self h0
+  set H : ℂ → ℂ := fun w => if w ∈ A₂ then F₂ w else F₁ w + c
+  have hH₂ : EqOn H F₂ A₂ := fun w hw => by simp only [H, if_pos hw]
+  have hH₁ : EqOn H (fun w => F₁ w + c) A₁ := by
+    intro w hw
+    by_cases hw₂ : w ∈ A₂
+    · have hwσ : w ∈ σ := by
+        have h' := hinter ⟨hw, hw₂⟩
+        simp only [mem_insert_iff, mem_singleton_iff] at h'
+        rcases h' with h | h
+        · rw [h]; exact arc_left_mem hσ
+        · rw [h]; exact arc_right_mem hσ
+      simp only [H, if_pos hw₂]
+      have := hcσ w hwσ
+      linear_combination this
+    · simp only [H, if_neg hw₂]
+  have hlog : HasLogOn (fun w => (w - z) / (w - 2)) (A₁ ∪ A₂) := by
+    refine ⟨H, ContinuousOn.union_of_isClosed
+      (((hF₁.mono subset_union_right).add continuousOn_const).congr hH₁)
+      ((hF₂.mono subset_union_right).congr hH₂) hA₁c hA₂c, ?_⟩
+    rintro w (hw | hw)
+    · rw [hH₁ hw, exp_add, hc1, mul_one, hFg₁ w (Or.inr hw)]
+    · rw [hH₂ hw, hFg₂ w (Or.inr hw)]
+  have hcirc : circle ⊆ A₁ ∪ A₂ := by
+    intro w hw
+    by_cases hwab : w ∈ ({expI' θ, expI' (θ + ℓ)} : Set ℂ)
+    · left
+      simp only [mem_insert_iff, mem_singleton_iff] at hwab
+      rcases hwab with h | h
+      · rw [h]; exact ⟨θ, ⟨le_rfl, by linarith⟩, rfl⟩
+      · rw [h]; exact ⟨θ + ℓ, ⟨by linarith, le_rfl⟩, rfl⟩
+    · rcases circle_diff_subset hℓ hℓ' ⟨hw, hwab⟩ with h | h
+      · exact Or.inl (circleArcOpen'_subset _ _ h)
+      · exact Or.inr (circleArcOpen'_subset _ _ h)
+  exact not_hasLogOn_circle_div hzD (by norm_num) (hlog.mono hcirc)
 
 /-- (P4) If `𝔻 \ σ` has a point `y` outside the component `W` of `z`, every interior point of `σ`
 is in `closure W`. Proof: if `p = γ(t₀) ∉ closure W`, pick `δ` with `γ([t₀ - δ, t₀ + δ])` in a ball
 missing `closure W`; with `β₁ = γ([0, t₀ - δ])`, `β₂ = γ([t₀ + δ, 1])` (`admitsLogs_image_Icc`),
 `W` is clopen in `𝔻 \ (β₁ ∪ β₂)`, which is preconnected (`isPreconnected_disc_diff`); so
-`W ⊇ 𝔻 \ σ ∋ y`. Estimate: ~1 session. -/
+`W ⊇ 𝔻 \ σ ∋ y`. -/
 theorem diff_subset_closure_component {σ : Set ℂ} {a b : ℂ} (hσ : IsArc σ a b)
     (haC : a ∈ circle) (hbC : b ∈ circle) (hσD : σ \ {a, b} ⊆ disc) {z y : ℂ}
     (hz : z ∈ disc \ σ) (hy : y ∈ disc \ σ) (hyz : y ∉ connectedComponentIn (disc \ σ) z) :
     σ \ {a, b} ⊆ closure (connectedComponentIn (disc \ σ) z) := by
-  sorry
+  classical
+  have hσc : IsClosed σ := (arc_isCompact hσ).isClosed
+  obtain ⟨p, hinj, rfl⟩ := hσ
+  set W := connectedComponentIn (disc \ range p) z with hW
+  have hWo : IsOpen W := (disc_diff_isOpen hσc).connectedComponentIn
+  rintro w ⟨⟨u, rfl⟩, hwab⟩
+  by_contra hwW
+  have hu0 : (u : ℝ) ≠ 0 := fun h => hwab (Or.inl (by
+    rw [show u = 0 from Subtype.ext h, p.source]))
+  have hu1 : (u : ℝ) ≠ 1 := fun h => hwab (Or.inr (by
+    rw [show u = 1 from Subtype.ext h, p.target]; rfl))
+  set t₀ : ℝ := (u : ℝ) with ht₀def
+  have ht₀ : 0 < t₀ ∧ t₀ < 1 := ⟨lt_of_le_of_ne u.2.1 (Ne.symm hu0), lt_of_le_of_ne u.2.2 hu1⟩
+  have hO : IsOpen (p.extend ⁻¹' (closure W)ᶜ) :=
+    isClosed_closure.isOpen_compl.preimage p.continuous_extend
+  have ht₀O : t₀ ∈ p.extend ⁻¹' (closure W)ᶜ := by
+    show p.extend u ∉ closure W
+    rw [Path.extend_extends']; exact hwW
+  obtain ⟨δ, hδ, hδO⟩ := Metric.isOpen_iff.1 hO t₀ ht₀O
+  set δ' := min δ (min t₀ (1 - t₀)) / 2 with hδ'def
+  have hm : 0 < min δ (min t₀ (1 - t₀)) := lt_min hδ (lt_min ht₀.1 (by linarith))
+  have hδ'0 : 0 < δ' := by positivity
+  have hδ'δ : δ' < δ := by have := min_le_left δ (min t₀ (1 - t₀)); linarith
+  have hδ't : δ' < t₀ := by
+    have := min_le_right δ (min t₀ (1 - t₀)); have := min_le_left t₀ (1 - t₀); linarith
+  have hδ't' : δ' < 1 - t₀ := by
+    have := min_le_right δ (min t₀ (1 - t₀)); have := min_le_right t₀ (1 - t₀); linarith
+  set β₁ := p.extend '' Icc 0 (t₀ - δ')
+  set β₂ := p.extend '' Icc (t₀ + δ') 1
+  have hinjE : InjOn p.extend (Icc 0 1) := fun x hx y hy hxy => by
+    rw [Path.extend_apply _ hx, Path.extend_apply _ hy] at hxy
+    exact congrArg Subtype.val (hinj hxy)
+  have hsub₁ : Icc 0 (t₀ - δ') ⊆ Icc (0 : ℝ) 1 := Icc_subset_Icc le_rfl (by linarith)
+  have hsub₂ : Icc (t₀ + δ') 1 ⊆ Icc (0 : ℝ) 1 := Icc_subset_Icc (by linarith) le_rfl
+  have hl₁ := admitsLogs_image_Icc p.continuous_extend.continuousOn (hinjE.mono hsub₁)
+  have hl₂ := admitsLogs_image_Icc p.continuous_extend.continuousOn (hinjE.mono hsub₂)
+  have hc₁ : IsCompact β₁ := isCompact_Icc.image p.continuous_extend
+  have hc₂ : IsCompact β₂ := isCompact_Icc.image p.continuous_extend
+  have ha : a ∈ β₁ := ⟨0, ⟨le_rfl, by linarith⟩, p.extend_zero⟩
+  have hb : b ∈ β₂ := ⟨1, ⟨by linarith, le_rfl⟩, p.extend_one⟩
+  have hβσ : ∀ s ∈ Icc (0 : ℝ) 1, p.extend s ∈ range p := fun s hs =>
+    ⟨⟨s, hs⟩, (Path.extend_apply _ hs).symm⟩
+  have h01 : (0 : ℝ) ∈ Icc (0 : ℝ) 1 := ⟨le_rfl, zero_le_one⟩
+  have h11 : (1 : ℝ) ∈ Icc (0 : ℝ) 1 := ⟨zero_le_one, le_rfl⟩
+  have h₁D : β₁ \ {a} ⊆ disc := by
+    rintro _ ⟨⟨s, hs, rfl⟩, hsa⟩
+    refine hσD ⟨hβσ s (hsub₁ hs), ?_⟩
+    rintro (h | h)
+    · exact hsa h
+    · have := hinjE (hsub₁ hs) h11 (h.trans p.extend_one.symm)
+      linarith [hs.2]
+  have h₂D : β₂ \ {b} ⊆ disc := by
+    rintro _ ⟨⟨s, hs, rfl⟩, hsb⟩
+    refine hσD ⟨hβσ s (hsub₂ hs), ?_⟩
+    rintro (h | h)
+    · have := hinjE (hsub₂ hs) h01 (h.trans p.extend_zero.symm)
+      linarith [hs.1]
+    · exact hsb h
+  have h₁₂ : Disjoint β₁ β₂ := by
+    rw [disjoint_left]
+    rintro _ ⟨s, hs, rfl⟩ ⟨s', hs', hss'⟩
+    have := hinjE (hsub₂ hs') (hsub₁ hs) hss'
+    linarith [hs.2, hs'.1]
+  have hβ : β₁ ∪ β₂ ⊆ range p := by
+    rintro _ (⟨s, hs, rfl⟩ | ⟨s, hs, rfl⟩)
+    · exact hβσ s (hsub₁ hs)
+    · exact hβσ s (hsub₂ hs)
+  have hpre := isPreconnected_disc_diff hc₁ hc₂ hl₁ hl₂ ha hb haC hbC h₁D h₂D h₁₂
+  have hsubW := hpre.subset_of_closure_inter_subset hWo
+    ⟨z, ⟨hz.1, fun h => hz.2 (hβ h)⟩, mem_connectedComponentIn hz⟩ ?_
+  · exact hyz (hsubW ⟨hy.1, fun h => hy.2 (hβ h)⟩)
+  rintro x ⟨hxcl, hxD, hxβ⟩
+  by_cases hxσ : x ∈ range p
+  · exfalso
+    obtain ⟨v, rfl⟩ := hxσ
+    have hxe : p.extend v = p v := Path.extend_extends' _ _
+    rcases le_or_gt (v : ℝ) (t₀ - δ') with h | h
+    · exact hxβ (Or.inl ⟨v, ⟨v.2.1, h⟩, hxe⟩)
+    rcases le_or_gt (t₀ + δ') v with h' | h'
+    · exact hxβ (Or.inr ⟨v, ⟨h', v.2.2⟩, hxe⟩)
+    have hv : (v : ℝ) ∈ ball t₀ δ := by
+      rw [Real.ball_eq_Ioo]; constructor <;> linarith
+    exact hδO hv (hxe.symm ▸ hxcl)
+  · exact mem_component_of_mem_closure hσc hxcl ⟨hxD, hxσ⟩
 
 /-- The frontier of a side. -/
 theorem frontier_component_eq {σ A Ao Bo : Set ℂ} (hσc : IsClosed σ) {z₀ z₂ : ℂ}

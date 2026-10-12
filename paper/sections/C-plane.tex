@@ -128,7 +128,7 @@ A complete metric space is not of the first category in itself; in it, a countab
 
 \subsection{Crosscuts}
 
-\begin{fact}[crosscut theorem]\label{fact:crosscut}
+\begin{theorem}[crosscut theorem]\label{fact:crosscut}
 \lean{TJK.crosscut_theorem, TJK.closure_inter_circle_of_frontier, TJK.IsCrosscut.exists_angles}
 \uses{def:arcs}
 \source{Jordan curve theorem; Newman, Elements, Theorem 11.8 (the $\theta$-curve theorem)}
@@ -136,7 +136,15 @@ Let $\sigma$ be a crosscut of $\D$ with endpoints $a\ne b$, and let $A_1,A_2$ be
 $C$ with endpoints $a,b$. Then $\D\setminus\sigma$ has exactly two components $U_1,U_2$, and the frontier
 of $U_i$ is $\sigma\cup A_i$ ($i=1,2$). In particular $\overline{U_i}\cap C=A_i$ and
 $\sigma\subseteq\overline{U_1}\cap\overline{U_2}$.
-\end{fact}
+\end{theorem}
+\begin{proof}
+Formalized in \texttt{TJK/Plane/JordanCrosscut.lean} by continuous logarithms. Every component of $\D\setminus\sigma$ has a point
+of $C\setminus\{a,b\}$ in its closure, and an arc does not separate the plane; a component near each open arc of $C$ exists;
+by an Eilenberg-type criterion (two points lie in the same component of the complement of a compact $K$ iff
+$(w-z)/(w-z')$ has a continuous logarithm on $K$, proved with Tietze extension and homotopy lifting for $\exp$) the two
+sides are different components, since logarithms on $\sigma\cup A_1$ and $\sigma\cup A_2$ would glue to one on $C$; and
+$\sigma$ lies in the closure of each side.
+\end{proof}
 
 \begin{lemma}[disjoint components have disjoint boundary arcs]\label{lem:disjoint-arcs}
 \lean{TJK.disjoint_boundaryArcs, TJK.disc_inter_ball_subset_of_mem_closure}
@@ -204,7 +212,7 @@ $U\supseteq\{\operatorname{Im}z>\max_\sigma\operatorname{Im}\}$.
 On $\R$, $\kappa(x)=e^{i\vartheta(x)}$ with $\vartheta(x)=\pi+2\arctan x$, an increasing bijection of $\R$ onto
 $(0,2\pi)$. So $\kappa(\sigma)$ is a crosscut of $\D$ from $e^{i\vartheta(a)}$ to $e^{i\vartheta(b)}$
 (Lemma~\ref{lem:charts}(a)), and $\kappa$ maps $[a,b]$ onto the arc $A_1=\{e^{it}:\vartheta(a)\le t\le\vartheta(b)\}$
-and $\R\setminus(a,b)$ onto the complementary closed arc $A_2\ni1$. Fact~\ref{fact:crosscut} gives the
+and $\R\setminus(a,b)$ onto the complementary closed arc $A_2\ni1$. Theorem~\ref{fact:crosscut} gives the
 components $U_1,U_2$ of $\D\setminus\kappa(\sigma)$ with $\overline{U_i}\cap C=A_i$; put $V=\kappa^{-1}(U_1)$,
 $U=\kappa^{-1}(U_2)$. Since $\kappa$ is a homeomorphism of $\Hp\cup\R$ onto $(\D\cup C)\setminus\{1\}$, closures
 correspond at points of $\Hp\cup\R$, which gives the traces on $\R$ and $\sigma\subseteq\overline U\cap\overline V$.

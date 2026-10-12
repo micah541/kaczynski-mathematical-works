@@ -7,7 +7,7 @@ Sources: \cite{MMJ}; \cite[\S4, Lemmas 7--8, Theorem 3]{Diss}. We work in $\D$ a
 \lean{TJK.McMillan.Gamma, TJK.McMillan.crossArcOpen, TJK.McMillan.I0, TJK.McMillan.acc}
 \uses{def:arcs, fact:crosscut}
 For a crosscut $\gamma$ of $\D$ with $0\notin\gamma$, let $U$ be the component of $\D\setminus\gamma$ containing
-$0$ and $L(\gamma)^*=C\setminus\overline U$; by Fact~\ref{fact:crosscut} it is the open arc of $C$ between the
+$0$ and $L(\gamma)^*=C\setminus\overline U$; by Theorem~\ref{fact:crosscut} it is the open arc of $C$ between the
 endpoints of $\gamma$ on the side of the other component. For a domain $\Omega\subseteq\D\setminus\{0\}$ let
 $\Gamma(\Omega)$ be the set of crosscuts $\gamma$ with $\gamma\cap\D\subseteq\Omega$,
 \[
@@ -28,7 +28,7 @@ We may assume $\acc(\Omega)$ has two or more points. Let $a\in\acc(\Omega)$ and 
 with arcs $\gamma,\gamma'$ at $a,a'$ in $\Omega$, and join their other endpoints by a path in $\Omega$. By
 Fact~\ref{fact:tietze-arc} the resulting path from $a$ to $a'$ contains a simple arc $\delta$ from $a$ to $a'$;
 it is a crosscut with $\delta\cap\D\subseteq\Omega$ (so $0\notin\delta$). Write $a=e^{i\theta}$,
-$a'=e^{i(\theta+\ell)}$, $0<\ell<2\pi$. By Fact~\ref{fact:crosscut}, $L(\delta)^*$ is one of the two open arcs
+$a'=e^{i(\theta+\ell)}$, $0<\ell<2\pi$. By Theorem~\ref{fact:crosscut}, $L(\delta)^*$ is one of the two open arcs
 $e^{i(s,t)}$ with $(s,t)=(\theta,\theta+\ell)$ or $(\theta+\ell,\theta+2\pi)$, and $a\in e^{i[s,t]}$. So
 $\acc(\Omega)$ lies in a union of closed arcs $e^{i[s,t]}$ whose open arcs $e^{i(s,t)}$ lie in $I_0(\Omega)$, and
 Lemma~\ref{lem:intervals-open} shows that $\acc(\Omega)\setminus I_0(\Omega)$ is countable.
@@ -45,7 +45,7 @@ point $a$, then $\Omega_1\cap\Omega_2\ne\emptyset$.
 Suppose $\Omega_1\cap\Omega_2=\emptyset$. Choose $\gamma_i\in\Gamma(\Omega_i)$ with $a\in L(\gamma_i)^*$, and let
 $U_i,V_i$ be the components of $\D\setminus\gamma_i$, with $0\in U_i$; so $a\notin\overline{U_i}$, while
 $a\in\overline{\acc(\Omega_i)}\subseteq\overline{\Omega_i}$. The sets $\tau_i=\gamma_i\cap\D$ are nonempty, connected,
-contained in $\Omega_i$ and in $\overline{U_i}$ (Fact~\ref{fact:crosscut}), and $\tau_1\cap\gamma_2=\emptyset=
+contained in $\Omega_i$ and in $\overline{U_i}$ (Theorem~\ref{fact:crosscut}), and $\tau_1\cap\gamma_2=\emptyset=
 \tau_2\cap\gamma_1$. Hence each $\tau_i$ lies in one component of the other complement.
 
 If $\tau_2\subseteq U_1$: the connected set $\Omega_2$ misses $\gamma_1$ (as $\gamma_1\cap\D\subseteq\Omega_1$), so
@@ -203,5 +203,5 @@ $I(\Omega_2)\cap\overline{\acc(\Omega_2)}$ meet, then $\Omega_1\cap\Omega_2\ne\e
 \begin{proof}
 As in Lemma~\ref{lem:mm-lemma3}, with $U_i$ the unbounded component of $\Hp\setminus\gamma_i$ (any two
 unbounded components meet, since each contains a half-plane $\{\operatorname{Im}z>t\}$) and
-Lemma~\ref{lem:crosscut-H} in place of Fact~\ref{fact:crosscut}.
+Lemma~\ref{lem:crosscut-H} in place of Theorem~\ref{fact:crosscut}.
 \end{proof}

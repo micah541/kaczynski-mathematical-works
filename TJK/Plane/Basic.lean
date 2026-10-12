@@ -1,6 +1,7 @@
 import Mathlib
 import TJK.Defs
 import TJK.Plane.Arc
+import TJK.Plane.JordanCrosscut
 
 /-!
 # Arcs, curvilinear limits, charts and transfer (blueprint §C, fact-free parts)
@@ -1852,8 +1853,8 @@ theorem crosscut_theorem {σ : Set ℂ} {θ ℓ : ℝ} (hℓ : 0 < ℓ) (hℓ' :
       (∀ z ∈ disc \ σ, connectedComponentIn (disc \ σ) z = connectedComponentIn (disc \ σ) z₁ ∨
         connectedComponentIn (disc \ σ) z = connectedComponentIn (disc \ σ) z₂) ∧
       frontier (connectedComponentIn (disc \ σ) z₁) = σ ∪ circleArc θ ℓ ∧
-      frontier (connectedComponentIn (disc \ σ) z₂) = σ ∪ circleArc (θ + ℓ) (2 * π - ℓ) := by
-  sorry
+      frontier (connectedComponentIn (disc \ σ) z₂) = σ ∪ circleArc (θ + ℓ) (2 * π - ℓ) :=
+  JordanCrosscut.crosscut_theorem' hℓ hℓ' hσ hσD
 
 /-- The consequences of `fact:crosscut` for the closures of the two components:
 `closure U ∩ C = A` and `σ ⊆ closure U`, when `frontier U = σ ∪ A` for a component `U` of
