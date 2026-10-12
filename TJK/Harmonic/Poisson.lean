@@ -11,7 +11,8 @@ theorems have the same statements as the imported facts `poisson_tendsto_of_cont
 
 * `poisson_tendsto_of_continuousAt'` (fact:poisson (ii)): proved, by the approximate-identity
   argument (positivity, total mass one, uniform smallness of the kernel away from `ζ₀`).
-* `hp_radial_limit_poisson'` (fact:poisson (iii)): skeleton with named sublemmas.
+* `hp_radial_limit_poisson'` (fact:poisson (iii)): reduced to named sublemmas; (A), (B), (D) are
+  proved, (C) `exists_poisson_rep_of_unifInt` is still `sorry`.
 -/
 
 namespace TJK.Harmonic
@@ -202,14 +203,68 @@ theorem poisson'_radius {u : ℂ → ℝ} (hu : InnerProductSpace.HarmonicOnNhd 
   simp only [Pi.smul_apply', smul_eq_mul, hc, poissonKernel_smul hs.1.ne']
 
 /-- (B) Hölder: bounded `p`-means, `p > 1`, give a uniform modulus of absolute continuity for the
-integrals of `|u_s|` over sets of angles. Expected: 1 session. -/
+integrals of `|u_s|` over sets of angles (Hölder with the indicator of `E`). -/
 theorem unifInt_of_pMean {u : ℂ → ℝ} (hu : InnerProductSpace.HarmonicOnNhd u disc) {p : ℝ}
     (hp : 1 < p) (hmean : ∃ B : ℝ, ∀ r ∈ Ico (0 : ℝ) 1,
       ∫ θ in (0 : ℝ)..(2 * π), |u (r * Complex.exp (θ * Complex.I))| ^ p ≤ B) :
     ∃ C : ℝ, ∀ s ∈ Ico (0 : ℝ) 1, ∀ E : Set ℝ, MeasurableSet E →
       ∫ θ in E ∩ Ioc 0 (2 * π), |u (s * circleMap 0 1 θ)| ≤
         C * volume.real (E ∩ Ioc 0 (2 * π)) ^ (1 - 1 / p) := by
-  sorry
+  obtain ⟨B, hB⟩ := hmean
+  set q := Real.conjExponent p
+  have hpq : p.HolderConjugate q := Real.HolderConjugate.conjExponent hp
+  have hq0 : 0 < q := hpq.symm.pos
+  have hp0 : 0 < p := by linarith
+  have h1q : 1 / q = 1 - 1 / p := by
+    have := hpq.one_div_add_one_div
+    rw [div_one] at this
+    linarith
+  refine ⟨max B 0 ^ (1 / p), fun s hs E hE => ?_⟩
+  set S := Ioc (0 : ℝ) (2 * π) with hSdef
+  set μ := volume.restrict S with hμ
+  set f : ℝ → ℝ := fun θ => |u (s * circleMap 0 1 θ)| with hf
+  have hcont : Continuous f := by
+    have hc : Continuous fun θ : ℝ => (s : ℂ) * circleMap 0 1 θ :=
+      continuous_const.mul (continuous_circleMap 0 1)
+    refine continuous_abs.comp (hu.continuousOn.comp_continuous hc fun θ => ?_)
+    rw [mem_ball_zero_iff, norm_mul, Complex.norm_real, Real.norm_eq_abs, abs_of_nonneg hs.1,
+      norm_circleMap_zero, abs_one, mul_one]
+    exact hs.2
+  obtain ⟨M, hM⟩ := (isCompact_Icc (a := (0 : ℝ)) (b := 2 * π)).exists_bound_of_continuousOn
+    hcont.continuousOn
+  have hfm : MemLp f (ENNReal.ofReal p) μ :=
+    MemLp.of_bound hcont.aestronglyMeasurable M
+      (ae_restrict_of_forall_mem measurableSet_Ioc fun x hx => hM x (Ioc_subset_Icc_self hx))
+  set g : ℝ → ℝ := E.indicator fun _ => (1 : ℝ) with hg
+  have hgm : MemLp g (ENNReal.ofReal q) μ :=
+    memLp_indicator_const _ hE (1 : ℝ) (Or.inr (measure_ne_top _ _))
+  have hH := integral_mul_le_Lp_mul_Lq_of_nonneg (μ := μ) hpq
+    (Eventually.of_forall fun x => abs_nonneg _)
+    (Eventually.of_forall fun x => by simp only [hg]; exact indicator_nonneg (fun _ _ => zero_le_one) x)
+    hfm hgm
+  have hL : ∫ θ, f θ * g θ ∂μ = ∫ θ in E ∩ S, f θ := by
+    have : (fun θ => f θ * g θ) = E.indicator f := by
+      funext θ
+      by_cases h : θ ∈ E <;> simp [hg, h]
+    rw [this, integral_indicator hE, hμ, Measure.restrict_restrict hE]
+  have hR2 : ∫ θ, g θ ^ q ∂μ = volume.real (E ∩ S) := by
+    have : (fun θ => g θ ^ q) = g := by
+      funext θ
+      by_cases h : θ ∈ E <;> simp [hg, h, hq0.ne']
+    rw [this, hg]
+    change ∫ x, E.indicator 1 x ∂μ = _
+    rw [integral_indicator_one hE, hμ, measureReal_restrict_apply hE]
+  have hR1 : ∫ θ, f θ ^ p ∂μ ≤ max B 0 := by
+    have h := hB s hs
+    rw [← intervalIntegral.integral_of_le Real.two_pi_pos.le]
+    refine le_trans (le_of_eq ?_) (h.trans (le_max_left _ _))
+    refine intervalIntegral.integral_congr fun θ _ => ?_
+    simp [hf, circleMap]
+  have hR1' : (∫ θ, f θ ^ p ∂μ) ^ (1 / p) ≤ max B 0 ^ (1 / p) :=
+    Real.rpow_le_rpow (integral_nonneg fun θ => Real.rpow_nonneg (abs_nonneg _) _) hR1
+      (by positivity)
+  rw [hL, hR2, h1q] at hH
+  refine hH.trans (mul_le_mul_of_nonneg_right hR1' (Real.rpow_nonneg measureReal_nonneg _))
 
 /-- (C) A harmonic function whose circle restrictions are uniformly integrable (with a modulus
 `C |E|^q`, `q > 0`) is the Poisson integral of an integrable function. Expected: 2–3 sessions
@@ -223,14 +278,284 @@ theorem exists_poisson_rep_of_unifInt {u : ℂ → ℝ} (hu : InnerProductSpace.
     ∃ ψ : ℂ → ℝ, CircleIntegrable ψ 0 1 ∧ ∀ z ∈ disc, u z = poisson' ψ z := by
   sorry
 
-/-- (D1) Fatou's theorem at a Lebesgue point of `g = ψ ∘ circleMap`. Expected: 1–2 sessions
-(kernel bound `P_r(t) ≤ C min((1-r)⁻¹, (1-r)/t²)` and a layer-cake or dyadic estimate). -/
+/-- Chord length on the unit circle: `|e^{iθ} - e^{iθ₀}| ≥ (2/π) |θ - θ₀|` for `|θ - θ₀| ≤ π`. -/
+theorem chord_ge {θ θ₀ : ℝ} (ht : |θ - θ₀| ≤ π) :
+    2 / π * |θ - θ₀| ≤ ‖circleMap 0 1 θ - circleMap 0 1 θ₀‖ := by
+  have he : circleMap 0 1 θ - circleMap 0 1 θ₀ =
+      Complex.exp (θ₀ * I) * (Complex.exp (I * ((θ - θ₀ : ℝ) : ℂ)) - 1) := by
+    simp only [circleMap, zero_add, Complex.ofReal_one, one_mul, mul_sub, mul_one,
+      ← Complex.exp_add]
+    congr 2
+    push_cast
+    ring
+  rw [he, norm_mul, Complex.norm_exp_ofReal_mul_I, one_mul,
+    Complex.norm_exp_I_mul_ofReal_sub_one, norm_mul, Real.norm_eq_abs, Real.norm_eq_abs,
+    abs_two]
+  set x := θ - θ₀
+  have hpi := Real.pi_pos
+  rcases le_total 0 x with hx | hx
+  · have h := Real.mul_le_sin (x := x / 2) (by linarith) (by rw [abs_of_nonneg hx] at ht; linarith)
+    rw [abs_of_nonneg hx]
+    have := le_abs_self (Real.sin (x / 2))
+    have : 2 / π * x = 2 * (2 / π * (x / 2)) := by ring
+    nlinarith
+  · have h := Real.mul_le_sin (x := -x / 2) (by linarith)
+      (by rw [abs_of_nonpos hx] at ht; linarith)
+    rw [abs_of_nonpos hx]
+    have h2 : Real.sin (-x / 2) = -Real.sin (x / 2) := by rw [neg_div, Real.sin_neg]
+    have := neg_abs_le (Real.sin (x / 2))
+    have : 2 / π * -x = 2 * (2 / π * (-x / 2)) := by ring
+    nlinarith
+
+/-- Radial kernel bound: `P(r e^{iθ₀}, e^{iθ}) ≤ 2π² (1-r) / max(1-r, |θ-θ₀|)²` for
+`|θ - θ₀| ≤ π`. -/
+theorem kernel_le_radial {r : ℝ} (hr : r ∈ Ico (0 : ℝ) 1) {θ θ₀ : ℝ} (ht : |θ - θ₀| ≤ π) :
+    poissonKernel 0 ((r : ℂ) * circleMap 0 1 θ₀) (circleMap 0 1 θ) ≤
+      2 * π ^ 2 * (1 - r) / max (1 - r) |θ - θ₀| ^ 2 := by
+  have hnz : ‖(r : ℂ) * circleMap 0 1 θ₀‖ = r := by
+    rw [norm_mul, Complex.norm_real, Real.norm_eq_abs, abs_of_nonneg hr.1, norm_circleMap_zero,
+      abs_one, mul_one]
+  rw [poissonKernel_circleMap, hnz]
+  set D := ‖circleMap 0 1 θ - (r : ℂ) * circleMap 0 1 θ₀‖ with hD
+  set d := ‖circleMap 0 1 θ - circleMap 0 1 θ₀‖ with hd
+  have hD1 : 1 - r ≤ D := by
+    have := norm_sub_norm_le (circleMap 0 1 θ) ((r : ℂ) * circleMap 0 1 θ₀)
+    rwa [hnz, norm_circleMap_zero, abs_one] at this
+  have hD2 : d ≤ D + (1 - r) := by
+    have h := norm_sub_le_norm_sub_add_norm_sub (circleMap 0 1 θ) ((r : ℂ) * circleMap 0 1 θ₀)
+      (circleMap 0 1 θ₀)
+    have h2 : ‖(r : ℂ) * circleMap 0 1 θ₀ - circleMap 0 1 θ₀‖ = 1 - r := by
+      rw [← sub_one_mul, norm_mul, norm_circleMap_zero, abs_one, mul_one, ← Complex.ofReal_one,
+        ← Complex.ofReal_sub, Complex.norm_real, Real.norm_eq_abs, abs_of_nonpos (by linarith [hr.2])]
+      ring
+    linarith
+  have hchord := chord_ge ht
+  have hpi := Real.pi_gt_three
+  have hη : 0 < 1 - r := by linarith [hr.2]
+  set m := max (1 - r) |θ - θ₀| with hm
+  have hm0 : 0 < m := lt_of_lt_of_le hη (le_max_left _ _)
+  have hmD : m ≤ π * D := by
+    rw [hm, max_le_iff]
+    constructor
+    · nlinarith
+    · have : 2 / π * |θ - θ₀| * π = 2 * |θ - θ₀| := by field_simp
+      nlinarith
+  have hD0 : 0 < D := lt_of_lt_of_le hη hD1
+  rw [div_le_div_iff₀ (by positivity) (by positivity)]
+  have h1 : 1 - r ^ 2 ≤ 2 * (1 - r) := by nlinarith [hr.1]
+  have h2 : m ^ 2 ≤ π ^ 2 * D ^ 2 := by
+    rw [← mul_pow]; exact pow_le_pow_left₀ hm0.le hmD 2
+  calc (1 - r ^ 2) * m ^ 2 ≤ (2 * (1 - r)) * (π ^ 2 * D ^ 2) :=
+        mul_le_mul h1 h2 (by positivity) (by positivity)
+    _ = 2 * π ^ 2 * (1 - r) * D ^ 2 := by ring
+
+/-- Dyadic decomposition of `min(1/η, η/t²)`. -/
+theorem dyadic_aux {η t : ℝ} (hη : 0 < η) : ∀ N : ℕ, t ≤ 2 ^ N * η →
+    ∃ k ≤ N, t ≤ 2 ^ k * η ∧ η / max η t ^ 2 ≤ 4 / ((2 ^ k) ^ 2 * η) := by
+  intro N
+  induction N with
+  | zero =>
+    intro h
+    refine ⟨0, le_rfl, h, ?_⟩
+    simp only [pow_zero, one_mul] at h ⊢
+    rw [max_eq_left h, div_le_div_iff₀ (by positivity) (by positivity)]
+    nlinarith
+  | succ n ih =>
+    intro h
+    by_cases h' : t ≤ 2 ^ n * η
+    · obtain ⟨k, hk, hk'⟩ := ih h'
+      exact ⟨k, hk.trans (Nat.le_succ n), hk'⟩
+    · rw [not_le] at h'
+      refine ⟨n + 1, le_rfl, h, ?_⟩
+      have h2 : (0 : ℝ) < 2 ^ n * η := by positivity
+      have hmt : 2 ^ n * η ≤ max η t := h'.le.trans (le_max_right _ _)
+      rw [div_le_div_iff₀ (by positivity) (by positivity)]
+      have : (2 ^ n * η) ^ 2 ≤ max η t ^ 2 := pow_le_pow_left₀ h2.le hmt 2
+      have e : η * (((2 : ℝ) ^ (n + 1)) ^ 2 * η) = 4 * (2 ^ n * η) ^ 2 := by ring
+      rw [e]
+      linarith
+
+/-- Main estimate for (D1): if `∫_{|t-θ₀|≤h} |ψ(e^{it}) - ψ(e^{iθ₀})| dt ≤ ε h` for `h ≤ δ`, then
+`|P[ψ](r e^{iθ₀}) - ψ(e^{iθ₀})| ≤ π (8ε + (1-r) M / δ²)`, `M` the `L¹` distance on a period. -/
+theorem poisson'_radial_est {ψ : ℂ → ℝ} (hψ : CircleIntegrable ψ 0 1) {θ₀ ε δ : ℝ} (hε : 0 ≤ ε)
+    (hδ : 0 < δ) (hF : ∀ h, 0 < h → h ≤ δ →
+      ∫ t in closedBall θ₀ h, |ψ (circleMap 0 1 t) - ψ (circleMap 0 1 θ₀)| ≤ ε * h)
+    {r : ℝ} (hr : r ∈ Ico (0 : ℝ) 1) :
+    |poisson' ψ (r * circleMap 0 1 θ₀) - ψ (circleMap 0 1 θ₀)| ≤
+      π * (8 * ε + (1 - r) / δ ^ 2 *
+        ∫ t in Ioc (θ₀ - π) (θ₀ + π), |ψ (circleMap 0 1 t) - ψ (circleMap 0 1 θ₀)|) := by
+  set a := ψ (circleMap 0 1 θ₀) with ha
+  set G : ℝ → ℝ := fun t => |ψ (circleMap 0 1 t) - a| with hG
+  set S := Ioc (θ₀ - π) (θ₀ + π) with hS
+  set M := ∫ t in S, G t with hM
+  set η := 1 - r with hη
+  have hη0 : 0 < η := by linarith [hr.2]
+  have hpi := Real.pi_pos
+  set z : ℂ := (r : ℂ) * circleMap 0 1 θ₀ with hz
+  have hzd : z ∈ disc := by
+    rw [mem_ball_zero_iff, hz, norm_mul, Complex.norm_real, Real.norm_eq_abs, abs_of_nonneg hr.1,
+      norm_circleMap_zero, abs_one, mul_one]
+    exact hr.2
+  set K : ℝ → ℝ := fun θ => poissonKernel 0 z (circleMap 0 1 θ) with hK
+  have hKc : Continuous K := continuous_kernel hzd
+  have hK0 : ∀ θ, 0 ≤ K θ := kernel_nonneg hzd
+  have hper : Periodic (fun t => ψ (circleMap 0 1 t)) (2 * π) := fun t => by
+    simp only [periodic_circleMap 0 1 t]
+  have hII : ∀ a b, IntervalIntegrable (fun t => ψ (circleMap 0 1 t)) volume a b :=
+    hper.intervalIntegrable₀ Real.two_pi_pos.ne' hψ
+  have hGII : ∀ a' b, IntervalIntegrable G volume a' b := fun a' b =>
+    ((hII a' b).sub intervalIntegrable_const).abs
+  have hloc : LocallyIntegrable G volume := fun x =>
+    ⟨Icc (x - 1) (x + 1), Icc_mem_nhds (by linarith) (by linarith),
+      (intervalIntegrable_iff_integrableOn_Icc_of_le (by linarith)).1 (hGII _ _)⟩
+  have hG0 : ∀ t, 0 ≤ G t := fun t => abs_nonneg _
+  have hGS : IntegrableOn G S :=
+    (hloc.integrableOn_isCompact isCompact_Icc).mono_set Ioc_subset_Icc_self
+  have hKGS : IntegrableOn (fun θ => K θ * G θ) S :=
+    ((hloc.integrableOn_isCompact isCompact_Icc).continuousOn_mul hKc.continuousOn
+      isCompact_Icc).mono_set Ioc_subset_Icc_self
+  -- shift the period to `S`
+  have h1 : |poisson' ψ z - a| ≤ (2 * π)⁻¹ * ∫ θ in S, K θ * G θ := by
+    rw [poisson'_sub_eq hψ hzd a]
+    have hFper : Periodic (fun θ => poissonKernel 0 z (circleMap 0 1 θ) *
+        (ψ (circleMap 0 1 θ) - a)) (2 * π) := fun θ => by
+      simp only [periodic_circleMap 0 1 θ]
+    have h := hFper.intervalIntegral_add_eq 0 (θ₀ - π)
+    rw [zero_add, show θ₀ - π + 2 * π = θ₀ + π by ring] at h
+    rw [h, abs_mul, abs_of_pos (by positivity : (0 : ℝ) < (2 * π)⁻¹)]
+    refine mul_le_mul_of_nonneg_left ?_ (by positivity)
+    refine (intervalIntegral.abs_integral_le_integral_abs (by linarith)).trans (le_of_eq ?_)
+    rw [intervalIntegral.integral_of_le (by linarith)]
+    refine integral_congr_ae (Eventually.of_forall fun θ => ?_)
+    simp only [hG, hK]
+    rw [abs_mul, abs_of_nonneg (kernel_nonneg hzd θ)]
+  -- dyadic majorant
+  obtain ⟨N, hN⟩ : ∃ N : ℕ, δ ≤ 2 ^ N * η := by
+    obtain ⟨N, hN⟩ := pow_unbounded_of_one_lt (δ / η) one_lt_two
+    exact ⟨N, ((div_lt_iff₀ hη0).1 hN).le⟩
+  set A : ℝ := 2 * π ^ 2 with hA
+  set B : ℕ → Set ℝ := fun k => closedBall θ₀ (min (2 ^ k * η) δ) with hB
+  set c : ℕ → ℝ := fun k => A * (4 / ((2 ^ k) ^ 2 * η)) with hc
+  set bnd : ℝ → ℝ := fun θ =>
+    (∑ k ∈ Finset.range (N + 1), c k * (B k).indicator G θ) + A * η / δ ^ 2 * G θ with hbnd
+  have hc0 : ∀ k, 0 ≤ c k := fun k => by positivity
+  have hpt : ∀ θ ∈ S, K θ * G θ ≤ bnd θ := by
+    intro θ hθ
+    have ht : |θ - θ₀| ≤ π := abs_sub_le_iff.2 ⟨by linarith [hθ.2], by linarith [hθ.1]⟩
+    have hKb : K θ ≤ A * η / max η |θ - θ₀| ^ 2 := kernel_le_radial hr ht
+    have hsum0 : 0 ≤ ∑ k ∈ Finset.range (N + 1), c k * (B k).indicator G θ :=
+      Finset.sum_nonneg fun k _ => mul_nonneg (hc0 k) (indicator_nonneg (fun t _ => hG0 t) θ)
+    have hfar0 : 0 ≤ A * η / δ ^ 2 * G θ := mul_nonneg (by positivity) (hG0 θ)
+    by_cases htδ : |θ - θ₀| ≤ δ
+    · obtain ⟨k, hkN, htk, hk⟩ := dyadic_aux hη0 N (htδ.trans hN)
+      have hθB : θ ∈ B k := by
+        simp only [hB, mem_closedBall, Real.dist_eq]
+        exact le_min htk htδ
+      have hterm := Finset.single_le_sum (f := fun k => c k * (B k).indicator G θ)
+        (fun k _ => mul_nonneg (hc0 k) (indicator_nonneg (fun t _ => hG0 t) θ))
+        (Finset.mem_range.2 (Nat.lt_succ_of_le hkN))
+      simp only [indicator_of_mem hθB] at hterm
+      have hKk : K θ ≤ c k := by
+        calc K θ ≤ A * η / max η |θ - θ₀| ^ 2 := hKb
+          _ = A * (η / max η |θ - θ₀| ^ 2) := by ring
+          _ ≤ c k := mul_le_mul_of_nonneg_left hk (by positivity)
+      calc K θ * G θ ≤ c k * G θ := mul_le_mul_of_nonneg_right hKk (hG0 θ)
+        _ ≤ bnd θ := by simp only [hbnd]; linarith
+    · rw [not_le] at htδ
+      have hKf : K θ ≤ A * η / δ ^ 2 := by
+        refine hKb.trans ?_
+        apply div_le_div_of_nonneg_left (by positivity) (by positivity)
+        exact pow_le_pow_left₀ hδ.le (htδ.le.trans (le_max_right _ _)) 2
+      calc K θ * G θ ≤ A * η / δ ^ 2 * G θ := mul_le_mul_of_nonneg_right hKf (hG0 θ)
+        _ ≤ bnd θ := by simp only [hbnd]; linarith
+  have hind : ∀ k, Integrable ((B k).indicator G) (volume.restrict S) := fun k =>
+    hGS.indicator measurableSet_closedBall
+  have hbndI : IntegrableOn bnd S :=
+    (integrable_finsetSum _ fun k _ => (hind k).const_mul (c k)).add (hGS.const_mul _)
+  have hint : ∫ θ in S, bnd θ =
+      (∑ k ∈ Finset.range (N + 1), c k * ∫ θ in S ∩ B k, G θ) + A * η / δ ^ 2 * M := by
+    have hs : ∀ k ∈ Finset.range (N + 1), ∫ θ in S, c k * (B k).indicator G θ =
+        c k * ∫ θ in S ∩ B k, G θ := fun k _ => by
+      rw [integral_const_mul, setIntegral_indicator measurableSet_closedBall]
+    simp only [hbnd]
+    rw [integral_add (integrable_finsetSum _ fun k _ => (hind k).const_mul (c k))
+      (hGS.const_mul _), integral_finsetSum _ (fun k _ => (hind k).const_mul (c k)),
+      integral_const_mul, Finset.sum_congr rfl hs]
+  have hBk : ∀ k, ∫ θ in S ∩ B k, G θ ≤ ε * (2 ^ k * η) := by
+    intro k
+    have hmin : 0 < min (2 ^ k * η) δ := lt_min (by positivity) hδ
+    calc ∫ θ in S ∩ B k, G θ ≤ ∫ θ in B k, G θ :=
+          setIntegral_mono_set (hloc.integrableOn_isCompact (isCompact_closedBall _ _))
+            (Eventually.of_forall fun t => hG0 t) inter_subset_right.eventuallyLE
+      _ ≤ ε * min (2 ^ k * η) δ := hF _ hmin (min_le_right _ _)
+      _ ≤ ε * (2 ^ k * η) := mul_le_mul_of_nonneg_left (min_le_left _ _) hε
+  have hsum : ∑ k ∈ Finset.range (N + 1), c k * ∫ θ in S ∩ B k, G θ ≤ A * (8 * ε) := by
+    calc _ ≤ ∑ k ∈ Finset.range (N + 1), A * (4 * ε) * (1 / 2 : ℝ) ^ k := by
+          refine Finset.sum_le_sum fun k _ => ?_
+          calc c k * ∫ θ in S ∩ B k, G θ ≤ c k * (ε * (2 ^ k * η)) :=
+                mul_le_mul_of_nonneg_left (hBk k) (hc0 k)
+            _ = A * (4 * ε) * (1 / 2 : ℝ) ^ k := by
+                simp only [hc, one_div_pow]
+                field_simp
+      _ = A * (4 * ε) * ∑ k ∈ Finset.range (N + 1), (1 / 2 : ℝ) ^ k := by rw [Finset.mul_sum]
+      _ ≤ A * (4 * ε) * 2 := mul_le_mul_of_nonneg_left (sum_geometric_two_le _) (by positivity)
+      _ = A * (8 * ε) := by ring
+  have hmain : ∫ θ in S, K θ * G θ ≤ A * (8 * ε) + A * η / δ ^ 2 * M := by
+    calc ∫ θ in S, K θ * G θ ≤ ∫ θ in S, bnd θ :=
+          setIntegral_mono_on hKGS hbndI measurableSet_Ioc hpt
+      _ = _ := hint
+      _ ≤ _ := add_le_add_left hsum _
+  calc |poisson' ψ z - a| ≤ (2 * π)⁻¹ * ∫ θ in S, K θ * G θ := h1
+    _ ≤ (2 * π)⁻¹ * (A * (8 * ε) + A * η / δ ^ 2 * M) :=
+        mul_le_mul_of_nonneg_left hmain (by positivity)
+    _ = π * (8 * ε + η / δ ^ 2 * M) := by
+        simp only [hA]
+        field_simp
+
+/-- (D1) Fatou's theorem at a Lebesgue point of `g = ψ ∘ circleMap` (kernel bound
+`kernel_le_radial`, dyadic majorant `dyadic_aux`, estimate `poisson'_radial_est`). -/
 theorem poisson'_radial_tendsto_of_lebesgue {ψ : ℂ → ℝ} (hψ : CircleIntegrable ψ 0 1) {θ₀ : ℝ}
     (hθ₀ : Tendsto (fun h => ⨍ t in closedBall θ₀ h, |ψ (circleMap 0 1 t) - ψ (circleMap 0 1 θ₀)|)
       (𝓝[>] 0) (𝓝 0)) :
     Tendsto (fun r : ℝ => poisson' ψ (r * circleMap 0 1 θ₀)) (𝓝[<] 1)
       (𝓝 (ψ (circleMap 0 1 θ₀))) := by
-  sorry
+  set a := ψ (circleMap 0 1 θ₀) with ha
+  set M := ∫ t in Ioc (θ₀ - π) (θ₀ + π), |ψ (circleMap 0 1 t) - a| with hM
+  have hM0 : 0 ≤ M := setIntegral_nonneg measurableSet_Ioc fun t _ => abs_nonneg _
+  have hpi := Real.pi_pos
+  rw [Metric.tendsto_nhdsWithin_nhds]
+  intro ε hε
+  have hev := hθ₀.eventually (gt_mem_nhds (show (0 : ℝ) < ε / (32 * π) by positivity))
+  obtain ⟨δ', hδ', hδ'sub⟩ := mem_nhdsGT_iff_exists_Ioo_subset.1 hev
+  set δ := min (δ' / 2) π with hδdef
+  have hδ : 0 < δ := lt_min (by linarith [hδ'.out]) hpi
+  have hF : ∀ h, 0 < h → h ≤ δ →
+      ∫ t in closedBall θ₀ h, |ψ (circleMap 0 1 t) - a| ≤ ε / (16 * π) * h := by
+    intro h hh hhδ
+    have hin : h ∈ Ioo 0 δ' :=
+      ⟨hh, by linarith [min_le_left (δ' / 2) π, hδ'.out]⟩
+    have h2 := hδ'sub hin
+    simp only [Set.mem_ofPred_eq] at h2
+    rw [setAverage_eq, Real.volume_real_closedBall hh.le, smul_eq_mul,
+      inv_mul_lt_iff₀ (by positivity)] at h2
+    have : 2 * h * (ε / (32 * π)) = ε / (16 * π) * h := by field_simp; ring
+    linarith
+  refine ⟨min 1 (ε * δ ^ 2 / (2 * π * (M + 1))), by positivity, fun r hr hrd => ?_⟩
+  have hr1 : r < 1 := hr
+  rw [Real.dist_eq, abs_sub_lt_iff] at hrd
+  have hρ1 := min_le_left 1 (ε * δ ^ 2 / (2 * π * (M + 1)))
+  have hρ2 := min_le_right 1 (ε * δ ^ 2 / (2 * π * (M + 1)))
+  have hr0 : 0 ≤ r := by linarith
+  have hest := poisson'_radial_est hψ (by positivity : (0 : ℝ) ≤ ε / (16 * π)) hδ hF ⟨hr0, hr1⟩
+  rw [Real.dist_eq]
+  refine lt_of_le_of_lt hest ?_
+  have hη : (1 - r) * (2 * π * (M + 1)) < ε * δ ^ 2 :=
+    (lt_div_iff₀ (by positivity)).1 (by linarith)
+  have h3 : π * ((1 - r) / δ ^ 2 * M) < ε / 2 := by
+    rw [div_mul_eq_mul_div, mul_div_assoc', div_lt_iff₀ (by positivity)]
+    nlinarith
+  have h4 : π * (8 * (ε / (16 * π))) = ε / 2 := by field_simp; ring
+  linarith [mul_add π (8 * (ε / (16 * π))) ((1 - r) / δ ^ 2 * M)]
 
 /-- (D2) Almost every angle is a Lebesgue point of `ψ ∘ circleMap` (Lebesgue differentiation on
 `ℝ`; `ψ ∘ circleMap` is periodic and integrable on a period, hence locally integrable). -/
