@@ -24,6 +24,7 @@ import TJK.Construct.D
 namespace TJK
 
 open _root_.Set Filter Topology Metric
+open scoped Real
 
 /-- `fact:tietze-ext`: a bounded continuous complex function on a closed subset of a normal space
 extends to a continuous function on the whole space with the same bound. -/
@@ -128,6 +129,7 @@ end TJK
 namespace TJK.Construct
 
 open _root_.Set Filter Topology Metric
+open scoped Real
 
 /-! ### The disc: rotations and the empty case -/
 

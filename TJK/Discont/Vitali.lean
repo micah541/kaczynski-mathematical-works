@@ -6,7 +6,7 @@ import Mathlib
 import TJK.Defs
 import TJK.Discont.Segments
 
-open MeasureTheory Filter Topology
+open MeasureTheory Filter Topology Function
 
 namespace TJK.Discont
 
