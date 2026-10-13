@@ -189,10 +189,10 @@ Disjointness cannot be omitted in Theorem~\ref{thm:th-thm9}: there are sets $M_0
 such that every point of $\{0<y<1\}$ lies on a segment from $M_0$ to $M_1$.
 \end{proposition}
 \begin{proof}
-Let $M_i$ be dense $\Gd$ subsets of measure zero, e.g.\ $\bigcap_n\bigcup_k(q_k-2^{-n-k},q_k+2^{-n-k})$ for an enumeration $q_k$ of
-$\Q$. Given $\langle x_0,y_0\rangle$ with $0<y_0<1$, the maps $F_0(\theta)=x_0-y_0\cot\theta$ and $F_1(\theta)=x_0+(1-y_0)\cot\theta$
-are homeomorphisms of $(0,\pi)$ onto $\R$, so $F_0^{-1}(M_0)\cap F_1^{-1}(M_1)$ is a nonempty residual set by Baire's theorem;
-for $\theta$ in it, the line through $\langle x_0,y_0\rangle$ with inclination $\theta$ meets $X_0$ in $M_0$ and $X_1$ in $M_1$.
+Let $M_0=M_1=M$ be a dense $\Gd$ subset of $\R$ of measure zero (e.g.\ the Liouville numbers, or
+$\bigcap_n\bigcup_k(q_k-2^{-n-k},q_k+2^{-n-k})$ for an enumeration $q_k$ of $\Q$). Given $\langle x_0,y_0\rangle$ with $0<y_0<1$, the
+segment from $\langle a,0\rangle$ to $\langle g(a),1\rangle$, $g(a)=(x_0-(1-y_0)a)/y_0$, passes through $\langle x_0,y_0\rangle$. As $g$ is an affine
+bijection, $g^{-1}(M)$ is a dense $\Gd$, so $M\cap g^{-1}(M)\ne\emptyset$ by Baire's theorem; any $a$ in it gives the required segment.
 \end{proof}
 
 \begin{lemma}[{\cite[Lemma 25]{Diss}}]\label{lem:th-lemma25}
