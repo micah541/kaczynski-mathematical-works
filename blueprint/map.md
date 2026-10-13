@@ -10,7 +10,7 @@ Every node is a numbered item of the [companion paper](../paper/main.pdf). Arrow
 | `proved` | proved (no `sorry`) | 108 |
 | `defined` | definition written in Lean | 15 |
 | `conditional` | proof written, but it uses a declaration that still has `sorry` | 3 |
-| `planned` | Lean name reserved, not yet stated | 6 |
+| `planned` | Lean name reserved, not yet stated | 7 |
 | `imported` | imported fact (Mathlib / library) | 7 |
 
 ```mermaid
@@ -153,6 +153,7 @@ flowchart BT
     lem_general_limit_endpoints["lem:general-limit-endpoints<br/><small>general limits along an arc</small>"]
     lem_ha_sequences["lem:ha-sequences<br/><small>the intervals</small>"]
     lem_ha_estimates["lem:ha-estimates<br/><small>estimates</small>"]
+    lem_ha_access["lem:ha-access<br/><small>accessibility, explicit</small>"]
     thm_ha_example["thm:ha-example<br/><small>; answer to</small>"]
     thm_ha_theorem["thm:ha-theorem<br/><small>Theorem</small>"]
     cor_ha_corollary["cor:ha-corollary<br/><small>Corollary</small>"]
@@ -435,9 +436,11 @@ flowchart BT
   lem_ha_estimates --> lem_ha_sequences
   lem_ha_estimates --> lem_ha_lemma
   lem_ha_estimates --> fact_poisson
+  lem_ha_access --> lem_ha_sequences
+  lem_ha_access --> lem_ha_estimates
   thm_ha_example --> lem_ha_estimates
   thm_ha_example --> lem_ha_sequences
-  thm_ha_example --> lem_ha_lemma
+  thm_ha_example --> lem_ha_access
   thm_ha_example --> lem_general_limit_endpoints
   thm_ha_example --> fact_poisson
   thm_ha_example --> cor_baire_continuity_point
@@ -477,7 +480,7 @@ flowchart BT
   classDef conditional fill:#d9ead3,color:#222,stroke:#b8902e,stroke-dasharray: 4 2
   class prop_gdelta_remark,lem_ha_lemma,thm_ha_example conditional
   classDef planned fill:#eeeeee,color:#333,stroke:#999
-  class prop_th_example,def_th_special,lem_th_special_implies,lem_th_lemma9,lem_th_lemma10,lem_th_lemma11 planned
+  class prop_th_example,lem_ha_access,def_th_special,lem_th_special_implies,lem_th_lemma9,lem_th_lemma10,lem_th_lemma11 planned
   classDef imported fill:#dbe8f6,color:#1c3a5e,stroke:#6b8fb8
   class fact_tietze_ext,fact_hyperspace,fact_baire_category,fact_bagemihl,fact_jordan_access,fact_kierst,fact_normal imported
 ```
@@ -644,7 +647,8 @@ flowchart BT
 | lem:general-limit-endpoints<br/>*general limits along an arc* | lemma | `TJK.Harmonic.asymptotic_at_endpoint` ([src](../TJK/Harmonic/Example.lean))<br/>`TJK.Harmonic.asymptotic_at_endpoints` ([src](../TJK/Harmonic/Example.lean)) | `def:ccset` | `proved` |
 | lem:ha-sequences<br/>*the intervals* | lemma | `TJK.Harmonic.exists_intervals` ([src](../TJK/Harmonic/Example.lean)) |  | `proved` |
 | lem:ha-estimates<br/>*estimates* | lemma | `TJK.Harmonic.Intervals.omega_jordan` ([src](../TJK/Harmonic/Example.lean))<br/>`TJK.Harmonic.Intervals.omega_closure_disjoint` ([src](../TJK/Harmonic/Example.lean))<br/>`TJK.Harmonic.Intervals.diam_omega_tendsto` ([src](../TJK/Harmonic/Example.lean))<br/>`TJK.Harmonic.Intervals.fn_le_eps` ([src](../TJK/Harmonic/Example.lean))<br/>`TJK.Harmonic.Intervals.fn_le_eps_sqrt` ([src](../TJK/Harmonic/Example.lean))<br/>`TJK.Harmonic.Intervals.fn_tendsto_zero` ([src](../TJK/Harmonic/Example.lean)) | `lem:ha-sequences`, `lem:ha-lemma`, `fact:poisson` | `proved` |
-| thm:ha-example<br/>*; answer to* | theorem | `TJK.Harmonic.exists_bounded_harmonic_boundaryFn_not_baireOne` ([src](../TJK/MainTheorems.lean)) | `lem:ha-estimates`, `lem:ha-sequences`, `lem:ha-lemma`, `lem:general-limit-endpoints`, `fact:poisson`, `cor:baire-continuity-point`, `lem:baire-precomp`, `def:ccset` | `conditional` |
+| lem:ha-access<br/>*accessibility, explicit* | lemma | `TJK.Harmonic.Intervals.accessible` | `lem:ha-sequences`, `lem:ha-estimates` | `planned` |
+| thm:ha-example<br/>*; answer to* | theorem | `TJK.Harmonic.exists_bounded_harmonic_boundaryFn_not_baireOne` ([src](../TJK/MainTheorems.lean)) | `lem:ha-estimates`, `lem:ha-sequences`, `lem:ha-access`, `lem:general-limit-endpoints`, `fact:poisson`, `cor:baire-continuity-point`, `lem:baire-precomp`, `def:ccset` | `conditional` |
 | thm:ha-theorem | theorem | `TJK.Harmonic.isMeagre_asymptotic_diff_generalLimit` ([src](../TJK/MainTheorems.lean)) | `fact:poisson`, `cor:bf-honorary`, `thm:kuratowski`, `lem:meager-subspace` | `proved` |
 | cor:ha-corollary | corollary | `TJK.Harmonic.isMeagre_discontinuity_boundaryFn` ([src](../TJK/Harmonic/Theorem.lean)) | `thm:ha-theorem`, `def:ccset` | `proved` |
 | cor:ha-analytic<br/>*analytic functions;* | corollary | `TJK.Harmonic.isMeagre_asymptotic_diff_generalLimit_holomorphic` ([src](../TJK/Harmonic/Theorem.lean)) | `thm:ha-theorem`, `cor:ha-corollary` | `proved` |

@@ -115,9 +115,51 @@ $\abs{e^{it}-z}^2=1+r^2-2r\cos(\theta-t)\ge\frac r2\sqrt{1-r}$; hence $P(z,e^{it
 $f_n\le\frac83\eps_n^2\sqrt{1-r}\le\eps_n\sqrt{1-r}\le\eps_n$, since $\eps_n\le\frac14$. This proves (1) and (2); (3) follows from (2).
 \end{proof}
 
+\begin{lemma}[accessibility, explicit]\label{lem:ha-access}
+\lean{TJK.Harmonic.Intervals.accessible}
+\uses{lem:ha-sequences, lem:ha-estimates}
+With the data and notation of Lemma~\ref{lem:ha-estimates}, every $\zeta\in C\setminus\bigcup_nI_n^*$ is accessible by a simple arc
+in $\D\setminus\bigcup_n\overline{\Omega_n}$. (This replaces Lemma~\ref{lem:ha-lemma}, and the Jordan curve theorem, for the domains
+actually used.)
+\end{lemma}
+\begin{proof}
+Write $v(s)=s^{1/4}$ for $s\ge0$ and $\zeta=e^{i\theta_0}$. By Lemma~\ref{lem:ha-estimates}, $\overline{\Omega_k}=H_k(\text{closed
+rectangle})$, so a point $(1-s)e^{i\phi}$ with $0<s<1$ lies in $\overline{\Omega_k}$ iff $s\le\eps_k$ and $e^{i\phi}=e^{i\psi}$ for some
+$\psi\in[\alpha(k)-v(s),\beta(k)+v(s)]$. We use $\abs{e^{ia}-e^{ib}}\le\abs{a-b}$ throughout.
+
+\emph{Blockers.} For each $n$ let $d^+_n\in[0,2\pi)$ and $d^-_n\in[0,2\pi)$ be defined by $e^{i\theta_0}=e^{i(\beta(n)+d^+_n)}=e^{i(\alpha(n)-d^-_n)}$.
+Call $n$ a \emph{$+$blocker} if $d^+_n\le\eps_n^{1/4}$ and a \emph{$-$blocker} if $d^-_n\le\eps_n^{1/4}$; not both, since
+$d^+_n+d^-_n+(\beta(n)-\alpha(n))\in2\pi\Z_{>0}$ while $2\eps_n^{1/4}+\pi\eps_n^2<2\pi$. Let $d_n=d^\pm_n$ for a $\pm$blocker, and $S_n=\{s:(d_n/2)^4<s<2\eps_n\}$.
+
+(a) \emph{If $(1-s)\zeta\in\overline{\Omega_k}$, $0<s<1$, then $k$ is a blocker and $s\in S_k$.} Indeed $s\le\eps_k$ and $\zeta=e^{i\psi}$ with
+$\psi\in[\alpha(k)-v(s),\beta(k)+v(s)]$; $\psi\notin(\alpha(k),\beta(k))$ since $\zeta\notin I_k^*$; if $\psi\in[\beta(k),\beta(k)+v(s)]$ then
+$d^+_k=\psi-\beta(k)\le v(s)\le\eps_k^{1/4}$, so $k$ is a $+$blocker and $(d_k/2)^4\le s/16<s\le\eps_k<2\eps_k$; symmetrically on the other side.
+
+(b) \emph{The $S_n$ ($n$ a blocker) are pairwise disjoint.} Let $h<k$ be blockers. The endpoint $e^{i\beta(h)}$ or $e^{i\alpha(h)}$ of $I_h$ is within
+$d_h$ of $\zeta$, and similarly for $k$, so by IV, $4\eps_k^{1/4}\le d_h+d_k\le d_h+\eps_k^{1/4}$, whence $(d_h/2)^4\ge(3/2)^4\eps_k>2\eps_k$.
+
+\emph{The arc.} Let $\rho_n(s)=\max(0,\min(1,2-s/\eps_n))$ and, for a $\pm$blocker $n$, $\delta_n(s)=\pm\max(0,2\rho_n(s)v(s)-d_n)$; for other $n$,
+$\delta_n=0$. Each $\delta_n$ is continuous, vanishes outside $S_n$, and $\abs{\delta_n}\le2v(2\eps_n)$, which is summable by I. So
+$\theta(s)=\theta_0+\sum_n\delta_n(s)$ is continuous on $[0,1]$, $\theta(0)=\theta_0$, and by (b) at most one term is non-zero at each $s$. Let
+$s_0=\frac12$ and $Z(s)=(1-s)e^{i\theta(s)}$, $s\in[0,s_0]$. $Z$ is continuous, injective ($\abs{Z(s)}=1-s$), $Z(0)=\zeta$, and $Z(s)\in\D$
+for $s>0$. We show $Z(s)\notin\overline{\Omega_k}$ for $0<s\le s_0$ and every $k$.
+
+If $s\notin S_n$ for all blockers $n$, then $Z(s)=(1-s)\zeta$ and (a) applies. Otherwise $s\in S_n$ for exactly one blocker $n$, say a $+$blocker
+(the other case is symmetric), and $Z(s)=(1-s)e^{i(\beta(n)+t)}$ with $t=\max(d_n,2\rho_n(s)v(s))\in[0,2v(2\eps_n)]$ (note $d_n\le\eps_n^{1/4}$).
+\begin{itemize}
+\item $k=n$: if $s\le\eps_n$ then $\rho_n(s)=1$ and $t\ge2v(s)$; for $\psi\in[\alpha(n)-v(s),\beta(n)+v(s)]$,
+$\beta(n)+t-\psi\in[t-v(s),\,t+v(s)+\pi\eps_n^2]\subseteq(0,2\pi)$, so $e^{i\psi}\ne e^{i(\beta(n)+t)}$.
+\item $k<n$: for $\psi$ as above (with $k$) and $b\in[\alpha(k),\beta(k)]$ with $\abs{\psi-b}\le v(s)$, by IV
+$\abs{e^{i(\beta(n)+t)}-e^{i\psi}}\ge4\eps_n^{1/4}-t-v(s)\ge(4-2\cdot2^{1/4}-2^{1/4})\eps_n^{1/4}>0$.
+\item $k>n$, $s\le\eps_k$: if $t=d_n$ then $Z(s)=(1-s)\zeta$, and by (a) $s\in S_k$, contradicting (b). Otherwise $t=2\rho_n(s)v(s)\le2\eps_k^{1/4}$
+and as before $\abs{e^{i(\beta(n)+t)}-e^{i\psi}}\ge4\eps_k^{1/4}-t-v(s)\ge\eps_k^{1/4}>0$.
+\end{itemize}
+So $Z([0,s_0])$ is a simple arc at $\zeta$ with all other points in $\D\setminus\bigcup_k\overline{\Omega_k}$.
+\end{proof}
+
 \begin{theorem}[{\cite{TAMSa}}; answer to {\cite[Problem 5]{BP}}]\label{thm:ha-example}
 \lean{TJK.Harmonic.exists_bounded_harmonic_boundaryFn_not_baireOne}
-\uses{lem:ha-estimates, lem:ha-sequences, lem:ha-lemma, lem:general-limit-endpoints, fact:poisson,
+\uses{lem:ha-estimates, lem:ha-sequences, lem:ha-access, lem:general-limit-endpoints, fact:poisson,
   cor:baire-continuity-point, lem:baire-precomp, def:ccset}
 There are a bounded harmonic function $f$ in $\D$ and a boundary function $\varphi:C\to\R$ for $f$ that is not of Baire class $\le1$.
 \end{theorem}
@@ -129,7 +171,7 @@ $\D$ (countable additivity of the integral, the $I_n$ being disjoint).
 $\chi$ is continuous with value $1$ at each point of an open arc $I_n^*$, so $f$ has general limit $1$ there (Theorem~\ref{fact:poisson}(ii));
 by Lemma~\ref{lem:general-limit-endpoints} (applied to subarcs of $I_n^*$), $f$ has asymptotic value $1$ at every point of $I_n$.
 
-Let $\zeta\in C\setminus\bigcup_nI_n^*$. By Lemma~\ref{lem:ha-lemma} there is an arc $\gamma$ at $\zeta$ meeting no $\Omega_n$. For $m\in\N$ and
+Let $\zeta\in C\setminus\bigcup_nI_n^*$. By Lemma~\ref{lem:ha-access} there is an arc $\gamma$ at $\zeta$ meeting no $\overline{\Omega_n}$. For $m\in\N$ and
 $z\in\gamma\setminus\{\zeta\}$, by (1) and I, $0\le f(z)\le\sum_{n<m}f_n(z)+\sum_{n\ge m}\eps_n\le\sum_{n<m}f_n(z)+2^{-m-1}$, and by (3)
 $\limsup f\le2^{-m-1}$ along $\gamma$. So $f$ has asymptotic value $0$ at $\zeta$. Let $A=\{e^{i\alpha(n)}\}$, $B=\{e^{i\beta(n)}\}$, and
 $\varphi=1$ on $\bigcup_nI_n^*\cup B$, $\varphi=0$ on the rest of $C$. Then $\varphi$ is a boundary function for $f$; $\varphi=0$ on $A$ and
