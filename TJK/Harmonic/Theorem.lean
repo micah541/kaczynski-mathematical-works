@@ -3,7 +3,7 @@ import TJK.Defs
 import TJK.Plane.Basic
 import TJK.Baire.Sphere
 import TJK.BoundaryFn.Fsigma
-import TJK.Harmonic.Example
+import TJK.Harmonic.Access
 
 /-!
 # Asymptotic values of harmonic functions with bounded `p`-means (blueprint §H)

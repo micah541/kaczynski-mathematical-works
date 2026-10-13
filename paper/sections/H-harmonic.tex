@@ -124,37 +124,38 @@ actually used.)
 \end{lemma}
 \begin{proof}
 Write $v(s)=s^{1/4}$ for $s\ge0$ and $\zeta=e^{i\theta_0}$. By Lemma~\ref{lem:ha-estimates}, $\overline{\Omega_k}=H_k(\text{closed
-rectangle})$, so a point $(1-s)e^{i\phi}$ with $0<s<1$ lies in $\overline{\Omega_k}$ iff $s\le\eps_k$ and $e^{i\phi}=e^{i\psi}$ for some
-$\psi\in[\alpha(k)-v(s),\beta(k)+v(s)]$. We use $\abs{e^{ia}-e^{ib}}\le\abs{a-b}$ throughout.
+rectangle})$, so if a point $(1-s)e^{i\phi}$ with $0<s<1$ lies in $\overline{\Omega_k}$ then $s\le\eps_k$ and $e^{i\phi}=e^{i\psi}$ for some
+$\psi\in[\alpha(k)-v(s),\beta(k)+v(s)]$, and $\abs{\psi-b}\le v(s)$ for some $b\in[\alpha(k),\beta(k)]$. We use
+$\abs{e^{ia}-e^{ib}}\le\abs{a-b}$ throughout, and compare fourth powers of fourth roots.
 
 \emph{Blockers.} For each $n$ let $d^+_n\in[0,2\pi)$ and $d^-_n\in[0,2\pi)$ be defined by $e^{i\theta_0}=e^{i(\beta(n)+d^+_n)}=e^{i(\alpha(n)-d^-_n)}$.
 Call $n$ a \emph{$+$blocker} if $d^+_n\le\eps_n^{1/4}$ and a \emph{$-$blocker} if $d^-_n\le\eps_n^{1/4}$; not both, since
-$d^+_n+d^-_n+(\beta(n)-\alpha(n))\in2\pi\Z_{>0}$ while $2\eps_n^{1/4}+\pi\eps_n^2<2\pi$. Let $d_n=d^\pm_n$ for a $\pm$blocker, and $S_n=\{s:(d_n/2)^4<s<2\eps_n\}$.
+$d^+_n+d^-_n+(\beta(n)-\alpha(n))\in2\pi\Z_{>0}$ while $2\eps_n^{1/4}+\pi\eps_n^2<2\pi$. For a $\pm$blocker let $\sigma_n=\pm1$ and
+$d_n=d^\pm_n$; otherwise $\sigma_n=0$. A blocker $n$ has an endpoint $p_n\in\{\alpha(n),\beta(n)\}$ with $\abs{e^{ip_n}-\zeta}\le d_n\le\eps_n^{1/4}$.
+Let $\rho_n(s)=\max(0,\min(1,2-s/\eps_n))$ and $\delta_n(s)=\sigma_n\max(0,2\rho_n(s)v(s)-d_n)$. Call $n$ \emph{active at $s$} if $n$ is a
+blocker and $d_n<2\rho_n(s)v(s)$; so $\delta_n(s)\ne0$ only if $n$ is active at $s$, and then $0<s<2\eps_n$ and $d_n<2v(s)$.
 
-(a) \emph{If $(1-s)\zeta\in\overline{\Omega_k}$, $0<s<1$, then $k$ is a blocker and $s\in S_k$.} Indeed $s\le\eps_k$ and $\zeta=e^{i\psi}$ with
-$\psi\in[\alpha(k)-v(s),\beta(k)+v(s)]$; $\psi\notin(\alpha(k),\beta(k))$ since $\zeta\notin I_k^*$; if $\psi\in[\beta(k),\beta(k)+v(s)]$ then
-$d^+_k=\psi-\beta(k)\le v(s)\le\eps_k^{1/4}$, so $k$ is a $+$blocker and $(d_k/2)^4\le s/16<s\le\eps_k<2\eps_k$; symmetrically on the other side.
+(a) \emph{If $(1-s)\zeta\in\overline{\Omega_k}$, $0<s<1$, then $k$ is active at $s$.} Indeed $s\le\eps_k$ (so $\rho_k(s)=1$) and
+$\zeta=e^{i\psi}$ with $\psi\in[\alpha(k)-v(s),\beta(k)+v(s)]$; $\psi\notin(\alpha(k),\beta(k))$ since $\zeta\notin I_k^*$; if $\psi\ge\beta(k)$ then
+$d^+_k=\psi-\beta(k)\le v(s)\le\eps_k^{1/4}$, so $k$ is a $+$blocker with $d_k\le v(s)<2v(s)$; symmetrically if $\psi\le\alpha(k)$.
 
-(b) \emph{The $S_n$ ($n$ a blocker) are pairwise disjoint.} Let $h<k$ be blockers. The endpoint $e^{i\beta(h)}$ or $e^{i\alpha(h)}$ of $I_h$ is within
-$d_h$ of $\zeta$, and similarly for $k$, so by IV, $4\eps_k^{1/4}\le d_h+d_k\le d_h+\eps_k^{1/4}$, whence $(d_h/2)^4\ge(3/2)^4\eps_k>2\eps_k$.
+(b) \emph{At each $s$ at most one $n$ is active.} Let $h<k$ be active at $s$. By IV,
+$4\eps_k^{1/4}\le\abs{e^{ip_h}-e^{ip_k}}\le d_h+d_k<2v(s)+\eps_k^{1/4}$, so $81\eps_k<16s<32\eps_k$, which is absurd.
 
-\emph{The arc.} Let $\rho_n(s)=\max(0,\min(1,2-s/\eps_n))$ and, for a $\pm$blocker $n$, $\delta_n(s)=\pm\max(0,2\rho_n(s)v(s)-d_n)$; for other $n$,
-$\delta_n=0$. Each $\delta_n$ is continuous, vanishes outside $S_n$, and $\abs{\delta_n}\le2v(2\eps_n)$, which is summable by I. So
-$\theta(s)=\theta_0+\sum_n\delta_n(s)$ is continuous on $[0,1]$, $\theta(0)=\theta_0$, and by (b) at most one term is non-zero at each $s$. Let
-$s_0=\frac12$ and $Z(s)=(1-s)e^{i\theta(s)}$, $s\in[0,s_0]$. $Z$ is continuous, injective ($\abs{Z(s)}=1-s$), $Z(0)=\zeta$, and $Z(s)\in\D$
-for $s>0$. We show $Z(s)\notin\overline{\Omega_k}$ for $0<s\le s_0$ and every $k$.
+\emph{The arc.} Each $\delta_n$ is continuous, $\delta_n(0)=0$, and $\abs{\delta_n}\le2v(2\eps_n)\le2\cdot2^{-(n+1)/4}$ by I. So
+$\theta(s)=\theta_0+\sum_n\delta_n(s)$ is continuous, $\theta(0)=\theta_0$, and by (b) at most one term is non-zero at each $s$. Let
+$Z(s)=(1-s)e^{i\theta(s)}$, $s\in[0,\frac12]$. $Z$ is continuous, injective ($\abs{Z(s)}=1-s$), $Z(0)=\zeta$, and $Z(s)\in\D$
+for $s>0$. We show $Z(s)\notin\overline{\Omega_k}$ for $0<s\le\frac12$ and every $k$.
 
-If $s\notin S_n$ for all blockers $n$, then $Z(s)=(1-s)\zeta$ and (a) applies. Otherwise $s\in S_n$ for exactly one blocker $n$, say a $+$blocker
-(the other case is symmetric), and $Z(s)=(1-s)e^{i(\beta(n)+t)}$ with $t=\max(d_n,2\rho_n(s)v(s))\in[0,2v(2\eps_n)]$ (note $d_n\le\eps_n^{1/4}$).
+If no $n$ is active at $s$, then $Z(s)=(1-s)\zeta$ and (a) applies. Otherwise exactly one $n$ is active at $s$, say a $+$blocker
+(the other case is symmetric), and $Z(s)=(1-s)e^{i(\beta(n)+t)}$ with $t=2\rho_n(s)v(s)\in(d_n,2v(s)]$; $t=2v(s)$ if $s\le\eps_n$; and
+$s<2\eps_n$. Suppose $Z(s)\in\overline{\Omega_k}$, with $\psi$, $b$ as above; so $s\le\eps_k$.
 \begin{itemize}
-\item $k=n$: if $s\le\eps_n$ then $\rho_n(s)=1$ and $t\ge2v(s)$; for $\psi\in[\alpha(n)-v(s),\beta(n)+v(s)]$,
-$\beta(n)+t-\psi\in[t-v(s),\,t+v(s)+\pi\eps_n^2]\subseteq(0,2\pi)$, so $e^{i\psi}\ne e^{i(\beta(n)+t)}$.
-\item $k<n$: for $\psi$ as above (with $k$) and $b\in[\alpha(k),\beta(k)]$ with $\abs{\psi-b}\le v(s)$, by IV
-$\abs{e^{i(\beta(n)+t)}-e^{i\psi}}\ge4\eps_n^{1/4}-t-v(s)\ge(4-2\cdot2^{1/4}-2^{1/4})\eps_n^{1/4}>0$.
-\item $k>n$, $s\le\eps_k$: if $t=d_n$ then $Z(s)=(1-s)\zeta$, and by (a) $s\in S_k$, contradicting (b). Otherwise $t=2\rho_n(s)v(s)\le2\eps_k^{1/4}$
-and as before $\abs{e^{i(\beta(n)+t)}-e^{i\psi}}\ge4\eps_k^{1/4}-t-v(s)\ge\eps_k^{1/4}>0$.
+\item $k=n$: then $t=2v(s)$, and $\beta(n)+t-\psi\in[v(s),\,3v(s)+\pi\eps_n^2]\subseteq(0,2\pi)$, so $e^{i\psi}\ne e^{i(\beta(n)+t)}$.
+\item $k\ne n$: $\abs{e^{i\beta(n)}-e^{ib}}\le\abs{e^{i\beta(n)}-e^{i(\beta(n)+t)}}+\abs{e^{i\psi}-e^{ib}}\le t+v(s)\le3v(s)$. If $k<n$, IV gives
+$4\eps_n^{1/4}\le3v(s)$, so $256\eps_n\le81s<162\eps_n$; if $k>n$, IV gives $4\eps_k^{1/4}\le3v(s)\le3\eps_k^{1/4}$. Both are absurd.
 \end{itemize}
-So $Z([0,s_0])$ is a simple arc at $\zeta$ with all other points in $\D\setminus\bigcup_k\overline{\Omega_k}$.
+So $Z([0,\frac12])$ is a simple arc at $\zeta$ with all other points in $\D\setminus\bigcup_k\overline{\Omega_k}$.
 \end{proof}
 
 \begin{theorem}[{\cite{TAMSa}}; answer to {\cite[Problem 5]{BP}}]\label{thm:ha-example}

@@ -15,8 +15,12 @@ Source: Kaczynski, Trans. AMS 137 (1969). We formalize
 * `lem:ha-sequences` (`exists_intervals`);
 * `lem:ha-estimates` (`omega_jordan`, `omega_closure_disjoint`, `diam_omega_tendsto`, `fn_le_eps`,
   `fn_le_eps_sqrt`, `fn_tendsto_zero`);
-* `lem:ha-lemma` (`accessible_avoiding_domains`);
-* `thm:ha-example` (`exists_bounded_harmonic_boundaryFn_not_baireOne'`).
+* `lem:ha-lemma` (`accessible_avoiding_domains`; no longer used by the example, which uses the
+  explicit `lem:ha-access` instead);
+* ingredients of `thm:ha-example` (`f_harmonic`, `f_tendsto_one`, `f_tendsto_zero_of_arc`,
+  `not_isBaireOne`).
+
+`lem:ha-access` and `thm:ha-example` itself are in `TJK.Harmonic.Access`.
 
 The Poisson integral of `φ : ℂ → ℝ` is `poisson φ z = ⨍_{|ζ| = 1} P(z, ζ) φ(ζ)`, with Mathlib's
 `poissonKernel 0 z ζ = (|ζ|² - |z|²)/|ζ - z|²`.
@@ -1584,7 +1588,7 @@ theorem accessible_avoiding_domains {ζ : ℂ} (hζ : ζ ∈ circle)
 
 end DomainFamily
 
-/-! ### The example (`thm:ha-example`) -/
+/-! ### Ingredients of the example (`thm:ha-example`) -/
 
 theorem arg_expI {t : ℝ} (ht : t ∈ Ioc (-π) π) : arg (expI t) = t := by
   rw [expI, Complex.arg_exp_mul_I, toIocMod_eq_self]
@@ -1770,63 +1774,5 @@ theorem not_isBaireOne
   linarith [abs_lt.1 h1, abs_lt.1 h2]
 
 end Intervals
-
-/-- `thm:ha-example` (Kaczynski; answer to Bagemihl–Piranian's Problem 5): a bounded harmonic
-function in the disc with a boundary function not of Baire class one. Same statement as the pinned
-`TJK.Harmonic.exists_bounded_harmonic_boundaryFn_not_baireOne`. -/
-theorem exists_bounded_harmonic_boundaryFn_not_baireOne' :
-    ∃ f : ℂ → ℝ, InnerProductSpace.HarmonicOnNhd f disc ∧ Bornology.IsBounded (f '' disc) ∧
-      ∃ φ : ℂ → ℝ, IsBoundaryFunction disc f circle φ ∧ ¬ IsBaireOne (circle.restrict φ) := by
-  have : Nonempty (Ioo (-π) π) := ⟨⟨0, by constructor <;> linarith [Real.pi_pos]⟩⟩
-  obtain ⟨u, hu⟩ := TopologicalSpace.exists_dense_seq (Ioo (-π) π)
-  obtain ⟨d, hcov⟩ := exists_intervals (fun n => (u n : ℝ)) (fun n => (u n).2)
-  have hD := d.omega_jordan
-  have hden : ∀ x y, -π ≤ x → x < y → y ≤ π →
-      ∃ k, ∃ s ∈ Icc (d.α k) (d.β k), x < s ∧ s < y := by
-    intro x y hx hxy hy
-    have hopen : IsOpen {v : Ioo (-π) π | (v : ℝ) ∈ Ioo x y} :=
-      isOpen_Ioo.preimage continuous_subtype_val
-    obtain ⟨n, hn⟩ := hu.exists_mem_open hopen
-      ⟨⟨(x + y) / 2, by linarith, by linarith⟩, by
-        show (x + y) / 2 ∈ Ioo x y; constructor <;> linarith⟩
-    obtain ⟨k, hk⟩ := hcov n
-    exact ⟨k, u n, hk, hn.1, hn.2⟩
-  classical
-  let φ : ℂ → ℝ := fun ζ =>
-    if (∃ n, ζ ∈ expI '' Ioo (d.α n) (d.β n)) ∨ (∃ n, ζ = expI (d.β n)) then 1 else 0
-  refine ⟨d.f, d.f_harmonic.1, ?_, φ, ?_, ?_⟩
-  · refine (Metric.isBounded_closedBall (x := (0 : ℝ)) (r := 1)).subset ?_
-    rintro _ ⟨z, hz, rfl⟩
-    rw [mem_closedBall, Real.dist_eq, sub_zero]
-    exact d.f_harmonic.2 z hz
-  · intro ζ hζ
-    by_cases h : (∃ n, ζ ∈ expI '' Ioo (d.α n) (d.β n)) ∨ (∃ n, ζ = expI (d.β n))
-    · have hφ : φ ζ = 1 := if_pos h
-      rw [hφ]
-      rcases h with ⟨n, t, ht, rfl⟩ | ⟨n, rfl⟩
-      · exact (asymptotic_at_endpoints d.f 1 t (d.β n) ht.2
-          (by linarith [ht.1, d.α_gt n, d.β_lt n])
-          fun s hs => d.f_tendsto_one ⟨by linarith [ht.1, hs.1], hs.2⟩).1
-      · exact (asymptotic_at_endpoints d.f 1 (d.α n) (d.β n) (d.α_lt_β n)
-          (by linarith [d.α_gt n, d.β_lt n]) fun s hs => d.f_tendsto_one hs).2
-    · have hφ : φ ζ = 0 := if_neg h
-      push Not at h
-      obtain ⟨γ, hγ⟩ := hD.accessible_avoiding_domains hζ h.1
-      obtain ⟨b', harc, hsub⟩ := id hγ
-      exact ⟨γ, ⟨b', harc, hsub.trans sdiff_subset⟩, hφ ▸ d.f_tendsto_zero_of_arc hγ hζ⟩
-  · refine d.not_isBaireOne hden φ (fun n => if_neg ?_) (fun n => if_pos (Or.inr ⟨n, rfl⟩))
-    have hαI : d.α n ∈ Ioc (-π) π := Ioo_subset_Ioc_self (hD.Icc_sub n ⟨le_rfl, (d.α_lt_β n).le⟩)
-    rintro (⟨m, s, hs, hse⟩ | ⟨m, hm⟩)
-    · have hsα := expI_injOn (Ioo_subset_Ioc_self (hD.Icc_sub m (Ioo_subset_Icc_self hs))) hαI hse
-      have : m = n := hD.unique (Ioo_subset_Icc_self hs)
-        (by rw [hsα]; exact ⟨le_rfl, (d.α_lt_β n).le⟩)
-      subst this
-      linarith [hs.1]
-    · have hβm := expI_injOn hαI
-        (Ioo_subset_Ioc_self (hD.Icc_sub m ⟨(d.α_lt_β m).le, le_rfl⟩)) hm
-      have : n = m := hD.unique ⟨le_rfl, (d.α_lt_β n).le⟩
-        (by rw [hβm]; exact ⟨(d.α_lt_β m).le, le_rfl⟩)
-      subst this
-      linarith [d.α_lt_β n]
 
 end TJK.Harmonic

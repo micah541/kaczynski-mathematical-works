@@ -43,3 +43,10 @@ non-Borel subset of ℝ. The cube lemma's dependence on Kierst's theorem and on 
 removed by a new elementary proof (`lem:cube-lemma-elementary`, independently reviewed). The facts
 `kierst`, `asymptotic_is_point_asymptotic` (unused), `bagemihl_ambiguous_countable` (used only by a
 side remark) and `jordan_accessible` remain `sorry`s.
+
+## 2026-10-13: all 20 headline theorems proved without sorry
+
+`thm:ha-example` no longer uses `fact:jordan-access`: the new `lem:ha-access`
+(`Intervals.accessible`, `TJK/Harmonic/Access.lean`) builds, for the concrete domains `Ω_n`, an
+explicit arc `s ↦ (1 - s) e^{iθ(s)}` that bends around each domain blocking the radius to `ζ`, using
+separation IV. `lem:ha-lemma` and `fact:jordan-access` remain in the blueprint but are unused.
