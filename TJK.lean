@@ -31,4 +31,5 @@ import TJK.Cube.Elementary
 import TJK.Harmonic.Poisson
 import TJK.Harmonic.Example
 import TJK.Harmonic.Access
+import TJK.Variant
 import TJK.Harmonic.Theorem

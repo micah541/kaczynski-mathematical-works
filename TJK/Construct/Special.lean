@@ -189,24 +189,23 @@ theorem split_of_mem_dyadicSel {U : Set ℝ} {p p' : ℕ × ℤ} (hp : p ∈ dya
 
 /-! ### `lem:special-from-fsigma` -/
 
-/-- Every `F_σ` subset of `X = (-1, 1)` is the union of a special family. -/
-theorem exists_specialFamily_of_isFσ {E : Set ℝ} (hE : IsFσ E) (hEX : E ⊆ Ioo (-1) 1) :
-    ∃ 𝓕 : Set (Set ℝ), IsSpecialFamily 𝓕 ∧ ⋃₀ 𝓕 = E := by
+/-- Every `F_σ` subset of `ℝ` is the union of a countable family of compact sets, any two distinct
+members of which are disjoint or split. -/
+theorem exists_countable_family_of_isFσ {E : Set ℝ} (hE : IsFσ E) :
+    ∃ 𝓕 : Set (Set ℝ), 𝓕.Countable ∧ (∀ F ∈ 𝓕, IsCompact F) ∧
+      (𝓕.Pairwise fun F G => Disjoint F G ∨ Split F G) ∧ ⋃₀ 𝓕 = E := by
   obtain ⟨C, hC, rfl⟩ := hE
   set A : ℕ → Set ℝ := fun n => ⋃ i ∈ Finset.range n, C i with hA
   have hAc : ∀ n, IsClosed (A n) := fun n => isClosed_biUnion_finset fun i _ => hC i
   have hAE : ∀ n, A n ⊆ ⋃ i, C i := fun n => iUnion₂_subset fun i _ => subset_iUnion C i
   have hAmono : Monotone A := fun m n hmn =>
     biUnion_subset_biUnion_left (by simpa using Finset.range_subset_range.2 hmn)
-  refine ⟨{F | ∃ n, ∃ p ∈ dyadicSel (A n)ᶜ, F = dyadic p.1 p.2 ∩ A (n + 1)},
-    ⟨?_, ?_, ?_, ?_⟩, ?_⟩
+  refine ⟨{F | ∃ n, ∃ p ∈ dyadicSel (A n)ᶜ, F = dyadic p.1 p.2 ∩ A (n + 1)}, ?_, ?_, ?_, ?_⟩
   · refine (countable_range fun t : ℕ × ℕ × ℤ => dyadic t.2.1 t.2.2 ∩ A (t.1 + 1)).mono ?_
     rintro F ⟨n, p, -, rfl⟩
     exact ⟨(n, p.1, p.2), rfl⟩
   · rintro F ⟨n, p, -, rfl⟩
     exact isCompact_Icc.inter_right (hAc _)
-  · rintro F ⟨n, p, -, rfl⟩
-    exact inter_subset_right.trans ((hAE _).trans hEX)
   · rintro F ⟨n, p, hp, rfl⟩ G ⟨n', p', hp', rfl⟩ hne
     rcases lt_trichotomy n n' with h | rfl | h
     · exact Or.inl (disjoint_left.2 fun x hx hx' => hp'.1 hx'.1 (hAmono h hx.2))
@@ -233,6 +232,12 @@ theorem exists_specialFamily_of_isFσ {E : Set ℝ} (hE : IsFσ E) (hEX : E ⊆ 
         have := Nat.find_spec hex
         rwa [hn] at this
       exact ⟨_, ⟨n, p, hp, rfl⟩, hxp, hx1⟩
+
+/-- Every `F_σ` subset of `X = (-1, 1)` is the union of a special family. -/
+theorem exists_specialFamily_of_isFσ {E : Set ℝ} (hE : IsFσ E) (hEX : E ⊆ Ioo (-1) 1) :
+    ∃ 𝓕 : Set (Set ℝ), IsSpecialFamily 𝓕 ∧ ⋃₀ 𝓕 = E := by
+  obtain ⟨𝓕, hc, hK, hp, hU⟩ := exists_countable_family_of_isFσ hE
+  exact ⟨𝓕, ⟨hc, hK, fun F hF => (subset_sUnion_of_mem hF).trans (hU ▸ hEX), hp⟩, hU⟩
 
 /-! ### `lem:special-sequence` -/
 

@@ -6,13 +6,14 @@ The dissertation uses a more restrictive notion of special family than \cite{TAM
 they are not used elsewhere. A \emph{complementary interval} of a closed $F\subseteq\R$ is a component of $\R\setminus F$.
 
 \begin{definition}[{\cite[\S4]{Diss}}]\label{def:th-special}
-\lean{TJK.Variant.IsThesisSpecial}
+\lean{TJK.Variant.IsThesisSpecial, TJK.Variant.InGap}
 A \emph{thesis-special family} is a nonempty family $\mathcal F$ of bounded closed subsets of $\R$ with an enumeration $F_1,F_2,\dots$ (every
 member occurring) such that for $m>n$, either $F_m$ lies in a complementary interval of $F_n$ or $F_m$ splits with $F_n$.
+(In Lean, ``$F'$ lies in a complementary interval of $F$'' is: $[x,y]\cap F=\emptyset$ for all $x,y\in F'$; the enumeration starts at $F_0$.)
 \end{definition}
 
 \begin{lemma}\label{lem:th-special-implies}
-\lean{TJK.Variant.IsThesisSpecial.pairwise}
+\lean{TJK.Variant.IsThesisSpecial.pairwise, TJK.Variant.IsThesisSpecial.isSpecialFamily}
 \uses{def:th-special, def:special-family, lem:special-pair-exists, lem:special-pair-shrink}
 Any two members of a thesis-special family are equal, disjoint, or split. Hence Lemmas~\ref{lem:special-pair-exists}
 and~\ref{lem:special-pair-shrink} apply to thesis-special families of subsets of $X$ (\cite[Lemmas 13, 14]{Diss}).
@@ -37,23 +38,32 @@ with $\emptyset$ if it is finite (repeating a member with two points would viola
 Every $\Fs$ set $E\subseteq\R$ is the union of a thesis-special family.
 \end{lemma}
 \begin{proof}
-Take $E_n$ from Lemma~\ref{lem:th-lemma9}. We construct $1=n_1<n_2<\cdots$ and bounded closed sets $F_1,F_2,\dots$ such that for every $s$:
-(a) if $n_s\ge r>t\ge1$, then $F_r$ lies in a complementary interval of $F_t$ or splits with $F_t$; (b) each $F_i$, $i\le n_s$, lies in some
-$E_j$, $j\le s$; (c) $\bigcup_{i\le n_s}F_i=\bigcup_{j\le s}E_j$. Start with $F_1=E_1$. Given stage $s$, let $\mathcal J$ be the set of
-complementary intervals of the bounded closed set $\bigcup_{j\le s}E_j$.
+Take $E_0,E_1,\dots$ from Lemma~\ref{lem:th-lemma9} and put $A_s=\bigcup_{j<s}E_j$. For $K\subseteq\R$ and $x\in\R$ let
+$[x]_K=\{y:[x,y]\cap K=\emptyset\}$; this is the component of $\R\setminus K$ containing $x$ if $x\notin K$, it is empty if $x\in K$,
+and $[x]_K=[x']_K$ whenever $[x,x']\cap K=\emptyset$. At stage $s$ the new sets are $N_s(x)=\overline{E_s\cap[x]_{A_s}}\subseteq E_s$, $x\in E_s$
+(this is $\overline I\cap E_s$ for the complementary interval $I$ of $A_s$ containing $x$, up to the endpoints of $I$ that are not limits of
+$E_s\cap I$; the new sets are bounded and closed, and $N_s(x)=\emptyset$ for $x\in A_s$).
 
-\emph{$E_{s+1}$ meets only finitely many $I\in\mathcal J$.} Otherwise pick $x_m\in I_m\cap E_{s+1}$ for infinitely many distinct $I_m$; a
-subsequence is strictly monotone, say increasing, with limit $x$. Between consecutive terms lies an endpoint $a_k$ of some $I_m$, which
-belongs to $\bigcup_{j\le s}E_j$; infinitely many $a_k$ lie in one $E_u$, so $x\in E_u\cap E_{s+1}$. Then $E_u$ and $E_{s+1}$ split at $x$; but
-both contain points less than $x$, which is impossible.
+\emph{Stage $s$ has only finitely many classes $[x]_{A_s}$, $x\in E_s$.} Since $[x]_{K\cup L}=[x]_K\cap[x]_L$, it suffices to treat one
+$E_j$, $j<s$. If $E_j,E_s$ split, say at $p$ with $E_j\le p\le E_s$, then $[x,x']\cap E_j=\emptyset$ for all $x,x'\in E_s\setminus E_j$ (a
+point of $E_j$ in $[x,x']$ would be $\le p\le\min(x,x')$, hence equal to $x$ or $x'$), so all $x\in E_s\setminus E_j$ have the same class, and the
+others have the empty class. If $E_j\cap E_s=\emptyset$, both are compact, so $|y-x|\ge r>0$ for $y\in E_j$, $x\in E_s$. Cover $E_s$ by
+finitely many balls $B(c,r)$, $c\in E_s$; if $|x-c|<r$ no $y\in E_j$ lies in $[x,c]$ (else $|x-c|\ge2r$), so $[x]_{E_j}=[c]_{E_j}$.
+(This replaces the subsequence argument of \cite{Diss}.)
 
-Let the new sets $F_{n_s+1},\dots,F_{n_{s+1}}$ be $\emptyset$ and the sets $\overline I\cap E_{s+1}$ for the finitely many $I\in\mathcal J$ meeting
-$E_{s+1}$. (We use the closure $\overline I$, so that the new sets are closed; with $I$ itself, as written in \cite{Diss}, they need not be.)
-(b) and (c) are clear. For (a) with $r$ new: if $t$ is old, $F_t\subseteq E_v$ with $v\le s$. If $E_v\cap E_{s+1}=\emptyset$, let $J$ be the
-smallest closed interval containing $F_r=\overline I\cap E_{s+1}$; $J^*\subseteq I$ misses $E_v$, and the endpoints of $J$ lie in $E_{s+1}$, so
-$J\cap E_v=\emptyset$ and $F_r$ lies in a complementary interval of $F_t$. If $E_v$ and $E_{s+1}$ split, so do $F_t$ and $F_r$. If $t$ is new too,
-$F_r$ and $F_t$ come from distinct $I_1,I_2\in\mathcal J$, and $\overline{I_1},\overline{I_2}$ split. Finally
-$\mathcal F=\{F_k\}$ is thesis-special with $\bigcup\mathcal F=E$.
+List the finitely many nonempty sets $N_s(x)$, $x\in E_s$, as $F_{s,0},\dots,F_{s,n_s-1}$ without repetition, put $F_{s,i}=\emptyset$ for
+$i\ge n_s$, and enumerate the pairs $(s,i)$, $i\le n_s$, lexicographically (stage by stage, one padding $\emptyset$ at the end of each
+stage), giving $F_0,F_1,\dots$. Then $\bigcup_kF_k=\bigcup_sE_s$: $F_k\subseteq E_s$, and the least $s$ with $y\in E_s$ has
+$y\notin A_s$, so $y\in N_s(y)$.
+
+Let $k<l$, $F_k=F_{s,i}$, $F_l=F_{s',i'}$, so $s<s'$ or ($s=s'$, $i<i'$). If one of them is empty, the other lies in a complementary interval
+of it, trivially. Otherwise $F_k=N_s(x)$, $F_l=N_{s'}(x')$.
+If $s=s'$ then $N_s(x)\ne N_s(x')$ forces $[x,x']\cap A_s\ne\emptyset$, say $x<z<x'$ with $z\in A_s$; then $[x]_{A_s}<z<[x']_{A_s}$, so
+$N_s(x)\le z\le N_s(x')$ and the two split. If $s<s'$ then $E_s$ and $E_{s'}$ are disjoint or split. If they split, so do $F_k\subseteq E_s$ and
+$F_l\subseteq E_{s'}$. If they are disjoint, let $u,v\in F_l$ and $z\in[u,v]\cap F_k$. Then $z\ne u,v$ since $u,v\in E_{s'}$ and $z\in E_s$.
+So $u<z<v$, and there are $y<z<y'$ in $E_{s'}\cap[x']_{A_{s'}}$, whence $z\in[y,y']\subseteq[x']_{A_{s'}}$ (this set is an interval), which is
+impossible for $z\in F_k\subseteq E_s\subseteq A_{s'}$. Hence $[u,v]\cap F_k=\emptyset$: $F_l$ lies in a complementary interval of $F_k$.
+Finally $\mathcal F=\{F_k\}$ is thesis-special with $\bigcup\mathcal F=E$.
 \end{proof}
 
 \begin{lemma}[{\cite[Lemmas 11, 12]{Diss}}]\label{lem:th-lemma11}
