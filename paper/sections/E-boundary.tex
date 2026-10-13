@@ -85,13 +85,37 @@ continuous map $\D\to\Sph$ is of honorary Baire class $2(C,\Sph)$.
 Combine Theorem~\ref{thm:bf-fsigma} with Theorem~\ref{thm:honorary-char}(2)$\Rightarrow$(1).
 \end{proof}
 
-\begin{fact}[Bagemihl's ambiguous point theorem {\cite{Bag}}]\label{fact:bagemihl}
-\lean{TJK.bagemihl_ambiguous_countable}
-\uses{def:ccset}
-\source{Bagemihl, Proc. Nat. Acad. Sci. 41 (1955)}
-For any function $f:\D\to\Sph$, the set of $x\in C$ at which there are two arcs along which $f$ has
+\begin{lemma}[accessible from two domains]\label{lem:two-domains}
+\lean{TJK.accessible_two_domains}
+\uses{fact:crosscut, fact:tietze-arc, def:arcs}
+Let $W_1,W_2\subseteq\D$ be disjoint connected open sets. At most three points of $C$ are accessible (by a simple arc, or
+equivalently by a path $g:[0,1]\to\C$ with $g(0)=x$, $g((0,1])\subseteq W_i$) from both $W_1$ and $W_2$.
+\end{lemma}
+\begin{proof}
+Let $S$ be the set of such points, $x\in S$, and suppose $y,z,w\in S\setminus\{x\}$ are distinct, numbered so that $z$ lies on the
+arc of $C$ from $y$ to $w$ not containing $x$ (order them by angle measured from $x$). Join the paths at $x$ and at $z$ into $W_1$ by a path
+in the connected open set $W_1$; the resulting path from $x$ to $z$ has all points other than $x,z$ in $W_1$ and contains a crosscut
+$\sigma$ from $x$ to $z$ (Fact~\ref{fact:tietze-arc}), $\sigma\setminus\{x,z\}\subseteq W_1$. By Theorem~\ref{fact:crosscut},
+$\D\setminus\sigma$ has two components $U_1,U_2$ with $\overline{U_i}\cap C=A_i$, the two closed arcs from $x$ to $z$; $y$ and $w$ lie in
+different open arcs $A_1^*,A_2^*$. The connected set $W_2$ misses $\sigma$ (as $x,z\notin\D$ and $W_1\cap W_2=\emptyset$), so lies in one
+$U_i$; but its closure contains $y$ and $w$ (they are accessible from $W_2$), which are not both in $\overline{U_i}$. So
+$\abs{S\setminus\{x\}}\le2$, and $\abs S\le3$.
+\end{proof}
+
+\begin{lemma}[Bagemihl's ambiguous point theorem, continuous case]\label{fact:bagemihl}
+\lean{TJK.ambiguous_countable}
+\uses{lem:two-domains, lem:open-components, def:ccset}
+\source{Bagemihl, Proc. Nat. Acad. Sci. 41 (1955), proved there for arbitrary $f$}
+For a function $f:\D\to\Sph$ continuous in $\D$, the set $Z$ of $x\in C$ at which there are two arcs along which $f$ has
 different limits is countable.
-\end{fact}
+\end{lemma}
+\begin{proof}
+Fix a countable base $\mathcal B$ of $\Sph$. Let $x\in Z$ with arcs $\gamma_1,\gamma_2$ and limits $p_1\ne p_2$; choose disjoint
+$B_1\ni p_1$, $B_2\ni p_2$ in $\mathcal B$. A terminal subarc of $\gamma_i$ minus $x$ is a connected subset of the open set
+$f^{-1}(B_i)\cap\D$, so it lies in a component $W_i$ of it, and $x$ is accessible from $W_i$. The components of open subsets of $\C$
+are countably many (each contains a point of $\Q+i\Q$), so the tuples $(B_1,B_2,W_1,W_2)$ form a countable set; for each, $W_1\cap W_2=\emptyset$,
+and by Lemma~\ref{lem:two-domains} at most three $x$ belong to it.
+\end{proof}
 
 \begin{proposition}[{\cite[remark after Corollary 4]{MMJ}}]\label{prop:gdelta-remark}
 \lean{TJK.McMillan.isFσδ_limit_mem_of_isGδ}
@@ -101,7 +125,7 @@ In Corollary~\ref{cor:mm-corollaries}(1) it suffices that $E$ be a $\Gd$ subset 
 \begin{proof}
 $A=\CC(f)$ is $\Fsd$ (Theorem~\ref{thm:mcmillan}). Choose any boundary function $\varphi:A\to\Sph$. By
 Theorem~\ref{thm:bf-fsigma}, $\varphi$ is of class $\Fs$ on $A\setminus M$ for a countable $M$. Off the
-countable set $Z$ of Fact~\ref{fact:bagemihl}, every arc limit of $f$ at $x\in A$ equals $\varphi(x)$; so the set
+countable set $Z$ of Lemma~\ref{fact:bagemihl} ($f$ is continuous in $\D$), every arc limit of $f$ at $x\in A$ equals $\varphi(x)$; so the set
 $S$ in question satisfies $S=(P\setminus Z)\cup(S\cap(M\cup Z))$ with $P=(\varphi|_{A\setminus M})^{-1}(E)$. Writing
 $E=\bigcap_jO_j$ with $O_j$ open, $P=\bigcap_j(\varphi|_{A\setminus M})^{-1}(O_j)$ is $\Fsd$ in $A\setminus M$, hence in
 $C$, as $A\setminus M$ is $\Fsd$. Countable sets are $\Fs$ and their complements $\Gd$, so $S$ is $\Fsd$.

@@ -19,19 +19,6 @@ There is an analytic subset of $\R$ that is not a Borel set.
 \end{theorem}
 \begin{proof}Formalized in \texttt{TJK/Cube/AnalyticNonBorel.lean}: a universal open set in $(\N\to\{0,1\})\times Y$ built from a countable basis gives, by projecting closed graphs, an analytic set universal for analytic subsets of Cantor space; its diagonal is analytic with non-analytic complement, hence not Borel; transfer to $\R$ by a continuous injection of Cantor space.\end{proof}
 
-\begin{fact}[Kierst {\cite{Kierst}}]\label{fact:kierst}
-\lean{TJK.Cube.kierst}
-\source{Kierst 1936}
-For every analytic set $A\subseteq\R$ there is a holomorphic function $h$ in $\D$ omitting the values $i$ and $-i$ whose set of finite asymptotic
-values is $A\cup\{-i,i\}$.
-\end{fact}
-
-\begin{fact}[Lehto--Virtanen {\cite[p.~53]{LV}}; Bagemihl--Seidel {\cite[Theorem 1]{BS}}]\label{fact:normal}
-\lean{TJK.Cube.asymptotic_is_point_asymptotic}
-\source{Lehto--Virtanen 1957 (functions omitting two values are normal); Bagemihl--Seidel 1961 (Koebe arcs), as used by McMillan}
-If $h$ is holomorphic in $\D$ and omits two finite values, then every finite asymptotic value of $h$ is a point asymptotic value of $h$.
-\end{fact}
-
 \begin{lemma}[{\cite[Lemma]{PAMS}}]\label{lem:cube-lemma}
 \lean{TJK.Cube.exists_s}
 \uses{lem:cube-lemma-elementary, def:asymptotic}
@@ -39,16 +26,24 @@ There is a continuous $s:\Hp\to\C$ with $\abs s<1$ such that the set $E$ of real
 of real point asymptotic values of $s$ lying in $(-1,1)$, and $E$ is not a Borel set.
 \end{lemma}
 \begin{proof}
-Let $A$ be analytic and not Borel, $h$ as in Fact~\ref{fact:kierst}, and $\rho(w)=w/(1+\abs w)$, a homeomorphism of $\C$ onto $\D$ mapping
+This is Lemma~\ref{lem:cube-lemma-elementary} below.
+\end{proof}
+
+\begin{remark}[Kaczynski's proof]
+Kaczynski derives the lemma from two classical theorems, which are not formalized here:
+(K) (Kierst 1936) for every analytic $A\subseteq\R$ there is a holomorphic $h$ in $\D$ omitting $i$ and $-i$ whose set of finite
+asymptotic values is $A\cup\{-i,i\}$; (N) (Lehto--Virtanen \cite[p.~53]{LV}; Bagemihl--Seidel \cite[Theorem 1]{BS}) if $h$ is
+holomorphic in $\D$ and omits two finite values, every finite asymptotic value of $h$ is a point asymptotic value. The argument:
+Let $A$ be analytic and not Borel, $h$ as in Kierst's theorem (K), and $\rho(w)=w/(1+\abs w)$, a homeomorphism of $\C$ onto $\D$ mapping
 $\R$ onto $(-1,1)$, with inverse $u\mapsto u/(1-\abs u)$. Put $s(x,y)=\rho\bigl(h(\max\{1-y,0\}e^{ix})\bigr)$, continuous on $\Hp$
 with $\abs s<1$. Let $b\in(-1,1)$. If $b$ is an asymptotic value of $s$ along $v=\langle x(t),y(t)\rangle$, then $y(t)=\dist(v(t),\C\setminus\Hp)\to0$, and
 $\rho^{-1}(b)$ is an asymptotic value of $h$ along $w=(1-y)e^{ix}$ (for $y<1$, $\dist(w,\C\setminus\D)\le\abs{w-e^{ix}}=y$); as $\rho^{-1}(b)$ is real,
-it lies in $A$. If $a\in A$, by Fact~\ref{fact:normal} $a$ is a point asymptotic value of $h$ at some $e^{ip}$, $p=\arg e^{ip}$, along a path
+it lies in $A$. If $a\in A$, by (N) $a$ is a point asymptotic value of $h$ at some $e^{ip}$, $p=\arg e^{ip}$, along a path
 $w(t)\to e^{ip}$. For $t$ near $1$, $w(t)e^{-ip}$ lies near $1$, off the negative axis, so $\vartheta(t)=p+\arg(w(t)e^{-ip})$ is continuous,
 $\vartheta(t)\to p$ and $\abs{w(t)}e^{i\vartheta(t)}=w(t)$. Hence $\rho(a)$ is a point asymptotic value of $s$ at $p$ along
 $\langle\vartheta(t),1-\abs{w(t)}\rangle$. Since point asymptotic values are asymptotic values, both sets equal $\rho(A)$, which is not Borel
 ($A=\rho^{-1}(\rho(A))$ and $\rho$ is continuous).
-\end{proof}
+\end{remark}
 
 \begin{remark}
 \cite{PAMS} notes that the lemma can also be proved without meromorphic functions, from \cite[Theorem 113]{SierpGT}, a theorem of

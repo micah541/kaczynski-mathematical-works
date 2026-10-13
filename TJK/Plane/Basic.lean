@@ -6,14 +6,14 @@ import TJK.Plane.JordanCrosscut
 /-!
 # Arcs, curvilinear limits, charts and transfer (blueprint §C, fact-free parts)
 
-* `fact:tietze-arc` (`exists_arc_in_path`, imported, `sorry`) and `cor:path-arc`
+* `fact:tietze-arc` (`exists_arc_in_path`, proved in `TJK.Plane.Arc`) and `cor:path-arc`
   (`exists_arcAt_of_path`);
 * `lem:subarc`, `lem:cluster`, `lem:open-components`;
 * `def:charts`, `lem:charts` for the Cayley map `κ` and the charts `Ψ_ℍ`, `Ψ_𝔻`, packaged as
   `PartialHomeomorph`s satisfying `IsChart`;
 * `lem:transfer`, `lem:locality`;
 * `lem:disc-geometry`, with closed arcs of `C` written as `circleArc θ ℓ`;
-* `fact:crosscut` (`crosscut_theorem`, imported, `sorry`).
+* `fact:crosscut` (`crosscut_theorem`, proved in `TJK.Plane.JordanCrosscut`).
 
 The basic tool is `IsArc.nhdsWithin_eq`: along an arc `γ = q([0,1])` at `a = q 0`, the filter
 `𝓝[γ \ {a}] a` is the image of `𝓝[>] 0` under the parametrization.
@@ -331,7 +331,7 @@ variable {E : Type*} [TopologicalSpace E] [T2Space E]
 
 /-- `fact:tietze-arc` (Tietze 1919; every path-connected Hausdorff space is arc-connected): the
 image of a path with distinct endpoints contains a simple arc with the same endpoints.
-Imported fact; not in Mathlib. -/
+Not in Mathlib; proved in `TJK.Plane.Arc`. -/
 theorem exists_arc_in_path {a b : E} (g : Path a b) (hab : a ≠ b) :
     ∃ γ ⊆ range g, IsArc γ a b :=
   exists_arc_in_path' g hab
@@ -1845,7 +1845,7 @@ open scoped Real
 theorem). Let `σ` be a crosscut of `𝔻` from `a = e^{iθ}` to `b = e^{i(θ + ℓ)}`, `0 < ℓ < 2π`, and
 let `A₁ = circleArc θ ℓ`, `A₂ = circleArc (θ + ℓ) (2π - ℓ)` be the two closed arcs of `C` with
 endpoints `a, b`. Then `𝔻 \ σ` has exactly two components `U₁, U₂`, and the frontier of `Uᵢ` is
-`σ ∪ Aᵢ`. Imported fact. -/
+`σ ∪ Aᵢ`. Proved in `TJK.Plane.JordanCrosscut`. -/
 theorem crosscut_theorem {σ : Set ℂ} {θ ℓ : ℝ} (hℓ : 0 < ℓ) (hℓ' : ℓ < 2 * π)
     (hσ : IsArc σ (expI θ) (expI (θ + ℓ))) (hσD : σ \ {expI θ, expI (θ + ℓ)} ⊆ disc) :
     ∃ z₁ ∈ disc \ σ, ∃ z₂ ∈ disc \ σ,

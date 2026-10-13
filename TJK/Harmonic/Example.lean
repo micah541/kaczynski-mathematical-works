@@ -9,14 +9,12 @@ import TJK.Harmonic.Poisson
 
 Source: Kaczynski, Trans. AMS 137 (1969). We formalize
 
-* `fact:poisson` (Poisson integrals; imported facts, stated with Mathlib's `poissonKernel`);
-* `fact:jordan-access` (Jordan curve theorem with accessibility; imported fact);
+* `fact:poisson` (Poisson integrals, stated with Mathlib's `poissonKernel`; proved here and in
+  `TJK.Harmonic.Poisson`);
 * `lem:general-limit-endpoints` (`asymptotic_at_endpoint`);
 * `lem:ha-sequences` (`exists_intervals`);
 * `lem:ha-estimates` (`omega_jordan`, `omega_closure_disjoint`, `diam_omega_tendsto`, `fn_le_eps`,
   `fn_le_eps_sqrt`, `fn_tendsto_zero`);
-* `lem:ha-lemma` (`accessible_avoiding_domains`; no longer used by the example, which uses the
-  explicit `lem:ha-access` instead);
 * ingredients of `thm:ha-example` (`f_harmonic`, `f_tendsto_one`, `f_tendsto_zero_of_arc`,
   `not_isBaireOne`).
 
@@ -39,7 +37,7 @@ noncomputable def poisson (φ : ℂ → ℝ) (z : ℂ) : ℝ :=
 
 /-- `fact:poisson` (ii): if `φ` is integrable on the circle, `S` has full measure on the circle,
 `ζ₀ ∈ S` and `φ|_S` is continuous at `ζ₀`, then `P[φ]` has the general limit `φ ζ₀` at `ζ₀`.
-Imported fact (Hoffman, pp. 32–38). -/
+Hoffman, pp. 32–38; proved in `TJK.Harmonic.Poisson`. -/
 theorem poisson_tendsto_of_continuousAt (φ : ℂ → ℝ) (hφ : CircleIntegrable φ 0 1) (S : Set ℂ)
     (hS : ∀ᵐ θ, circleMap 0 1 θ ∈ S) {ζ₀ : ℂ} (hζ₀ : ζ₀ ∈ S ∩ circle)
     (hc : ContinuousWithinAt φ (S ∩ circle) ζ₀) :
@@ -48,7 +46,7 @@ theorem poisson_tendsto_of_continuousAt (φ : ℂ → ℝ) (hφ : CircleIntegrab
 
 /-- `fact:poisson` (iii): a harmonic function in the disc with bounded `p`-th integral means,
 `p > 1`, has radial limits almost everywhere on the circle, and it is the Poisson integral of its
-(integrable) radial limit function. Imported fact (Hoffman, pp. 32–38). -/
+(integrable) radial limit function. Hoffman, pp. 32–38; proved in `TJK.Harmonic.Poisson`. -/
 theorem hp_radial_limit_poisson (u : ℂ → ℝ) (hu : InnerProductSpace.HarmonicOnNhd u disc)
     (p : ℝ) (hp : 1 < p)
     (hmean : ∃ B : ℝ, ∀ r ∈ Ico (0 : ℝ) 1,
@@ -58,20 +56,6 @@ theorem hp_radial_limit_poisson (u : ℂ → ℝ) (hu : InnerProductSpace.Harmon
         (𝓝 (ψ (circleMap 0 1 θ)))) ∧
       ∀ z ∈ disc, u z = poisson ψ z :=
   hp_radial_limit_poisson' u hu p hp hmean
-
-/-! ### The Jordan curve theorem (`fact:jordan-access`) -/
-
-/-- `fact:jordan-access`: the complement of a Jordan curve `Γ = e([-π, π])` (`e` continuous,
-`e (-π) = e π`, injective on `[-π, π)`) is the disjoint union of two connected open sets, a bounded
-one `B` and an unbounded one `U`, each with frontier `Γ`, and every point of `Γ` is accessible from
-`B` by a simple arc. Imported fact (Jordan curve theorem; Newman, *Elements*, p. 164). -/
-theorem jordan_accessible (e : ℝ → ℂ) (he : Continuous e) (hper : e (-π) = e π)
-    (hinj : InjOn e (Ico (-π) π)) :
-    ∃ B U : Set ℂ, IsOpen B ∧ IsOpen U ∧ IsConnected B ∧ IsConnected U ∧ Disjoint B U ∧
-      B ∪ U = (e '' Icc (-π) π)ᶜ ∧ Bornology.IsBounded B ∧ ¬ Bornology.IsBounded U ∧
-      frontier B = e '' Icc (-π) π ∧ frontier U = e '' Icc (-π) π ∧
-      ∀ p ∈ e '' Icc (-π) π, ∃ γ, IsArcAt B p γ := by
-  sorry
 
 /-! ### Angles -/
 
@@ -289,9 +273,9 @@ theorem exists_intervals (p : ℕ → ℝ) (hp : ∀ n, p n ∈ Ioo (-π) π) :
     refine ⟨k, ?_⟩
     rwa [build_stable p hp hk] at hmem
 
-/-! ### Families of Jordan domains along the circle (hypotheses of `lem:ha-lemma`) -/
+/-! ### Families of Jordan domains along the circle (`lem:ha-estimates`) -/
 
-/-- The hypotheses of `lem:ha-lemma`, in parametrized form. `I n = e^{i[a n, b n]}` are disjoint
+/-- The geometric properties of the domains `Ω n` of `lem:ha-estimates`, in parametrized form. `I n = e^{i[a n, b n]}` are disjoint
 closed arcs (`-π < a n < b n < π`); `Ω n ⊆ 𝔻` is connected; the part of its frontier off the open
 arc `I n*` is the simple arc `Γ n = g n ([a n, b n])` from `e^{i a n}` to `e^{i b n}` through `𝔻`,
 so that `Ω̄ n ⊆ Ω n ∪ Γ n ∪ I n` (this is how we use that `Ω n` is a Jordan domain with
@@ -715,7 +699,7 @@ theorem tendsto_ε : Tendsto d.ε atTop (𝓝 0) := by
   have := tendsto_pow_atTop_nhds_zero_of_lt_one (r := (1 / 2 : ℝ)) (by norm_num) (by norm_num)
   exact this.comp (tendsto_add_atTop_nat 2)
 
-/-- `lem:ha-estimates`: `diam Ω_n → 0`, in the uniform form used by `lem:ha-lemma`. -/
+/-- `lem:ha-estimates`: `diam Ω_n → 0`, in uniform form. -/
 theorem diam_omega_tendsto (δ : ℝ) (hδ : 0 < δ) :
     ∀ᶠ n in atTop, ∀ z ∈ closure (d.Ω n), ∀ t ∈ Icc (d.α n) (d.β n), ‖z - expI t‖ ≤ δ := by
   have hc : Continuous fun x : ℝ => x + π * x ^ 2 + √(√x) := by fun_prop
@@ -725,7 +709,7 @@ theorem diam_omega_tendsto (δ : ℝ) (hδ : 0 < δ) :
   filter_upwards [this.eventually (gt_mem_nhds hδ)] with n hn z hz t ht
   exact (d.norm_sub_le_of_mem_closure n hz ht).trans hn.le
 
-/-- `lem:ha-estimates`: the `Ω_n` form a family of Jordan domains as in `lem:ha-lemma`. -/
+/-- `lem:ha-estimates`: the `Ω_n` form a family of Jordan domains along the arcs `I_n`. -/
 theorem omega_jordan : DomainFamily d.α d.β d.Ω d.g where
   a_gt := d.α_gt
   lt := d.α_lt_β
@@ -1292,20 +1276,11 @@ theorem asymptotic_at_endpoints (u : ℂ → ℝ) (c t₀ t₁ : ℝ) (ht : t₀
     · rw [abs_neg, abs_of_pos (by linarith)]; linarith
     · constructor <;> nlinarith [hs.1, hs.2]
 
-/-! ### Accessibility (`lem:ha-lemma`) -/
+/-! ### Elementary facts about `DomainFamily` -/
 
 namespace DomainFamily
 
 variable {a b : ℕ → ℝ} {Ω : ℕ → Set ℂ} {g : ℕ → ℝ → ℂ}
-
-open Classical in
-/-- The Jordan curve `Γ`: `g n` on `[a n, b n]`, `e^{it}` elsewhere. -/
-noncomputable def curve (a b : ℕ → ℝ) (g : ℕ → ℝ → ℂ) (t : ℝ) : ℂ :=
-  if h : ∃ n, t ∈ Icc (a n) (b n) then g h.choose t else expI t
-
-/-- The approximations `φ_p` of `Γ` using only `g 0, …, g (p-1)`. -/
-noncomputable def curveP (a b : ℕ → ℝ) (g : ℕ → ℝ → ℂ) (p : ℕ) (t : ℝ) : ℂ :=
-  expI t + ∑ n ∈ Finset.range p, (Icc (a n) (b n)).indicator (fun t => g n t - expI t) t
 
 variable (hD : DomainFamily a b Ω g)
 include hD
@@ -1315,276 +1290,8 @@ theorem unique {n m : ℕ} {t : ℝ} (hn : t ∈ Icc (a n) (b n)) (hm : t ∈ Ic
   by_contra h
   exact disjoint_left.1 (hD.disj h) hn hm
 
-theorem curve_eq {n : ℕ} {t : ℝ} (ht : t ∈ Icc (a n) (b n)) : curve a b g t = g n t := by
-  have h : ∃ n, t ∈ Icc (a n) (b n) := ⟨n, ht⟩
-  rw [curve, dif_pos h, hD.unique h.choose_spec ht]
-
-omit hD in
-theorem curve_eq' {t : ℝ} (ht : ∀ n, t ∉ Icc (a n) (b n)) : curve a b g t = expI t := by
-  rw [curve, dif_neg (by push Not; exact ht)]
-
-theorem g_norm {n : ℕ} {t : ℝ} (ht : t ∈ Icc (a n) (b n)) :
-    (t = a n ∧ g n t = expI t) ∨ (t = b n ∧ g n t = expI t) ∨ g n t ∈ disc := by
-  rcases eq_or_lt_of_le ht.1 with h | h
-  · exact Or.inl ⟨h.symm, by rw [← h, hD.left]⟩
-  rcases eq_or_lt_of_le ht.2 with h' | h'
-  · exact Or.inr (Or.inl ⟨h', by rw [h', hD.right]⟩)
-  exact Or.inr (Or.inr (hD.mem_disc n t ⟨h, h'⟩))
-
-theorem g_eq_of_circle {n : ℕ} {t : ℝ} (ht : t ∈ Icc (a n) (b n)) (h1 : ‖g n t‖ = 1) :
-    g n t = expI t := by
-  rcases hD.g_norm ht with h | h | h
-  · exact h.2
-  · exact h.2
-  · rw [mem_ball_zero_iff, h1] at h; exact absurd h (lt_irrefl _)
-
-theorem g_norm_le {n : ℕ} {t : ℝ} (ht : t ∈ Icc (a n) (b n)) : ‖g n t‖ ≤ 1 := by
-  rcases hD.g_norm ht with h | h | h
-  · rw [h.2, norm_expI]
-  · rw [h.2, norm_expI]
-  · exact (mem_ball_zero_iff.1 h).le
-
 theorem Icc_sub (n : ℕ) : Icc (a n) (b n) ⊆ Ioo (-π) π := fun _ ht =>
   ⟨by linarith [hD.a_gt n, ht.1], by linarith [hD.b_lt n, ht.2]⟩
-
-theorem curveP_eq (p : ℕ) (t : ℝ) :
-    (∀ n < p, t ∈ Icc (a n) (b n) → curveP a b g p t = g n t) ∧
-      ((∀ n < p, t ∉ Icc (a n) (b n)) → curveP a b g p t = expI t) := by
-  constructor
-  · intro n hn ht
-    rw [curveP, Finset.sum_eq_single n]
-    · simp [indicator, ht]
-    · intro m _ hmn
-      have : t ∉ Icc (a m) (b m) := fun h => hmn (hD.unique h ht)
-      simp [indicator, this]
-    · intro h; exact absurd (Finset.mem_range.2 hn) h
-  · intro h
-    rw [curveP, Finset.sum_eq_zero, add_zero]
-    intro m hm
-    simp [indicator, h m (Finset.mem_range.1 hm)]
-
-theorem continuous_curveP (p : ℕ) : Continuous (curveP a b g p) := by
-  unfold curveP
-  refine continuous_expI.add (continuous_finsetSum _ fun n _ => ?_)
-  refine continuous_indicator ?_ ((hD.cont n).sub continuous_expI).continuousOn
-  intro t ht
-  rw [frontier_Icc (hD.lt n).le] at ht
-  simp only [mem_insert_iff, mem_singleton_iff] at ht
-  rcases ht with h | h
-  · rw [h, hD.left, sub_self]
-  · rw [h, hD.right, sub_self]
-
-theorem continuous_curve : Continuous (curve a b g) := by
-  refine TendstoUniformly.continuous (F := curveP a b g) (p := atTop) ?_
-    (Frequently.of_forall hD.continuous_curveP)
-  rw [Metric.tendstoUniformly_iff]
-  intro δ hδ
-  obtain ⟨N, hN⟩ := eventually_atTop.1 (hD.small (δ / 2) (by positivity))
-  filter_upwards [eventually_ge_atTop N] with p hp t
-  by_cases ht : ∃ n, t ∈ Icc (a n) (b n)
-  · obtain ⟨n, hn⟩ := ht
-    rw [hD.curve_eq hn]
-    by_cases hnp : n < p
-    · rw [(hD.curveP_eq p t).1 n hnp hn, dist_self]; exact hδ
-    · rw [(hD.curveP_eq p t).2 fun m hm hmt => by
-        have := hD.unique hmt hn; omega, dist_eq_norm]
-      have := hN n (by omega) t hn
-      linarith
-  · push Not at ht
-    rw [curve_eq' ht, (hD.curveP_eq p t).2 fun m _ => ht m, dist_self]
-    exact hδ
-
-theorem curve_cases (t : ℝ) :
-    (∃ n, t ∈ Icc (a n) (b n) ∧ curve a b g t = g n t) ∨
-      ((∀ n, t ∉ Icc (a n) (b n)) ∧ curve a b g t = expI t) := by
-  by_cases h : ∃ n, t ∈ Icc (a n) (b n)
-  · obtain ⟨n, hn⟩ := h; exact Or.inl ⟨n, hn, hD.curve_eq hn⟩
-  · push Not at h; exact Or.inr ⟨h, curve_eq' h⟩
-
-theorem curve_pi : curve a b g π = expI π :=
-  curve_eq' fun n h => by linarith [h.2, hD.b_lt n]
-
-theorem curve_neg_pi : curve a b g (-π) = expI (-π) :=
-  curve_eq' fun n h => by linarith [h.1, hD.a_gt n]
-
-theorem curve_injOn : InjOn (curve a b g) (Ico (-π) π) := by
-  intro s hs t ht hst
-  have hst2 : |s - t| < 2 * π := by
-    rw [abs_lt]; constructor <;> linarith [hs.1, hs.2, ht.1, ht.2]
-  have hts2 : |t - s| < 2 * π := by rwa [abs_sub_comm]
-  rcases hD.curve_cases s with ⟨n, hn, hs'⟩ | ⟨hn, hs'⟩ <;>
-  rcases hD.curve_cases t with ⟨m, hm, ht'⟩ | ⟨hm, ht'⟩
-  · rw [hs', ht'] at hst
-    by_cases hnm : n = m
-    · subst hnm; exact hD.inj n hn hm hst
-    · have h1 : g n s ∈ closure (Ω n) := hD.curve_sub n ⟨s, hn, rfl⟩
-      have h2 : g m t ∈ closure (Ω m) := hD.curve_sub m ⟨t, hm, rfl⟩
-      rw [hst] at h1
-      exact absurd h2 (disjoint_left.1 (hD.closure_disj hnm) h1)
-  · rw [hs', ht'] at hst
-    have h1 : ‖g n s‖ = 1 := by rw [hst, norm_expI]
-    rw [hD.g_eq_of_circle hn h1] at hst
-    have := eq_of_expI_eq hst hst2
-    exact absurd (this ▸ hn) (hm n)
-  · rw [hs', ht'] at hst
-    have h1 : ‖g m t‖ = 1 := by rw [← hst, norm_expI]
-    rw [hD.g_eq_of_circle hm h1] at hst
-    have := eq_of_expI_eq hst.symm hts2
-    exact absurd (this ▸ hm) (hn m)
-  · rw [hs', ht'] at hst; exact eq_of_expI_eq hst hst2
-
-theorem norm_curve_le (t : ℝ) : ‖curve a b g t‖ ≤ 1 := by
-  rcases hD.curve_cases t with ⟨n, hn, h⟩ | ⟨_, h⟩
-  · rw [h]; exact hD.g_norm_le hn
-  · rw [h, norm_expI]
-
-theorem expI_notMem_curve {n : ℕ} {t : ℝ} (ht : t ∈ Ioo (a n) (b n)) :
-    expI t ∉ curve a b g '' Icc (-π) π := by
-  rintro ⟨s, hs, hse⟩
-  have htI := hD.Icc_sub n (Ioo_subset_Icc_self ht)
-  have hst2 : |s - t| < 2 * π := by
-    rw [abs_lt]; constructor <;> linarith [hs.1, hs.2, htI.1, htI.2]
-  rcases hD.curve_cases s with ⟨m, hm, hs'⟩ | ⟨hm, hs'⟩
-  · rw [hs'] at hse
-    have h1 : ‖g m s‖ = 1 := by rw [hse, norm_expI]
-    have hg := hD.g_eq_of_circle hm h1
-    rw [hg] at hse
-    have hst := eq_of_expI_eq hse hst2
-    subst hst
-    have hmn : m = n := hD.unique hm (Ioo_subset_Icc_self ht)
-    subst hmn
-    rcases hD.g_norm hm with h | h | h
-    · exact absurd h.1 ht.1.ne'
-    · exact absurd h.1 ht.2.ne
-    · rw [mem_ball_zero_iff, h1] at h; exact lt_irrefl _ h
-  · rw [hs'] at hse
-    have hst := eq_of_expI_eq hse hst2
-    subst hst
-    exact hm n (Ioo_subset_Icc_self ht)
-
-theorem mem_curve {ζ : ℂ} (hζ : ζ ∈ circle) (hζI : ∀ n, ζ ∉ expI '' Ioo (a n) (b n)) :
-    ζ ∈ curve a b g '' Icc (-π) π := by
-  have harg := Complex.arg_mem_Ioc ζ
-  have hζe : expI (arg ζ) = ζ := expI_arg (mem_sphere_zero_iff_norm.1 hζ)
-  refine ⟨arg ζ, ⟨harg.1.le, harg.2⟩, ?_⟩
-  rcases hD.curve_cases (arg ζ) with ⟨n, hn, h⟩ | ⟨_, h⟩
-  · rw [h]
-    rcases eq_or_lt_of_le hn.1 with h1 | h1
-    · rw [← h1, hD.left, h1, hζe]
-    rcases eq_or_lt_of_le hn.2 with h2 | h2
-    · rw [h2, hD.right, ← h2, hζe]
-    exact absurd ⟨arg ζ, ⟨h1, h2⟩, hζe⟩ (hζI n)
-  · rw [h, hζe]
-
-theorem disjoint_curve (n : ℕ) : Disjoint (Ω n) (curve a b g '' Icc (-π) π) := by
-  rw [disjoint_left]
-  rintro z hz ⟨s, -, rfl⟩
-  rcases hD.curve_cases s with ⟨m, hm, h⟩ | ⟨_, h⟩
-  · rw [h] at hz
-    by_cases hnm : n = m
-    · subst hnm; exact disjoint_left.1 (hD.disj_curve n) hz ⟨s, hm, rfl⟩
-    · exact disjoint_left.1 (hD.closure_disj hnm) (subset_closure hz) (hD.curve_sub m ⟨s, hm, rfl⟩)
-  · rw [h] at hz
-    have := hD.sub_disc n hz
-    rw [mem_ball_zero_iff, norm_expI] at this
-    exact lt_irrefl _ this
-
-/-- `lem:ha-lemma`: every point of `C \ ⋃ I_n*` is accessible by a simple arc in
-`𝔻 \ ⋃ Ω̄_n`. -/
-theorem accessible_avoiding_domains {ζ : ℂ} (hζ : ζ ∈ circle)
-    (hζI : ∀ n, ζ ∉ expI '' Ioo (a n) (b n)) :
-    ∃ γ, IsArcAt (disc \ ⋃ n, closure (Ω n)) ζ γ := by
-  obtain ⟨B, U, hBo, hUo, -, -, hBU, hunion, hBb, -, -, -, hacc⟩ :=
-    jordan_accessible (curve a b g) hD.continuous_curve
-      (by rw [hD.curve_neg_pi, hD.curve_pi, expI_neg_pi]) hD.curve_injOn
-  set Γ := curve a b g '' Icc (-π) π with hΓ
-  have hΓc : IsCompact Γ := isCompact_Icc.image hD.continuous_curve
-  -- points outside the closed disc lie in `U`
-  have hU1 : ∀ z : ℂ, 1 < ‖z‖ → z ∈ U := by
-    intro z hz
-    set S := (fun t : ℝ => (t : ℂ) * z) '' Ici 1 with hS
-    have hSc : IsPreconnected S :=
-      isPreconnected_Ici.image _ (by fun_prop : Continuous fun t : ℝ => (t : ℂ) * z).continuousOn
-    have hSΓ : S ⊆ B ∪ U := by
-      rintro _ ⟨t, ht, rfl⟩
-      rw [hunion]
-      rintro ⟨s, -, hse⟩
-      have := hD.norm_curve_le s
-      have ht1 : (1 : ℝ) ≤ t := ht
-      rw [hse, norm_mul, Complex.norm_real, Real.norm_of_nonneg (by linarith)] at this
-      nlinarith
-    rcases hSc.subset_or_subset hBo hUo hBU hSΓ with h | h
-    · exfalso
-      obtain ⟨R, hR⟩ := hBb.subset_closedBall 0
-      have hm : (((|R| + 1 : ℝ)) : ℂ) * z ∈ B := h ⟨|R| + 1, by
-        show (1 : ℝ) ≤ |R| + 1; linarith [abs_nonneg R], rfl⟩
-      have := hR hm
-      rw [mem_closedBall_zero_iff, norm_mul, Complex.norm_real,
-        Real.norm_of_nonneg (by positivity)] at this
-      nlinarith [le_abs_self R, abs_nonneg R]
-    · exact h ⟨1, show (1 : ℝ) ≤ 1 from le_rfl, by simp⟩
-  -- points of the open arcs `I_n*` lie in `U`
-  have hU3 : ∀ n, ∀ t ∈ Ioo (a n) (b n), expI t ∈ U := by
-    intro n t ht
-    have hnot := hD.expI_notMem_curve ht
-    obtain ⟨ρ, hρ, hball⟩ := Metric.isOpen_iff.1 hΓc.isClosed.isOpen_compl (expI t) hnot
-    have hballBU : ball (expI t) ρ ⊆ U ∪ B := by
-      rw [union_comm, hunion]; exact hball
-    have hz' : ((1 + ρ / 2 : ℝ) : ℂ) * expI t ∈ ball (expI t) ρ ∩ U := by
-      constructor
-      · rw [mem_ball, dist_eq_norm, show ((1 + ρ / 2 : ℝ) : ℂ) * expI t - expI t =
-          ((ρ / 2 : ℝ) : ℂ) * expI t by push_cast; ring, norm_mul, norm_expI, mul_one,
-          Complex.norm_real, Real.norm_of_nonneg (by positivity)]
-        linarith
-      · apply hU1
-        rw [norm_mul, norm_expI, mul_one, Complex.norm_real, Real.norm_of_nonneg (by positivity)]
-        linarith
-    exact IsPreconnected.subset_left_of_subset_union hUo hBo hBU.symm hballBU ⟨_, hz'⟩
-      (convex_ball _ _).isPreconnected (mem_ball_self hρ)
-  -- the domains `Ω_n` lie in `U`
-  have hU4 : ∀ n, Ω n ⊆ U := by
-    intro n
-    obtain ⟨t, ht, hcl⟩ := hD.touch n
-    have hne : (Ω n ∩ U).Nonempty := by
-      have := _root_.mem_closure_iff.1 hcl U hUo (hU3 n t ht)
-      rwa [inter_comm] at this
-    refine IsPreconnected.subset_left_of_subset_union hUo hBo hBU.symm ?_ hne (hD.conn n)
-    intro z hz
-    have hzΓ : z ∉ Γ := disjoint_left.1 (hD.disjoint_curve n) hz
-    have : z ∈ B ∪ U := by rw [hunion]; exact hzΓ
-    rcases this with h | h
-    · exact Or.inr h
-    · exact Or.inl h
-  -- hence `B ⊆ 𝔻 \ ⋃ Ω̄_n`
-  have hB : B ⊆ disc \ ⋃ n, closure (Ω n) := by
-    intro z hz
-    have hzU : z ∉ U := disjoint_left.1 hBU hz
-    have hzΓ : z ∉ Γ := by
-      have : z ∈ B ∪ U := Or.inl hz
-      rw [hunion] at this; exact this
-    have hzd : z ∈ disc := by
-      rw [mem_ball_zero_iff]
-      rcases lt_trichotomy ‖z‖ 1 with h | h | h
-      · exact h
-      · exfalso
-        have hzc : z ∈ circle := mem_sphere_zero_iff_norm.2 h
-        by_cases hI : ∃ n, z ∈ expI '' Ioo (a n) (b n)
-        · obtain ⟨n, t, ht, rfl⟩ := hI; exact hzU (hU3 n t ht)
-        · push Not at hI; exact hzΓ (hD.mem_curve hzc hI)
-      · exact absurd (hU1 z h) hzU
-    refine ⟨hzd, ?_⟩
-    simp only [mem_iUnion, not_exists]
-    intro n hcl
-    rcases hD.closure_sub n hcl with (h | h) | h
-    · exact hzU (hU4 n h)
-    · obtain ⟨t, ht, rfl⟩ := h
-      have htI := hD.Icc_sub n ht
-      exact hzΓ ⟨t, ⟨htI.1.le, htI.2.le⟩, hD.curve_eq ht⟩
-    · obtain ⟨t, -, rfl⟩ := h
-      rw [mem_ball_zero_iff, norm_expI] at hzd
-      exact lt_irrefl _ hzd
-  obtain ⟨γ, b', harc, hγ⟩ := hacc ζ (hD.mem_curve hζ hζI)
-  exact ⟨γ, b', harc, hγ.trans hB⟩
 
 end DomainFamily
 

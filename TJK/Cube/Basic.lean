@@ -11,11 +11,11 @@ import TJK.Cube.Elementary
 Formalizes `paper/sections/I-cube.tex` (Kaczynski, Proc. AMS 23 (1969)):
 
 * `def:asymptotic` (`IsAsymptoticValue`, `IsPointAsymptoticValue`);
-* the imported facts `fact:analytic-nonborel` (`exists_analytic_not_borel`), `fact:kierst`
-  (`kierst`) and `fact:normal` (`asymptotic_is_point_asymptotic`), stated with `sorry`;
+* `fact:analytic-nonborel` (`exists_analytic_not_borel`, proved in
+  `TJK/Cube/AnalyticNonBorel.lean`);
 * `lem:cube-lemma` (`exists_s`), proved by the elementary argument of `TJK/Cube/Elementary.lean`
-  (`TJK.Cube.Elementary.exists_s'`), so that `kierst` and `asymptotic_is_point_asymptotic` are
-  no longer used;
+  (`TJK.Cube.Elementary.exists_s'`) instead of Kaczynski's proof via Kierst's theorem and
+  normal functions (which are not formalized);
 * `thm:cube` (`exists_not_measurableSet_curvConvSet'`), for the cube `openCube'`, which is
   definitionally `TJK.Cube.openCube` of `TJK/MainTheorems.lean`.
 
@@ -148,26 +148,11 @@ theorem exists_path_of_tendsto {X : Type*} [TopologicalSpace X] {v : ℝ → X} 
 /-! ### The facts -/
 
 /-- `fact:analytic-nonborel` (Souslin–Lusin): there is an analytic subset of `ℝ` that is not a
-Borel set. Imported fact; Mathlib has analytic sets but not this example. -/
+Borel set. Mathlib has analytic sets but not this example; proved in
+`TJK.Cube.AnalyticNonBorel`. -/
 theorem exists_analytic_not_borel :
     ∃ A : Set ℝ, MeasureTheory.AnalyticSet A ∧ ¬ MeasurableSet A :=
   exists_analytic_not_borel'
-
-/-- `fact:kierst` (Kierst 1936): for every analytic `A ⊆ ℝ` there is a holomorphic function in
-`𝔻` omitting `i` and `-i` whose set of (finite) asymptotic values is `A ∪ {i, -i}`. Imported
-fact. -/
-theorem kierst {A : Set ℝ} (hA : MeasureTheory.AnalyticSet A) :
-    ∃ h : ℂ → ℂ, DifferentiableOn ℂ h disc ∧
-      (∀ z ∈ disc, h z ≠ Complex.I ∧ h z ≠ -Complex.I) ∧
-      {a | IsAsymptoticValue disc h a} = (((↑) : ℝ → ℂ) '' A) ∪ {Complex.I, -Complex.I} := by
-  sorry
-
-/-- `fact:normal` (Lehto–Virtanen; Bagemihl–Seidel): a holomorphic function in `𝔻` omitting two
-values is normal, so each of its asymptotic values is a point asymptotic value. Imported fact. -/
-theorem asymptotic_is_point_asymptotic {h : ℂ → ℂ} (hh : DifferentiableOn ℂ h disc) {α β : ℂ}
-    (hαβ : α ≠ β) (homit : ∀ z ∈ disc, h z ≠ α ∧ h z ≠ β) {a : ℂ}
-    (ha : IsAsymptoticValue disc h a) : ∃ p, IsPointAsymptoticValue disc h p a := by
-  sorry
 
 /-! ### `lem:cube-lemma` -/
 

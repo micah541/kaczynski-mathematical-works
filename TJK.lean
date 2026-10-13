@@ -16,6 +16,7 @@ import TJK.Construct.H
 import TJK.Plane.Arc
 import TJK.Plane.JordanCrosscut
 import TJK.Plane.Basic
+import TJK.Plane.Ambiguous
 import TJK.Construct.Realize
 import TJK.Discont.Vitali
 import TJK.Construct.D

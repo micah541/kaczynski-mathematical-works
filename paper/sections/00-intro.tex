@@ -34,11 +34,12 @@ and transfer it to the others by an explicit homeomorphism (Lemma~\ref{lem:trans
 sources prove the same statement by different arguments, we give the argument that is shorter or more
 general, and say so in the concordance.
 
-\emph{Facts.} Results from the literature that the sources use without proof are stated as numbered
-\emph{Facts}, with their provenance. In the formalization they are separate Lean theorems, proved or
-left as \texttt{sorry}; they are never axioms. Some of them are deep (the Jordan curve theorem, Kierst's
-theorem on asymptotic values of holomorphic functions); the dependency map shows exactly which results
-rest on which Facts.
+\emph{Facts.} Results from the literature that the sources use without proof are stated with their
+provenance and proved here (Tietze's arc theorem, the crosscut theorem, the Poisson integral, Banach's
+theorem, an analytic non-Borel set, Bagemihl's theorem for continuous functions). Two deep theorems that
+the sources rely on, the Jordan curve theorem with accessibility and Kierst's theorem on asymptotic
+values, are avoided: we replace the arguments that use them by direct ones (Lemmas~\ref{lem:ha-access}
+and~\ref{lem:cube-lemma-elementary}), and record the original arguments in remarks.
 
 \emph{Departures from the sources.} We record here the places where our proof differs in substance from
 the source.

@@ -42,7 +42,9 @@ Take $E_0,E_1,\dots$ from Lemma~\ref{lem:th-lemma9} and put $A_s=\bigcup_{j<s}E_
 $[x]_K=\{y:[x,y]\cap K=\emptyset\}$; this is the component of $\R\setminus K$ containing $x$ if $x\notin K$, it is empty if $x\in K$,
 and $[x]_K=[x']_K$ whenever $[x,x']\cap K=\emptyset$. At stage $s$ the new sets are $N_s(x)=\overline{E_s\cap[x]_{A_s}}\subseteq E_s$, $x\in E_s$
 (this is $\overline I\cap E_s$ for the complementary interval $I$ of $A_s$ containing $x$, up to the endpoints of $I$ that are not limits of
-$E_s\cap I$; the new sets are bounded and closed, and $N_s(x)=\emptyset$ for $x\in A_s$).
+$E_s\cap I$; the new sets are bounded and closed, and $N_s(x)=\emptyset$ for $x\in A_s$). The closure is needed: \cite{Diss}
+uses $I\cap E_s$, which need not be closed (for $E_0=[-1,0]$ and $E_1=\{0\}\cup\{1/k:k\ge1\}$, which split at $0$, the complementary
+interval $I=(0,\infty)$ of $A_1=E_0$ gives $I\cap E_1=\{1/k:k\ge1\}$).
 
 \emph{Stage $s$ has only finitely many classes $[x]_{A_s}$, $x\in E_s$.} Since $[x]_{K\cup L}=[x]_K\cap[x]_L$, it suffices to treat one
 $E_j$, $j<s$. If $E_j,E_s$ split, say at $p$ with $E_j\le p\le E_s$, then $[x,x']\cap E_j=\emptyset$ for all $x,x'\in E_s\setminus E_j$ (a
@@ -117,7 +119,7 @@ Lemmas 23, 24; Theorem 9; example & Lemmas~\ref{lem:th-lemma23}, \ref{lem:th-lem
 Lemma 25; Theorem 10, Corollaries & Lemma~\ref{lem:th-lemma25}; Thm.~\ref{thm:th-thm10}; Cor.~\ref{cor:ae-zero}, \ref{cor:nonmeasurable}\\
 unsolved problems 1--5 & open questions; not formalized\\ \midrule
 \multicolumn{2}{@{}l}{\cite{TAMSa}}\\
-Lemma & Lemma~\ref{lem:ha-lemma}\\
+Lemma & Remark before Lemma~\ref{lem:ha-access}; Lemma~\ref{lem:ha-access}\\
 example (answer to \cite[Problem 5]{BP}) & Lemmas~\ref{lem:ha-sequences}, \ref{lem:ha-estimates}, Thm.~\ref{thm:ha-example}\\
 Theorem, Corollary, analytic case & Thm.~\ref{thm:ha-theorem}, Cor.~\ref{cor:ha-corollary}, Cor.~\ref{cor:ha-analytic}\\ \midrule
 \multicolumn{2}{@{}l}{\cite{TAMSb}}\\

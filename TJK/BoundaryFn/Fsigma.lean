@@ -7,6 +7,7 @@ import TJK.Baire.Approx
 import TJK.Baire.Higher
 import TJK.Baire.Sphere
 import TJK.McMillan.Basic
+import TJK.Plane.Ambiguous
 
 /-!
 # Boundary functions of continuous functions are of class `F_σ` off a countable set (blueprint §E)
@@ -15,7 +16,7 @@ import TJK.McMillan.Basic
 * `thm:bf-fsigma` (`BoundaryFn.exists_countable_isFσMeasurable'`, dissertation Theorem 5), and its
   disc version `BoundaryFn.exists_countable_isFσMeasurable_disc`;
 * `cor:bf-honorary`: boundary functions into `ℝ^m` or the sphere are of honorary Baire class two;
-* `fact:bagemihl` (`bagemihl_ambiguous_countable`, imported, `sorry`);
+* `fact:bagemihl` is `TJK.ambiguous_countable` in `TJK.Plane.Ambiguous`;
 * `prop:gdelta-remark` (`McMillan.isFσδ_limit_mem_of_isGδ`).
 -/
 
@@ -297,16 +298,7 @@ theorem isHonoraryBaireTwo_disc_sphere' (f : ℂ → Sphere2) (hf : ContinuousOn
 
 end BoundaryFn
 
-/-! ### `fact:bagemihl` and `prop:gdelta-remark` -/
-
-/-- `fact:bagemihl` (Bagemihl's ambiguous point theorem, 1955): for any `f : 𝔻 → S²`, the points
-of `C` with two arcs along which `f` has different limits form a countable set.
-Imported fact; not in Mathlib. -/
-theorem bagemihl_ambiguous_countable (f : ℂ → Sphere2) :
-    {x | x ∈ circle ∧ ∃ γ₁ γ₂ : Set ℂ, ∃ p₁ p₂ : Sphere2, IsArcAt disc x γ₁ ∧
-      IsArcAt disc x γ₂ ∧ Tendsto f (𝓝[γ₁ \ {x}] x) (𝓝 p₁) ∧
-      Tendsto f (𝓝[γ₂ \ {x}] x) (𝓝 p₂) ∧ p₁ ≠ p₂}.Countable := by
-  sorry
+/-! ### `prop:gdelta-remark` -/
 
 /-- `prop:gdelta-remark` (Michigan Math. J. 1966, remark after Corollary 4): McMillan's
 `cor:mm-corollaries` (1) holds for `G_δ` sets `E ⊆ S²`. -/
@@ -327,7 +319,7 @@ theorem McMillan.isFσδ_limit_mem_of_isGδ (f : ℂ → Sphere2) (hf : Continuo
   set Z := {x | x ∈ circle ∧ ∃ γ₁ γ₂ : Set ℂ, ∃ p₁ p₂ : Sphere2, IsArcAt disc x γ₁ ∧
       IsArcAt disc x γ₂ ∧ Tendsto f (𝓝[γ₁ \ {x}] x) (𝓝 p₁) ∧
       Tendsto f (𝓝[γ₂ \ {x}] x) (𝓝 p₂) ∧ p₁ ≠ p₂}
-  have hZ : Z.Countable := bagemihl_ambiguous_countable f
+  have hZ : Z.Countable := ambiguous_countable f hf
   set S := {x | x ∈ circle ∧ ∃ γ, IsArcAt disc x γ ∧ ∃ p ∈ E, Tendsto f (𝓝[γ \ {x}] x) (𝓝 p)}
   set P := Subtype.val '' ((A \ M).restrict φ ⁻¹' E)
   have hAM : IsFσδ (A \ M) := hA.inter (IsGδ.isFσδ hM.isGδ_compl)

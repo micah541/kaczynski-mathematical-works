@@ -22,38 +22,13 @@ radial limit $\psi$ of $u$ exists at almost every point of $C$, $\psi\in L^1(C)$
 $P[\varphi]=\operatorname{Re}(2F-F(0))$ with $F(z)=\frac1{2\pi i}\oint\frac{\varphi(\zeta)}{\zeta-z}d\zeta$ holomorphic in $\D$; and
 $\abs{P[\varphi]}\le P[\sup\abs\varphi]=\sup\abs\varphi$ since $P\ge0$ and $P[1]=1$.
 
-\begin{fact}[Jordan curve theorem and accessibility]\label{fact:jordan-access}
-\lean{TJK.Harmonic.jordan_accessible}
-\source{Jordan curve theorem; Newman, Elements, corollary on p.~164}
-Let $e:\R\to\C$ be continuous with $e(-\pi)=e(\pi)$ and $e$ injective on $[-\pi,\pi)$, and $\Gamma=e([-\pi,\pi])$. Then
-$\C\setminus\Gamma$ is the union of two disjoint connected open sets, a bounded one $B$ and an unbounded one, each with frontier
-$\Gamma$, and every point $p\in\Gamma$ is accessible from $B$: there is a simple arc $\gamma$ with endpoint $p$ and
-$\gamma\setminus\{p\}\subseteq B$.
-\end{fact}
-
-\begin{lemma}[{\cite[Lemma]{TAMSa}}]\label{lem:ha-lemma}
-\lean{TJK.Harmonic.DomainFamily.accessible_avoiding_domains}
-\uses{fact:jordan-access}
-Let $-\pi<a_n<b_n<\pi$ with the intervals $[a_n,b_n]$ pairwise disjoint, $I_n=\expi[a_n,b_n]$, and let $\Omega_n\subseteq\D$ be connected
-sets (``Jordan domains along $I_n$'') with: a simple arc $\Gamma_n=g_n([a_n,b_n])$ ($g_n$ continuous, injective on $[a_n,b_n]$) from
-$e^{ia_n}$ to $e^{ib_n}$ with $g_n((a_n,b_n))\subseteq\D$, $\Gamma_n\subseteq\overline{\Omega_n}$, $\Gamma_n\cap\Omega_n=\emptyset$,
-$\overline{\Omega_n}\subseteq\Omega_n\cup\Gamma_n\cup I_n$, and $\overline{\Omega_n}$ meeting the open arc $I_n^*$; the
-$\overline{\Omega_n}$ pairwise disjoint; and $\sup_{t\in[a_n,b_n]}\abs{g_n(t)-e^{it}}\to0$ (e.g.\ $\diam\Omega_n\to0$). Then every point
-of $C\setminus\bigcup_nI_n^*$ is accessible by a simple arc in $\D\setminus\bigcup_n\overline{\Omega_n}$.
-\end{lemma}
-\begin{proof}
-Let $\phi(t)=g_n(t)$ for $t\in[a_n,b_n]$ and $\phi(t)=e^{it}$ elsewhere, and $\phi_p$ the same using only $g_1,\dots,g_p$. Each
-$\phi_p$ is continuous ($g_n=e^{it}$ at $a_n,b_n$), and $\abs{\phi_p-\phi}\le\sup_{n>p}\sup_t\abs{g_n(t)-e^{it}}\to0$, so $\phi$ is
-continuous; $\phi(-\pi)=\phi(\pi)$; and $\phi$ is injective on $[-\pi,\pi)$ (the $\Gamma_n\subseteq\overline{\Omega_n}$ are disjoint, and
-$\Gamma_n$ meets $C$ only at its endpoints). Let $\Gamma=\phi([-\pi,\pi])\subseteq\overline\D$ and $B,U$ as in
-Fact~\ref{fact:jordan-access}. Each ray $\{tz:t\ge1\}$, $\abs z>1$, is connected, misses $\Gamma$ and is unbounded, so lies in $U$. A
-point $e^{it}$, $t\in(a_n,b_n)$, is not in $\Gamma$; a small disc about it misses $\Gamma$ and contains points of modulus $>1$, so
-lies in $U$. Each $\Omega_n$ is connected, misses $\Gamma$, and meets $U$ (near a point of $I_n^*\cap\overline{\Omega_n}$), so
-$\Omega_n\subseteq U$. Hence a point $z\in B$ satisfies $\abs z\le1$; if $\abs z=1$ then either $z\in I_n^*\subseteq U$ or
-$z\in\Gamma$, impossible; so $z\in\D$; and $z\notin\overline{\Omega_n}\subseteq\Omega_n\cup\Gamma_n\cup I_n$. So
-$B\subseteq\D\setminus\bigcup_n\overline{\Omega_n}$, and each point of $C\setminus\bigcup I_n^*\subseteq\Gamma$ is accessible from
-$B$.
-\end{proof}
+\begin{remark}[Kaczynski's Lemma]
+\cite[Lemma]{TAMSa} states, for general Jordan domains $\Omega_n\subseteq\D$ along disjoint closed arcs $I_n$ of $C$ with disjoint closures and
+$\diam\Omega_n\to0$, that every point of $C\setminus\bigcup_nI_n^*$ is accessible by a simple arc in $\D\setminus\bigcup_n\overline{\Omega_n}$. The
+proof applies the Jordan curve theorem, with accessibility of boundary points, to the curve obtained from $C$ by replacing each $I_n$ with
+the rest of $\partial\Omega_n$. The Jordan curve theorem is not formalized here; for the domains actually used,
+Lemma~\ref{lem:ha-access} below proves the conclusion directly.
+\end{remark}
 
 \begin{lemma}[general limits along an arc]\label{lem:general-limit-endpoints}
 \lean{TJK.Harmonic.asymptotic_at_endpoint, TJK.Harmonic.asymptotic_at_endpoints}
@@ -87,12 +62,11 @@ $t\in[\alpha(q),\beta(q)]$, IV holds, and V holds for $h\le q$.
 \lean{TJK.Harmonic.Intervals.omega_jordan, TJK.Harmonic.Intervals.omega_closure_disjoint,
   TJK.Harmonic.Intervals.diam_omega_tendsto, TJK.Harmonic.Intervals.fn_le_eps,
   TJK.Harmonic.Intervals.fn_le_eps_sqrt, TJK.Harmonic.Intervals.fn_tendsto_zero}
-\uses{lem:ha-sequences, lem:ha-lemma, fact:poisson}
+\uses{lem:ha-sequences, fact:poisson}
 With the data of Lemma~\ref{lem:ha-sequences}, let $I_n=\expi[\alpha(n),\beta(n)]$, $\chi_n$ its indicator, $f_n=P[\chi_n]$,
 $v(r)=(1-r)^{1/4}$, $H_n(s,r)=re^{i(\alpha(n)-v(r)+s(\beta(n)-\alpha(n)+2v(r)))}$ and $\Omega_n=H_n((0,1)\times(1-\eps_n,1))$, so that
 $re^{i\theta}\in\Omega_n$ whenever $1-\eps_n<r<1$ and $\alpha(n)-v(r)<\theta<\beta(n)+v(r)$. Then the $\Omega_n$, with $\Gamma_n$ the
-image under $H_n$ of the edges $s=0$, $r=1-\eps_n$, $s=1$ of the closed rectangle, satisfy the hypotheses of
-Lemma~\ref{lem:ha-lemma}; $\overline{\Omega_n}$ lies within $\eps_n+\pi\eps_n^2+\eps_n^{1/4}$ of every point of $I_n$ (so
+image under $H_n$ of the edges $s=0$, $r=1-\eps_n$, $s=1$ of the closed rectangle, are Jordan domains along the arcs $I_n$ with pairwise disjoint closures; $\overline{\Omega_n}$ lies within $\eps_n+\pi\eps_n^2+\eps_n^{1/4}$ of every point of $I_n$ (so
 $\diam\Omega_n\to0$); and
 \begin{enumerate}[label=(\arabic*)]
 \item $0\le f_n\le\eps_n$ on $\D\setminus\Omega_n$;
@@ -119,7 +93,7 @@ $f_n\le\frac83\eps_n^2\sqrt{1-r}\le\eps_n\sqrt{1-r}\le\eps_n$, since $\eps_n\le\
 \lean{TJK.Harmonic.Intervals.accessible}
 \uses{lem:ha-sequences, lem:ha-estimates}
 With the data and notation of Lemma~\ref{lem:ha-estimates}, every $\zeta\in C\setminus\bigcup_nI_n^*$ is accessible by a simple arc
-in $\D\setminus\bigcup_n\overline{\Omega_n}$. (This replaces Lemma~\ref{lem:ha-lemma}, and the Jordan curve theorem, for the domains
+in $\D\setminus\bigcup_n\overline{\Omega_n}$. (This replaces Kaczynski's Lemma, and the Jordan curve theorem, for the domains
 actually used.)
 \end{lemma}
 \begin{proof}

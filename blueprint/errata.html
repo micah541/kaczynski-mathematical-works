@@ -1,0 +1,287 @@
+<title>Kaczynski Works Errata</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,600;1,6..72,400&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: a single reading column styled as a journal errata sheet; each entry is a ruled
+   record with source location, the problem, and the resolution, keyed by a typed tag. */
+:root {
+  --bg: #f6f7f9;
+  --paper: #ffffff;
+  --ink: #1c2230;
+  --muted: #5b6475;
+  --rule: #d9dee7;
+  --accent: #2a4d8f;
+  --err: #a3341f;
+  --err-bg: #fbeae6;
+  --gap: #7a5a00;
+  --gap-bg: #f8f0d8;
+  --alt: #2a4d8f;
+  --alt-bg: #e7eef9;
+  --nf: #5b6475;
+  --nf-bg: #eceff4;
+  --code-bg: #eef1f6;
+  --serif: "Newsreader", "Iowan Old Style", "Palatino Linotype", Georgia, serif;
+  --sans: "IBM Plex Sans", "Segoe UI", system-ui, sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, "Cascadia Mono", Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #12151c; --paper: #191d26; --ink: #e3e7ef; --muted: #9aa3b5; --rule: #2c3240;
+    --accent: #8fb0ee; --err: #f0907b; --err-bg: #3a1f1a; --gap: #e2c068; --gap-bg: #332a12;
+    --alt: #8fb0ee; --alt-bg: #1c2a44; --nf: #a6aebf; --nf-bg: #242a36; --code-bg: #232937;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #12151c; --paper: #191d26; --ink: #e3e7ef; --muted: #9aa3b5; --rule: #2c3240;
+  --accent: #8fb0ee; --err: #f0907b; --err-bg: #3a1f1a; --gap: #e2c068; --gap-bg: #332a12;
+  --alt: #8fb0ee; --alt-bg: #1c2a44; --nf: #a6aebf; --nf-bg: #242a36; --code-bg: #232937;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body {
+  background: var(--bg); color: var(--ink); font-family: var(--serif);
+  font-size: 18px; line-height: 1.6; padding-inline: 16px; padding-block: 40px 64px;
+}
+main { max-width: 46rem; margin: 0 auto; display: grid; gap: 40px; }
+h1, h2, h3 { font-family: var(--sans); text-wrap: balance; line-height: 1.25; margin: 0; }
+h1 { font-size: 2rem; font-weight: 600; letter-spacing: -0.01em; }
+h2 { font-size: 1.15rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; color: var(--accent); }
+h3 { font-size: 1.05rem; font-weight: 600; }
+p { margin: 0; }
+a { color: var(--accent); }
+code { font-family: var(--mono); font-size: 0.82em; background: var(--code-bg); padding: 0.05em 0.3em; border-radius: 3px; overflow-wrap: anywhere; }
+.lede { display: grid; gap: 14px; }
+.kicker { font-family: var(--sans); font-size: 0.8rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+.lede p { color: var(--ink); }
+.meta { font-family: var(--sans); font-size: 0.85rem; color: var(--muted); }
+.sources { font-family: var(--sans); font-size: 0.88rem; border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule); padding-block: 12px; display: grid; gap: 4px; }
+.sources div { display: grid; grid-template-columns: 7.5rem 1fr; gap: 12px; }
+.sources b { font-weight: 600; }
+.legend { display: flex; flex-wrap: wrap; gap: 8px 16px; font-family: var(--sans); font-size: 0.85rem; color: var(--muted); align-items: center; }
+.tag { font-family: var(--sans); font-size: 0.72rem; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; padding: 2px 8px; border-radius: 3px; white-space: nowrap; }
+.t-err { color: var(--err); background: var(--err-bg); }
+.t-gap { color: var(--gap); background: var(--gap-bg); }
+.t-alt { color: var(--alt); background: var(--alt-bg); }
+.t-nf { color: var(--nf); background: var(--nf-bg); }
+section { display: grid; gap: 18px; }
+section > .intro { color: var(--muted); font-size: 1rem; }
+.entry { background: var(--paper); border: 1px solid var(--rule); border-radius: 6px; padding: 18px 20px; display: grid; gap: 10px; min-width: 0; }
+.entry header { display: flex; flex-wrap: wrap; gap: 6px 12px; align-items: baseline; justify-content: space-between; }
+.loc { font-family: var(--sans); font-size: 0.85rem; color: var(--muted); }
+.entry dl { margin: 0; display: grid; grid-template-columns: 6.5rem 1fr; gap: 6px 14px; font-size: 1rem; }
+.entry dt { font-family: var(--sans); font-size: 0.78rem; font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase; color: var(--muted); padding-top: 0.2em; }
+.entry dd { margin: 0; min-width: 0; }
+.refs { font-family: var(--sans); font-size: 0.82rem; color: var(--muted); }
+.math { font-style: italic; }
+table.nf { width: 100%; border-collapse: collapse; font-size: 0.98rem; }
+table.nf th, table.nf td { text-align: left; vertical-align: top; padding: 8px 10px 8px 0; border-bottom: 1px solid var(--rule); }
+table.nf th { font-family: var(--sans); font-size: 0.78rem; letter-spacing: 0.05em; text-transform: uppercase; color: var(--muted); font-weight: 600; }
+.tablewrap { overflow-x: auto; }
+footer { font-family: var(--sans); font-size: 0.85rem; color: var(--muted); border-top: 1px solid var(--rule); padding-top: 16px; display: grid; gap: 8px; }
+@media (max-width: 560px) {
+  body { font-size: 17px; }
+  .entry dl { grid-template-columns: 1fr; gap: 2px; }
+  .entry dd { margin-bottom: 8px; }
+  .sources div { grid-template-columns: 1fr; gap: 0; }
+}
+</style>
+
+<main>
+  <div class="lede">
+    <div class="kicker">Errata and divergences · Lean 4 formalization</div>
+    <h1>The mathematical works of Theodore J. Kaczynski</h1>
+    <p>We formalized all seven sources in Lean 4 with Mathlib. Doing so required a blueprint that proves every result in full. This sheet lists each place where what we proved departs from the published text. Some are errors that needed a correction. Some are steps the sources cite without proof, which we proved or routed around. Some are arguments we replaced with different ones. The rest are items we did not formalize.</p>
+    <p class="meta">Prepared 13 October 2026 from the project blueprint (<code>paper/main.tex</code>) and its design log (<code>blueprint/DECISIONS.md</code>).</p>
+  </div>
+
+  <div class="sources" aria-label="Sources">
+    <div><b>Math. Mag.</b><span>41 (1968): note on Alan Sutcliffe’s digit-reversal problem</span></div>
+    <div><b>J. Math. Mech.</b><span>14 (1965): boundary functions in the disk (only the review is available)</span></div>
+    <div><b>Michigan Math. J.</b><span>13 (1966): McMillan’s F<sub>σδ</sub> theorem, cluster sets</span></div>
+    <div><b>Dissertation</b><span><i>Boundary functions</i>, University of Michigan, 1967</span></div>
+    <div><b>Trans. AMS 137</b><span>(1969): boundary functions for bounded harmonic functions</span></div>
+    <div><b>Trans. AMS 141</b><span>(1969): boundary functions and sets of curvilinear convergence for continuous functions</span></div>
+    <div><b>Proc. AMS 23</b><span>(1969): a cube with a non-Borel set of curvilinear convergence</span></div>
+  </div>
+
+  <div class="legend">
+    <span><span class="tag t-err">Error</span> statement or step is wrong as written</span>
+    <span><span class="tag t-gap">Cited</span> step relies on an outside theorem</span>
+    <span><span class="tag t-alt">New proof</span> correct, but we argue differently</span>
+    <span><span class="tag t-nf">Not formalized</span></span>
+  </div>
+
+  <section aria-labelledby="s-err">
+    <h2 id="s-err">Corrections</h2>
+    <p class="intro">Three statements in the sources are wrong as written, and one cited theorem needs a restriction on <span class="math">n</span>. None of these affects a main theorem. Each one has a local fix.</p>
+
+    <article class="entry">
+      <header><h3>Complementary intervals give non-closed sets</h3><span class="tag t-err">Error</span></header>
+      <div class="loc">Dissertation, Lemma 10 (every F<sub>σ</sub> set is the union of a special family)</div>
+      <dl>
+        <dt>Source</dt>
+        <dd>At each stage, the new sets are formed as <span class="math">I ∩ E<sub>s+1</sub></span>, where <span class="math">I</span> runs over the open complementary intervals of the earlier closed sets. These sets are claimed to be closed.</dd>
+        <dt>Problem</dt>
+        <dd>The intersection of a closed set with an open interval need not be closed. Take <span class="math">E<sub>0</sub> = [−1, 0]</span> and <span class="math">E<sub>1</sub> = {0} ∪ {1/k : k ≥ 1}</span>, which split at 0. The complementary interval <span class="math">(0, ∞)</span> of <span class="math">E<sub>0</sub></span> gives <span class="math">{1/k : k ≥ 1}</span>, which is not closed.</dd>
+        <dt>Fix</dt>
+        <dd>Use the closed interval: <span class="math">Ī ∩ E<sub>s+1</sub></span>. With this change the lemma is proved. We also replaced the source’s subsequence argument for “E<sub>s+1</sub> meets only finitely many complementary intervals” with a shorter argument that counts classes.</dd>
+      </dl>
+      <p class="refs">Blueprint <code>lem:th-lemma10</code> · Lean <code>TJK.Variant.exists_thesisSpecial_of_isFσ</code></p>
+    </article>
+
+    <article class="entry">
+      <header><h3>Interior of a trapezoid</h3><span class="tag t-err">Error</span></header>
+      <div class="loc">Dissertation, definition of trapezoids before Lemmas 23–24 and Theorem 9</div>
+      <dl>
+        <dt>Source</dt>
+        <dd>A trapezoid is any set lying between a closed trapezoid <span class="math">T</span> and its interior. Its area is claimed to be half the sum of the lengths of its traces on the lines <span class="math">y = 0</span> and <span class="math">y = 1</span>.</dd>
+        <dt>Problem</dt>
+        <dd>The interior is taken in the plane, so it misses the two horizontal edges, and the area formula fails for sets that omit them. With infinite parameters, the degenerate sides <span class="math">a<sub>i</sub> = b<sub>i</sub> = ±∞</span> also break the formula.</dd>
+        <dt>Fix</dt>
+        <dd>Take the interior relative to the strip <span class="math">0 ≤ y ≤ 1</span>, and exclude sides with <span class="math">a<sub>i</sub> = b<sub>i</sub> = ±∞</span>. Theorem 9 is unaffected: its proof only uses closed trapezoids with finite parameters.</dd>
+      </dl>
+      <p class="refs">Blueprint <code>def:trapezoid</code> · Lean <code>TJK.Discont.closedTrapezoid</code>, <code>volume_closedTrapezoid</code></p>
+    </article>
+
+    <article class="entry">
+      <header><h3>A constant in the modulus <span class="math">d(t)</span></h3><span class="tag t-err">Error</span></header>
+      <div class="loc">Trans. AMS 141, proof of (D) (realizing an F<sub>σδ</sub> set with a prescribed boundary function)</div>
+      <dl>
+        <dt>Source</dt>
+        <dd>The proof defines <span class="math">d(t)</span> from the moduli of continuity <span class="math">d<sub>1</sub>, d<sub>2</sub></span> with a factor ½.</dd>
+        <dt>Problem</dt>
+        <dd><span class="math">d<sub>1</sub></span> and <span class="math">d<sub>2</sub></span> are defined as suprema. With the factor ½, the estimate on <span class="math">|p − q|</span> reaches the supremum itself. The definition of the supremum then gives nothing, because a strict inequality is needed.</dd>
+        <dt>Fix</dt>
+        <dd>Replace ½ by ¼: <span class="math">d(t) = min{¼ D(t/2), t/4}</span>. The rest of the argument is unchanged.</dd>
+      </dl>
+      <p class="refs">Blueprint <code>thm:construct-D</code> · Lean <code>TJK.Construct.exists_f_Q</code></p>
+    </article>
+
+    <article class="entry">
+      <header><h3>Sutcliffe’s Theorem 2 needs <span class="math">n ≥ 4</span></h3><span class="tag t-err">Error</span></header>
+      <div class="loc">Math. Mag. 41, as cited in the proofs of the Theorem and Corollary</div>
+      <dl>
+        <dt>Source</dt>
+        <dd>The note cites Sutcliffe’s Theorem 2: a 2-digit solution exists for base <span class="math">n</span> exactly when <span class="math">n + 1</span> is composite.</dd>
+        <dt>Problem</dt>
+        <dd>The direction “<span class="math">n + 1</span> composite ⇒ a 2-digit solution exists” fails for <span class="math">n = 3</span>: <span class="math">4</span> is composite, but base 3 has no 2-digit solution.</dd>
+        <dt>Fix</dt>
+        <dd>Kaczynski’s own results are not affected. He handles <span class="math">n = 2, 3</span> separately (his Lemma 2), and his Corollary is stated for <span class="math">n &gt; 3</span>. We prove both directions of Sutcliffe’s Theorem 2 for <span class="math">n ≥ 4</span>, with explicit solutions <span class="math">(a, c, k) = (e − 1, n − e, d − 1)</span> when <span class="math">n + 1 = de</span>.</dd>
+      </dl>
+      <p class="refs">Blueprint <code>prop:sut-two-composite</code>, <code>prop:sut-explicit</code> · Lean <code>TJK.Sutcliffe</code></p>
+    </article>
+  </section>
+
+  <section aria-labelledby="s-gap">
+    <h2 id="s-gap">Steps that rely on outside theorems</h2>
+    <p class="intro">The sources quote these results without proof. In each case we either proved the result or replaced the argument that uses it.</p>
+
+    <article class="entry">
+      <header><h3>The Jordan curve theorem, with accessibility</h3><span class="tag t-gap">Cited</span></header>
+      <div class="loc">Trans. AMS 137, Lemma (used for the bounded harmonic counterexample)</div>
+      <dl>
+        <dt>Source</dt>
+        <dd>The Lemma covers general Jordan domains along disjoint arcs of the circle. It glues their boundaries into one Jordan curve and invokes the Jordan curve theorem, including accessibility of every boundary point.</dd>
+        <dt>What we did</dt>
+        <dd>For the domains actually built in the paper, we construct the accessing arc directly: <span class="math">s ↦ (1 − s) e<sup>iθ(s)</sup></span>, bending around each domain that blocks the radius. This uses only the separation property IV of the paper’s intervals. The Jordan curve theorem is not used, and the Lemma in its general form is not formalized.</dd>
+      </dl>
+      <p class="refs">Blueprint <code>lem:ha-access</code> · Lean <code>TJK.Harmonic.Intervals.accessible</code></p>
+    </article>
+
+    <article class="entry">
+      <header><h3>Kierst’s theorem and normal functions</h3><span class="tag t-gap">Cited</span></header>
+      <div class="loc">Proc. AMS 23, Lemma (a continuous function on the half-plane with a non-Borel set of asymptotic values)</div>
+      <dl>
+        <dt>Source</dt>
+        <dd>The proof combines Kierst’s theorem on asymptotic values of holomorphic functions with the Lehto–Virtanen and Bagemihl–Seidel results on normal functions. The paper remarks that an elementary proof exists, but omits it as a “messy construction”.</dd>
+        <dt>What we did</dt>
+        <dd>We give a new elementary proof that uses only the existence of an analytic non-Borel set. It builds the function on a binary tree of segments in the half-plane. This proof was reviewed independently. Kaczynski’s original argument appears as a remark and is not formalized.</dd>
+      </dl>
+      <p class="refs">Blueprint <code>lem:cube-lemma-elementary</code> · Lean <code>TJK.Cube.Elementary.exists_s'</code></p>
+    </article>
+
+    <article class="entry">
+      <header><h3>Bagemihl’s ambiguous point theorem</h3><span class="tag t-gap">Cited</span></header>
+      <div class="loc">Michigan Math. J. 13, remark after Corollary 4 (G<sub>δ</sub> targets)</div>
+      <dl>
+        <dt>Source</dt>
+        <dd>The remark uses Bagemihl’s theorem (1955): for an arbitrary function on the disk, only countably many boundary points have two arcs with different limits.</dd>
+        <dt>What we did</dt>
+        <dd>The function in the remark is continuous, and that case has a short proof. Two disjoint connected open sets in the disk share at most three accessible boundary points, by the crosscut theorem. Classifying the ambiguous points by countably many such pairs gives countability. The general theorem, for arbitrary functions, is not needed and is not formalized.</dd>
+      </dl>
+      <p class="refs">Blueprint <code>lem:two-domains</code>, <code>fact:bagemihl</code> · Lean <code>TJK.accessible_two_domains</code>, <code>TJK.ambiguous_countable</code></p>
+    </article>
+
+    <article class="entry">
+      <header><h3>Other quoted results, now proved</h3><span class="tag t-gap">Cited</span></header>
+      <div class="loc">Several sources</div>
+      <dl>
+        <dt>Plane topology</dt>
+        <dd>The crosscut theorem replaces the dissertation’s “Figure 5” argument and the monotonicity of first hitting points. It is proved via continuous logarithms and homotopy lifting. Tietze’s theorem that path-connected Hausdorff spaces are arc-connected is also proved.</dd>
+        <dt>Analysis</dt>
+        <dd>We proved the facts about Poisson integrals (boundedness, boundary limits at continuity points, and the representation of harmonic functions whose <span class="math">L<sup>p</sup></span> means are bounded, <span class="math">p &gt; 1</span>), together with Banach’s and the Lebesgue–Hausdorff–Banach theorems on Baire classes.</dd>
+        <dt>Set theory</dt>
+        <dd>We proved that an analytic non-Borel subset of ℝ exists (via a universal analytic set and diagonalization) and that a Vitali set exists.</dd>
+        <dt>Trans. AMS 141</dt>
+        <dd>Step (B)(III) cites a Bagemihl–McMillan theorem. We use the dissertation’s approximation theorem instead, as the paper itself suggests. Step (F)(I) cites a corollary of invariance of domain. We write down the inverse maps explicitly. The Hausdorff extension theorems for Baire-one functions, used in the dissertation and in Appendix (b), (c), are proved.</dd>
+        <dt>Sutcliffe</dt>
+        <dd>Sutcliffe’s Theorems 2 and 3, used in the note, are proved with explicit solutions.</dd>
+      </dl>
+    </article>
+  </section>
+
+  <section aria-labelledby="s-alt">
+    <h2 id="s-alt">Different arguments</h2>
+    <p class="intro">In these places the source is correct, but the formal proof follows a different route.</p>
+
+    <article class="entry">
+      <header><h3>Homeomorphisms of the disk</h3><span class="tag t-alt">New proof</span></header>
+      <div class="loc">J. Math. Mech. 14, Theorem 1 (known only from its review)</div>
+      <dl>
+        <dt>Source</dt>
+        <dd>The review states the result: a boundary function of a self-homeomorphism of the disk is continuous off a countable set. No proof is available to us.</dd>
+        <dt>What we did</dt>
+        <dd>We give a new proof of a quantitative form: the points where <span class="math">φ</span> has jumps of size at least <span class="math">ε</span> number at most <span class="math">2π/ε</span>.</dd>
+      </dl>
+      <p class="refs">Blueprint <code>thm:homeo</code> · Lean <code>TJK.Homeo.exists_countable_continuousOn</code></p>
+    </article>
+
+    <article class="entry">
+      <header><h3>Shorter or more direct proofs</h3><span class="tag t-alt">New proof</span></header>
+      <div class="loc">Dissertation and Trans. AMS 141</div>
+      <dl>
+        <dt>Theorem 9</dt>
+        <dd>The dissertation proves both inequalities for the measure of a union of disjoint segments at once, via Lemmas 23 and 24. We prove each inequality separately, more briefly.</dd>
+        <dt>Example after Theorem 9</dt>
+        <dd>For the null sets <span class="math">M<sub>0</sub>, M<sub>1</sub></span> we take the Liouville numbers, a dense G<sub>δ</sub> null set. Baire’s theorem is applied to an affine change of variable.</dd>
+        <dt>(XX)</dt>
+        <dd>For the existence of special functions we give a construction without recursion. The disjointness constraints turn out to be independent of the other member’s size.</dd>
+        <dt>Special families</dt>
+        <dd>Trans. AMS 141 also requires a special family to be nonempty. Nothing uses this, and we drop it.</dd>
+      </dl>
+    </article>
+  </section>
+
+  <section aria-labelledby="s-nf">
+    <h2 id="s-nf">Not formalized</h2>
+    <div class="tablewrap">
+      <table class="nf">
+        <thead><tr><th>Item</th><th>Reason</th></tr></thead>
+        <tbody>
+          <tr><td>Dissertation, unsolved problems 1–5; Trans. AMS 141, Problems 1–2; Proc. AMS 23, Problem</td><td>Open questions in the source.</td></tr>
+          <tr><td>J. Math. Mech. 14, remarks on three dimensions</td><td>Not stated as a theorem. Section I treats the three-dimensional case.</td></tr>
+          <tr><td>Trans. AMS 137, Lemma in full generality</td><td>Needs the Jordan curve theorem. The case used in the paper is proved directly.</td></tr>
+          <tr><td>Proc. AMS 23, Kaczynski’s proof of the Lemma</td><td>Needs Kierst’s theorem and normal functions. The Lemma itself is proved by the elementary argument.</td></tr>
+          <tr><td>Bagemihl’s theorem for arbitrary functions</td><td>Only the continuous case is used, and that case is proved.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <footer>
+    <p>Status: all 20 pinned headline theorems are proved in Lean, and <code>#print axioms</code> lists only <code>propext</code>, <code>Classical.choice</code> and <code>Quot.sound</code> for each. No fact in their dependencies is assumed without proof.</p>
+    <p>Each entry names its blueprint label and Lean declaration in the formalization repository.</p>
+  </footer>
+</main>
