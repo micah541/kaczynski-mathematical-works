@@ -30,3 +30,14 @@ points:
 6. "First category on the circle" is `IsMeagre` of the preimage in the subtype `circle` (every subset
    of the circle is nowhere dense in `ℂ`, so meagreness in `ℂ` would be vacuous).
 7. Lebesgue measurability is `NullMeasurable` for `volume`; Borel is `MeasurableSet`.
+
+## 2026-10-12: all 20 headline theorems proved without sorry
+
+Every pinned headline theorem depends only on `propext`, `Classical.choice`, `Quot.sound`.
+Imported Facts that were proved along the way: the Tietze arc lemma (Hausdorff spaces), the
+crosscut theorem (continuous logarithms + homotopy lifting), Banach's theorem and the
+Lebesgue–Hausdorff–Banach theorem, the Poisson facts (i)–(iii), a Vitali set, an analytic
+non-Borel subset of ℝ. The cube lemma's dependence on Kierst's theorem and on normal functions was
+removed by a new elementary proof (`lem:cube-lemma-elementary`, independently reviewed). The facts
+`kierst`, `asymptotic_is_point_asymptotic`, `bagemihl_ambiguous_countable` (used only by a side
+remark) and `jordan_accessible` remain as unused or side-remark `sorry`s.

@@ -22,4 +22,7 @@ python scripts/blueprint.py map     # regenerate blueprint/map.md
 python scripts/blueprint.py check   # dangling references, cycles, axioms, pinned statements
 ```
 
+**Status (2026-10-12):** all 20 pinned headline theorems are proved in Lean and depend on no
+`sorry` (axioms: `propext`, `Classical.choice`, `Quot.sound` only).
+
 See `CLAUDE.md` for build instructions and `blueprint/DECISIONS.md` for design decisions.

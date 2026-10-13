@@ -5,7 +5,7 @@ import TJK.Cube.AnalyticNonBorel
 /-!
 # An elementary proof of the cube lemma (blueprint `lem:cube-lemma-elementary`)
 
-SKELETON (first pass). This file proves `exists_s'`, a copy of `TJK.Cube.exists_s`
+This file proves `exists_s'`, a copy of `TJK.Cube.exists_s`
 (`lem:cube-lemma`), without Kierst's theorem and without normal functions: only the existence of
 an analytic non-Borel set (`TJK.Cube.exists_analytic_not_borel'`, `fact:analytic-nonborel`, proved
 in `TJK/Cube/AnalyticNonBorel.lean`) and plane geometry. See the subsection "An elementary proof of the lemma" of
@@ -24,7 +24,7 @@ Notation (as in the blueprint):
 * `kappa u = κ(u)`, `ell u = ℓ(u)`, `enc σ = β_σ`;
 * `R`, `Ψ` and `sFun` are `R`, `Ψ` and `s = R + (i/2) Ψ`.
 
-Every `sorry` below is a planned proof step (marked `-- TODO`).
+The file is sorry-free.
 -/
 
 open _root_.Set Filter Topology Metric
@@ -1138,6 +1138,132 @@ def Om (u : Word) : Set ℂ :=
   {z | 0 < z.im ∧ z.im < (2 : ℝ)⁻¹ ^ (u.length + 1) ∧
     ∃ v, u <+: v ∧ u.length < v.length ∧ dd v z < 1 / 32}
 
+theorem infDist_upper_compl' {z : ℂ} (hz : 0 ≤ z.im) : infDist z upperᶜ = z.im := by
+  apply le_antisymm
+  · have hmem : (z.re : ℂ) ∈ upperᶜ := by simp
+    refine (infDist_le_dist_of_mem hmem).trans (le_of_eq ?_)
+    have : z - (z.re : ℂ) = (z.im : ℂ) * Complex.I := by apply Complex.ext <;> simp
+    rw [dist_eq_norm, this, norm_mul, Complex.norm_I, mul_one, Complex.norm_real,
+      Real.norm_of_nonneg hz]
+  · refine (le_infDist ⟨0, by simp⟩).2 fun w hw => ?_
+    simp only [mem_compl_iff, mem_ofPred_eq, not_lt] at hw
+    rw [dist_eq_norm]
+    have := Complex.abs_im_le_norm (z - w)
+    rw [Complex.sub_im] at this
+    linarith [le_abs_self (z.im - w.im)]
+
+theorem eventually_dd_lt {w : Word} {z : ℂ} {c : ℝ} (hz : 0 < z.im) (h : dd w z < c) :
+    ∀ᶠ z' in 𝓝 z, 0 < z'.im ∧ dd w z' < c := by
+  have h1 : ∀ᶠ z' in 𝓝 z, 0 < z'.im :=
+    (isOpen_lt continuous_const Complex.continuous_im).mem_nhds hz
+  have hc : ContinuousAt (fun z' : ℂ => infDist z' (edge w) / z'.im) z :=
+    (continuous_infDist_pt _).continuousAt.div Complex.continuous_im.continuousAt hz.ne'
+  have h2 : ∀ᶠ z' in 𝓝 z, dd w z' < c := hc.eventually_lt continuousAt_const h
+  exact h1.and h2
+
+theorem isOpen_Om (u : Word) : IsOpen (Om u) := by
+  rw [isOpen_iff_mem_nhds]
+  rintro z ⟨h0, h1, v, hv1, hv2, hd⟩
+  have h3 : ∀ᶠ z' in 𝓝 z, z'.im < (2 : ℝ)⁻¹ ^ (u.length + 1) :=
+    (isOpen_lt Complex.continuous_im continuous_const).mem_nhds h1
+  filter_upwards [eventually_dd_lt h0 hd, h3] with z' hz' h3'
+  exact ⟨hz'.1, h3', v, hv1, hv2, hz'.2⟩
+
+theorem prefix_of_mem_Om {u u' : Word} {z : ℂ} (hz : z ∈ Om u) (hz' : z ∈ Om u')
+    (hl : u.length ≤ u'.length) : u <+: u' := by
+  obtain ⟨h0, h1, v, hv1, hv2, hd⟩ := hz
+  obtain ⟨-, -, v', hv1', -, hd'⟩ := hz'
+  have := (claimL_below h0 h1 hv1 hv2 hd (by linarith : dd v' z ≤ 1 / 12)).1
+  exact List.prefix_of_prefix_length_le this hv1' hl
+
+theorem exists_lt_of_Ψ_lt {z : ℂ} {c : ℝ} (hc : c ≤ 1) (h : Ψ z < c) :
+    ∃ w, psi w + 16 * dd w z < c := by
+  have e : Ψ z = min 1 (⨅ u : Word, (psi u + 16 * dd u z)) := rfl
+  have : (⨅ u : Word, (psi u + 16 * dd u z)) < c := by
+    by_contra h'
+    rw [e] at h
+    exact (not_lt.2 (le_min hc (not_lt.1 h'))) h
+  exact exists_lt_of_ciInf_lt this
+
+theorem exists_mem_Om {z : ℂ} {k : ℕ} (hz : 0 < z.im) (hzk : z.im < (2 : ℝ)⁻¹ ^ (k + 1))
+    (hΨ : Ψ z < 1 / 2) : ∃ u : Word, u.length = k ∧ z ∈ Om u := by
+  obtain ⟨w, hw⟩ := exists_lt_of_Ψ_lt (by norm_num) hΨ
+  have hd : dd w z < 1 / 32 := by linarith [psi_pos w]
+  have hwl : k < w.length := by
+    by_contra h
+    have := one_le_dd_of_length_le (not_lt.1 h) hz hzk
+    linarith
+  have hl := List.length_take_of_le hwl.le
+  refine ⟨w.take k, hl, hz, ?_, w, List.take_prefix _ _, ?_, hd⟩
+  · rw [hl]; exact hzk
+  · rw [hl]; exact hwl
+
+/-- A connected tail inside a disjoint union of open sets lies in one of them. -/
+theorem exists_eventually_mem {ι : Type*} (O : ι → Set ℂ) (hO : ∀ i, IsOpen (O i))
+    (hd : Pairwise fun i j => Disjoint (O i) (O j)) {v : ℝ → ℂ}
+    (hvc : ContinuousOn v (Ico 0 1)) (hev : ∀ᶠ t in 𝓝[<] (1 : ℝ), ∃ i, v t ∈ O i) :
+    ∃ i, ∀ᶠ t in 𝓝[<] (1 : ℝ), v t ∈ O i := by
+  obtain ⟨t0, ht0, hsub⟩ := mem_nhdsLT_iff_exists_Ioo_subset.1 hev
+  have ht0' : t0 < 1 := ht0
+  set t1 := (max t0 0 + 1) / 2 with ht1
+  have hm1 := le_max_left t0 0
+  have hm2 := le_max_right t0 0
+  have hm3 : max t0 0 < 1 := max_lt ht0' one_pos
+  have ht1a : t0 < t1 := by rw [ht1]; linarith
+  have ht1b : 0 ≤ t1 := by rw [ht1]; linarith
+  have ht1c : t1 < 1 := by rw [ht1]; linarith
+  obtain ⟨i, hi⟩ : ∃ i, v t1 ∈ O i := hsub ⟨ht1a, ht1c⟩
+  have hpc : IsPreconnected (v '' Ico t1 1) :=
+    isPreconnected_Ico.image v (hvc.mono (Ico_subset_Ico_left ht1b))
+  have hU : v '' Ico t1 1 ⊆ O i ∪ ⋃ j : {j // j ≠ i}, O j.1 := by
+    rintro _ ⟨t, ht, rfl⟩
+    obtain ⟨j, hj⟩ : ∃ j, v t ∈ O j := hsub ⟨ht1a.trans_le ht.1, ht.2⟩
+    by_cases hji : j = i
+    · exact Or.inl (hji ▸ hj)
+    · exact Or.inr (mem_iUnion.2 ⟨⟨j, hji⟩, hj⟩)
+  have hsub' := hpc.subset_left_of_subset_union (hO i) (isOpen_iUnion fun j : {j // j ≠ i} => hO j.1)
+    (disjoint_iUnion_right.2 fun j : {j // j ≠ i} => hd (Ne.symm j.2)) hU
+    ⟨v t1, ⟨t1, ⟨le_rfl, ht1c⟩, rfl⟩, hi⟩
+  refine ⟨i, ?_⟩
+  filter_upwards [Ioo_mem_nhdsLT ht1c] with t ht
+  exact hsub' ⟨t, ⟨ht.1.le, ht.2⟩, rfl⟩
+
+theorem take_pre (β : ℕ → Bool) {j m : ℕ} (h : j ≤ m) : (pre β m).take j = pre β j := by
+  have := List.prefix_iff_eq_take.1 (pre_prefix β h)
+  rw [length_pre] at this
+  exact this.symm
+
+theorem dist_limPt_lt {β : ℕ → Bool} {k : ℕ} {z : ℂ} (hz : z ∈ Om (pre β k)) :
+    dist z (limPt β : ℂ) < 2 * (2 : ℝ)⁻¹ ^ k := by
+  obtain ⟨h0, h1, w, hw1, hw2, hd⟩ := hz
+  rw [length_pre] at h1 hw2
+  have hd' : infDist z (edge w) < z.im / 32 := by
+    unfold dd at hd; rw [div_lt_iff₀ h0] at hd; linarith
+  obtain ⟨p, hp, hzp⟩ := (Metric.infDist_lt_iff (edge_nonempty w)).1 hd'
+  have hre := (re_mem_of_mem_edge hw2 hp).1
+  have e : w.take k = pre β k := by
+    have := List.prefix_iff_eq_take.1 hw1
+    rw [length_pre] at this
+    exact this.symm
+  rw [e] at hre
+  obtain ⟨hp1, hp2⟩ := hre
+  have hre' : |z.re - p.re| ≤ dist z p := by
+    rw [Complex.dist_eq]; simpa using Complex.abs_re_le_norm (z - p)
+  have hlim := abs_limPt_sub_mid_pre β k
+  have hw := width_pre β k
+  have hpow : (2 : ℝ)⁻¹ ^ (k + 1) = (2 : ℝ)⁻¹ ^ k / 2 := by rw [pow_succ]; ring
+  have hm : mid (pre β k) = left (pre β k) + width (pre β k) / 2 := rfl
+  have hn : dist z (limPt β : ℂ) ≤ |z.re - limPt β| + |z.im| := by
+    rw [Complex.dist_eq]
+    refine (Complex.norm_le_abs_re_add_abs_im _).trans (le_of_eq ?_)
+    simp
+  rw [abs_of_pos h0] at hn
+  have h3 := abs_sub_le z.re p.re (limPt β)
+  have h4 : |p.re - limPt β| ≤ (2 : ℝ)⁻¹ ^ k / 2 + (2 : ℝ)⁻¹ ^ (k + 1) := by
+    rw [abs_le] at hlim ⊢; constructor <;> linarith [hlim.1, hlim.2]
+  have h5 : (0 : ℝ) < (2 : ℝ)⁻¹ ^ k := by positivity
+  linarith
+
 /-- Tail argument: along a path with `Im → 0` and `Ψ → 0` there is a branch `β` such that each
 tail eventually lies in `Ω_k(β|k)`; the path tends to `limPt β`. -/
 theorem exists_branch {v : ℝ → ℂ} (hvc : ContinuousOn v (Ico 0 1)) (hvm : MapsTo v (Ico 0 1) upper)
@@ -1145,25 +1271,212 @@ theorem exists_branch {v : ℝ → ℂ} (hvc : ContinuousOn v (Ico 0 1)) (hvm : 
     (hΨ : Tendsto (fun t => Ψ (v t)) (𝓝[<] 1) (𝓝 0)) :
     ∃ β : ℕ → Bool, (∀ k, ∀ᶠ t in 𝓝[<] 1, v t ∈ Om (pre β k)) ∧
       Tendsto v (𝓝[<] 1) (𝓝 (limPt β : ℂ)) := by
-  sorry -- TODO (components: `Om u`, `|u| = k`, open and pairwise disjoint)
+  have hk : ∀ k : ℕ, ∃ u : {u : Word // u.length = k}, ∀ᶠ t in 𝓝[<] (1 : ℝ), v t ∈ Om u.1 := by
+    intro k
+    apply exists_eventually_mem (fun u : {u : Word // u.length = k} => Om u.1)
+      (fun u => isOpen_Om u.1) _ hvc
+    · have h1 : ∀ᶠ t in 𝓝[<] (1 : ℝ), (v t).im < (2 : ℝ)⁻¹ ^ (k + 1) :=
+        (tendsto_order.1 him).2 _ (by positivity)
+      have h2 : ∀ᶠ t in 𝓝[<] (1 : ℝ), Ψ (v t) < 1 / 2 := (tendsto_order.1 hΨ).2 _ (by norm_num)
+      filter_upwards [h1, h2, Ioo_mem_nhdsLT (show (0 : ℝ) < 1 by norm_num)] with t ht1 ht2 ht3
+      obtain ⟨u, hu, hz⟩ := exists_mem_Om (hvm ⟨ht3.1.le, ht3.2⟩) ht1 ht2
+      exact ⟨⟨u, hu⟩, hz⟩
+    · rintro ⟨u, hu⟩ ⟨u', hu'⟩ hne
+      refine Set.disjoint_left.2 fun z hz hz' => hne (Subtype.ext ?_)
+      exact List.IsPrefix.eq_of_length (prefix_of_mem_Om hz hz' (by rw [hu, hu']))
+        (by rw [hu, hu'])
+  choose U hU using hk
+  have hpre : ∀ j k, j ≤ k → (U j).1 <+: (U k).1 := by
+    intro j k hjk
+    obtain ⟨t, h1, h2⟩ := ((hU j).and (hU k)).exists
+    exact prefix_of_mem_Om h1 h2 (by rw [(U j).2, (U k).2]; exact hjk)
+  let β : ℕ → Bool := fun n => (U (n + 1)).1.getD n false
+  have hβ : ∀ k, pre β k = (U k).1 := by
+    intro k
+    apply List.ext_getElem (by rw [length_pre, (U k).2])
+    intro i h1 h2
+    rw [length_pre] at h1
+    simp only [pre, List.getElem_ofFn]
+    have hi : i < (U (i + 1)).1.length := by rw [(U (i + 1)).2]; omega
+    show (U (i + 1)).1.getD i false = _
+    rw [List.getD_eq_getElem _ _ hi]
+    exact (hpre (i + 1) k (by omega)).getElem hi
+  refine ⟨β, fun k => by rw [hβ k]; exact hU k, ?_⟩
+  rw [Metric.tendsto_nhds]
+  intro ε hε
+  obtain ⟨k, hk⟩ := exists_pow_lt_of_lt_one (half_pos hε) (by norm_num : (2 : ℝ)⁻¹ < 1)
+  filter_upwards [hU k] with t ht
+  rw [← hβ k] at ht
+  have := dist_limPt_lt ht
+  linarith
+
+/-- The side region `S_i = {z : ∃ w ⊒ (β|i) 1, d_w(z) < 1/32}`. -/
+def Side (β : ℕ → Bool) (i : ℕ) : Set ℂ :=
+  {z | 0 < z.im ∧ ∃ w, pre β i ++ [true] <+: w ∧ dd w z < 1 / 32}
+
+theorem isOpen_Side (β : ℕ → Bool) (i : ℕ) : IsOpen (Side β i) := by
+  rw [isOpen_iff_mem_nhds]
+  rintro z ⟨h0, w, hw, hd⟩
+  filter_upwards [eventually_dd_lt h0 hd] with z' hz'
+  exact ⟨hz'.1, w, hw, hz'.2⟩
 
 /-- Case 2: no path with `Ψ → 0` follows a branch `t 0^∞`. -/
 theorem not_finite_branch {v : ℝ → ℂ} (hvc : ContinuousOn v (Ico 0 1))
-    (hvm : MapsTo v (Ico 0 1) upper) (hΨ : Tendsto (fun t => Ψ (v t)) (𝓝[<] 1) (𝓝 0))
+    (_hvm : MapsTo v (Ico 0 1) upper) (hΨ : Tendsto (fun t => Ψ (v t)) (𝓝[<] 1) (𝓝 0))
     {β : ℕ → Bool} (hβ : ∀ k, ∀ᶠ t in 𝓝[<] 1, v t ∈ Om (pre β k)) :
     {n | β n = true}.Infinite := by
-  sorry -- TODO (the sets `S_i`, (G5b), (G6))
+  by_contra hfin
+  rw [not_infinite] at hfin
+  obtain ⟨n, hzero, hell⟩ := exists_zeros hfin
+  have hpsi : ∀ m ≥ n, psi (pre β m) = 1 / (n + 2) := fun m hm => by rw [psi, hell m hm]
+  have hsep : ∀ i ≥ n, ∀ w w' : Word, pre β i ++ [true] <+: w → pre β (i + 1) <+: w' →
+      i + 1 < w'.length → Separated w w' := by
+    intro i hi w w' hw hw' hl
+    rw [pre_succ, hzero i hi] at hw'
+    exact separated_of_one_zero hw hw' (by rw [length_pre]; omega)
+  have hSd0 : ∀ i j, i < j → Disjoint (Side β (n + i)) (Side β (n + j)) := by
+    intro i j h
+    refine Set.disjoint_left.2 fun z hz hz' => ?_
+    obtain ⟨h0, w, hw, hd⟩ := hz
+    obtain ⟨-, w', hw', hd'⟩ := hz'
+    have h1 : pre β (n + i + 1) <+: w' :=
+      (pre_prefix β (by omega : n + i + 1 ≤ n + j)).trans ((List.prefix_append _ _).trans hw')
+    have hl : n + i + 1 < w'.length := by
+      have := hw'.length_le; simp [length_pre] at this; omega
+    have := dd_gt_of_separated (hsep (n + i) (by omega) w w' hw h1 hl) h0 hd
+    linarith
+  have hSd : Pairwise fun i j => Disjoint (Side β (n + i)) (Side β (n + j)) := by
+    intro i j hij
+    rcases lt_or_gt_of_ne hij with h | h
+    · exact hSd0 i j h
+    · exact (hSd0 j i h).symm
+  have hc0 : (0 : ℝ) < 1 / (n + 2) := by positivity
+  have hc1 : (1 : ℝ) / (n + 2) ≤ 1 / 2 := by
+    rw [div_le_div_iff₀ (by positivity) (by norm_num)]; linarith [Nat.cast_nonneg (α := ℝ) n]
+  have hev : ∀ᶠ t in 𝓝[<] (1 : ℝ), ∃ j, v t ∈ Side β (n + j) := by
+    have h2 : ∀ᶠ t in 𝓝[<] (1 : ℝ), Ψ (v t) < 1 / (n + 2) / 2 :=
+      (tendsto_order.1 hΨ).2 _ (by positivity)
+    filter_upwards [hβ n, h2] with t ht ht2
+    obtain ⟨h0, h1, v0, hv1, hv2, hd0⟩ := ht
+    obtain ⟨w, hw⟩ := exists_lt_of_Ψ_lt (by linarith) ht2
+    have hdw : dd w (v t) < 1 / 32 := by linarith [psi_pos w]
+    have hpw : psi w < 1 / (n + 2) / 2 := by linarith [dd_nonneg w h0]
+    obtain ⟨hnw, hlw⟩ := claimL_below h0 h1 hv1 hv2 hd0 (by linarith : dd w (v t) ≤ 1 / 12)
+    rw [length_pre] at hlw
+    have hne' : w ≠ pre β w.length := by
+      intro h; rw [h, hpsi _ hlw.le] at hpw; linarith
+    have hne : w.take w.length ≠ (pre β w.length).take w.length := by
+      rwa [List.take_length, take_pre β le_rfl]
+    obtain ⟨u, b, hu, hub, hub'⟩ :=
+      exists_split_of_take_ne le_rfl (length_pre β w.length).ge hne
+    have hu1 : u <+: pre β w.length := (List.prefix_append _ _).trans hub'
+    have e : u = pre β u.length := by
+      rw [← take_pre β hu.le]; exact List.prefix_iff_eq_take.1 hu1
+    have hbu : β u.length = !b := by
+      have := hub'.getElem (by simp : u.length < (u ++ [!b]).length)
+      simp [pre] at this
+      simp [this]
+    have hnu : n ≤ u.length := by
+      by_contra h
+      have h3 : pre β (u.length + 1) <+: w :=
+        (pre_prefix β (by omega : u.length + 1 ≤ n)).trans hnw
+      rw [pre_succ, ← e, hbu] at h3
+      have h4 := h3.getElem (by simp : u.length < (u ++ [!b]).length)
+      have h5 := hub.getElem (by simp : u.length < (u ++ [b]).length)
+      simp at h4 h5
+      rw [← h5] at h4
+      cases b <;> simp at h4
+    have hb : b = true := by
+      have := hzero _ hnu
+      rw [hbu] at this
+      simpa using this
+    refine ⟨u.length - n, h0, w, ?_, hdw⟩
+    rw [show n + (u.length - n) = u.length by omega, ← e, ← hb]
+    exact hub
+  obtain ⟨j, hj⟩ := exists_eventually_mem (fun j => Side β (n + j)) (fun j => isOpen_Side β _)
+    hSd hvc hev
+  obtain ⟨t, ht1, ht2⟩ := (hj.and (hβ (n + j + 1))).exists
+  obtain ⟨h0, w, hw, hd⟩ := ht1
+  obtain ⟨-, -, w', hw', hl', hd'⟩ := ht2
+  rw [length_pre] at hl'
+  have := dd_gt_of_separated (hsep (n + j) (by omega) w w' hw hw' hl') h0 hd
+  linarith
 
 /-- Step 2: a real asymptotic value of `s` is a point asymptotic value and lies in `range g`. -/
 theorem mem_range_of_isAsymptoticValue (hgc : Continuous g)
     (hg : range g ⊆ Ioo (-1 / 2) (1 / 2)) {b : ℝ}
     (hb : IsAsymptoticValue' upper (sFun g) (b : ℂ)) :
     b ∈ range g ∧ ∃ p, IsPointAsymptoticValue' upper (sFun g) p (b : ℂ) := by
-  sorry -- TODO (`exists_branch`, `not_finite_branch`, `exists_enc_eq`, Claim L)
+  obtain ⟨v, hvc, hvm, hvd, hvf⟩ := hb
+  have hI01 : Ioo (0 : ℝ) 1 ∈ 𝓝[<] (1 : ℝ) := Ioo_mem_nhdsLT (by norm_num)
+  have him : Tendsto (fun t => (v t).im) (𝓝[<] 1) (𝓝 0) := by
+    refine hvd.congr' ?_
+    filter_upwards [hI01] with t ht
+    exact infDist_upper_compl' (hvm ⟨ht.1.le, ht.2⟩).le
+  have hR : Tendsto (fun t => R g (v t)) (𝓝[<] 1) (𝓝 b) := by
+    have := (Complex.continuous_re.tendsto _).comp hvf
+    simpa [Function.comp_def, sFun] using this
+  have hΨ2 : Tendsto (fun t => Ψ (v t) / 2) (𝓝[<] 1) (𝓝 0) := by
+    have := (Complex.continuous_im.tendsto _).comp hvf
+    simpa [Function.comp_def, sFun] using this
+  have hΨ : Tendsto (fun t => Ψ (v t)) (𝓝[<] 1) (𝓝 0) := by
+    have := hΨ2.const_mul 2
+    simp only [mul_zero] at this
+    exact this.congr fun t => by ring
+  obtain ⟨β, hβ, hlim⟩ := exists_branch hvc hvm him hΨ
+  obtain ⟨σ, hσ⟩ := exists_enc_eq (not_finite_branch hvc hvm hΨ hβ)
+  have hfront : ((limPt β : ℝ) : ℂ) ∈ frontier upper := by
+    rw [Complex.frontier_setOfPred_lt_im]; simp
+  refine ⟨?_, limPt β, hfront, v, hvc, hvm, hlim, hvf⟩
+  have hR' : Tendsto (fun t => R g (v t)) (𝓝[<] 1) (𝓝 (g σ)) := by
+    rw [Metric.tendsto_nhds]
+    intro ε hε
+    obtain ⟨j, hj⟩ := exists_cyl_of_continuous g hgc σ (half_pos hε)
+    obtain ⟨k, hk⟩ := (tendsto_atTop.1 (tendsto_length_kappa_pre_enc σ) j).exists
+    have key : ∀ w : Word, pre β k <+: w → |rr g w - g σ| < ε / 2 := fun w hw => by
+      apply hj
+      intro i hi
+      have hi' : i < (kappa (pre (enc σ) k)).length := lt_of_lt_of_le hi hk
+      rw [← hσ] at hw
+      have h1 := cyl_anti (kappa_mono hw) (ext0_mem_cyl (kappa w)) i hi'
+      have h2 := kappa_pre_enc σ k i hi'
+      rw [h1, h2]
+    have hgσ := hg (mem_range_self σ)
+    have h2 : ∀ᶠ t in 𝓝[<] (1 : ℝ), Ψ (v t) < min (ε / 2) (1 / 2) :=
+      (tendsto_order.1 hΨ).2 _ (by positivity)
+    filter_upwards [hβ k, h2] with t ht hψ
+    obtain ⟨h0, h1, v0, hv1, hv2, hd0⟩ := ht
+    have hlow : g σ - ε / 2 ≤ R g (v t) := by
+      refine claimL_R g hg h0 h1 hv1 hv2 hd0 (by linarith [hgσ.2]) fun w hw _ => ?_
+      linarith [(abs_lt.1 (key w hw)).1]
+    have hm1 := min_le_left (ε / 2) (1 / 2)
+    have hm2 := min_le_right (ε / 2) (1 / 2)
+    obtain ⟨w, hw⟩ := exists_lt_of_Ψ_lt (by linarith) hψ
+    have hdw : dd w (v t) ≤ 1 / 12 := by linarith [psi_pos w]
+    have hww := (claimL_below h0 h1 hv1 hv2 hd0 hdw).1
+    have hup := R_le_rr g hg h0 w
+    have := (abs_lt.1 (key w hww)).2
+    rw [Real.dist_eq, abs_lt]
+    constructor <;> linarith [psi_pos w, dd_nonneg w h0]
+  exact ⟨σ, (tendsto_nhds_unique hR hR').symm⟩
 
 end Fun
 
 /-! ### `lem:cube-lemma-elementary` -/
+
+theorem isAsymptoticValue'_congr {f f' : ℂ → ℂ} (h : EqOn f f' upper) {a : ℂ} :
+    IsAsymptoticValue' upper f a ↔ IsAsymptoticValue' upper f' a := by
+  constructor <;> rintro ⟨v, hc, hm, hd, hf⟩ <;> refine ⟨v, hc, hm, hd, hf.congr' ?_⟩ <;>
+    filter_upwards [Ioo_mem_nhdsLT (show (0 : ℝ) < 1 by norm_num)] with t ht
+  · exact h (hm ⟨ht.1.le, ht.2⟩)
+  · exact (h (hm ⟨ht.1.le, ht.2⟩)).symm
+
+theorem isPointAsymptoticValue'_congr {f f' : ℂ → ℂ} (h : EqOn f f' upper) {p a : ℂ} :
+    IsPointAsymptoticValue' upper f p a ↔ IsPointAsymptoticValue' upper f' p a := by
+  constructor <;> rintro ⟨hp, v, hc, hm, hd, hf⟩ <;> refine ⟨hp, v, hc, hm, hd, hf.congr' ?_⟩ <;>
+    filter_upwards [Ioo_mem_nhdsLT (show (0 : ℝ) < 1 by norm_num)] with t ht
+  · exact h (hm ⟨ht.1.le, ht.2⟩)
+  · exact (h (hm ⟨ht.1.le, ht.2⟩)).symm
 
 /-- `lem:cube-lemma-elementary`: the statement of `TJK.Cube.exists_s` (with the primed copies of
 `def:asymptotic`), proved from `fact:analytic-nonborel` alone. -/
@@ -1171,7 +1484,35 @@ theorem exists_s' : ∃ s : ℂ → ℂ, ContinuousOn s upper ∧ (∀ z, ‖s z
     {b : ℝ | b ∈ Ioo (-1) 1 ∧ IsAsymptoticValue' upper s (b : ℂ)} =
       {b : ℝ | b ∈ Ioo (-1) 1 ∧ ∃ p, IsPointAsymptoticValue' upper s p (b : ℂ)} ∧
     ¬ MeasurableSet {b : ℝ | b ∈ Ioo (-1) 1 ∧ IsAsymptoticValue' upper s (b : ℂ)} := by
-  sorry -- TODO: `s z = sFun g z` for `0 < z.im` and `0` otherwise (`‖s z‖ < 1` for all `z`);
-  -- both sets equal `range g` by `isPointAsymptoticValue_g`, `mem_range_of_isAsymptoticValue`.
+  obtain ⟨g, hgc, hgr, hgm⟩ := exists_g
+  obtain ⟨s, hs⟩ : ∃ s : ℂ → ℂ, s = fun z => if 0 < z.im then sFun g z else 0 := ⟨_, rfl⟩
+  have hEq : EqOn s (sFun g) upper := fun z hz => by
+    rw [hs]; exact if_pos hz
+  have hmem : ∀ σ, g σ ∈ Ioo (-1 : ℝ) 1 := fun σ => by
+    have := hgr (mem_range_self σ)
+    exact ⟨by linarith [this.1], by linarith [this.2]⟩
+  have e1 : {b : ℝ | b ∈ Ioo (-1) 1 ∧ IsAsymptoticValue' upper s (b : ℂ)} = range g := by
+    ext b
+    simp only [mem_ofPred_eq, isAsymptoticValue'_congr hEq]
+    constructor
+    · rintro ⟨-, hb⟩; exact (mem_range_of_isAsymptoticValue g hgc hgr hb).1
+    · rintro ⟨σ, rfl⟩
+      exact ⟨hmem σ, (isPointAsymptoticValue_g g hgc hgr σ).isAsymptoticValue'⟩
+  have e2 : {b : ℝ | b ∈ Ioo (-1) 1 ∧ ∃ p, IsPointAsymptoticValue' upper s p (b : ℂ)} =
+      range g := by
+    ext b
+    simp only [mem_ofPred_eq, isPointAsymptoticValue'_congr hEq]
+    constructor
+    · rintro ⟨-, p, hp⟩
+      exact (mem_range_of_isAsymptoticValue g hgc hgr hp.isAsymptoticValue').1
+    · rintro ⟨σ, rfl⟩
+      exact ⟨hmem σ, _, isPointAsymptoticValue_g g hgc hgr σ⟩
+  refine ⟨s, (continuousOn_sFun g hgr).congr hEq, fun z => ?_, by rw [e1, e2], by
+    rw [e1]; exact hgm⟩
+  rw [hs]
+  dsimp only
+  split_ifs with hz
+  · exact norm_sFun_lt_one g hgr z hz
+  · simp
 
 end TJK.Cube.Elementary

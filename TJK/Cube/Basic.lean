@@ -3,6 +3,7 @@ import TJK.Defs
 import TJK.Plane.Basic
 import TJK.Construct.K
 import TJK.Cube.AnalyticNonBorel
+import TJK.Cube.Elementary
 
 /-!
 # A cube with a non-Borel set of curvilinear convergence (blueprint §I)
@@ -12,7 +13,9 @@ Formalizes `paper/sections/I-cube.tex` (Kaczynski, Proc. AMS 23 (1969)):
 * `def:asymptotic` (`IsAsymptoticValue`, `IsPointAsymptoticValue`);
 * the imported facts `fact:analytic-nonborel` (`exists_analytic_not_borel`), `fact:kierst`
   (`kierst`) and `fact:normal` (`asymptotic_is_point_asymptotic`), stated with `sorry`;
-* `lem:cube-lemma` (`exists_s`);
+* `lem:cube-lemma` (`exists_s`), proved by the elementary argument of `TJK/Cube/Elementary.lean`
+  (`TJK.Cube.Elementary.exists_s'`), so that `kierst` and `asymptotic_is_point_asymptotic` are
+  no longer used;
 * `thm:cube` (`exists_not_measurableSet_curvConvSet'`), for the cube `openCube'`, which is
   definitionally `TJK.Cube.openCube` of `TJK/MainTheorems.lean`.
 
@@ -284,138 +287,9 @@ exactly its real point asymptotic values in `(-1, 1)`, and form a non-Borel set.
 theorem exists_s : ∃ s : ℂ → ℂ, ContinuousOn s upper ∧ (∀ z, ‖s z‖ < 1) ∧
     {b : ℝ | b ∈ Ioo (-1) 1 ∧ IsAsymptoticValue upper s (b : ℂ)} =
       {b : ℝ | b ∈ Ioo (-1) 1 ∧ ∃ p, IsPointAsymptoticValue upper s p (b : ℂ)} ∧
-    ¬ MeasurableSet {b : ℝ | b ∈ Ioo (-1) 1 ∧ IsAsymptoticValue upper s (b : ℂ)} := by
-  obtain ⟨A, hA, hAnm⟩ := exists_analytic_not_borel
-  obtain ⟨h, hh, homit, hasym⟩ := kierst hA
-  set s : ℂ → ℂ := fun z => squash (h (wrap z)) with hs
-  have hsc : ContinuousOn s upper :=
-    continuous_squash.comp_continuousOn (hh.continuousOn.comp continuous_wrap.continuousOn
-      fun z hz => wrap_mem_disc hz)
-  have hI01 : Ioo (0 : ℝ) 1 ∈ 𝓝[<] (1 : ℝ) := Ioo_mem_nhdsLT (by norm_num)
-  -- an asymptotic value `b` of `s` gives the asymptotic value `ρ⁻¹(b)` of `h`
-  have h1 : ∀ b : ℝ, b ∈ Ioo (-1) 1 → IsAsymptoticValue upper s (b : ℂ) →
-      b ∈ realSquash '' A := by
-    rintro b hb ⟨v, hvc, hvm, hvd, hvf⟩
-    have hb1 : ‖(b : ℂ)‖ < 1 := by
-      rw [Complex.norm_real, Real.norm_eq_abs, abs_lt]; exact hb
-    have him : Tendsto (fun t => (v t).im) (𝓝[<] 1) (𝓝 0) := by
-      refine hvd.congr' ?_
-      filter_upwards [hI01] with t ht
-      exact infDist_upper_compl (hvm ⟨ht.1.le, ht.2⟩).le
-    have hasy : IsAsymptoticValue disc h (unsquash b) := by
-      refine ⟨wrap ∘ v, continuous_wrap.comp_continuousOn hvc,
-        fun t ht => wrap_mem_disc (hvm ht), ?_, ?_⟩
-      · refine squeeze_zero' (Eventually.of_forall fun t => infDist_nonneg) ?_ him
-        filter_upwards [hI01] with t ht
-        exact infDist_wrap_le (hvm ⟨ht.1.le, ht.2⟩)
-      · refine ((continuousAt_unsquash hb1).tendsto.comp hvf).congr fun t => ?_
-        simp [hs, unsquash_squash]
-    have hmem : unsquash b ∈ (((↑) : ℝ → ℂ) '' A) ∪ {Complex.I, -Complex.I} := by
-      rw [← hasym]; exact hasy
-    rcases hmem with ⟨a, ha, hab⟩ | hI
-    · refine ⟨a, ha, ?_⟩
-      apply Complex.ofReal_injective
-      rw [← squash_ofReal, hab, squash_unsquash hb1]
-    · exfalso
-      rw [unsquash_ofReal] at hI
-      simp only [mem_insert_iff, mem_singleton_iff] at hI
-      rcases hI with hI | hI <;> have := congrArg Complex.im hI <;>
-        rw [Complex.ofReal_im] at this <;> simp at this
-  -- each `a ∈ A` gives the point asymptotic value `ρ(a)` of `s`
-  have h2 : ∀ a ∈ A, ∃ p, IsPointAsymptoticValue upper s p (realSquash a : ℂ) := by
-    intro a ha
-    have ha' : IsAsymptoticValue disc h (a : ℂ) := by
-      have : (a : ℂ) ∈ {a | IsAsymptoticValue disc h a} := by
-        rw [hasym]; exact Or.inl ⟨a, ha, rfl⟩
-      exact this
-    obtain ⟨p, hpf, w, hwc, hwm, hwp, hwf⟩ :=
-      asymptotic_is_point_asymptotic hh I_ne_neg_I homit ha'
-    have hp1 : ‖p‖ = 1 := by
-      rw [disc, frontier_ball (0 : ℂ) one_ne_zero, mem_sphere_zero_iff_norm] at hpf
-      exact hpf
-    set θ := Complex.arg p with hθ
-    set e : ℂ := Complex.exp (-(θ : ℂ) * Complex.I) with he
-    have heθ : e * Complex.exp (θ * Complex.I) = 1 := by
-      rw [he, ← Complex.exp_add]; ring_nf; exact Complex.exp_zero
-    have hpe : p * e = 1 := by
-      have := Complex.norm_mul_exp_arg_mul_I p
-      rw [hp1, Complex.ofReal_one, one_mul] at this
-      rw [← this, mul_comm, heθ]
-    have hne : ‖e‖ = 1 := by
-      rw [he, show -(θ : ℂ) * Complex.I = ((-θ : ℝ) : ℂ) * Complex.I by push_cast; ring]
-      exact Complex.norm_exp_ofReal_mul_I _
-    set u : ℝ → ℂ := fun t => w t * e with hu_def
-    have hu : Tendsto u (𝓝[<] 1) (𝓝 1) := by rw [← hpe]; exact hwp.mul_const e
-    set v : ℝ → ℂ := fun t =>
-      ((θ + Complex.arg (u t) : ℝ) : ℂ) + ((1 - ‖w t‖ : ℝ) : ℂ) * Complex.I with hv_def
-    have hv_re : ∀ t, (v t).re = θ + Complex.arg (u t) := fun t => by simp [hv_def]
-    have hv_im : ∀ t, (v t).im = 1 - ‖w t‖ := fun t => by simp [hv_def]
-    have hwrap : ∀ t, wrap (v t) = w t := by
-      intro t
-      have hm : max (1 - (1 - ‖w t‖)) 0 = ‖u t‖ := by
-        rw [hu_def, norm_mul, hne, mul_one, sub_sub_cancel, max_eq_left (norm_nonneg _)]
-      rw [wrap, hv_re, hv_im, hm]
-      push_cast
-      rw [add_mul, Complex.exp_add, ← mul_assoc, mul_comm _ (Complex.exp _), ← mul_assoc,
-        mul_comm (Complex.exp _), Complex.norm_mul_exp_arg_mul_I, hu_def]
-      simp only
-      rw [mul_assoc, heθ, mul_one]
-    have hevent : ∀ᶠ t in 𝓝[<] 1, u t ∈ Complex.slitPlane :=
-      hu (Complex.isOpen_slitPlane.mem_nhds Complex.one_mem_slitPlane)
-    obtain ⟨t₀, ht₀0, ht₀1, ht₀⟩ := exists_Ico_of_eventually hevent
-    have hvm : MapsTo v (Ico 0 1) upper := fun t ht => by
-      show 0 < (v t).im
-      have := hwm ht
-      rw [disc, mem_ball_zero_iff] at this
-      rw [hv_im]; linarith
-    have hΦ : Continuous
-        (fun x : ℝ × ℝ => ((θ + x.1 : ℝ) : ℂ) + ((1 - x.2 : ℝ) : ℂ) * Complex.I) := by
-      fun_prop
-    have hvc : ContinuousOn v (Ico t₀ 1) := by
-      intro t ht
-      have hw : ContinuousWithinAt w (Ico t₀ 1) t :=
-        (hwc t ⟨ht₀0.trans ht.1, ht.2⟩).mono (Ico_subset_Ico_left ht₀0)
-      have harg := (Complex.continuousAt_arg (ht₀ t ht)).comp_continuousWithinAt
-        (hw.mul continuousWithinAt_const)
-      exact hΦ.continuousAt.comp_continuousWithinAt (harg.prodMk hw.norm)
-    have hvp : Tendsto v (𝓝[<] 1) (𝓝 (θ : ℂ)) := by
-      have harg : Tendsto (fun t => Complex.arg (u t)) (𝓝[<] 1) (𝓝 0) := by
-        have := (Complex.continuousAt_arg Complex.one_mem_slitPlane).tendsto.comp hu
-        rwa [Complex.arg_one] at this
-      have hw1 : Tendsto (fun t => ‖w t‖) (𝓝[<] 1) (𝓝 1) := by
-        have := hwp.norm; rwa [hp1] at this
-      have := (hΦ.tendsto (0, 1)).comp (harg.prodMk_nhds hw1)
-      convert this using 2
-      all_goals first | (funext t; simp [hv_def]) | simp
-    have hθf : (θ : ℂ) ∈ frontier upper :=
-      mem_frontier_of_tendsto isOpen_upper hvp
-        (by filter_upwards [hI01] with t ht; exact hvm ⟨ht.1.le, ht.2⟩) (by simp)
-    refine ⟨θ, isPointAsymptoticValue_of_Ico hθf ht₀1 hvc
-      (hvm.mono_left (Ico_subset_Ico_left ht₀0)) hvp ?_⟩
-    rw [← squash_ofReal]
-    refine (continuous_squash.continuousAt.tendsto.comp hwf).congr fun t => ?_
-    simp [hs, hwrap]
-  have hE : {b : ℝ | b ∈ Ioo (-1) 1 ∧ IsAsymptoticValue upper s (b : ℂ)} =
-      realSquash '' A := by
-    ext b
-    constructor
-    · rintro ⟨hb, hasy⟩; exact h1 b hb hasy
-    · rintro ⟨a, ha, rfl⟩
-      obtain ⟨p, hp⟩ := h2 a ha
-      exact ⟨realSquash_mem a, hp.isAsymptoticValue⟩
-  refine ⟨s, hsc, fun z => norm_squash_lt_one _, ?_, ?_⟩
-  · ext b
-    constructor
-    · rintro ⟨hb, hasy⟩
-      obtain ⟨a, ha, rfl⟩ := h1 b hb hasy
-      exact ⟨hb, h2 a ha⟩
-    · rintro ⟨hb, p, hp⟩
-      exact ⟨hb, hp.isAsymptoticValue⟩
-  · rw [hE]
-    intro hm
-    apply hAnm
-    rw [← realSquash_injective.preimage_image A]
-    exact continuous_realSquash.measurable hm
+    ¬ MeasurableSet {b : ℝ | b ∈ Ioo (-1) 1 ∧ IsAsymptoticValue upper s (b : ℂ)} :=
+  -- the primed definitions of `TJK.Cube.Elementary` are definitionally the unprimed ones
+  Elementary.exists_s'
 
 /-! ### `thm:cube`: notation and auxiliary estimates -/
 
