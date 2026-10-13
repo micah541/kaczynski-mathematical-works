@@ -48,6 +48,7 @@ LAYERS = {
     "sec:discont": "G Discontinuous functions",
     "sec:harmonic": "H Harmonic functions",
     "sec:cube": "I The cube",
+    "sec:wedderburn": "J Wedderburn's theorem",
     "app:variants": "Z Variants",
 }
 

@@ -10,7 +10,7 @@ affects a main theorem.
 Each entry names its blueprint label and Lean declaration. The design log is
 [`blueprint/DECISIONS.md`](blueprint/DECISIONS.md).
 
-**Sources.** *Math. Mag.* 41 (1968); *J. Math. Mech.* 14 (1965), known to us only through its review;
+**Sources.** *Amer. Math. Monthly* 71 (1964); *Math. Mag.* 41 (1968); *J. Math. Mech.* 14 (1965), known to us only through its review;
 *Michigan Math. J.* 13 (1966); the dissertation *Boundary functions* (University of Michigan, 1967);
 *Trans. AMS* 137 (1969); *Trans. AMS* 141 (1969); *Proc. AMS* 23 (1969).
 
@@ -98,7 +98,16 @@ general theorem is not needed and is not formalized.
 Blueprint `lem:two-domains`, `fact:bagemihl`; Lean `TJK.accessible_two_domains`,
 `TJK.ambiguous_countable`.
 
-### 2.4 Other quoted results, now proved
+### 2.4 The classification of p-groups with one subgroup of order p
+*Amer. Math. Monthly 71, proof of Wedderburn's theorem.* The note cites Hall's classification: a
+p-group with exactly one subgroup of order p is cyclic or generalized quaternion. We prove directly
+the special case the argument uses: such a group, if not cyclic, has p = 2 and contains elements
+a, b of order 4 with bab⁻¹ = a⁻¹. The proof is an induction through a cyclic subgroup of index p.
+The note also cites the solvability of groups whose Sylow subgroups are all cyclic
+(Miller–Blichfeldt–Dickson); we use Mathlib's theory of such groups (`IsZGroup`).
+Blueprint `lem:wb-pgroup`; Lean `TJK.Wedderburn.exists_quaternion_of_not_isCyclic`.
+
+### 2.5 Other quoted results, now proved
 - **Plane topology.** The crosscut theorem, proved via continuous logarithms and homotopy lifting,
   replaces the dissertation's "Figure 5" argument and the monotonicity of first hitting points.
   Tietze's theorem that path-connected Hausdorff spaces are arc-connected is also proved.
@@ -127,6 +136,10 @@ In these places the source is correct, but the formal proof follows a different 
   dense G<sub>δ</sub> null set. Baire's theorem is applied to an affine change of variable.
 - **Trans. AMS 141, (XX).** For the existence of special functions we give a construction without
   recursion.
+- **Amer. Math. Monthly 71, last step.** The note takes a minimal normal subgroup `A/Z` of
+  `F*/Z`, which is cyclic, and shows `A` is central. We instead use that the commutator subgroup of
+  `F*` is cyclic (Mathlib), show by the same `(1 + x)` argument that it is central, and conclude
+  that `F*` is nilpotent, hence cyclic. Blueprint `thm:wedderburn`.
 - **Trans. AMS 141, special families.** The paper also requires a special family to be nonempty.
   Nothing uses this, and we drop it.
 
@@ -134,6 +147,7 @@ In these places the source is correct, but the formal proof follows a different 
 
 | Item | Reason |
 |---|---|
+| Problems posed in *Amer. Math. Monthly* (Advanced Problem 5210, 1964) and *Mathematics Magazine* (Problem 787 and "A Match Stick Problem", 1971) | Short problems rather than papers; not included. |
 | Dissertation, unsolved problems 1–5; Trans. AMS 141, Problems 1–2; Proc. AMS 23, Problem | Open questions in the source. |
 | J. Math. Mech. 14, remarks on three dimensions | Not stated as a theorem. Section I treats the three-dimensional case. |
 | Trans. AMS 137, Lemma in full generality | Needs the Jordan curve theorem. The case used in the paper is proved directly. |

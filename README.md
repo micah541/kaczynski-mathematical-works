@@ -1,19 +1,21 @@
-# The Mathematical Works of Theodore J. Kaczynski, formalized in Lean 4
+# The Complete Mathematical Works of Theodore J. Kaczynski, formalized in Lean 4
 
-This repository formalizes the research papers and doctoral dissertation of Theodore J. Kaczynski
-(1965–1969), which are mostly about how functions in the disk and the half-plane behave at the
-boundary. It contains:
+This repository formalizes every published mathematical paper of Theodore J. Kaczynski, together
+with his doctoral dissertation (1964–1969). Most of them are about how functions in the disk and the
+half-plane behave at the boundary; the first is a new proof of Wedderburn's theorem. (Not included:
+three short problems he posed in the *American Mathematical Monthly* and *Mathematics Magazine*.)
+It contains:
 
 - a **blueprint**: one self-contained mathematical document that proves every result of these works;
-- a **Lean 4 formalization** of all of it (about 22,000 lines, on Mathlib);
+- a **Lean 4 formalization** of all of it (about 22,400 lines, on Mathlib);
 - an **errata** ([`ERRATA.md`](ERRATA.md)) recording where the published proofs needed a correction,
   relied on outside theorems, or were replaced by different arguments.
 
 ## Status
 
-All **20 pinned headline theorems** are proved, and no declaration in the project uses `sorry`.
+All **21 pinned headline theorems** are proved, and no declaration in the project uses `sorry`.
 Every headline theorem depends only on Lean's three standard axioms (`propext`,
-`Classical.choice`, `Quot.sound`). The blueprint has 137 items, all formalized.
+`Classical.choice`, `Quot.sound`). The blueprint has 141 items, all formalized.
 
 The results the sources quote from the literature are proved here, or the argument that used them
 is replaced:
@@ -25,12 +27,14 @@ is replaced:
 - Bagemihl's ambiguous-point theorem for continuous functions.
 
 Two deep theorems the sources use, the full Jordan curve theorem and Kierst's theorem, are avoided by
-direct arguments (see [`ERRATA.md`](ERRATA.md), §2).
+direct arguments (see [`ERRATA.md`](ERRATA.md), §2). Wedderburn's theorem is proved by Kaczynski's
+argument, without Mathlib's own proof of it (Witt's), which is switched off in that file.
 
 ## The sources
 
 | Source | Topic | Blueprint | Lean |
 |---|---|---|---|
+| *Amer. Math. Monthly* 71 (1964) | a group-theoretic proof of Wedderburn's theorem | §J | [`Wedderburn.lean`](TJK/Wedderburn.lean) |
 | *Math. Magazine* 41 (1968) | Sutcliffe's digit-reversal conjecture | §A | [`Sutcliffe.lean`](TJK/Sutcliffe.lean) |
 | *J. Math. Mech.* 14 (1965), known only from its review | boundary functions in the disk; homeomorphisms | §§E, G | [`BoundaryFn/`](TJK/BoundaryFn), [`Discont/`](TJK/Discont) |
 | *Michigan Math. J.* 13 (1966) | McMillan's F<sub>σδ</sub> theorem; cluster sets | §D | [`McMillan/`](TJK/McMillan) |
@@ -64,6 +68,7 @@ changes. They include:
   functions with bounded integral means.
 - **The cube:** a bounded continuous function in a cube whose set of curvilinear convergence is not
   Borel.
+- **Wedderburn's theorem**, by Kaczynski's proof: every finite division ring is commutative.
 - **Sutcliffe's conjecture:** if base `n` has a 3-digit number that is multiplied by an integer when
   its digits are reversed, it also has a 2-digit one.
 

@@ -1,0 +1,92 @@
+% ===========================================================================
+\section{Wedderburn's theorem}\label{sec:wedderburn}
+% ===========================================================================
+Source: \cite{Wedd}, a group-theoretic proof that every finite skew field (division ring) is commutative. The note cites
+two results from group theory: the classification of $p$-groups with a unique subgroup of order $p$ (\cite[p.~189]{Hall}),
+and the solvability of finite groups whose Sylow subgroups are cyclic (Miller--Blichfeldt--Dickson). For the first we prove
+directly the special case that is needed (Lemma~\ref{lem:wb-pgroup}); for the second we use Mathlib's theory of Z-groups
+(\texttt{IsZGroup}), which proves the stronger fact that such a group has cyclic commutator subgroup. Mathlib
+also proves Wedderburn's theorem itself, by Witt's argument; the formalization below does not use that proof (the instance
+\texttt{littleWedderburn} is switched off in \texttt{TJK/Wedderburn.lean}, and the constants on which
+\texttt{TJK.Wedderburn.mul\_comm} depends were checked not to include it).
+
+\begin{lemma}[{\cite[Lemma]{Wedd}}]\label{lem:wb-squares}
+\lean{TJK.Wedderburn.exists_sq_add_sq_eq_neg_one}
+Let $q$ be a prime. Then $t^2+r^2\equiv-1\pmod q$ has a solution with $t\not\equiv0\pmod q$.
+\end{lemma}
+\begin{proof}
+If $-1$ is a square, take $r=0$ and $t^2=-1$. Otherwise ($q$ is odd) every non-square is $-s^2$ for some $s\ne0$. If some
+$t^2+r^2$ is a non-square, $t^2+r^2=-s^2$ gives $(ts^{-1})^2+(rs^{-1})^2=-1$, and $t\ne0$ or $r\ne0$, so after
+exchanging $t$ and $r$, $t\ne0$. Otherwise the squares are closed under addition, so $-1=1+1+\dots+1$ ($q-1$ terms) is a
+square, a contradiction.
+\end{proof}
+
+\begin{lemma}[special case of {\cite[Theorem 12.5.2]{Hall}}]\label{lem:wb-pgroup}
+\lean{TJK.Wedderburn.exists_quaternion_of_not_isCyclic}
+Let $S$ be a finite $p$-group with exactly one subgroup of order $p$. If $S$ is not cyclic, then $p=2$ and $S$ contains
+elements $a,b$ of order $4$ with $bab^{-1}=a^{-1}$.
+\end{lemma}
+\begin{proof}
+Induction on $\abs S$. As $S$ is not cyclic, $\abs S>p$; let $M$ be a subgroup of index $p$, which is normal. $M$ has exactly
+one subgroup of order $p$; if $M$ is not cyclic we are done by induction. So $M=\langle x\rangle$ with $\abs x=p^n$, $n\ge1$.
+Choose $y\in S\setminus M$; then $y^{-1}xy=x^\rho$ and $y^p=x^\sigma$ for some integers $\rho,\sigma\ge0$ ($M$ is normal of
+index $p$). Since $y^p$ commutes with $y$, $x^{\rho\sigma}=y^{-1}x^\sigma y=x^\sigma$, so $\sigma(\rho-1)\equiv0\pmod{p^n}$. Induction
+on $k$ gives $(yx^j)^k=y^kx^{j(1+\rho+\dots+\rho^{k-1})}$, so
+\[
+(yx^j)^p=x^{\sigma+j\Sigma},\qquad \Sigma=1+\rho+\dots+\rho^{p-1}.
+\]
+If $p\nmid\sigma$, then $y^p$ generates $M$, so $y$ has order $p^{n+1}=\abs S$ and $S$ is cyclic. Hence $p\mid\sigma$. If
+some $j$ has $\sigma+j\Sigma\equiv0\pmod{p^n}$, then $yx^j\notin M$ has order $p$, and $\langle yx^j\rangle$ is a second
+subgroup of order $p$, as $M$ contains one: a contradiction. It remains to see when such a $j$ exists. It does whenever
+$\Sigma=p^ku$ with $p\nmid u$ and $p^k\mid\sigma$: take $j\equiv-(\sigma/p^k)u^{-1}\pmod{p^n}$.
+
+\emph{$p$ odd.} If $\rho\not\equiv1\pmod p$, then $(\rho-1)\Sigma=\rho^p-1\equiv\rho-1\pmod p$ by Fermat, so $\Sigma\equiv1\pmod p$
+($k=0$). If $\rho=1+cp$, then $\rho^i\equiv1+icp\pmod{p^2}$, so $\Sigma\equiv p+cp\cdot\frac{p(p-1)}2\equiv p\pmod{p^2}$ as $p$ is odd;
+thus $\Sigma=pu$ with $p\nmid u$, and $p\mid\sigma$ ($k=1$).
+
+\emph{$p=2$.} Here $\Sigma=1+\rho$. If $\rho$ is even, $\Sigma$ is odd ($k=0$). If $\rho\equiv1\pmod4$, $\Sigma=2u$ with $u$ odd
+($k=1$). Let $\rho\equiv3\pmod 4$. Then $\rho-1=2w$ with $w$ odd, and $\sigma(\rho-1)\equiv0\pmod{2^n}$ gives $2^{n-1}\mid\sigma$.
+Write $1+\rho=2^ku$ with $u$ odd; if $k\le n-1$ we are done, and if $2^n\mid\sigma$ take $j=0$. There remains the case
+$\rho\equiv-1\pmod{2^n}$, $\sigma=2^{n-1}v$ with $v$ odd; then $n\ge2$ (as $2\mid\sigma$) and $\sigma\equiv2^{n-1}\pmod{2^n}$, so
+$y^2=x^{2^{n-1}}$, while $y^{-1}xy=x^{-1}$. Put $a=x^{2^{n-2}}$ (order $4$) and $b=y$: $b^2=a^2\ne1$ and $b^4=1$, so $b$ has
+order $4$, and $bab^{-1}=a^{-1}$.
+\end{proof}
+
+\begin{lemma}[{\cite{Wedd}}]\label{lem:wb-sylow}
+\lean{TJK.Wedderburn.isCyclic_sylow}
+\uses{lem:wb-squares, lem:wb-pgroup}
+Every Sylow subgroup of the multiplicative group $F^*$ of a finite division ring $F$ is cyclic.
+\end{lemma}
+\begin{proof}
+Let $S$ be a Sylow $p$-subgroup, $S\ne1$. Its center contains an element $g$ of order $p$. If $h\in S$ generates a subgroup of order
+$p$ other than $\langle g\rangle$, then $g$ and $h$ commute, so they generate a commutative subring of $F$, a commutative domain in
+which the $p^2$ elements of $\langle g,h\rangle$ are roots of $X^p-1$: impossible. So $S$ has a unique subgroup of order $p$.
+Suppose $S$ is not cyclic; by Lemma~\ref{lem:wb-pgroup}, $p=2$ and there are $a,b$ of order $4$ with $ba=a^{-1}b$. Since
+$(a^2-1)(a^2+1)=a^4-1=0$ and $a^2\ne1$, $a^2=-1$; in particular $1\ne-1$, so the characteristic $q$ of $F$ is odd. Then
+$a^{-1}=a^3=-a$, so $ba=-ab$, and likewise $b^2=-1$. Take $t,r$ from Lemma~\ref{lem:wb-squares} for $q$. Using $a^2=b^2=-1$,
+$ba=-ab$,
+\[
+(t+ra+b)(r^2+1+rta+tb)=r(t^2+r^2+1)a+(t^2+r^2+1)b=0 .
+\]
+If $t+ra+b=0$, then $b=-t-ra$ commutes with $a$. Otherwise $r^2+1+rta+tb=0$ and $t\ne0$, so $b=-t^{-1}(r^2+1)-ra$ commutes with
+$a$. Either way $ab=ba=-ab$, so $2ab=0$, which is impossible as $q$ is odd and $ab\ne0$.
+\end{proof}
+
+\begin{theorem}[Wedderburn; proof of {\cite{Wedd}}]\label{thm:wedderburn}
+\lean{TJK.Wedderburn.mul_comm}
+\uses{lem:wb-sylow}
+Every finite division ring is commutative.
+\end{theorem}
+\begin{proof}
+By Lemma~\ref{lem:wb-sylow} all Sylow subgroups of $F^*$ are cyclic, so (H\"older, Burnside, Zassenhaus; in Mathlib
+\texttt{IsZGroup.isCyclic\_commutator}) the commutator subgroup $A=[F^*,F^*]$ is cyclic, in particular abelian; it is
+normal. We show below that an abelian normal subgroup $A$ of $F^*$ lies in the center $Z$ of $F^*$. Then $[F^*,F^*]\subseteq Z$,
+so $F^*$ is nilpotent; a nilpotent group with cyclic Sylow subgroups is the direct product of them, hence cyclic, so $F^*$ is
+abelian and $F$ is commutative. (The note argues instead with a minimal normal subgroup $A/Z$ of the solvable group $F^*/Z$,
+which is cyclic, and the fact that a group cyclic modulo a central subgroup is abelian; the key step below is the same.)
+
+Let $x\in F^*$ and $y\in A$; we show $xy=yx$. If $x=-1$ this is clear. Otherwise $1+x\in F^*$, and as $A$ is normal,
+$xyx^{-1}\in A$ and $z=(1+x)y(1+x)^{-1}\in A$. From $(1+x)y=z(1+x)$, $y-z=zx-xy=(z-xyx^{-1})x$. If $z=xyx^{-1}$, then $y=z=xyx^{-1}$.
+Otherwise $x=(z-xyx^{-1})^{-1}(y-z)$; since $A$ is abelian, $z$, $y$ and $xyx^{-1}$ commute with $y$, hence so does $x$. Thus
+$A\subseteq Z$.
+\end{proof}

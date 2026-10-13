@@ -92,11 +92,12 @@ footer { font-family: var(--sans); font-size: 0.85rem; color: var(--muted); bord
   <div class="lede">
     <div class="kicker">Errata and divergences · Lean 4 formalization</div>
     <h1>The mathematical works of Theodore J. Kaczynski</h1>
-    <p>We formalized all seven sources in Lean 4 with Mathlib. Doing so required a blueprint that proves every result in full. This sheet lists each place where what we proved departs from the published text. Some are errors that needed a correction. Some are steps the sources cite without proof, which we proved or routed around. Some are arguments we replaced with different ones. The rest are items we did not formalize.</p>
+    <p>We formalized all eight sources, his published papers and his dissertation, in Lean 4 with Mathlib. Doing so required a blueprint that proves every result in full. This sheet lists each place where what we proved departs from the published text. Some are errors that needed a correction. Some are steps the sources cite without proof, which we proved or routed around. Some are arguments we replaced with different ones. The rest are items we did not formalize.</p>
     <p class="meta">Prepared 13 October 2026 from the project blueprint (<code>paper/main.tex</code>) and its design log (<code>blueprint/DECISIONS.md</code>).</p>
   </div>
 
   <div class="sources" aria-label="Sources">
+    <div><b>Amer. Math. Monthly</b><span>71 (1964): another proof of Wedderburn’s theorem</span></div>
     <div><b>Math. Mag.</b><span>41 (1968): note on Alan Sutcliffe’s digit-reversal problem</span></div>
     <div><b>J. Math. Mech.</b><span>14 (1965): boundary functions in the disk (only the review is available)</span></div>
     <div><b>Michigan Math. J.</b><span>13 (1966): McMillan’s F<sub>σδ</sub> theorem, cluster sets</span></div>
@@ -215,6 +216,18 @@ footer { font-family: var(--sans); font-size: 0.85rem; color: var(--muted); bord
     </article>
 
     <article class="entry">
+      <header><h3>Classifying p-groups with one subgroup of order p</h3><span class="tag t-gap">Cited</span></header>
+      <div class="loc">Amer. Math. Monthly 71, proof of Wedderburn’s theorem</div>
+      <dl>
+        <dt>Source</dt>
+        <dd>The note cites Hall’s classification: a <span class="math">p</span>-group with exactly one subgroup of order <span class="math">p</span> is cyclic or generalized quaternion. It also cites the solvability of groups whose Sylow subgroups are all cyclic.</dd>
+        <dt>What we did</dt>
+        <dd>We prove directly the special case the argument uses: if such a group is not cyclic, then <span class="math">p = 2</span> and it contains <span class="math">a, b</span> of order 4 with <span class="math">bab<sup>−1</sup> = a<sup>−1</sup></span>. For groups with cyclic Sylow subgroups we use Mathlib’s theory (<code>IsZGroup</code>). Mathlib’s own proof of Wedderburn’s theorem is switched off, and a dependency check confirms it is not used.</dd>
+      </dl>
+      <p class="refs">Blueprint <code>lem:wb-pgroup</code>, <code>thm:wedderburn</code> · Lean <code>TJK.Wedderburn.mul_comm</code></p>
+    </article>
+
+    <article class="entry">
       <header><h3>Other quoted results, now proved</h3><span class="tag t-gap">Cited</span></header>
       <div class="loc">Several sources</div>
       <dl>
@@ -258,6 +271,8 @@ footer { font-family: var(--sans); font-size: 0.85rem; color: var(--muted); bord
         <dd>For the null sets <span class="math">M<sub>0</sub>, M<sub>1</sub></span> we take the Liouville numbers, a dense G<sub>δ</sub> null set. Baire’s theorem is applied to an affine change of variable.</dd>
         <dt>(XX)</dt>
         <dd>For the existence of special functions we give a construction without recursion. The disjointness constraints turn out to be independent of the other member’s size.</dd>
+        <dt>Wedderburn, last step</dt>
+        <dd>The note takes a minimal normal subgroup of <span class="math">F*/Z</span> and shows it is central. We use instead that the commutator subgroup of <span class="math">F*</span> is cyclic, show by the same <span class="math">(1 + x)</span> argument that it is central, and conclude that <span class="math">F*</span> is nilpotent, hence cyclic.</dd>
         <dt>Special families</dt>
         <dd>Trans. AMS 141 also requires a special family to be nonempty. Nothing uses this, and we drop it.</dd>
       </dl>
@@ -270,6 +285,7 @@ footer { font-family: var(--sans); font-size: 0.85rem; color: var(--muted); bord
       <table class="nf">
         <thead><tr><th>Item</th><th>Reason</th></tr></thead>
         <tbody>
+          <tr><td>Problems posed in the Amer. Math. Monthly (1964) and Mathematics Magazine (1971)</td><td>Short problems rather than papers. Not included.</td></tr>
           <tr><td>Dissertation, unsolved problems 1–5; Trans. AMS 141, Problems 1–2; Proc. AMS 23, Problem</td><td>Open questions in the source.</td></tr>
           <tr><td>J. Math. Mech. 14, remarks on three dimensions</td><td>Not stated as a theorem. Section I treats the three-dimensional case.</td></tr>
           <tr><td>Trans. AMS 137, Lemma in full generality</td><td>Needs the Jordan curve theorem. The case used in the paper is proved directly.</td></tr>
@@ -281,7 +297,7 @@ footer { font-family: var(--sans); font-size: 0.85rem; color: var(--muted); bord
   </section>
 
   <footer>
-    <p>Status: all 20 pinned headline theorems are proved in Lean, and <code>#print axioms</code> lists only <code>propext</code>, <code>Classical.choice</code> and <code>Quot.sound</code> for each. No fact in their dependencies is assumed without proof.</p>
+    <p>Status: all 21 pinned headline theorems are proved in Lean, and <code>#print axioms</code> lists only <code>propext</code>, <code>Classical.choice</code> and <code>Quot.sound</code> for each. No fact in their dependencies is assumed without proof.</p>
     <p>Each entry names its blueprint label and Lean declaration in the formalization repository.</p>
   </footer>
 </main>

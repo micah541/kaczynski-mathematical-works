@@ -34,4 +34,5 @@ import TJK.Harmonic.Example
 import TJK.Harmonic.Access
 import TJK.Variant
 import TJK.Discont.Example
+import TJK.Wedderburn
 import TJK.Harmonic.Theorem

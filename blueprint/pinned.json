@@ -203,5 +203,10 @@
     "sha": "7890c5185fec2265",
     "statement": "theorem three_digit_of_two_digit {n : ℕ} (h : HasSolution n 2) : HasSolution n 3",
     "file": "TJK/Sutcliffe.lean"
+  },
+  "TJK.Wedderburn.mul_comm": {
+    "sha": "e1acff04ce951de2",
+    "statement": "theorem mul_comm (D : Type*) [DivisionRing D] [Finite D] (a b : D) : a * b = b * a",
+    "file": "TJK/Wedderburn.lean"
   }
 }

@@ -7,7 +7,7 @@ Every node is a numbered item of the [companion paper](../paper/main.pdf). Arrow
 
 | Status | Meaning | Count |
 |---|---|---|
-| `proved` | proved (no `sorry`) | 118 |
+| `proved` | proved (no `sorry`) | 122 |
 | `defined` | definition written in Lean | 16 |
 | `imported` | imported fact (Mathlib / library) | 3 |
 
@@ -162,6 +162,12 @@ flowchart BT
     lem_cube_lemma["lem:cube-lemma<br/><small>Lemma</small>"]
     lem_cube_lemma_elementary["lem:cube-lemma-elementary<br/><small>elementary form of Lemma reflem:cube-lemma</small>"]
     thm_cube["thm:cube<br/><small>Theorem</small>"]
+  end
+  subgraph J_Wedderburn_s_theorem["J Wedderburn's theorem"]
+    lem_wb_squares["lem:wb-squares<br/><small>Lemma</small>"]
+    lem_wb_pgroup["lem:wb-pgroup<br/><small>special case of</small>"]
+    lem_wb_sylow["lem:wb-sylow<br/><small>Lemma</small>"]
+    thm_wedderburn["thm:wedderburn<br/><small>Wedderburn; proof of</small>"]
   end
   subgraph Z_Variants["Z Variants"]
     def_th_special["def:th-special<br/><small>Definition</small>"]
@@ -463,6 +469,9 @@ flowchart BT
   thm_cube --> lem_subarc
   thm_cube --> cor_path_arc
   thm_cube --> def_asymptotic
+  lem_wb_sylow --> lem_wb_squares
+  lem_wb_sylow --> lem_wb_pgroup
+  thm_wedderburn --> lem_wb_sylow
   lem_th_special_implies --> def_th_special
   lem_th_special_implies --> def_special_family
   lem_th_special_implies --> lem_special_pair_exists
@@ -472,7 +481,7 @@ flowchart BT
   lem_th_lemma10 --> def_th_special
   lem_th_lemma11 --> def_th_special
   classDef proved fill:#1f8a4c,color:#fff,stroke:#146236
-  class lem_sut_basic,prop_sut_two_composite,prop_sut_explicit,lem_sut_factor,thm_sut_sutcliffe2,thm_sut_sutcliffe3,lem_sut_lemma1,lem_sut_lemma2,thm_sut_main,cor_sut_main,lem_borel_basic,lem_reduction,cor_reduction_finite,thm_sierpinski,lem_baire1_fsigma,lem_finite_valued,lem_finite_valued_ops,lem_approx_char,lem_approx_finite,lem_uniform_approx,lem_approx_real,thm_baire1_char,lem_uniform_limit_fsigma,thm_extension,lem_fold,lem_fold_factor,thm_sphere_baire1,thm_sphere_extension,thm_honorary_char,lem_honorary_invariance,thm_kuratowski,cor_baire_continuity_point,lem_meager_subspace,lem_additive_basic,lem_baire_precomp,lem_baire_imp_class,fact_banach,fact_borel_baire,lem_equiv,lem_intervals_open,lem_two_sided,lem_monotone_extend,lem_monotone_compose,lem_baire_criterion,fact_tietze_arc,cor_path_arc,lem_subarc,lem_cluster,fact_crosscut,lem_disjoint_arcs,lem_charts,lem_crosscut_H,lem_strip,lem_disc_geometry,lem_open_components,lem_transfer,lem_locality,lem_mm_lemma2,lem_mm_lemma3,thm_mcmillan,thm_mm_thm2,cor_mm_corollaries,thm_mcmillan_H,lem_th_lemma7,lem_th_lemma8,lem_th_lemma15,thm_bf_fsigma,cor_bf_honorary,lem_two_domains,fact_bagemihl,prop_gdelta_remark,lem_homeo_values,thm_homeo,lem_B_char,lem_region_geometry,lem_special_from_fsigma,lem_special_sequence,lem_special_pair_exists,lem_special_pair_shrink,thm_construct_A,thm_cc_realize,lem_monotone_inverse,lem_closed_graph,thm_construct_B,thm_construct_C,thm_construct_D,thm_construct_E,thm_construct_F,thm_construct_H,lem_figure5,thm_baire_plus_one,cor_borel,lem_th_lemma23,lem_th_lemma24,thm_th_thm9,prop_th_example,lem_th_lemma25,thm_th_thm10,cor_ae_zero,fact_vitali,cor_nonmeasurable,fact_poisson,lem_general_limit_endpoints,lem_ha_sequences,lem_ha_estimates,lem_ha_access,thm_ha_example,thm_ha_theorem,cor_ha_corollary,cor_ha_analytic,fact_analytic_nonborel,lem_cube_lemma,lem_cube_lemma_elementary,thm_cube,lem_th_special_implies,lem_th_lemma9,lem_th_lemma10,lem_th_lemma11 proved
+  class lem_sut_basic,prop_sut_two_composite,prop_sut_explicit,lem_sut_factor,thm_sut_sutcliffe2,thm_sut_sutcliffe3,lem_sut_lemma1,lem_sut_lemma2,thm_sut_main,cor_sut_main,lem_borel_basic,lem_reduction,cor_reduction_finite,thm_sierpinski,lem_baire1_fsigma,lem_finite_valued,lem_finite_valued_ops,lem_approx_char,lem_approx_finite,lem_uniform_approx,lem_approx_real,thm_baire1_char,lem_uniform_limit_fsigma,thm_extension,lem_fold,lem_fold_factor,thm_sphere_baire1,thm_sphere_extension,thm_honorary_char,lem_honorary_invariance,thm_kuratowski,cor_baire_continuity_point,lem_meager_subspace,lem_additive_basic,lem_baire_precomp,lem_baire_imp_class,fact_banach,fact_borel_baire,lem_equiv,lem_intervals_open,lem_two_sided,lem_monotone_extend,lem_monotone_compose,lem_baire_criterion,fact_tietze_arc,cor_path_arc,lem_subarc,lem_cluster,fact_crosscut,lem_disjoint_arcs,lem_charts,lem_crosscut_H,lem_strip,lem_disc_geometry,lem_open_components,lem_transfer,lem_locality,lem_mm_lemma2,lem_mm_lemma3,thm_mcmillan,thm_mm_thm2,cor_mm_corollaries,thm_mcmillan_H,lem_th_lemma7,lem_th_lemma8,lem_th_lemma15,thm_bf_fsigma,cor_bf_honorary,lem_two_domains,fact_bagemihl,prop_gdelta_remark,lem_homeo_values,thm_homeo,lem_B_char,lem_region_geometry,lem_special_from_fsigma,lem_special_sequence,lem_special_pair_exists,lem_special_pair_shrink,thm_construct_A,thm_cc_realize,lem_monotone_inverse,lem_closed_graph,thm_construct_B,thm_construct_C,thm_construct_D,thm_construct_E,thm_construct_F,thm_construct_H,lem_figure5,thm_baire_plus_one,cor_borel,lem_th_lemma23,lem_th_lemma24,thm_th_thm9,prop_th_example,lem_th_lemma25,thm_th_thm10,cor_ae_zero,fact_vitali,cor_nonmeasurable,fact_poisson,lem_general_limit_endpoints,lem_ha_sequences,lem_ha_estimates,lem_ha_access,thm_ha_example,thm_ha_theorem,cor_ha_corollary,cor_ha_analytic,fact_analytic_nonborel,lem_cube_lemma,lem_cube_lemma_elementary,thm_cube,lem_wb_squares,lem_wb_pgroup,lem_wb_sylow,thm_wedderburn,lem_th_special_implies,lem_th_lemma9,lem_th_lemma10,lem_th_lemma11 proved
   classDef defined fill:#b7e1c5,color:#123,stroke:#4c9a68
   class def_sut_solution,def_borel_classes,def_fn_classes,def_fold,def_additive_classes,def_arcs,def_ccset,def_charts,def_acc,def_regions,def_special_family,def_special_pair,def_meets_in,def_trapezoid,def_asymptotic,def_th_special defined
   classDef imported fill:#dbe8f6,color:#1c3a5e,stroke:#6b8fb8
@@ -655,6 +664,15 @@ flowchart BT
 | lem:cube-lemma | lemma | `TJK.Cube.exists_s` ([src](../TJK/Cube/Basic.lean)) | `lem:cube-lemma-elementary`, `def:asymptotic` | `proved` |
 | lem:cube-lemma-elementary<br/>*elementary form of Lemma reflem:cube-lemma* | lemma | `TJK.Cube.Elementary.exists_s'` ([src](../TJK/Cube/Elementary.lean)) | `fact:analytic-nonborel`, `def:asymptotic` | `proved` |
 | thm:cube | theorem | `TJK.Cube.exists_not_measurableSet_curvConvSet` ([src](../TJK/MainTheorems.lean)) | `lem:cube-lemma`, `thm:construct-C`, `lem:subarc`, `cor:path-arc`, `def:asymptotic` | `proved` |
+
+## J Wedderburn's theorem
+
+| Item | Kind | Lean | Depends on | Status |
+|---|---|---|---|---|
+| lem:wb-squares | lemma | `TJK.Wedderburn.exists_sq_add_sq_eq_neg_one` ([src](../TJK/Wedderburn.lean)) |  | `proved` |
+| lem:wb-pgroup<br/>*special case of* | lemma | `TJK.Wedderburn.exists_quaternion_of_not_isCyclic` ([src](../TJK/Wedderburn.lean)) |  | `proved` |
+| lem:wb-sylow | lemma | `TJK.Wedderburn.isCyclic_sylow` ([src](../TJK/Wedderburn.lean)) | `lem:wb-squares`, `lem:wb-pgroup` | `proved` |
+| thm:wedderburn<br/>*Wedderburn; proof of* | theorem | `TJK.Wedderburn.mul_comm` ([src](../TJK/Wedderburn.lean)) | `lem:wb-sylow` | `proved` |
 
 ## Z Variants
 
